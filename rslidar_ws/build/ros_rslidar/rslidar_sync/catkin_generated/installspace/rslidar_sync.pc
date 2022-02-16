@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/rslidar_ws/install
+
+Name: rslidar_sync
+Description: Description of rslidar_sync
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

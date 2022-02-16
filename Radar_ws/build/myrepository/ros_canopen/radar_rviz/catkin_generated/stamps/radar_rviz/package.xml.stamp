@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>radar_rviz</name>
+  <version>0.7.6</version>
+  <description>Radar markers visualization of conti radar objects</description>
+
+  <maintainer email="sergiocp@ntu.edu.sg">Sergio</maintainer>
+  <license>BSD</license>
+  <author email="sergiocp@ntu.edu.sg">Sergio</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>pb_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+</package>

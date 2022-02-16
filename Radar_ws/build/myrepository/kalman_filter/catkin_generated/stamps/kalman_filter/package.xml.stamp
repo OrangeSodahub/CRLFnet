@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>kalman_filter</name>
+  <version>0.7.6</version>
+  <description>Extended Kalman Filter for sensor measurements</description>
+
+  <maintainer email="sergiocp@ntu.edu.sg">Sergio</maintainer>
+  <license>BSD</license>
+  <author email="sergiocp@ntu.edu.sg">Sergio</author>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>std_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>pb_msgs</depend>
+
+
+</package>

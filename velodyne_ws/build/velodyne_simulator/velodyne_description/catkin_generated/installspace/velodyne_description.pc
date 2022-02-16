@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/velodyne_ws/install
+
+Name: velodyne_description
+Description: Description of velodyne_description
+Version: 1.0.12
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

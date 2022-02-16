@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/zonlin/ROS/rslidar_ws/install/setup.sh

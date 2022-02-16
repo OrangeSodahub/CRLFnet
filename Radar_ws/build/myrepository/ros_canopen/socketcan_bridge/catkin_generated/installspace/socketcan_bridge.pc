@@ -1,0 +1,8 @@
+prefix=/home/zonlin/桌面/ROS_WS/Radar_ws/install
+
+Name: socketcan_bridge
+Description: Description of socketcan_bridge
+Version: 0.7.6
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lsocketcan_to_topic -ltopic_to_socketcan -ldecode -ldecode_cluster -lwarning -lspeedinfo -lconfiguration
+Requires: can_msgs roscpp socketcan_interface pb_msgs geometry_msgs sensor_msgs

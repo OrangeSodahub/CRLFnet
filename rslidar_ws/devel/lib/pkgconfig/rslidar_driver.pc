@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/rslidar_ws/devel
+
+Name: rslidar_driver
+Description: Description of rslidar_driver
+Version: 1.0.0
+Cflags: -I/home/zonlin/ROS/rslidar_ws/devel/include
+Libs: -L${prefix}/lib 
+Requires: angles pcl_ros roscpp roslib sensor_msgs tf dynamic_reconfigure diagnostic_updater rslidar_msgs nodelet message_runtime std_msgs

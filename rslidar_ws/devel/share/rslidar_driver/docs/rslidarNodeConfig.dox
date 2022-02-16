@@ -1,0 +1,6 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~time_offset" : \b [double] A manually calibrated offset (in seconds) to add to the timestamp before publication of a message. min: -1.0, default: 0.0, max: 1.0
+

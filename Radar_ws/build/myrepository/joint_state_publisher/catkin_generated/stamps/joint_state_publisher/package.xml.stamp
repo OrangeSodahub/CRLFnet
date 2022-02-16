@@ -1,0 +1,22 @@
+<package format="2">
+  <name>joint_state_publisher</name>
+  <version>1.12.12</version>
+  <description>
+    This package contains a tool for setting and publishing joint state values for a given URDF.
+  </description>
+  <author email="davidvlu@gmail.com">David V. Lu!!</author>
+  <author email="jacquelinekay1@gmail.com">Jackie Kay</author>
+  <maintainer email="clalancette@osrfoundation.org">Chris Lalancette</maintainer>
+  <maintainer email="sloretz@osrfoundation.org">Shane Loretz</maintainer>
+
+  <license>BSD</license>
+  <url type="website">http://www.ros.org/wiki/joint_state_publisher</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>python_qt_binding</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+
+  <test_depend>rostest</test_depend>
+</package>

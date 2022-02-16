@@ -1,0 +1,8 @@
+prefix=/home/zonlin/桌面/ROS_WS/Radar_ws/devel
+
+Name: urdf_radar
+Description: Description of urdf_radar
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

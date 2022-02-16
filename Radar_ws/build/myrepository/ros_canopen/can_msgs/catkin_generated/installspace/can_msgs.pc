@@ -1,0 +1,8 @@
+prefix=/home/zonlin/桌面/ROS_WS/Radar_ws/install
+
+Name: can_msgs
+Description: Description of can_msgs
+Version: 0.7.6
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime std_msgs

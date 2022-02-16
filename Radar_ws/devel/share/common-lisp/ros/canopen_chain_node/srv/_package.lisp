@@ -1,0 +1,15 @@
+(cl:defpackage canopen_chain_node-srv
+  (:use )
+  (:export
+   "GETOBJECT"
+   "<GETOBJECT-REQUEST>"
+   "GETOBJECT-REQUEST"
+   "<GETOBJECT-RESPONSE>"
+   "GETOBJECT-RESPONSE"
+   "SETOBJECT"
+   "<SETOBJECT-REQUEST>"
+   "SETOBJECT-REQUEST"
+   "<SETOBJECT-RESPONSE>"
+   "SETOBJECT-RESPONSE"
+  ))
+

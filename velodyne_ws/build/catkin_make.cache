@@ -1,0 +1,2 @@
+velodyne_simulator/velodyne_description:velodyne_simulator/velodyne_gazebo_plugins:velodyne_simulator/velodyne_simulator
+-DCATKIN_DEVEL_PREFIX=/home/zonlin/ROS/velodyne_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/ROS/velodyne_ws/install -G Unix Makefiles

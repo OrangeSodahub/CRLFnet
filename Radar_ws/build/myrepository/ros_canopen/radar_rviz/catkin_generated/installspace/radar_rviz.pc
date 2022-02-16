@@ -1,0 +1,8 @@
+prefix=/home/zonlin/桌面/ROS_WS/Radar_ws/install
+
+Name: radar_rviz
+Description: Description of radar_rviz
+Version: 0.7.6
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lvisualization_marker -lvisualization_marker_cluster
+Requires: roscpp std_msgs visualization_msgs pb_msgs geometry_msgs

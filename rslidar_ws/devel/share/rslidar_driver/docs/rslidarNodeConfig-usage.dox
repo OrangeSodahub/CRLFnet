@@ -1,0 +1,7 @@
+\subsubsection usage Usage
+\verbatim
+<node name="fullscan_puber" pkg="rslidar_driver" type="fullscan_puber">
+  <param name="time_offset" type="double" value="0.0" />
+</node>
+\endverbatim
+

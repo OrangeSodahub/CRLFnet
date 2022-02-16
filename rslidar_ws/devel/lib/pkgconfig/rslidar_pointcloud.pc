@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/rslidar_ws/devel
+
+Name: rslidar_pointcloud
+Description: Description of rslidar_pointcloud
+Version: 1.0.0
+Cflags: -I/home/zonlin/ROS/rslidar_ws/devel/include
+Libs: -L${prefix}/lib 
+Requires: angles nodelet pcl_ros roscpp roslib sensor_msgs tf rslidar_driver rslidar_msgs dynamic_reconfigure

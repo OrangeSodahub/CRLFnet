@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/catkin_ws/install
+
+Name: site
+Description: Description of site
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
