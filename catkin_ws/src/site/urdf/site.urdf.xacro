@@ -3,6 +3,7 @@
      Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro" 
   name="site">
 
   <gazebo reference="lawn_Link">
@@ -110,10 +111,6 @@
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="CPU_4_Link">
-    <material>Gazebo/Black</material>
-    <turnGravityOff>false</turnGravityOff>
-  </gazebo>
-  <gazebo reference="ARS_408_21_1_Link">
     <material>Gazebo/Black</material>
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
@@ -323,8 +320,7 @@
       xyz="0 0 0" />
   </joint>
 
-  <!--
-  <link
+  <!--<link
     name="RS-LiDAR-16-1_Link">
     <inertial>
       <origin
@@ -377,12 +373,14 @@
     <axis
       xyz="0 -1 0" />
   </joint>-->
-  <joint name="velodyne1_base_mount_joint" type="fixed">
+
+  <!-- Lidar11 -->
+  <joint name="velodyne11_base_mount_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.00504837374851497 0.852121866219549 0.20807708"/>
     <parent link="pole1_Link"/>
-    <child link="velodyne1_base_link"/>
+    <child link="velodyne11_base_link"/>
   </joint>
-  <link name="velodyne1_base_link">
+  <link name="velodyne11_base_link">
     <inertial>
       <mass value="0.83"/>
       <origin xyz="-0.716154162323716 0.2472 0"/>
@@ -390,12 +388,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="package://site/meshes/VLP16_base_1_1.dae"/>
+        <mesh filename="package://site/meshes/VLP16_base_1_11.dae"/>
       </geometry>
     </visual>
     <visual>
       <geometry>
-        <mesh filename="package://site/meshes/VLP16_base_2_1.dae"/>
+        <mesh filename="package://site/meshes/VLP16_base_2_11.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -405,12 +403,12 @@
       </geometry>
     </collision>
   </link>
-  <joint name="velodyne1_base_scan_joint" type="fixed">
+  <joint name="velodyne11_base_scan_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
-    <parent link="velodyne1_base_link"/>
-    <child link="velodyne1"/>
+    <parent link="velodyne11_base_link"/>
+    <child link="velodyne11"/>
   </joint>
-  <link name="velodyne1">
+  <link name="velodyne11">
     <inertial>
       <mass value="0.01"/>
       <origin xyz="0 0 0"/>
@@ -419,12 +417,12 @@
     <visual>
       <origin xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://site/meshes/VLP16_scan_1.dae"/>
+        <mesh filename="package://site/meshes/VLP16_scan_11.dae"/>
       </geometry>
     </visual>
   </link>
-  <gazebo reference="velodyne1">
-    <sensor name="velodyne1-VLP16" type="ray">
+  <gazebo reference="velodyne11">
+    <sensor name="velodyne11-VLP16" type="ray">
       <pose>0 0 0 0 0 0</pose>
       <visualize>false</visualize>
       <update_rate>10</update_rate>
@@ -437,7 +435,7 @@
             <max_angle>3.141592653589793</max_angle>
           </horizontal>
           <vertical>
-            <samples>32</samples>
+            <samples>16</samples>
             <resolution>1</resolution>
             <min_angle>-0.5352924815866609</min_angle>
             <max_angle>0.5352924815866609</max_angle>
@@ -455,15 +453,104 @@
         </noise>
       </ray>
       <plugin filename="libgazebo_ros_velodyne_laser.so" name="gazebo_ros_laser_controller">
-        <topicName>/velodyne1_points</topicName>
-        <frameName>velodyne1</frameName>
+        <topicName>/velodyne11_points</topicName>
+        <frameName>velodyne11</frameName>
         <organize_cloud>False</organize_cloud>
         <min_range>0.9</min_range>
         <max_range>130.0</max_range>
         <gaussianNoise>0.008</gaussianNoise>
       </plugin>
     </sensor>
-  </gazebo>-->
+  </gazebo>
+
+  <!-- Lidar12 -->
+  <joint name="velodyne12_base_mount_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.5004837374851497 0.42121866219549 0"/>
+    <parent link="pole1_Link"/>
+    <child link="velodyne12_base_link"/>
+  </joint>
+  <link name="velodyne12_base_link">
+    <inertial>
+      <mass value="0.83"/>
+      <origin xyz="-0.716154162323716 0.2472 0"/>
+      <inertia ixx="0.000908059425" ixy="0" ixz="0" iyy="0.000908059425" iyz="0" izz="0.0011049624"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_1_12.dae"/>
+      </geometry>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_2_12.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.03585"/>
+      <geometry>
+        <cylinder length="0.0717" radius="0.0516"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="velodyne12_base_scan_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="velodyne12_base_link"/>
+    <child link="velodyne12"/>
+  </joint>
+  <link name="velodyne12">
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_scan_12.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <gazebo reference="velodyne12">
+    <sensor name="velodyne12-VLP16" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>500</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.141592653589793</min_angle>
+            <max_angle>3.141592653589793</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>16</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.5352924815866609</min_angle>
+            <max_angle>0.5352924815866609</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>131.0</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.0</stddev>
+        </noise>
+      </ray>
+      <plugin filename="libgazebo_ros_velodyne_laser.so" name="gazebo_ros_laser_controller">
+        <topicName>/velodyne12_points</topicName>
+        <frameName>velodyne12</frameName>
+        <organize_cloud>False</organize_cloud>
+        <min_range>0.9</min_range>
+        <max_range>130.0</max_range>
+        <gaussianNoise>0.008</gaussianNoise>
+      </plugin>
+    </sensor>
+  </gazebo>
 
   <!-- camera11 -->
   <link
@@ -614,7 +701,6 @@
     <axis
       xyz="0 0 0" />
   </joint>
-  <!--*********************************************************************-->
   <!-- add camera simulation plugines -->
   <gazebo reference="camera12_Link">
     <sensor type="camera" name="camera12">
@@ -1045,62 +1131,14 @@
       </plugin>
     </sensor>
   </gazebo>
-  <!--*********************************************************************-->
 
-  <!--
-  <link
-    name="ARS_408_21_2_Link">
-    <inertial>
-      <origin
-        xyz="0.00168514324992164 0.0154191890257049 -2.61569096045022E-05"
-        rpy="0 0 0" />
-      <mass
-        value="3.09545763589521" />
-      <inertia
-        ixx="0.00233952324153942"
-        ixy="6.43560712854057E-06"
-        ixz="5.7678092833293E-06"
-        iyy="0.00726270749670218"
-        iyz="-1.06274664763526E-06"
-        izz="0.00541858260532214" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://site/meshes/ARS_408_21_2_Link.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://site/meshes/ARS_408_21_2_Link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="ARS_408_21_2"
-    type="fixed">
-    <origin
-      xyz="-1.48204368460924 -1.1757576992523 0.505765128564767"
-      rpy="0 0 -3.13286600732982" />
-    <parent
-      link="pole2_Link" />
-    <child
-      link="ARS_408_21_2_Link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>-->
+  <!-- Radar_2 -->
+  <xacro:include filename="$(find site)/urdf/ARS_408_21_2.urdf.xacro"/>
+    <xacro:ARS_408_21_3 parent="pole2_Link" name="ARS_408_21_2" radarTopic="/ARS_408_21_2_Topic" velTopic="/ARS_408_21_2_velTopic" occlusion="0.6" noiseDev="0.05" samplePoints="20">
+      <origin xyz="-1.48204368460924 -1.1757576992523 0.505765128564767" />
+  </xacro:ARS_408_21_3>
+
+  <!-- Lidar_2 -->
   <joint name="velodyne2_base_mount_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 -1 0.2046681097924481"/>
     <parent link="pole4_Link"/>
@@ -1188,6 +1226,7 @@
       </plugin>
     </sensor>
   </gazebo>
+  <!--*******************************************************************************************-->
 
   <link
     name="CPU_2_Link">
@@ -1350,7 +1389,6 @@
     <axis
       xyz="0 0 0" />
   </joint>
-<!--*********************************************************************-->
   <!-- add camera simulation plugines -->
   <gazebo reference="camera3_Link">
     <sensor type="camera" name="camera3">
@@ -1390,59 +1428,12 @@
   </gazebo>
   <!--*********************************************************************-->
 
-  <link
-    name="ARS_408_21_3_Link">
-    <inertial>
-      <origin
-        xyz="0.00168514324992231 0.0154191890257048 -2.61569096043912E-05"
-        rpy="0 0 0" />
-      <mass
-        value="3.09545763589522" />
-      <inertia
-        ixx="0.00233952324153942"
-        ixy="6.43560712858864E-06"
-        ixz="5.76780928332912E-06"
-        iyy="0.00726270749670221"
-        iyz="-1.06274664763534E-06"
-        izz="0.00541858260532216" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://site/meshes/ARS_408_21_3_Link.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://site/meshes/ARS_408_21_3_Link.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="ARS_408_21_3"
-    type="fixed">
-    <origin
-      xyz="1.00189979461188 -0.22928478435155 0.503482602285128"
-      rpy="0 0 0" />
-    <parent
-      link="pole3_Link" />
-    <child
-      link="ARS_408_21_3_Link" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
+  <!-- Radar_3 -->
+  <xacro:include filename="$(find site)/urdf/ARS_408_21_3.urdf.xacro"/>
+    <xacro:ARS_408_21_3 parent="pole3_Link" name="ARS_408_21_3" radarTopic="/ARS_408_21_3_Topic" velTopic="/ARS_408_21_3_velTopic" occlusion="0.6" noiseDev="0.05" samplePoints="20">
+      <origin xyz="1.00189979461188 -0.22928478435155 0.503482602285128" rpy="0 0 0" />
+  </xacro:ARS_408_21_3>
+
   <link
     name="CPU_3_Link">
     <inertial>

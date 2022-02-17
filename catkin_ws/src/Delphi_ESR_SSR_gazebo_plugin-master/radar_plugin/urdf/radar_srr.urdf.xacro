@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!-- This xacro describes a Delphi SRR -->
+<!--
+Parameters for the radar plugin:
+radarName - "SRRRight", "SRRLeft"
+topic - "/srr_right_obstacles", "/srr_left_obstacles"
+velTopic - Velocity topic of parent vehicle (test_car or bus)
+samples - (samples)^2 is the number of points that will be ray-traced for occlusion of an object
+occlusion - Percentage of occlusion to allow before not publishing object (0 to 1)
+noise - Parameters for noise model
+All other specifications of SRR must be left to default values
+-->
+<robot name="SRR" xmlns:xacro="http://ros.org/wiki/xacro">
+    <!-- When including this xacro, specify origin for the sensor, parent, and the correct name for the radar -->
+    <xacro:macro name="SRR" params="*origin parent:=base_link name:=SRRRight radarTopic:=radar_obstacles velTopic:=/sim_car/vel_of_car occlusion:=0.6 noiseDev:=0.05 samplePoints:=20">
+        <joint name="${name}_joint" type="fixed">
+            <xacro:insert_block name="origin"/>
+            <parent link="${parent}"/>
+            <child link="${name}_link"/>
+        </joint>
+        <link name="${name}_link">
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.05 0.173 0.09"/>
+                </geometry>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="0.05 0.173 0.09"/>
+                </geometry>
+            </collision>
+            <inertial>
+                <mass value="0.575"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <inertia ixx="0.00182" ixy="0.0" ixz="0.0" iyy="0.00051" iyz="0.0" izz="0.00155"/>
+            </inertial>
+        </link>
+        <gazebo reference="${name}_link">
+            <material>Gazebo/Red</material>
+            <!-- Logical camera for the radar -->
+						<sensor name="${name}_logical_camera" type="logical_camera">
+                <logical_camera>
+                    <near>0.5</near>
+                    <far>80.0</far>
+                    <horizontal_fov>2.6167</horizontal_fov>
+                    <aspect_ratio>15</aspect_ratio>
+                </logical_camera>
+                <always_on>true</always_on>
+                <visualize>false</visualize>
+                <update_rate>20</update_rate>
+            </sensor>
+        </gazebo>
+        <!-- Gazebo plugin for the radar's functionality -->
+        <gazebo>             
+            <plugin name="radar_srr_plugin" filename="libradar_srr_plugin.so">
+                <radarName>${name}</radarName>
+                <topic>${radarTopic}</topic>
+                <velTopic>${velTopic}</velTopic>
+                <near>0.5</near>
+                <far>80.0</far>
+                <hfov>2.6167</hfov>
+                <vfov>0.1744</vfov>
+                <samples>${samplePoints}</samples>
+                <occlusion>${occlusion}</occlusion>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>${noiseDev}</stddev>
+                </noise>
+            </plugin>
+        </gazebo>
+
+    </xacro:macro>
+</robot>

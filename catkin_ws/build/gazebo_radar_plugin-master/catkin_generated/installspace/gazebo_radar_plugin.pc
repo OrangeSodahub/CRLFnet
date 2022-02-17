@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/catkin_ws/install
+
+Name: gazebo_radar_plugin
+Description: Description of gazebo_radar_plugin
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: gazebo_ros message_runtime roscpp

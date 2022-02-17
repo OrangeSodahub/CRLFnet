@@ -26,7 +26,7 @@
   <arg name="organize_cloud" default="false"/>
   <param
     name="robot_description"
-    command="$(find xacro)/xacro --inorder '$(find site)/urdf/site.urdf' organize_cloud:=$(arg organize_cloud) gpu:=$(arg gpu)" />
+    command="$(find xacro)/xacro --inorder '$(find site)/urdf/site.urdf.xacro' organize_cloud:=$(arg organize_cloud) gpu:=$(arg gpu)" />
   <node
     pkg="robot_state_publisher"
     type="robot_state_publisher"
@@ -47,7 +47,7 @@
     type="rostopic"
     args="pub /calibrated std_msgs/Bool true" />
 
-  <!-- output the point_cloud data -->
+  <!-- output the point_cloud data 
   <node
     name="point_cloud_write1"
     pkg="site"
@@ -57,7 +57,7 @@
     name="point_cloud_write2"
     pkg="site"
     type="point_cloud_write2"
-    args="-d $(find site)/src/point_cloud_write2.cpp" />
+    args="-d $(find site)/src/point_cloud_write2.cpp" />-->
 
   <!-- visualize the point_cloud data via cloud_viewer 
   <node
@@ -66,13 +66,15 @@
     type="cloud_viewer"
     args="-d $(find site)/src/cloud_viewer.cpp" />-->
 
-  <!-- output the image -->
+  <!-- output the image 
   <node
     name="image_output"
     pkg="site"
     type="image_output"
-    args="-d $(find site)/src/image_output.cpp" />
+    args="-d $(find site)/src/image_output.cpp" />-->
 
+  <!-- spawn the miliwave radar -->
+  
   <!-- Rviz -->
   <arg name="rviz" default="true"/>
   <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find site)/rviz/example.rviz" />
