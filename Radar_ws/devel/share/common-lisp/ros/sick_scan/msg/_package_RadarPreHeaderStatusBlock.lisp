@@ -1,0 +1,14 @@
+(cl:in-package sick_scan-msg)
+(cl:export '(UITELEGRAMCOUNT-VAL
+          UITELEGRAMCOUNT
+          UICYCLECOUNT-VAL
+          UICYCLECOUNT
+          UDISYSTEMCOUNTSCAN-VAL
+          UDISYSTEMCOUNTSCAN
+          UDISYSTEMCOUNTTRANSMIT-VAL
+          UDISYSTEMCOUNTTRANSMIT
+          UIINPUTS-VAL
+          UIINPUTS
+          UIOUTPUTS-VAL
+          UIOUTPUTS
+))

@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/Radar_ws/devel
+
+Name: pudong
+Description: Description of pudong
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

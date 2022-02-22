@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/test_to_topic"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/test_to_topic.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/test_to_topic"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/test_to_topic.pdb"
   "CMakeFiles/test_to_topic.dir/test/to_topic_test.cpp.o"
 )
 

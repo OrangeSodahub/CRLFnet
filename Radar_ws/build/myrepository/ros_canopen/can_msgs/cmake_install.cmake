@@ -1,8 +1,8 @@
-# Install script for directory: /home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/can_msgs
+# Install script for directory: /home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/can_msgs
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/zonlin/桌面/ROS_WS/Radar_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/zonlin/ROS/Radar_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,7 +38,7 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/can_msgs/msg" TYPE FILE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/can_msgs/msg/Frame.msg")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/can_msgs/msg" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/can_msgs/msg/Frame.msg")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -46,27 +46,27 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include/can_msgs")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/include/can_msgs")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/roseus/ros/can_msgs")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/share/roseus/ros/can_msgs")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/common-lisp/ros/can_msgs")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/share/common-lisp/ros/can_msgs")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/gennodejs/ros/can_msgs")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/share/gennodejs/ros/can_msgs")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/python3/dist-packages/can_msgs")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/can_msgs")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/python3/dist-packages/can_msgs")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/can_msgs")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -85,6 +85,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/can_msgs" TYPE FILE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/can_msgs/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/can_msgs" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/can_msgs/package.xml")
 endif()
 

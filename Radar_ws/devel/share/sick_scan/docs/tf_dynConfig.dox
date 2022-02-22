@@ -1,0 +1,13 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~parent_frame" : \b [str] Parent Frame for transformation min: , default: map, max: 
+- \b "~child_frame" : \b [str] Child Frame for transformation min: , default: scan, max: 
+- \b "~tf_x" : \b [double] X-offset between parent and child min: -10.0, default: 0.0, max: 10.0
+- \b "~tf_y" : \b [double] Y-offset between parent and child min: -10.0, default: 0.0, max: 10.0
+- \b "~tf_z" : \b [double] Z-offset between parent and child min: -10.0, default: 0.0, max: 10.0
+- \b "~tf_rot_x" : \b [double] Rotate around x axis min: -180.0, default: 0.0, max: 180.0
+- \b "~tf_rot_y" : \b [double] Rotate around new y axis min: -180.0, default: 0.0, max: 180.0
+- \b "~tf_rot_z" : \b [double] Rotate around new z axis min: -180.0, default: 0.0, max: 180.0
+

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libFusionEKF.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libFusionEKF.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libFusionEKF.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libFusionEKF.so"
   "CMakeFiles/FusionEKF.dir/src/FusionEKF.cpp.o"
 )
 

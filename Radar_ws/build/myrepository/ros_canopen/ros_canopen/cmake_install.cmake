@@ -1,8 +1,8 @@
-# Install script for directory: /home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/ros_canopen
+# Install script for directory: /home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/ros_canopen
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/zonlin/桌面/ROS_WS/Radar_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/zonlin/ROS/Radar_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,6 +38,6 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ros_canopen" TYPE FILE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/ros_canopen/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ros_canopen" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/ros_canopen/package.xml")
 endif()
 

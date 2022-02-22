@@ -1,4 +1,4 @@
-prefix=/home/zonlin/桌面/ROS_WS/Radar_ws/install
+prefix=/home/zonlin/ROS/Radar_ws/install
 
 Name: pb_msgs
 Description: Description of pb_msgs

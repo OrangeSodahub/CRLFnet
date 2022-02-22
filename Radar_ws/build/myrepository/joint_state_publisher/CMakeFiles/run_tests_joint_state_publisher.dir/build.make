@@ -43,7 +43,7 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/zonlin/桌面/ROS_WS/Radar_ws/src
+CMAKE_SOURCE_DIR = /home/zonlin/ROS/Radar_ws/src
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/zonlin/ROS/Radar_ws/build
@@ -67,6 +67,6 @@ myrepository/joint_state_publisher/CMakeFiles/run_tests_joint_state_publisher.di
 .PHONY : myrepository/joint_state_publisher/CMakeFiles/run_tests_joint_state_publisher.dir/clean
 
 myrepository/joint_state_publisher/CMakeFiles/run_tests_joint_state_publisher.dir/depend:
-	cd /home/zonlin/ROS/Radar_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zonlin/桌面/ROS_WS/Radar_ws/src /home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/joint_state_publisher /home/zonlin/ROS/Radar_ws/build /home/zonlin/ROS/Radar_ws/build/myrepository/joint_state_publisher /home/zonlin/ROS/Radar_ws/build/myrepository/joint_state_publisher/CMakeFiles/run_tests_joint_state_publisher.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/zonlin/ROS/Radar_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/zonlin/ROS/Radar_ws/src /home/zonlin/ROS/Radar_ws/src/myrepository/joint_state_publisher /home/zonlin/ROS/Radar_ws/build /home/zonlin/ROS/Radar_ws/build/myrepository/joint_state_publisher /home/zonlin/ROS/Radar_ws/build/myrepository/joint_state_publisher/CMakeFiles/run_tests_joint_state_publisher.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : myrepository/joint_state_publisher/CMakeFiles/run_tests_joint_state_publisher.dir/depend
 

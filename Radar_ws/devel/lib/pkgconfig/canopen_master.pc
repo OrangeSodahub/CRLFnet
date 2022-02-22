@@ -1,8 +1,8 @@
-prefix=/home/zonlin/桌面/ROS_WS/Radar_ws/devel
+prefix=/home/zonlin/ROS/Radar_ws/devel
 
 Name: canopen_master
 Description: Description of canopen_master
 Version: 0.7.6
-Cflags: -I/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_master/include -I/usr/include
+Cflags: -I/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_master/include -I/usr/include
 Libs: -L${prefix}/lib -lcanopen_master /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.71.0 /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0 /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
 Requires: socketcan_interface

@@ -21,7 +21,16 @@ for site robot</p>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>image_transport</depend>
+  <!-- build_depends and run_depends are from gazebo_radar_plugin -->
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
   <export>
     <architecture_independent />
+    <!-- Other tools can request additional information be placed here -->
+    <gazebo_ros plugin_path="${prefix}/lib" gazebo_media_path="${prefix}" />
   </export>
 </package>

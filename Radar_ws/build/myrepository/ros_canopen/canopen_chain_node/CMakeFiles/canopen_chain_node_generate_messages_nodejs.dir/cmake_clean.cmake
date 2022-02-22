@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/gennodejs/ros/canopen_chain_node/srv/GetObject.js"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/gennodejs/ros/canopen_chain_node/srv/SetObject.js"
+  "/home/zonlin/ROS/Radar_ws/devel/share/gennodejs/ros/canopen_chain_node/srv/GetObject.js"
+  "/home/zonlin/ROS/Radar_ws/devel/share/gennodejs/ros/canopen_chain_node/srv/SetObject.js"
   "CMakeFiles/canopen_chain_node_generate_messages_nodejs"
 )
 

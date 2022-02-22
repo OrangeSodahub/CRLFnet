@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libkalman_filter.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libkalman_filter.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libkalman_filter.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libkalman_filter.so"
   "CMakeFiles/kalman_filter.dir/src/kalman_filter.cpp.o"
 )
 

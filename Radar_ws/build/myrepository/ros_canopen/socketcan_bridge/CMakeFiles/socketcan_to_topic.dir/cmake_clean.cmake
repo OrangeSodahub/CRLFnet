@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libsocketcan_to_topic.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libsocketcan_to_topic.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libsocketcan_to_topic.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libsocketcan_to_topic.so"
   "CMakeFiles/socketcan_to_topic.dir/src/socketcan_to_topic.cpp.o"
 )
 

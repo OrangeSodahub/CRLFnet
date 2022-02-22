@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libradar_input.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libradar_input.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libradar_input.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libradar_input.so"
   "CMakeFiles/radar_input.dir/src/radar_input.cpp.o"
 )
 

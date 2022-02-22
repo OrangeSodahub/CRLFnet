@@ -1,8 +1,8 @@
-# Install script for directory: /home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node
+# Install script for directory: /home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/zonlin/桌面/ROS_WS/Radar_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/zonlin/ROS/Radar_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,8 +39,8 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/canopen_chain_node/srv" TYPE FILE FILES
-    "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/GetObject.srv"
-    "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/SetObject.srv"
+    "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/GetObject.srv"
+    "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/SetObject.srv"
     )
 endif()
 
@@ -49,27 +49,27 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include/canopen_chain_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/include/canopen_chain_node")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/roseus/ros/canopen_chain_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/share/roseus/ros/canopen_chain_node")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/common-lisp/ros/canopen_chain_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/share/common-lisp/ros/canopen_chain_node")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/gennodejs/ros/canopen_chain_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/share/gennodejs/ros/canopen_chain_node")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/python3/dist-packages/canopen_chain_node")
+  execute_process(COMMAND "/usr/bin/python3" -m compileall "/home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/canopen_chain_node")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/python3/dist-packages/canopen_chain_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python3/dist-packages" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/canopen_chain_node")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -88,7 +88,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/canopen_chain_node" TYPE FILE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/canopen_chain_node" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -98,12 +98,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_chain_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node" TYPE EXECUTABLE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_chain_node/canopen_chain_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node" TYPE EXECUTABLE FILES "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_chain_node/canopen_chain_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_chain_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_chain_node")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_chain_node"
-         OLD_RPATH "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
+         OLD_RPATH "/home/zonlin/ROS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_chain_node")
@@ -118,12 +118,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libcanopen_ros_chain.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libcanopen_ros_chain.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/zonlin/ROS/Radar_ws/devel/lib/libcanopen_ros_chain.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libcanopen_ros_chain.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libcanopen_ros_chain.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libcanopen_ros_chain.so"
-         OLD_RPATH "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
+         OLD_RPATH "/home/zonlin/ROS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libcanopen_ros_chain.so")
@@ -141,12 +141,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_sync_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node" TYPE EXECUTABLE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_chain_node/canopen_sync_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node" TYPE EXECUTABLE FILES "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_chain_node/canopen_sync_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_sync_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_sync_node")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_sync_node"
-         OLD_RPATH "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
+         OLD_RPATH "/home/zonlin/ROS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/canopen_chain_node/canopen_sync_node")
@@ -155,10 +155,10 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/canopen_chain_node" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/include/canopen_chain_node/" FILES_MATCHING REGEX "/[^/]*\\.h$")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/canopen_chain_node" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/include/canopen_chain_node/" FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/canopen_chain_node" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/launch")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/canopen_chain_node" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/launch")
 endif()
 

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/test_conversion"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/test_conversion.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/test_conversion"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/test_conversion.pdb"
   "CMakeFiles/test_conversion.dir/test/test_conversion.cpp.o"
 )
 

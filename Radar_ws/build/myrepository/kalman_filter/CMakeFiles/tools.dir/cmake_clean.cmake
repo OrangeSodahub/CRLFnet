@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libtools.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libtools.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libtools.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libtools.so"
   "CMakeFiles/tools.dir/src/tools.cpp.o"
 )
 

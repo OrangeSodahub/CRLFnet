@@ -1,4 +1,4 @@
-prefix=/home/zonlin/桌面/ROS_WS/Radar_ws/install
+prefix=/home/zonlin/ROS/Radar_ws/install
 
 Name: canopen_402
 Description: Description of canopen_402

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_interface/socketcan_dump"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_interface/socketcan_dump.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_interface/socketcan_dump"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_interface/socketcan_dump.pdb"
   "CMakeFiles/socketcan_dump.dir/src/candump.cpp.o"
 )
 

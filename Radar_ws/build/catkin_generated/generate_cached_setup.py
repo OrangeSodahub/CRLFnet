@@ -19,7 +19,7 @@ except ImportError:
             break
     from catkin.environment_cache import generate_environment_script
 
-code = generate_environment_script('/home/zonlin/桌面/ROS_WS/Radar_ws/devel/env.sh')
+code = generate_environment_script('/home/zonlin/ROS/Radar_ws/devel/env.sh')
 
 output_filename = '/home/zonlin/ROS/Radar_ws/build/catkin_generated/setup_cached.sh'
 with open(output_filename, 'w') as f:

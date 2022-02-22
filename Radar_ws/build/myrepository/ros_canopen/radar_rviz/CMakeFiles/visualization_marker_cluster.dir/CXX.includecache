@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include/pb_msgs/ClusterRadar.h
+/home/zonlin/ROS/Radar_ws/devel/include/pb_msgs/ClusterRadar.h
 string
 -
 vector
@@ -24,7 +24,7 @@ ros/message_operations.h
 std_msgs/Header.h
 -
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include/pb_msgs/ContiRadar.h
+/home/zonlin/ROS/Radar_ws/devel/include/pb_msgs/ContiRadar.h
 string
 -
 vector
@@ -42,7 +42,7 @@ ros/message_operations.h
 std_msgs/Header.h
 -
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/radar_rviz/include/markers/visualization_marker_cluster.h
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/radar_rviz/include/markers/visualization_marker_cluster.h
 ros/ros.h
 -
 std_msgs/String.h
@@ -58,7 +58,7 @@ iostream
 cmath
 -
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/radar_rviz/src/visualization_marker_cluster.cpp
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/radar_rviz/src/visualization_marker_cluster.cpp
 ros/ros.h
 -
 std_msgs/String.h

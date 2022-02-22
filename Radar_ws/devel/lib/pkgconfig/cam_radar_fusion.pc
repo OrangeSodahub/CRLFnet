@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/Radar_ws/devel
+
+Name: cam_radar_fusion
+Description: Description of cam_radar_fusion
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: cv_bridge image_transport pcl_conversions pcl_ros roscpp tf

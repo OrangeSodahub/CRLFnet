@@ -1,0 +1,14 @@
+\subsubsection usage Usage
+\verbatim
+<node name="sick_scan_fusion" pkg="sick_scan_fusion" type="sick_scan_fusion">
+  <param name="parent_frame" type="str" value="map" />
+  <param name="child_frame" type="str" value="scan" />
+  <param name="tf_x" type="double" value="0.0" />
+  <param name="tf_y" type="double" value="0.0" />
+  <param name="tf_z" type="double" value="0.0" />
+  <param name="tf_rot_x" type="double" value="0.0" />
+  <param name="tf_rot_y" type="double" value="0.0" />
+  <param name="tf_rot_z" type="double" value="0.0" />
+</node>
+\endverbatim
+

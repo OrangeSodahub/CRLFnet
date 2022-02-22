@@ -1,7 +1,7 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
 messages_str = ""
-services_str = "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/GetObject.srv;/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/SetObject.srv"
+services_str = "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/GetObject.srv;/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_chain_node/srv/SetObject.srv"
 pkg_name = "canopen_chain_node"
 dependencies_str = ""
 langs = "gencpp;geneus;genlisp;gennodejs;genpy"

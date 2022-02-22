@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libspeedinfo.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libspeedinfo.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libspeedinfo.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libspeedinfo.so"
   "CMakeFiles/speedinfo.dir/src/speedinfo.cpp.o"
 )
 

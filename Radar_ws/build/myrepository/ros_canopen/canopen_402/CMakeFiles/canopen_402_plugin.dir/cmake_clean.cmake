@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libcanopen_402_plugin.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libcanopen_402_plugin.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libcanopen_402_plugin.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libcanopen_402_plugin.so"
   "CMakeFiles/canopen_402_plugin.dir/src/plugin.cpp.o"
 )
 

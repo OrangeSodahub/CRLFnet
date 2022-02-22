@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/configuration_node"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/configuration_node.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/configuration_node"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/configuration_node.pdb"
   "CMakeFiles/configuration_node.dir/src/configuration_node.cpp.o"
 )
 

@@ -376,14 +376,14 @@
 
   <!-- Lidar11 -->
   <joint name="velodyne11_base_mount_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.00504837374851497 0.852121866219549 0.20807708"/>
+    <origin rpy="0 0 0" xyz="-0.367676330068534 1.21889954106114 0"/>
     <parent link="pole1_Link"/>
     <child link="velodyne11_base_link"/>
   </joint>
   <link name="velodyne11_base_link">
     <inertial>
       <mass value="0.83"/>
-      <origin xyz="-0.716154162323716 0.2472 0"/>
+      <origin xyz="-1.64972044824145 -1.1648101676817 0"/>
       <inertia ixx="0.000908059425" ixy="0" ixz="0" iyy="0.000908059425" iyz="0" izz="0.0011049624"/>
     </inertial>
     <visual>
@@ -452,7 +452,7 @@
           <stddev>0.0</stddev>
         </noise>
       </ray>
-      <plugin filename="libgazebo_ros_velodyne_laser.so" name="gazebo_ros_laser_controller">
+      <plugin filename="libgazebo_ros_velodyne_laser.so" name="gazebo_ros_laser_controller"> <!--插件位于包velodyne/devel/lib中,需编译后才能形成-->
         <topicName>/velodyne11_points</topicName>
         <frameName>velodyne11</frameName>
         <organize_cloud>False</organize_cloud>

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_master/canopen_bcm_sync"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_master/canopen_bcm_sync.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_master/canopen_bcm_sync"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_master/canopen_bcm_sync.pdb"
   "CMakeFiles/canopen_bcm_sync.dir/src/bcm_sync.cpp.o"
 )
 

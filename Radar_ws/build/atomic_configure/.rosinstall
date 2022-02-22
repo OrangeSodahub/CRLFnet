@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/zonlin/桌面/ROS_WS/Radar_ws/devel/setup.sh
+    local-name: /home/zonlin/ROS/Radar_ws/devel/setup.sh

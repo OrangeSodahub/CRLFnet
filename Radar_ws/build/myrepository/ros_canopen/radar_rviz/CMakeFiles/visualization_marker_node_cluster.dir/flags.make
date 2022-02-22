@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=c++11
 
 CXX_DEFINES = -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"radar_rviz\"
 
-CXX_INCLUDES = -I/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/radar_rviz/include -I/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp 
+CXX_INCLUDES = -I/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/radar_rviz/include -I/home/zonlin/ROS/Radar_ws/devel/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp 
 

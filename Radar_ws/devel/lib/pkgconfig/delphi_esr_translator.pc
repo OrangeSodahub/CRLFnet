@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/Radar_ws/devel
+
+Name: delphi_esr_translator
+Description: Description of delphi_esr_translator
+Version: 0.0.0
+Cflags: -I/home/zonlin/ROS/Radar_ws/src/radars-tools/include
+Libs: -L${prefix}/lib 
+Requires: roscpp rospy tf2 tf2_ros std_msgs delphi_esr_msgs radar_msgs visualization_msgs

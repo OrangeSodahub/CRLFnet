@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_interface/socketcan_bcm"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_interface/socketcan_bcm.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_interface/socketcan_bcm"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_interface/socketcan_bcm.pdb"
   "CMakeFiles/socketcan_bcm.dir/src/canbcm.cpp.o"
 )
 

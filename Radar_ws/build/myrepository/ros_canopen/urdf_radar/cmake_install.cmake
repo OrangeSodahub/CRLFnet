@@ -1,8 +1,8 @@
-# Install script for directory: /home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/urdf_radar
+# Install script for directory: /home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/urdf_radar
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/zonlin/桌面/ROS_WS/Radar_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/zonlin/ROS/Radar_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -49,14 +49,14 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/urdf_radar" TYPE FILE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/urdf_radar" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/urdf_radar" TYPE DIRECTORY FILES
-    "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/launch"
-    "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/rviz"
-    "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/urdf"
+    "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/launch"
+    "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/rviz"
+    "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/urdf_radar/urdf"
     )
 endif()
 

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libdecode_cluster.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libdecode_cluster.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libdecode_cluster.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libdecode_cluster.so"
   "CMakeFiles/decode_cluster.dir/src/decode_cluster.cpp.o"
 )
 

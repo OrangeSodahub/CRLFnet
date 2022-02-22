@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/common-lisp/ros/can_msgs/msg/Frame.lisp"
+  "/home/zonlin/ROS/Radar_ws/devel/share/common-lisp/ros/can_msgs/msg/Frame.lisp"
   "CMakeFiles/can_msgs_generate_messages_lisp"
 )
 

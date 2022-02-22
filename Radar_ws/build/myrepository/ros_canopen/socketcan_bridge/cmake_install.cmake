@@ -1,8 +1,8 @@
-# Install script for directory: /home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge
+# Install script for directory: /home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/zonlin/桌面/ROS_WS/Radar_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/zonlin/ROS/Radar_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -49,7 +49,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/socketcan_bridge" TYPE FILE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/socketcan_bridge" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/package.xml")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -59,12 +59,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_bridge_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge" TYPE EXECUTABLE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/socketcan_bridge_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge" TYPE EXECUTABLE FILES "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/socketcan_bridge_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_bridge_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_bridge_node")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_bridge_node"
-         OLD_RPATH "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
+         OLD_RPATH "/home/zonlin/ROS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_bridge_node")
@@ -79,12 +79,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libsocketcan_to_topic.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libsocketcan_to_topic.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/zonlin/ROS/Radar_ws/devel/lib/libsocketcan_to_topic.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libsocketcan_to_topic.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libsocketcan_to_topic.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libsocketcan_to_topic.so"
-         OLD_RPATH "/opt/ros/noetic/lib:/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:"
+         OLD_RPATH "/opt/ros/noetic/lib:/home/zonlin/ROS/Radar_ws/devel/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libsocketcan_to_topic.so")
@@ -102,12 +102,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_to_topic_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge" TYPE EXECUTABLE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/socketcan_to_topic_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge" TYPE EXECUTABLE FILES "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/socketcan_to_topic_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_to_topic_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_to_topic_node")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_to_topic_node"
-         OLD_RPATH "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
+         OLD_RPATH "/home/zonlin/ROS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/socketcan_to_topic_node")
@@ -122,12 +122,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libtopic_to_socketcan.so"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libtopic_to_socketcan.so")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/zonlin/ROS/Radar_ws/devel/lib/libtopic_to_socketcan.so")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libtopic_to_socketcan.so" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libtopic_to_socketcan.so")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libtopic_to_socketcan.so"
-         OLD_RPATH "/opt/ros/noetic/lib:/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:"
+         OLD_RPATH "/opt/ros/noetic/lib:/home/zonlin/ROS/Radar_ws/devel/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libtopic_to_socketcan.so")
@@ -145,12 +145,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/topic_to_socketcan_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge" TYPE EXECUTABLE FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/topic_to_socketcan_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge" TYPE EXECUTABLE FILES "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/topic_to_socketcan_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/topic_to_socketcan_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/topic_to_socketcan_node")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/topic_to_socketcan_node"
-         OLD_RPATH "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
+         OLD_RPATH "/home/zonlin/ROS/Radar_ws/devel/lib:/opt/ros/noetic/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/socketcan_bridge/topic_to_socketcan_node")
@@ -159,6 +159,6 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/socketcan_bridge" TYPE DIRECTORY FILES "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/socketcan_bridge" TYPE DIRECTORY FILES "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/")
 endif()
 

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_chain_node/canopen_chain_node"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_chain_node/canopen_chain_node.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_chain_node/canopen_chain_node"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_chain_node/canopen_chain_node.pdb"
   "CMakeFiles/canopen_chain_node.dir/src/chain_node.cpp.o"
 )
 

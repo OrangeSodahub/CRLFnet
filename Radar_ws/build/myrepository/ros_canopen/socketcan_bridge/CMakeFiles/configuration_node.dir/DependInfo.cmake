@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/src/configuration_node.cpp" "/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/socketcan_bridge/CMakeFiles/configuration_node.dir/src/configuration_node.cpp.o"
+  "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/src/configuration_node.cpp" "/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/socketcan_bridge/CMakeFiles/configuration_node.dir/src/configuration_node.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,9 +17,9 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_interface/include"
+  "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include"
+  "/home/zonlin/ROS/Radar_ws/devel/include"
+  "/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_interface/include"
   "/opt/ros/noetic/include"
   "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   )

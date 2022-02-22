@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libcanopen_402.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libcanopen_402.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libcanopen_402.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libcanopen_402.so"
   "CMakeFiles/canopen_402.dir/src/motor.cpp.o"
 )
 

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libvisualization_marker.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libvisualization_marker.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libvisualization_marker.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libvisualization_marker.so"
   "CMakeFiles/visualization_marker.dir/src/visualization_marker.cpp.o"
 )
 

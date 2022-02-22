@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include/can_msgs/Frame.h"
+  "/home/zonlin/ROS/Radar_ws/devel/include/can_msgs/Frame.h"
   "CMakeFiles/can_msgs_generate_messages_cpp"
 )
 

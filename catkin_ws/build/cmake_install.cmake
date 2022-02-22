@@ -131,6 +131,8 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/zonlin/ROS/catkin_ws/build/gtest/cmake_install.cmake")
+  include("/home/zonlin/ROS/catkin_ws/build/gazebo_radar_plugin/cmake_install.cmake")
+  include("/home/zonlin/ROS/catkin_ws/build/point_cloud/cmake_install.cmake")
   include("/home/zonlin/ROS/catkin_ws/build/site/cmake_install.cmake")
 
 endif()

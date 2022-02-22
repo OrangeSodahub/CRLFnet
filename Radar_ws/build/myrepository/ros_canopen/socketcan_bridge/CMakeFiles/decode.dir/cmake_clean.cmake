@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libdecode.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libdecode.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libdecode.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libdecode.so"
   "CMakeFiles/decode.dir/src/decode.cpp.o"
 )
 

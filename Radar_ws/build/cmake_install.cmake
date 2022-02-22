@@ -1,8 +1,8 @@
-# Install script for directory: /home/zonlin/桌面/ROS_WS/Radar_ws/src
+# Install script for directory: /home/zonlin/ROS/Radar_ws/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/zonlin/桌面/ROS_WS/Radar_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/zonlin/ROS/Radar_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -49,38 +49,38 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/zonlin/桌面/ROS_WS/Radar_ws/install/_setup_util.py")
+   "/home/zonlin/ROS/Radar_ws/install/_setup_util.py")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/zonlin/桌面/ROS_WS/Radar_ws/install" TYPE PROGRAM FILES "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/_setup_util.py")
+file(INSTALL DESTINATION "/home/zonlin/ROS/Radar_ws/install" TYPE PROGRAM FILES "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/_setup_util.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/zonlin/桌面/ROS_WS/Radar_ws/install/env.sh")
+   "/home/zonlin/ROS/Radar_ws/install/env.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/zonlin/桌面/ROS_WS/Radar_ws/install" TYPE PROGRAM FILES "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/env.sh")
+file(INSTALL DESTINATION "/home/zonlin/ROS/Radar_ws/install" TYPE PROGRAM FILES "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/env.sh")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/zonlin/桌面/ROS_WS/Radar_ws/install/setup.bash;/home/zonlin/桌面/ROS_WS/Radar_ws/install/local_setup.bash")
+   "/home/zonlin/ROS/Radar_ws/install/setup.bash;/home/zonlin/ROS/Radar_ws/install/local_setup.bash")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/zonlin/桌面/ROS_WS/Radar_ws/install" TYPE FILE FILES
+file(INSTALL DESTINATION "/home/zonlin/ROS/Radar_ws/install" TYPE FILE FILES
     "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/setup.bash"
     "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/local_setup.bash"
     )
@@ -88,14 +88,14 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/zonlin/桌面/ROS_WS/Radar_ws/install/setup.sh;/home/zonlin/桌面/ROS_WS/Radar_ws/install/local_setup.sh")
+   "/home/zonlin/ROS/Radar_ws/install/setup.sh;/home/zonlin/ROS/Radar_ws/install/local_setup.sh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/zonlin/桌面/ROS_WS/Radar_ws/install" TYPE FILE FILES
+file(INSTALL DESTINATION "/home/zonlin/ROS/Radar_ws/install" TYPE FILE FILES
     "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/setup.sh"
     "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/local_setup.sh"
     )
@@ -103,14 +103,14 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/zonlin/桌面/ROS_WS/Radar_ws/install/setup.zsh;/home/zonlin/桌面/ROS_WS/Radar_ws/install/local_setup.zsh")
+   "/home/zonlin/ROS/Radar_ws/install/setup.zsh;/home/zonlin/ROS/Radar_ws/install/local_setup.zsh")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/zonlin/桌面/ROS_WS/Radar_ws/install" TYPE FILE FILES
+file(INSTALL DESTINATION "/home/zonlin/ROS/Radar_ws/install" TYPE FILE FILES
     "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/setup.zsh"
     "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/local_setup.zsh"
     )
@@ -118,31 +118,27 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
-   "/home/zonlin/桌面/ROS_WS/Radar_ws/install/.rosinstall")
+   "/home/zonlin/ROS/Radar_ws/install/.rosinstall")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(WARNING "ABSOLUTE path INSTALL DESTINATION : ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/home/zonlin/桌面/ROS_WS/Radar_ws/install" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/.rosinstall")
+file(INSTALL DESTINATION "/home/zonlin/ROS/Radar_ws/install" TYPE FILE FILES "/home/zonlin/ROS/Radar_ws/build/catkin_generated/installspace/.rosinstall")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/zonlin/ROS/Radar_ws/build/gtest/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/ros_canopen/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/socketcan_interface/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/canopen_master/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/canopen_402/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/can_msgs/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/pb_msgs/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/kalman_filter/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/radar_rviz/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/canopen_chain_node/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/joint_state_publisher/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/socketcan_bridge/cmake_install.cmake")
-  include("/home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/urdf_radar/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/ros_radar/radar_pa_msgs/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/radar_pkg/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/radar_viz_example/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/ros_radar/radar_pa/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/gazebo_radar_plugin/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/sick_scan/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/ROS-SLAM-MATLAB-Moveit2.0/pudong/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/ROS-SLAM-MATLAB-Moveit2.0/pudong_gazebo/cmake_install.cmake")
 
 endif()
 

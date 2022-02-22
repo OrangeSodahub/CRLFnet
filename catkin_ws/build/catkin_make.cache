@@ -1,2 +1,2 @@
-Delphi_ESR_SSR_gazebo_plugin-master/radar_plugin:gazebo_radar_plugin-master:point_cloud:site
+gazebo_radar_plugin:point_cloud:site
 -DCATKIN_DEVEL_PREFIX=/home/zonlin/ROS/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/ROS/catkin_ws/install -G Unix Makefiles

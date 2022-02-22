@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/devel/include/can_msgs/Frame.h
+/home/zonlin/ROS/Radar_ws/devel/include/can_msgs/Frame.h
 string
 -
 vector
@@ -24,11 +24,11 @@ ros/message_operations.h
 std_msgs/Header.h
 -
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/configuration.h
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/configuration.h
 ros/ros.h
 -
 std_msgs/String.h
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/std_msgs/String.h
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/std_msgs/String.h
 can_msgs/Frame.h
 -
 socketcan_bridge/data.h
@@ -36,17 +36,17 @@ socketcan_bridge/data.h
 cmath
 -
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/configuration_vars.h
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/configuration_vars.h
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/data.h
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/include/socketcan_bridge/data.h
 iostream
 -
 
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/src/configuration.cpp
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/src/configuration.cpp
 ros/ros.h
 -
 std_msgs/String.h
-/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/src/std_msgs/String.h
+/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_bridge/src/std_msgs/String.h
 can_msgs/Frame.h
 -
 socketcan_bridge/data.h

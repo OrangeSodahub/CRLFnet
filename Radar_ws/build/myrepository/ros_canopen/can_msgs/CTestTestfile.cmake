@@ -1,5 +1,5 @@
 # CMake generated Testfile for 
-# Source directory: /home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/can_msgs
+# Source directory: /home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/can_msgs
 # Build directory: /home/zonlin/ROS/Radar_ws/build/myrepository/ros_canopen/can_msgs
 # 
 # This file includes the relevant testing commands required for 

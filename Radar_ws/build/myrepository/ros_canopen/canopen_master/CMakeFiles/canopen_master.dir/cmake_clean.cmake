@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libcanopen_master.pdb"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/libcanopen_master.so"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libcanopen_master.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/libcanopen_master.so"
   "CMakeFiles/canopen_master.dir/src/emcy.cpp.o"
   "CMakeFiles/canopen_master.dir/src/node.cpp.o"
   "CMakeFiles/canopen_master.dir/src/objdict.cpp.o"

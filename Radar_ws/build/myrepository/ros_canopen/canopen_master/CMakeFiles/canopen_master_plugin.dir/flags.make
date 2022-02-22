@@ -6,5 +6,5 @@ CXX_FLAGS = -fPIC
 
 CXX_DEFINES = -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_CHRONO_DYN_LINK -DBOOST_THREAD_DYN_LINK -DROS_BUILD_SHARED_LIBS=1 -Dcanopen_master_plugin_EXPORTS
 
-CXX_INCLUDES = -I/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_master/include -I/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_interface/include -I/opt/ros/noetic/include 
+CXX_INCLUDES = -I/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_master/include -I/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_interface/include -I/opt/ros/noetic/include 
 

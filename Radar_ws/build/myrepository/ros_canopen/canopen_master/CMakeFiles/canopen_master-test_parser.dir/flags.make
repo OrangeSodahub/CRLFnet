@@ -6,5 +6,5 @@ CXX_FLAGS =   -DGTEST_HAS_PTHREAD=1
 
 CXX_DEFINES = -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_CHRONO_DYN_LINK -DBOOST_THREAD_DYN_LINK -DROS_BUILD_SHARED_LIBS=1
 
-CXX_INCLUDES = -I/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/canopen_master/include -I/home/zonlin/桌面/ROS_WS/Radar_ws/src/myrepository/ros_canopen/socketcan_interface/include -I/opt/ros/noetic/include -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest 
+CXX_INCLUDES = -I/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_master/include -I/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/socketcan_interface/include -I/opt/ros/noetic/include -isystem /usr/src/googletest/googletest/include -isystem /usr/src/googletest/googletest 
 

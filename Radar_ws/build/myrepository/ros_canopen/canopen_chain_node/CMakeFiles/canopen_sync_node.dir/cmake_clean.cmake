@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_chain_node/canopen_sync_node"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/canopen_chain_node/canopen_sync_node.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_chain_node/canopen_sync_node"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/canopen_chain_node/canopen_sync_node.pdb"
   "CMakeFiles/canopen_sync_node.dir/src/sync_node.cpp.o"
 )
 

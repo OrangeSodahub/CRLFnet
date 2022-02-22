@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/common-lisp/ros/canopen_chain_node/srv/GetObject.lisp"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/share/common-lisp/ros/canopen_chain_node/srv/SetObject.lisp"
+  "/home/zonlin/ROS/Radar_ws/devel/share/common-lisp/ros/canopen_chain_node/srv/GetObject.lisp"
+  "/home/zonlin/ROS/Radar_ws/devel/share/common-lisp/ros/canopen_chain_node/srv/SetObject.lisp"
   "CMakeFiles/canopen_chain_node_generate_messages_lisp"
 )
 

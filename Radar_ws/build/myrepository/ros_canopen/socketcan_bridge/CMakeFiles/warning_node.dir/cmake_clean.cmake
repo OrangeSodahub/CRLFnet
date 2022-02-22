@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/warning_node"
-  "/home/zonlin/桌面/ROS_WS/Radar_ws/devel/lib/socketcan_bridge/warning_node.pdb"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/warning_node"
+  "/home/zonlin/ROS/Radar_ws/devel/lib/socketcan_bridge/warning_node.pdb"
   "CMakeFiles/warning_node.dir/src/warning_node.cpp.o"
 )
 

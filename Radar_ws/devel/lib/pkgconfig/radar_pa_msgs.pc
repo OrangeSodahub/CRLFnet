@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/Radar_ws/devel
+
+Name: radar_pa_msgs
+Description: Description of radar_pa_msgs
+Version: 1.0.1
+Cflags: -I/home/zonlin/ROS/Radar_ws/devel/include
+Libs: -L${prefix}/lib 
+Requires: rospy std_msgs
