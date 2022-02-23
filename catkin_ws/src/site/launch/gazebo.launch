@@ -31,10 +31,10 @@
     pkg="robot_state_publisher"
     type="robot_state_publisher"
     name="robot_state_publisher">
-  <param
-    name="publish_frequency"
-    type="double"
-    value="30.0" />
+    <param
+      name="publish_frequency"
+      type="double"
+      value="30.0" />
   </node>
   <node
     pkg="gazebo_ros"
@@ -71,15 +71,13 @@
     type="cloud_viewer"
     args="-d $(find site)/src/cloud_viewer.cpp" />-->
 
-  <!-- output the image -->
+  <!-- output the image 
   <node
     name="image_output"
     pkg="site"
     type="image_output"
-    args="-d $(find site)/src/image_output.cpp" />
+    args="-d $(find site)/src/image_output.cpp" />-->
 
-  <!-- spawn the miliwave radar -->
-  
   <!-- Rviz -->
   <arg name="rviz" default="true"/>
   <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find site)/rviz/example.rviz" />

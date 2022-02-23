@@ -14,7 +14,8 @@ public:
         pcl::PointCloud<pcl::PointXYZ> cloud; // 原始点云
         pcl::PointCloud<pcl::PointXYZ> cloud_filtered; // 经过滤波后的点云
         pcl::PointCloud<pcl::PointXYZ> cloud_downsampled; // 经过下采样后的点云
-        pcl::io::loadPCDFile ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1.pcd", cloud);
+        pcl::io::loadPCDFile ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud.pcd", cloud);
+        std::cerr << "point_cloud.pcd" << " " << cloud.points.size() << "points have been loaded" << std::endl;
  
         //剔除离群值
         pcl::StatisticalOutlierRemoval<pcl::PointXYZ> statFilter; // 统计离群值算法
@@ -30,8 +31,8 @@ public:
         voxelSampler.filter(cloud_downsampled); // 输出点云结果
 
         //保存点云文件
-        if(pcl::io::savePCDFileASCII ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1_filtered_downsampled.pcd", cloud_downsampled)>=0)
-        {std::cerr << "Saved point_cloud1_filtered_downsampled.pcd" << " " << cloud_downsampled.points.size() << "points have been written" << std::endl;}
+        if(pcl::io::savePCDFileASCII ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud_filtered_downsampled.pcd", cloud_downsampled)>=0)
+        {std::cerr << "Saved point_cloud_filtered_downsampled.pcd" << " " << cloud_downsampled.points.size() << "points have been written" << std::endl;}
  
         viewer.showCloud(cloud_filtered.makeShared());
         viewer_timer = nh.createTimer(ros::Duration(0.1), &cloudHandler::timerCB, this);
@@ -52,7 +53,7 @@ protected:
     ros::Timer viewer_timer;
 };
  
-main (int argc, char **argv)
+int main (int argc, char **argv)
 {
     ros::init (argc, argv, "point_cloud_filter"); // node
     cloudHandler handler;

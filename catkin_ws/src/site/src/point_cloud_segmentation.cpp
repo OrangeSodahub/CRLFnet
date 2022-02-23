@@ -1,4 +1,4 @@
-/*随机一致性算法*/
+/* 随机一致性算法 去除地面点 */
 
 #include <ros/ros.h>
 #include <pcl/point_cloud.h>
@@ -14,7 +14,7 @@
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/filters/extract_indices.h>
  
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     ros::init (argc, argv, "point_cloud_segmentation"); // node
     ros::NodeHandle nh;
@@ -25,7 +25,8 @@ main(int argc, char **argv)
     ros::Publisher ind_pub = nh.advertise<pcl_msgs::PointIndices>("point_indices", 1);
     ros::Publisher coef_pub = nh.advertise<pcl_msgs::ModelCoefficients>("planar_coef", 1);
 
-    pcl::io::loadPCDFile ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1_filtered_downsampled.pcd", cloud);
+    pcl::io::loadPCDFile ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud_filtered_downsampled.pcd", cloud);
+    std::cerr << "point_cloud_segmented.pcd:" << " " << cloud_segmented.points.size() << "points have been loaded" << std::endl;
 
     //RANSAC算法 分割
 	pcl::ModelCoefficients coefficients;//初始化模型系数
@@ -50,12 +51,12 @@ main(int argc, char **argv)
     pcl::ExtractIndices<pcl::PointXYZ> extract;
     extract.setInputCloud(cloud.makeShared());
     extract.setIndices(inliers);
-    extract.setNegative(false);
+    extract.setNegative(true); // 注意false和true的区别
     extract.filter(cloud_segmented);
 
     //保存点云文件
-    if(pcl::io::savePCDFileASCII ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1_segmented.pcd", cloud_segmented)>=0)
-    {std::cerr << "Saved point_cloud1_segmented.pcd" << " " << cloud_segmented.points.size() << "points have been written" << std::endl;}
+    if(pcl::io::savePCDFileASCII ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud_segmented.pcd", cloud_segmented)>=0)
+    {std::cerr << "Saved point_cloud_segmented.pcd" << " " << cloud_segmented.points.size() << "points have been written" << std::endl;}
      
     ros::Rate loop_rate(1);
     while (ros::ok())

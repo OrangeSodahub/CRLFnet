@@ -131,6 +131,8 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/zonlin/ROS/Radar_ws/build/gtest/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/delphi_esr_msgs/cmake_install.cmake")
+  include("/home/zonlin/ROS/Radar_ws/build/test_urdf_test/cmake_install.cmake")
   include("/home/zonlin/ROS/Radar_ws/build/ros_radar/radar_pa_msgs/cmake_install.cmake")
   include("/home/zonlin/ROS/Radar_ws/build/radar_pkg/cmake_install.cmake")
   include("/home/zonlin/ROS/Radar_ws/build/radar_viz_example/cmake_install.cmake")

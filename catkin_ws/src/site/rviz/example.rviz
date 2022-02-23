@@ -239,14 +239,14 @@ Visualization Manager:
       Max Intensity: 7
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: VLP11-16
+      Name: VLP1-16
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.00999999978
       Style: Points
-      Topic: /velodyne11_points
+      Topic: /velodyne1_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -269,14 +269,14 @@ Visualization Manager:
       Max Intensity: 7
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: VLP12-16
+      Name: VLP2-16
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.00999999978
       Style: Points
-      Topic: /velodyne12_points
+      Topic: /velodyne2_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -299,14 +299,14 @@ Visualization Manager:
       Max Intensity: 22
       Min Color: 0; 0; 0
       Min Intensity: 0
-      Name: VLP2-16
+      Name: VLP3-16
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.00999999978
       Style: Points
-      Topic: /velodyne2_points
+      Topic: /velodyne3_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true

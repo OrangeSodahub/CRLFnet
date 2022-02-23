@@ -56,7 +56,7 @@ int main (int argc, char **argv)
 {
     ros::init (argc, argv, "point_cloud_write2");
     ros::NodeHandle nh;
-    ros::Subscriber bat_sub = nh.subscribe("/velodyne2_points", 10, cloudCB); // topic名为/velodyne2_points
+    ros::Subscriber bat_sub = nh.subscribe("/velodyne2_points", 10, cloudCB); // topic名为/velodyne12_points
     ros::spin();
  
     return 0;

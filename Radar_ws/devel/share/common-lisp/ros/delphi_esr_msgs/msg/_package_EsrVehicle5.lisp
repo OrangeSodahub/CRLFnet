@@ -1,0 +1,22 @@
+(cl:in-package delphi_esr_msgs-msg)
+(cl:export '(HEADER-VAL
+          HEADER
+          OVERSTEER_UNDERSTEER-VAL
+          OVERSTEER_UNDERSTEER
+          YAW_RATE_BIAS_SHIFT-VAL
+          YAW_RATE_BIAS_SHIFT
+          BEAMWIDTH_VERT-VAL
+          BEAMWIDTH_VERT
+          FUNNEL_OFFSET_LEFT-VAL
+          FUNNEL_OFFSET_LEFT
+          FUNNEL_OFFSET_RIGHT-VAL
+          FUNNEL_OFFSET_RIGHT
+          CW_BLOCKAGE_THRESHOLD-VAL
+          CW_BLOCKAGE_THRESHOLD
+          DISTANCE_REAR_AXLE-VAL
+          DISTANCE_REAR_AXLE
+          WHEEL_BASE-VAL
+          WHEEL_BASE
+          STEERING_GEAR_RATIO-VAL
+          STEERING_GEAR_RATIO
+))

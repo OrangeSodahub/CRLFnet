@@ -29,7 +29,7 @@ add_custom_target(_radar_pa_msgs_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg" NAME_WE)
 add_custom_target(_radar_pa_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "radar_pa_msgs" "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg" "radar_pa_msgs/radar_msg_B:radar_pa_msgs/radar_msg_A:std_msgs/Header"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "radar_pa_msgs" "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg" "radar_pa_msgs/radar_msg_A:radar_pa_msgs/radar_msg_B:std_msgs/Header"
 )
 
 #
@@ -53,7 +53,7 @@ _generate_msg_cpp(radar_pa_msgs
 _generate_msg_cpp(radar_pa_msgs
   "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg"
   "${MSG_I_FLAGS}"
-  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/radar_pa_msgs
 )
 
@@ -102,7 +102,7 @@ _generate_msg_eus(radar_pa_msgs
 _generate_msg_eus(radar_pa_msgs
   "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg"
   "${MSG_I_FLAGS}"
-  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/radar_pa_msgs
 )
 
@@ -151,7 +151,7 @@ _generate_msg_lisp(radar_pa_msgs
 _generate_msg_lisp(radar_pa_msgs
   "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg"
   "${MSG_I_FLAGS}"
-  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/radar_pa_msgs
 )
 
@@ -200,7 +200,7 @@ _generate_msg_nodejs(radar_pa_msgs
 _generate_msg_nodejs(radar_pa_msgs
   "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg"
   "${MSG_I_FLAGS}"
-  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/radar_pa_msgs
 )
 
@@ -249,7 +249,7 @@ _generate_msg_py(radar_pa_msgs
 _generate_msg_py(radar_pa_msgs
   "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg"
   "${MSG_I_FLAGS}"
-  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg;/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/radar_pa_msgs
 )
 

@@ -1,0 +1,24 @@
+(cl:in-package delphi_esr_msgs-msg)
+(cl:export '(HEADER-VAL
+          HEADER
+          VEHICLE_SPEED-VAL
+          VEHICLE_SPEED
+          SPEED_DIRECTION-VAL
+          SPEED_DIRECTION
+          YAW_RATE-VAL
+          YAW_RATE
+          YAW_RATE_VALID-VAL
+          YAW_RATE_VALID
+          RADIUS_CURVATURE-VAL
+          RADIUS_CURVATURE
+          STEERING_ANGLE_VALID-VAL
+          STEERING_ANGLE_VALID
+          STEERING_ANGLE_SIGN-VAL
+          STEERING_ANGLE_SIGN
+          STEERING_ANGLE-VAL
+          STEERING_ANGLE
+          STEERING_ANGLE_RATE-VAL
+          STEERING_ANGLE_RATE
+          STEERING_ANGLE_RATE_SIGN-VAL
+          STEERING_ANGLE_RATE_SIGN
+))

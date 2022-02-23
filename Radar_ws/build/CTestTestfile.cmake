@@ -5,6 +5,8 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
+subdirs("delphi_esr_msgs")
+subdirs("test_urdf_test")
 subdirs("ros_radar/radar_pa_msgs")
 subdirs("radar_pkg")
 subdirs("radar_viz_example")

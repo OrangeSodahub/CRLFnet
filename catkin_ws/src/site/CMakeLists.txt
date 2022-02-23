@@ -116,9 +116,10 @@ add_executable(cloud_viewer src/cloud_viewer.cpp)
 add_executable(point_cloud_filter src/point_cloud_filter.cpp)
 add_executable(point_cloud_segmentation src/point_cloud_segmentation.cpp)
 add_executable(point_cloud_segmentation_ou_cluster src/point_cloud_segmentation_ou_cluster.cpp)
+add_executable(point_cloud_merge src/point_cloud_merge.cpp)
 add_executable(image_output src/image_output.cpp)
 
-# Link your application with OpenCV libraries
+# Link your application with libraries
 target_link_libraries(point_cloud_write1 ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 target_link_libraries(point_cloud_write2 ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 target_link_libraries(point_cloud_write3 ${catkin_LIBRARIES} ${PCL_LIBRARIES})
@@ -126,6 +127,7 @@ target_link_libraries(cloud_viewer ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} $
 target_link_libraries(point_cloud_filter ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
 target_link_libraries(point_cloud_segmentation ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
 target_link_libraries(point_cloud_segmentation_ou_cluster ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
+target_link_libraries(point_cloud_merge ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
 target_link_libraries(image_output ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 #############

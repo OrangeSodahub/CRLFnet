@@ -72,8 +72,8 @@ ros_radar/radar_pa_msgs/CMakeFiles/radar_pa_msgs_generate_messages_cpp: /home/zo
 
 /home/zonlin/ROS/Radar_ws/devel/include/radar_pa_msgs/radar_msg.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
 /home/zonlin/ROS/Radar_ws/devel/include/radar_pa_msgs/radar_msg.h: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg
-/home/zonlin/ROS/Radar_ws/devel/include/radar_pa_msgs/radar_msg.h: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg
 /home/zonlin/ROS/Radar_ws/devel/include/radar_pa_msgs/radar_msg.h: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg
+/home/zonlin/ROS/Radar_ws/devel/include/radar_pa_msgs/radar_msg.h: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg
 /home/zonlin/ROS/Radar_ws/devel/include/radar_pa_msgs/radar_msg.h: /opt/ros/noetic/share/std_msgs/msg/Header.msg
 /home/zonlin/ROS/Radar_ws/devel/include/radar_pa_msgs/radar_msg.h: /opt/ros/noetic/share/gencpp/msg.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/zonlin/ROS/Radar_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating C++ code from radar_pa_msgs/radar_msg.msg"

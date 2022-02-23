@@ -71,8 +71,8 @@ ros_radar/radar_pa_msgs/CMakeFiles/radar_pa_msgs_generate_messages_py: /home/zon
 
 /home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/radar_pa_msgs/msg/_radar_msg.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/radar_pa_msgs/msg/_radar_msg.py: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg
-/home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/radar_pa_msgs/msg/_radar_msg.py: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg
 /home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/radar_pa_msgs/msg/_radar_msg.py: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_A.msg
+/home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/radar_pa_msgs/msg/_radar_msg.py: /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg_B.msg
 /home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/radar_pa_msgs/msg/_radar_msg.py: /opt/ros/noetic/share/std_msgs/msg/Header.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/zonlin/ROS/Radar_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python from MSG radar_pa_msgs/radar_msg"
 	cd /home/zonlin/ROS/Radar_ws/build/ros_radar/radar_pa_msgs && ../../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg/radar_msg.msg -Iradar_pa_msgs:/home/zonlin/ROS/Radar_ws/src/ros_radar/radar_pa_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p radar_pa_msgs -o /home/zonlin/ROS/Radar_ws/devel/lib/python3/dist-packages/radar_pa_msgs/msg

@@ -1,3 +1,5 @@
+/* 欧式聚类分割 */
+
 #include <pcl/ModelCoefficients.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
@@ -16,7 +18,7 @@ int main (int argc, char** argv)
     // Read in the cloud data
     pcl::PCDReader reader;
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>), cloud_f (new pcl::PointCloud<pcl::PointXYZ>);
-    reader.read ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1.pcd", *cloud); // cloud已经过滤波和降采样
+    reader.read ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud.pcd", *cloud); // cloud已经过滤波和降采样
     
     // Create the segmentation object for the planar model and set all the parameters
     pcl::SACSegmentation<pcl::PointXYZ> seg;//实例化一个分割对象
@@ -31,7 +33,7 @@ int main (int argc, char** argv)
     seg.setDistanceThreshold (0.02);//设置内点到模型的距离允许最大值
     
     int i=0, nr_points = (int) cloud->points.size ();//计数变量i，记下提取的平面的个数
-    while (cloud->points.size () > 0.3 * nr_points)
+    while (cloud->points.size () > 0.3 * nr_points) //***该循环不断地去除平面
     {
     
         // Segment the largest planar component from the remaining cloud
@@ -51,7 +53,7 @@ int main (int argc, char** argv)
         extract.setNegative (false);//提取内点
     
         // Write the planar inliers to disk
-        extract.filter (*cloud_plane);//保存提取到的平面
+        extract.filter (*cloud_plane);//保存提取到的平面到cloud_plane
         std::cout << "PointCloud representing the planar component: " << cloud_plane->points.size () << " data points." << std::endl;
     
         //存写指针的参数
@@ -62,13 +64,13 @@ int main (int argc, char** argv)
         //依次将该指针(cloud_plane)保存至一个专门存放平面的文件(未设置点云格式）、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
         std::stringstream s_plane;
         s_plane << "cloud_plane_"<< i <<".pcd";
-        pcl::io::savePCDFileASCII(s_plane.str(),*cloud_plane);
-        std::cout<<s_plane.str()<<" save succeed \n\n"<<std::endl;
+        pcl::io::savePCDFileASCII("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/"+s_plane.str(),*cloud_plane); //2022.2.23设置了保存路径
+        std::cout<<s_plane.str()<<" save successfully \n\n"<<std::endl;
     
         //计数变量加1
         i++;
         // Remove the planar inliers, extract the rest
-        extract.setNegative (true);//提取外点（除第一个平面之外的点）
+        extract.setNegative (true);//提取外点（除第一个平面之外的点） //2022.2.23如果是false则提取的是内点
         extract.filter (*cloud_f);//保存除平面之外的剩余点
         cloud = cloud_f;//将剩余点作为下一次分割、提取的平面的输入点云
     }
@@ -101,62 +103,62 @@ int main (int argc, char** argv)
         std::cout << "PointCloud representing the Cluster: " << cloud_cluster->points.size () << " data points." << std::endl;
         std::stringstream ss;
         ss << "cloud_cluster_" << j << ".pcd";
-        writer.write<pcl::PointXYZ> (ss.str (), *cloud_cluster, false); //*
+        writer.write<pcl::PointXYZ> ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/"+ss.str (), *cloud_cluster); //*
         j++;
     }
     
-    pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3d viewer"));
+    pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("point_cloud viewer"));
     int v1(0);
     viewer->createViewPort(0,0,0.5,1,v1);
     viewer->setBackgroundColor(0,0,0,v1);
     viewer->addPointCloud(cloud,"cloud",v1);
-    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,255,0,0,"cloud",v1);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,255,255,255,"cloud",v1);
     
     //第二个视口，显示分割聚类后的点云
     //读入每一个点云
     pcl::PointCloud<pcl::PointXYZ>::Ptr view0(new pcl::PointCloud<pcl::PointXYZ>);
-        pcl::PointCloud<pcl::PointXYZ>::Ptr view1(new pcl::PointCloud<pcl::PointXYZ>);
-        pcl::PointCloud<pcl::PointXYZ>::Ptr view2(new pcl::PointCloud<pcl::PointXYZ>);
-        pcl::PointCloud<pcl::PointXYZ>::Ptr view3(new pcl::PointCloud<pcl::PointXYZ>);
-        pcl::PointCloud<pcl::PointXYZ>::Ptr view4(new pcl::PointCloud<pcl::PointXYZ>);
-        //读取两个平面的指针
-        pcl::PointCloud<pcl::PointXYZ>::Ptr view_plane1(new pcl::PointCloud<pcl::PointXYZ>);
-        pcl::PointCloud<pcl::PointXYZ>::Ptr view_plane2(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr view1(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr view2(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr view3(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr view4(new pcl::PointCloud<pcl::PointXYZ>);
+    //读取两个平面的指针
+    pcl::PointCloud<pcl::PointXYZ>::Ptr view_plane1(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr view_plane2(new pcl::PointCloud<pcl::PointXYZ>);
     
-    pcl::io::loadPCDFile("cloud_cluster_0.pcd",*view0);
-        pcl::io::loadPCDFile("cloud_cluster_1.pcd",*view1);
-        pcl::io::loadPCDFile("cloud_cluster_2.pcd",*view2);
-        pcl::io::loadPCDFile("cloud_cluster_3.pcd",*view3);
-        pcl::io::loadPCDFile("cloud_cluster_4.pcd",*view4);
-        //读取两个平面
-        pcl::io::loadPCDFile("cloud_plane_0.pcd",*view_plane1);
-        pcl::io::loadPCDFile("cloud_plane_1.pcd",*view_plane2);
-        std::cerr<<"cloud_plane read"<<std::endl;
-    
-        int v2(0);
-        viewer->createViewPort(0.5,0,1,1,v2);
-        viewer->setBackgroundColor(1,1,1,v2);
-    
-        viewer->addPointCloud(view0,"view0",v2);
-        viewer->addPointCloud(view1,"view1",v2);
-        viewer->addPointCloud(view2,"view2",v2);
-        viewer->addPointCloud(view3,"view3",v2);
-        viewer->addPointCloud(view4,"view4",v2);
-    
-        //显示两个平面
-        viewer->addPointCloud<pcl::PointXYZ>(view_plane1,"view_plane1",v2);
-        viewer->addPointCloud(view_plane2,"view_plane2",v2);
-        std::cout<<"added!"<<std::endl;
-    
-        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,255,0,0,"view0",v2);
-        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,255,0,"view1",v2);
-        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,0,255,"view2",v2);
-        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,126,123,0,"view3",v2);
-        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,0,0,"view4",v2);
-    
-        //设置两个平面的颜色
-        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,100,0,60,"view_plane1",v2);
-        viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,255,60,"view_plane2",v2);
+    pcl::io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/cloud_cluster_0.pcd",*view0);
+    pcl::io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/cloud_cluster_1.pcd",*view1);
+    pcl::io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/cloud_cluster_2.pcd",*view2);
+    pcl::io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/cloud_cluster_3.pcd",*view3);
+    pcl::io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/cloud_cluster_4.pcd",*view4);
+    //读取两个平面
+    pcl::io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/cloud_plane_0.pcd",*view_plane1);
+    pcl::io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/cloud_plane_1.pcd",*view_plane2);
+    std::cerr<<"cloud_plane read"<<std::endl;
+
+    int v2(0);
+    viewer->createViewPort(0.5,0,1,1,v2);
+    viewer->setBackgroundColor(1,1,1,v2);
+
+    viewer->addPointCloud(view0,"view0",v2);
+    viewer->addPointCloud(view1,"view1",v2);
+    viewer->addPointCloud(view2,"view2",v2);
+    viewer->addPointCloud(view3,"view3",v2);
+    viewer->addPointCloud(view4,"view4",v2);
+
+    //显示两个平面
+    viewer->addPointCloud<pcl::PointXYZ>(view_plane1,"view_plane1",v2);
+    viewer->addPointCloud(view_plane2,"view_plane2",v2);
+    std::cout<<"added!"<<std::endl;
+
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,255,0,0,"view0",v2);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,255,0,"view1",v2);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,0,255,"view2",v2);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,126,123,0,"view3",v2);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,0,0,"view4",v2);
+
+    //设置两个平面的颜色
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,100,0,60,"view_plane1",v2);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,0,255,60,"view_plane2",v2);
     
     while (!viewer->wasStopped())
     {

@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/Radar_ws/install
+
+Name: center_msgs
+Description: Description of center_msgs
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,2 +1,2 @@
-ROS-SLAM-MATLAB-Moveit2.0/pudong:ROS-SLAM-MATLAB-Moveit2.0/pudong_gazebo:gazebo_radar_plugin:radar_pkg:radar_viz_example:ros_radar/radar_pa:ros_radar/radar_pa_msgs:sick_scan
+ROS-SLAM-MATLAB-Moveit2.0/pudong:ROS-SLAM-MATLAB-Moveit2.0/pudong_gazebo:delphi_esr_msgs:gazebo_radar_plugin:radar_pkg:radar_viz_example:ros_radar/radar_pa:ros_radar/radar_pa_msgs:sick_scan:test_urdf_test
 -DCATKIN_DEVEL_PREFIX=/home/zonlin/ROS/Radar_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/ROS/Radar_ws/install -G Unix Makefiles
