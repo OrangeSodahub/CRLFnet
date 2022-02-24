@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/catkin_ws/install
+
+Name: pkg
+Description: Description of pkg
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

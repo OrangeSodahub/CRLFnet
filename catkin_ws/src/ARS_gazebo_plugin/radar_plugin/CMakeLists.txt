@@ -51,14 +51,14 @@ include_directories(
   ${GAZEBO_INCLUDE_DIRS}
 )
 
-add_executable(radarMsgCombiner src/radar_combiner.cpp)
+#add_executable(radarMsgCombiner src/radar_combiner.cpp)
 
-add_library(radar_plugin src/radar_plugin.cpp)
+#add_library(radar_plugin src/radar_plugin.cpp)
 #add_library(radar_srr_plugin src/radar_srr_plugin.cpp)
 
-add_dependencies(radar_plugin ${catkin_EXPORTED_TARGETS})
+#add_dependencies(radar_plugin ${catkin_EXPORTED_TARGETS})
 #add_dependencies(radar_srr_plugin ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(radarMsgCombiner ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-target_link_libraries(radar_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+#target_link_libraries(radarMsgCombiner ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+#target_link_libraries(radar_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 #target_link_libraries(radar_srr_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})

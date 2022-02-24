@@ -47,7 +47,7 @@
     type="rostopic"
     args="pub /calibrated std_msgs/Bool true" />
 
-  <!-- output the point_cloud data -->
+  <!-- output the point_cloud data 
   <node
     name="point_cloud_write1"
     pkg="site"
@@ -62,7 +62,7 @@
     name="point_cloud_write3"
     pkg="site"
     type="point_cloud_write3"
-    args="-d $(find site)/src/point_cloud_write3.cpp" />
+    args="-d $(find site)/src/point_cloud_write3.cpp" />-->
 
   <!-- visualize the point_cloud data via cloud_viewer 
   <node
@@ -78,8 +78,8 @@
     type="image_output"
     args="-d $(find site)/src/image_output.cpp" />-->
 
-  <!-- Rviz -->
+  <!-- Rviz 
   <arg name="rviz" default="true"/>
-  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find site)/rviz/example.rviz" />
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find site)/rviz/example.rviz" />-->
 
 </launch>

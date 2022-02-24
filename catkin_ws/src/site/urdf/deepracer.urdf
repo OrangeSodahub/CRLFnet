@@ -22,15 +22,15 @@
         iyz="0"
         izz="0.05865" />
     </inertial>
-    <!--<visual>
+    <visual>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/chassis.STL" />
+          filename="package://site/meshes/deepracer/chassis.STL" />
       </geometry>
-    </visual>-->
+    </visual>
   </link>
   
   <joint name="base_link_joint" type="fixed">
@@ -61,7 +61,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_rear_wheel.STL" />
+          filename="package://site/meshes/deepracer/left_rear_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -70,7 +70,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_rear_wheel.STL" />
+          filename="package://site/meshes/deepracer/left_rear_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -115,7 +115,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_rear_wheel.STL" />
+          filename="package://site/meshes/deepracer/right_rear_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -124,7 +124,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_rear_wheel.STL" />
+          filename="package://site/meshes/deepracer/right_rear_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -170,7 +170,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_steering_hinge.STL" />
+          filename="package://site/meshes/deepracer/left_steering_hinge.STL" />
       </geometry>
     </visual>
   </link>
@@ -217,7 +217,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_front_wheel.STL" />
+          filename="package://site/meshes/deepracer/left_front_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -226,7 +226,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_front_wheel.STL" />
+          filename="package://site/meshes/deepracer/left_front_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -271,7 +271,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_steering_hinge.STL" />
+          filename="package://site/meshes/deepracer/right_steering_hinge.STL" />
       </geometry>
     </visual>
   </link>
@@ -316,7 +316,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_front_wheel.STL" />
+          filename="package://site/meshes/deepracer/right_front_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -325,7 +325,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_front_wheel.STL" />
+          filename="package://site/meshes/deepracer/right_front_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -369,7 +369,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/zed_camera_link_leftcam.STL" />
+          filename="package://site/meshes/deepracer/zed_camera_link_leftcam.STL" />
       </geometry>
     </visual>
   </link>
@@ -403,15 +403,15 @@
         iyz="0"
         izz="1e-6" />
     </inertial>
-<!--     <visual>
+  <visual>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/camera_link_leftcam.STL" />
+          filename="package://site/meshes/deepracer/camera_link_leftcam.STL" />
       </geometry>
-    </visual> -->
+    </visual>
   </link>
   <joint
     name="camera_joint_leftcam"
@@ -448,7 +448,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/zed_camera_link_rightcam.STL" />
+          filename="package://site/meshes/deepracer/zed_camera_link_rightcam.STL" />
       </geometry>
     </visual>
   </link>
@@ -482,15 +482,15 @@
         iyz="0"
         izz="1e-6" />
     </inertial>
-<!--     <visual>
+  <visual>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/camera_link_rightcam.STL" />
+          filename="package://site/meshes/deepracer/camera_link_rightcam.STL" />
       </geometry>
-    </visual> -->
+    </visual>
   </link>
 
   <joint
@@ -528,7 +528,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/laser.STL" />
+          filename="package://site/meshes/deepracer/laser.STL" />
       </geometry>
     </visual>
     <collision>
@@ -537,7 +537,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/laser.STL" />
+          filename="package://site/meshes/deepracer/laser.STL" />
       </geometry>
     </collision>
   </link>
@@ -577,7 +577,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/car_body_link_lidar_v3.STL" />
+          filename="package://site/meshes/deepracer/car_body_link_lidar_v3.STL" />
       </geometry>
     </visual>
     <collision>
@@ -586,7 +586,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/car_body_link_lidar_v3.STL" />
+          filename="package://site/meshes/deepracer/car_body_link_lidar_v3.STL" />
       </geometry>
     </collision>
   </link>
