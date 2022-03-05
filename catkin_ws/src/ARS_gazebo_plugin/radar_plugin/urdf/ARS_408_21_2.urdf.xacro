@@ -38,7 +38,7 @@ All other specifications of ESR must be left to default values
                 </geometry>
             </collision>
             <inertial>
-                <origin xyz="0.00168514324992164 0.0154191890257049 -2.61569096045022E-05" rpy="0 0 0" />
+                <origin xyz="0.00168514324992186 0.0154191890257047 -2.61569096043912E-05" rpy="0 0 0" />
                 <mass value="3.09545763589521"/>
                 <inertia
                     ixx="0.00233952324153942"

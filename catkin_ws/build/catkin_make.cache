@@ -1,2 +1,2 @@
-ARS_gazebo_plugin/radar_plugin:per_msgs:point_cloud:site
+ARS_gazebo_plugin/radar_plugin:per_msgs:point_cloud:site:site_model
 -DCATKIN_DEVEL_PREFIX=/home/zonlin/ROS/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/ROS/catkin_ws/install -G Unix Makefiles

@@ -192,3 +192,10 @@
 /home/zonlin/ROS/catkin_ws/build/site/CMakeFiles/rebuild_cache.dir
 /home/zonlin/ROS/catkin_ws/build/site/CMakeFiles/point_cloud_merge.dir
 /home/zonlin/ROS/catkin_ws/build/site/CMakeFiles/edit_cache.dir
+/home/zonlin/ROS/catkin_ws/build/site_model/CMakeFiles/install/strip.dir
+/home/zonlin/ROS/catkin_ws/build/site_model/CMakeFiles/install/local.dir
+/home/zonlin/ROS/catkin_ws/build/site_model/CMakeFiles/install.dir
+/home/zonlin/ROS/catkin_ws/build/site_model/CMakeFiles/list_install_components.dir
+/home/zonlin/ROS/catkin_ws/build/site_model/CMakeFiles/rebuild_cache.dir
+/home/zonlin/ROS/catkin_ws/build/site_model/CMakeFiles/edit_cache.dir
+/home/zonlin/ROS/catkin_ws/build/site_model/CMakeFiles/test.dir
