@@ -40,7 +40,7 @@
    (track_id
     :reader track_id
     :initarg :track_id
-    :type cl:integer
+    :type cl:fixnum
     :initform 0))
 )
 
@@ -115,9 +115,6 @@
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
   (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'track_id)) ostream)
-  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'track_id)) ostream)
-  (cl:write-byte (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'track_id)) ostream)
-  (cl:write-byte (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'track_id)) ostream)
 )
 (cl:defmethod roslisp-msg-protocol:deserialize ((msg <GeometryMsgsRadarObject>) istream)
   "Deserializes a message object of type '<GeometryMsgsRadarObject>"
@@ -153,9 +150,6 @@
       (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
     (cl:setf (cl:slot-value msg 'obj_vcs_posey) (roslisp-utils:decode-single-float-bits bits)))
     (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'track_id)) (cl:read-byte istream))
-    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'track_id)) (cl:read-byte istream))
-    (cl:setf (cl:ldb (cl:byte 8 16) (cl:slot-value msg 'track_id)) (cl:read-byte istream))
-    (cl:setf (cl:ldb (cl:byte 8 24) (cl:slot-value msg 'track_id)) (cl:read-byte istream))
   msg
 )
 (cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql '<GeometryMsgsRadarObject>)))
@@ -166,16 +160,16 @@
   "per_msgs/GeometryMsgsRadarObject")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<GeometryMsgsRadarObject>)))
   "Returns md5sum for a message object of type '<GeometryMsgsRadarObject>"
-  "f6e9b9d77e2c774b5c49c0eee3fe3bd2")
+  "c025781ebbd73797667e4f989e96e8b9")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'GeometryMsgsRadarObject)))
   "Returns md5sum for a message object of type 'GeometryMsgsRadarObject"
-  "f6e9b9d77e2c774b5c49c0eee3fe3bd2")
+  "c025781ebbd73797667e4f989e96e8b9")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<GeometryMsgsRadarObject>)))
   "Returns full string definition for message of type '<GeometryMsgsRadarObject>"
-  (cl:format cl:nil "Header header~%float32 range  # meters~%float32 range_rate #velocity~%float32 angle_centroid~%float32 obj_vcs_posex~%float32 obj_vcs_posey~%uint32 track_id~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
+  (cl:format cl:nil "Header header~%float32 range  # meters~%float32 range_rate #velocity~%float32 angle_centroid~%float32 obj_vcs_posex~%float32 obj_vcs_posey~%uint8 track_id~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'GeometryMsgsRadarObject)))
   "Returns full string definition for message of type 'GeometryMsgsRadarObject"
-  (cl:format cl:nil "Header header~%float32 range  # meters~%float32 range_rate #velocity~%float32 angle_centroid~%float32 obj_vcs_posex~%float32 obj_vcs_posey~%uint32 track_id~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
+  (cl:format cl:nil "Header header~%float32 range  # meters~%float32 range_rate #velocity~%float32 angle_centroid~%float32 obj_vcs_posex~%float32 obj_vcs_posey~%uint8 track_id~%~%================================================================================~%MSG: std_msgs/Header~%# Standard metadata for higher-level stamped data types.~%# This is generally used to communicate timestamped data ~%# in a particular coordinate frame.~%# ~%# sequence ID: consecutively increasing ID ~%uint32 seq~%#Two-integer timestamp that is expressed as:~%# * stamp.sec: seconds (stamp_secs) since epoch (in Python the variable is called 'secs')~%# * stamp.nsec: nanoseconds since stamp_secs (in Python the variable is called 'nsecs')~%# time-handling sugar is provided by the client library~%time stamp~%#Frame this data is associated with~%string frame_id~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <GeometryMsgsRadarObject>))
   (cl:+ 0
      (roslisp-msg-protocol:serialization-length (cl:slot-value msg 'header))
@@ -184,7 +178,7 @@
      4
      4
      4
-     4
+     1
 ))
 (cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <GeometryMsgsRadarObject>))
   "Converts a ROS message object to a list"

@@ -41,6 +41,12 @@ ros/message_operations.h
 -
 std_msgs/Header.h
 -
+per_msgs/GeometryMsgsRadarObject.h
+-
+per_msgs/GeometryMsgsRadarObject.h
+-
+per_msgs/GeometryMsgsRadarObject.h
+-
 
 /home/zonlin/ROS/catkin_ws/src/ARS_gazebo_plugin/radar_plugin/include/radar_plugin/radar_plugin.h
 map

@@ -78,8 +78,8 @@
     type="image_output"
     args="-d $(find site)/src/image_output.cpp" />-->
 
-  <!-- Rviz 
+  <!-- Rviz -->
   <arg name="rviz" default="true"/>
-  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find site)/rviz/example.rviz" />-->
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find site)/rviz/example.rviz" />
 
 </launch>

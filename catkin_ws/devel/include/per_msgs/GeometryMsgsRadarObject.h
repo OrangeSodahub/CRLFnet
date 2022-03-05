@@ -64,7 +64,7 @@ struct GeometryMsgsRadarObject_
    typedef float _obj_vcs_posey_type;
   _obj_vcs_posey_type obj_vcs_posey;
 
-   typedef uint32_t _track_id_type;
+   typedef uint8_t _track_id_type;
   _track_id_type track_id;
 
 
@@ -159,12 +159,12 @@ struct MD5Sum< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "f6e9b9d77e2c774b5c49c0eee3fe3bd2";
+    return "c025781ebbd73797667e4f989e96e8b9";
   }
 
   static const char* value(const ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xf6e9b9d77e2c774bULL;
-  static const uint64_t static_value2 = 0x5c49c0eee3fe3bd2ULL;
+  static const uint64_t static_value1 = 0xc025781ebbd73797ULL;
+  static const uint64_t static_value2 = 0x667e4f989e96e8b9ULL;
 };
 
 template<class ContainerAllocator>
@@ -189,7 +189,7 @@ struct Definition< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >
 "float32 angle_centroid\n"
 "float32 obj_vcs_posex\n"
 "float32 obj_vcs_posey\n"
-"uint32 track_id\n"
+"uint8 track_id\n"
 "\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
@@ -263,7 +263,7 @@ struct Printer< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >
     s << indent << "obj_vcs_posey: ";
     Printer<float>::stream(s, indent + "  ", v.obj_vcs_posey);
     s << indent << "track_id: ";
-    Printer<uint32_t>::stream(s, indent + "  ", v.track_id);
+    Printer<uint8_t>::stream(s, indent + "  ", v.track_id);
   }
 };
 

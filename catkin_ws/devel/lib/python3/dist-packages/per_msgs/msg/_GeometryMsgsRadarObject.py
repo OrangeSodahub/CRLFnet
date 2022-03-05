@@ -9,7 +9,7 @@ import struct
 import std_msgs.msg
 
 class GeometryMsgsRadarObject(genpy.Message):
-  _md5sum = "f6e9b9d77e2c774b5c49c0eee3fe3bd2"
+  _md5sum = "c025781ebbd73797667e4f989e96e8b9"
   _type = "per_msgs/GeometryMsgsRadarObject"
   _has_header = True  # flag to mark the presence of a Header object
   _full_text = """Header header
@@ -18,7 +18,7 @@ float32 range_rate #velocity
 float32 angle_centroid
 float32 obj_vcs_posex
 float32 obj_vcs_posey
-uint32 track_id
+uint8 track_id
 
 ================================================================================
 MSG: std_msgs/Header
@@ -37,7 +37,7 @@ time stamp
 string frame_id
 """
   __slots__ = ['header','range','range_rate','angle_centroid','obj_vcs_posex','obj_vcs_posey','track_id']
-  _slot_types = ['std_msgs/Header','float32','float32','float32','float32','float32','uint32']
+  _slot_types = ['std_msgs/Header','float32','float32','float32','float32','float32','uint8']
 
   def __init__(self, *args, **kwds):
     """
@@ -100,7 +100,7 @@ string frame_id
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_5fI().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
+      buff.write(_get_struct_5fB().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -130,8 +130,8 @@ string frame_id
         self.header.frame_id = str[start:end]
       _x = self
       start = end
-      end += 24
-      (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fI().unpack(str[start:end])
+      end += 21
+      (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fB().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -153,7 +153,7 @@ string frame_id
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
       _x = self
-      buff.write(_get_struct_5fI().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
+      buff.write(_get_struct_5fB().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -184,8 +184,8 @@ string frame_id
         self.header.frame_id = str[start:end]
       _x = self
       start = end
-      end += 24
-      (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fI().unpack(str[start:end])
+      end += 21
+      (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fB().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -200,9 +200,9 @@ def _get_struct_3I():
     if _struct_3I is None:
         _struct_3I = struct.Struct("<3I")
     return _struct_3I
-_struct_5fI = None
-def _get_struct_5fI():
-    global _struct_5fI
-    if _struct_5fI is None:
-        _struct_5fI = struct.Struct("<5fI")
-    return _struct_5fI
+_struct_5fB = None
+def _get_struct_5fB():
+    global _struct_5fB
+    if _struct_5fB is None:
+        _struct_5fB = struct.Struct("<5fB")
+    return _struct_5fB

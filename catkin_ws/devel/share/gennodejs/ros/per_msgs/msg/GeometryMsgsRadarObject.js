@@ -88,7 +88,7 @@ class GeometryMsgsRadarObject {
     // Serialize message field [obj_vcs_posey]
     bufferOffset = _serializer.float32(obj.obj_vcs_posey, buffer, bufferOffset);
     // Serialize message field [track_id]
-    bufferOffset = _serializer.uint32(obj.track_id, buffer, bufferOffset);
+    bufferOffset = _serializer.uint8(obj.track_id, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -109,14 +109,14 @@ class GeometryMsgsRadarObject {
     // Deserialize message field [obj_vcs_posey]
     data.obj_vcs_posey = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [track_id]
-    data.track_id = _deserializer.uint32(buffer, bufferOffset);
+    data.track_id = _deserializer.uint8(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
     let length = 0;
     length += std_msgs.msg.Header.getMessageSize(object.header);
-    return length + 24;
+    return length + 21;
   }
 
   static datatype() {
@@ -126,7 +126,7 @@ class GeometryMsgsRadarObject {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'f6e9b9d77e2c774b5c49c0eee3fe3bd2';
+    return 'c025781ebbd73797667e4f989e96e8b9';
   }
 
   static messageDefinition() {
@@ -138,7 +138,7 @@ class GeometryMsgsRadarObject {
     float32 angle_centroid
     float32 obj_vcs_posex
     float32 obj_vcs_posey
-    uint32 track_id
+    uint8 track_id
     
     ================================================================================
     MSG: std_msgs/Header

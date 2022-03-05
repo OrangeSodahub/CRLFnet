@@ -11,6 +11,7 @@ const _deserializer = _ros_msg_utils.Deserialize;
 const _arrayDeserializer = _deserializer.Array;
 const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
+let GeometryMsgsRadarObject = require('./GeometryMsgsRadarObject.js');
 let std_msgs = _finder('std_msgs');
 
 //-----------------------------------------------------------
@@ -174,11 +175,23 @@ class SensorMsgsRadar {
     // Serialize message field [fsm4_tracker_counter]
     bufferOffset = _serializer.float32(obj.fsm4_tracker_counter, buffer, bufferOffset);
     // Serialize message field [front_esr_tracklist]
-    bufferOffset = _arraySerializer.float32(obj.front_esr_tracklist, buffer, bufferOffset, null);
+    // Serialize the length for message field [front_esr_tracklist]
+    bufferOffset = _serializer.uint32(obj.front_esr_tracklist.length, buffer, bufferOffset);
+    obj.front_esr_tracklist.forEach((val) => {
+      bufferOffset = GeometryMsgsRadarObject.serialize(val, buffer, bufferOffset);
+    });
     // Serialize message field [front_right_esr_tracklist]
-    bufferOffset = _arraySerializer.float32(obj.front_right_esr_tracklist, buffer, bufferOffset, null);
+    // Serialize the length for message field [front_right_esr_tracklist]
+    bufferOffset = _serializer.uint32(obj.front_right_esr_tracklist.length, buffer, bufferOffset);
+    obj.front_right_esr_tracklist.forEach((val) => {
+      bufferOffset = GeometryMsgsRadarObject.serialize(val, buffer, bufferOffset);
+    });
     // Serialize message field [front_left_esr_tracklist]
-    bufferOffset = _arraySerializer.float32(obj.front_left_esr_tracklist, buffer, bufferOffset, null);
+    // Serialize the length for message field [front_left_esr_tracklist]
+    bufferOffset = _serializer.uint32(obj.front_left_esr_tracklist.length, buffer, bufferOffset);
+    obj.front_left_esr_tracklist.forEach((val) => {
+      bufferOffset = GeometryMsgsRadarObject.serialize(val, buffer, bufferOffset);
+    });
     return bufferOffset;
   }
 
@@ -215,20 +228,41 @@ class SensorMsgsRadar {
     // Deserialize message field [fsm4_tracker_counter]
     data.fsm4_tracker_counter = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [front_esr_tracklist]
-    data.front_esr_tracklist = _arrayDeserializer.float32(buffer, bufferOffset, null)
+    // Deserialize array length for message field [front_esr_tracklist]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.front_esr_tracklist = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.front_esr_tracklist[i] = GeometryMsgsRadarObject.deserialize(buffer, bufferOffset)
+    }
     // Deserialize message field [front_right_esr_tracklist]
-    data.front_right_esr_tracklist = _arrayDeserializer.float32(buffer, bufferOffset, null)
+    // Deserialize array length for message field [front_right_esr_tracklist]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.front_right_esr_tracklist = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.front_right_esr_tracklist[i] = GeometryMsgsRadarObject.deserialize(buffer, bufferOffset)
+    }
     // Deserialize message field [front_left_esr_tracklist]
-    data.front_left_esr_tracklist = _arrayDeserializer.float32(buffer, bufferOffset, null)
+    // Deserialize array length for message field [front_left_esr_tracklist]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.front_left_esr_tracklist = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.front_left_esr_tracklist[i] = GeometryMsgsRadarObject.deserialize(buffer, bufferOffset)
+    }
     return data;
   }
 
   static getMessageSize(object) {
     let length = 0;
     length += std_msgs.msg.Header.getMessageSize(object.header);
-    length += 4 * object.front_esr_tracklist.length;
-    length += 4 * object.front_right_esr_tracklist.length;
-    length += 4 * object.front_left_esr_tracklist.length;
+    object.front_esr_tracklist.forEach((val) => {
+      length += GeometryMsgsRadarObject.getMessageSize(val);
+    });
+    object.front_right_esr_tracklist.forEach((val) => {
+      length += GeometryMsgsRadarObject.getMessageSize(val);
+    });
+    object.front_left_esr_tracklist.forEach((val) => {
+      length += GeometryMsgsRadarObject.getMessageSize(val);
+    });
     return length + 64;
   }
 
@@ -239,7 +273,7 @@ class SensorMsgsRadar {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '5b695fa4723d4915d6ab0e488542236e';
+    return '0c024c9d8ad963f855e814137a581c47';
   }
 
   static messageDefinition() {
@@ -259,9 +293,9 @@ class SensorMsgsRadar {
     float32 total_fsm4_tracks
     float32 fsm4_tracklist
     float32 fsm4_tracker_counter
-    float32[] front_esr_tracklist
-    float32[] front_right_esr_tracklist
-    float32[] front_left_esr_tracklist
+    GeometryMsgsRadarObject[] front_esr_tracklist
+    GeometryMsgsRadarObject[] front_right_esr_tracklist
+    GeometryMsgsRadarObject[] front_left_esr_tracklist
     ================================================================================
     MSG: std_msgs/Header
     # Standard metadata for higher-level stamped data types.
@@ -277,6 +311,16 @@ class SensorMsgsRadar {
     time stamp
     #Frame this data is associated with
     string frame_id
+    
+    ================================================================================
+    MSG: per_msgs/GeometryMsgsRadarObject
+    Header header
+    float32 range  # meters
+    float32 range_rate #velocity
+    float32 angle_centroid
+    float32 obj_vcs_posex
+    float32 obj_vcs_posey
+    uint8 track_id
     
     `;
   }
@@ -386,21 +430,30 @@ class SensorMsgsRadar {
     }
 
     if (msg.front_esr_tracklist !== undefined) {
-      resolved.front_esr_tracklist = msg.front_esr_tracklist;
+      resolved.front_esr_tracklist = new Array(msg.front_esr_tracklist.length);
+      for (let i = 0; i < resolved.front_esr_tracklist.length; ++i) {
+        resolved.front_esr_tracklist[i] = GeometryMsgsRadarObject.Resolve(msg.front_esr_tracklist[i]);
+      }
     }
     else {
       resolved.front_esr_tracklist = []
     }
 
     if (msg.front_right_esr_tracklist !== undefined) {
-      resolved.front_right_esr_tracklist = msg.front_right_esr_tracklist;
+      resolved.front_right_esr_tracklist = new Array(msg.front_right_esr_tracklist.length);
+      for (let i = 0; i < resolved.front_right_esr_tracklist.length; ++i) {
+        resolved.front_right_esr_tracklist[i] = GeometryMsgsRadarObject.Resolve(msg.front_right_esr_tracklist[i]);
+      }
     }
     else {
       resolved.front_right_esr_tracklist = []
     }
 
     if (msg.front_left_esr_tracklist !== undefined) {
-      resolved.front_left_esr_tracklist = msg.front_left_esr_tracklist;
+      resolved.front_left_esr_tracklist = new Array(msg.front_left_esr_tracklist.length);
+      for (let i = 0; i < resolved.front_left_esr_tracklist.length; ++i) {
+        resolved.front_left_esr_tracklist[i] = GeometryMsgsRadarObject.Resolve(msg.front_left_esr_tracklist[i]);
+      }
     }
     else {
       resolved.front_left_esr_tracklist = []

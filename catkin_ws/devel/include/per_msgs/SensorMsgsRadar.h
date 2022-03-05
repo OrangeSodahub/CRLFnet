@@ -16,6 +16,9 @@
 #include <ros/message_operations.h>
 
 #include <std_msgs/Header.h>
+#include <per_msgs/GeometryMsgsRadarObject.h>
+#include <per_msgs/GeometryMsgsRadarObject.h>
+#include <per_msgs/GeometryMsgsRadarObject.h>
 
 namespace per_msgs
 {
@@ -108,13 +111,13 @@ struct SensorMsgsRadar_
    typedef float _fsm4_tracker_counter_type;
   _fsm4_tracker_counter_type fsm4_tracker_counter;
 
-   typedef std::vector<float, typename ContainerAllocator::template rebind<float>::other >  _front_esr_tracklist_type;
+   typedef std::vector< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >::other >  _front_esr_tracklist_type;
   _front_esr_tracklist_type front_esr_tracklist;
 
-   typedef std::vector<float, typename ContainerAllocator::template rebind<float>::other >  _front_right_esr_tracklist_type;
+   typedef std::vector< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >::other >  _front_right_esr_tracklist_type;
   _front_right_esr_tracklist_type front_right_esr_tracklist;
 
-   typedef std::vector<float, typename ContainerAllocator::template rebind<float>::other >  _front_left_esr_tracklist_type;
+   typedef std::vector< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >::other >  _front_left_esr_tracklist_type;
   _front_left_esr_tracklist_type front_left_esr_tracklist;
 
 
@@ -219,12 +222,12 @@ struct MD5Sum< ::per_msgs::SensorMsgsRadar_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "5b695fa4723d4915d6ab0e488542236e";
+    return "0c024c9d8ad963f855e814137a581c47";
   }
 
   static const char* value(const ::per_msgs::SensorMsgsRadar_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x5b695fa4723d4915ULL;
-  static const uint64_t static_value2 = 0xd6ab0e488542236eULL;
+  static const uint64_t static_value1 = 0x0c024c9d8ad963f8ULL;
+  static const uint64_t static_value2 = 0x55e814137a581c47ULL;
 };
 
 template<class ContainerAllocator>
@@ -257,9 +260,9 @@ struct Definition< ::per_msgs::SensorMsgsRadar_<ContainerAllocator> >
 "float32 total_fsm4_tracks\n"
 "float32 fsm4_tracklist\n"
 "float32 fsm4_tracker_counter\n"
-"float32[] front_esr_tracklist\n"
-"float32[] front_right_esr_tracklist\n"
-"float32[] front_left_esr_tracklist\n"
+"GeometryMsgsRadarObject[] front_esr_tracklist\n"
+"GeometryMsgsRadarObject[] front_right_esr_tracklist\n"
+"GeometryMsgsRadarObject[] front_left_esr_tracklist\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
 "# Standard metadata for higher-level stamped data types.\n"
@@ -275,6 +278,16 @@ struct Definition< ::per_msgs::SensorMsgsRadar_<ContainerAllocator> >
 "time stamp\n"
 "#Frame this data is associated with\n"
 "string frame_id\n"
+"\n"
+"================================================================================\n"
+"MSG: per_msgs/GeometryMsgsRadarObject\n"
+"Header header\n"
+"float32 range  # meters\n"
+"float32 range_rate #velocity\n"
+"float32 angle_centroid\n"
+"float32 obj_vcs_posex\n"
+"float32 obj_vcs_posey\n"
+"uint8 track_id\n"
 ;
   }
 
@@ -361,19 +374,25 @@ struct Printer< ::per_msgs::SensorMsgsRadar_<ContainerAllocator> >
     for (size_t i = 0; i < v.front_esr_tracklist.size(); ++i)
     {
       s << indent << "  front_esr_tracklist[" << i << "]: ";
-      Printer<float>::stream(s, indent + "  ", v.front_esr_tracklist[i]);
+      s << std::endl;
+      s << indent;
+      Printer< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >::stream(s, indent + "    ", v.front_esr_tracklist[i]);
     }
     s << indent << "front_right_esr_tracklist[]" << std::endl;
     for (size_t i = 0; i < v.front_right_esr_tracklist.size(); ++i)
     {
       s << indent << "  front_right_esr_tracklist[" << i << "]: ";
-      Printer<float>::stream(s, indent + "  ", v.front_right_esr_tracklist[i]);
+      s << std::endl;
+      s << indent;
+      Printer< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >::stream(s, indent + "    ", v.front_right_esr_tracklist[i]);
     }
     s << indent << "front_left_esr_tracklist[]" << std::endl;
     for (size_t i = 0; i < v.front_left_esr_tracklist.size(); ++i)
     {
       s << indent << "  front_left_esr_tracklist[" << i << "]: ";
-      Printer<float>::stream(s, indent + "  ", v.front_left_esr_tracklist[i]);
+      s << std::endl;
+      s << indent;
+      Printer< ::per_msgs::GeometryMsgsRadarObject_<ContainerAllocator> >::stream(s, indent + "    ", v.front_left_esr_tracklist[i]);
     }
   }
 };

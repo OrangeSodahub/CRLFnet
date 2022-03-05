@@ -35,9 +35,9 @@
     ((:total_fsm4_tracks __total_fsm4_tracks) 0.0)
     ((:fsm4_tracklist __fsm4_tracklist) 0.0)
     ((:fsm4_tracker_counter __fsm4_tracker_counter) 0.0)
-    ((:front_esr_tracklist __front_esr_tracklist) (make-array 0 :initial-element 0.0 :element-type :float))
-    ((:front_right_esr_tracklist __front_right_esr_tracklist) (make-array 0 :initial-element 0.0 :element-type :float))
-    ((:front_left_esr_tracklist __front_left_esr_tracklist) (make-array 0 :initial-element 0.0 :element-type :float))
+    ((:front_esr_tracklist __front_esr_tracklist) ())
+    ((:front_right_esr_tracklist __front_right_esr_tracklist) ())
+    ((:front_left_esr_tracklist __front_left_esr_tracklist) ())
     )
    (send-super :init)
    (setq _header __header)
@@ -105,14 +105,26 @@
    (&optional __fsm4_tracker_counter)
    (if __fsm4_tracker_counter (setq _fsm4_tracker_counter __fsm4_tracker_counter)) _fsm4_tracker_counter)
   (:front_esr_tracklist
-   (&optional __front_esr_tracklist)
-   (if __front_esr_tracklist (setq _front_esr_tracklist __front_esr_tracklist)) _front_esr_tracklist)
+   (&rest __front_esr_tracklist)
+   (if (keywordp (car __front_esr_tracklist))
+       (send* _front_esr_tracklist __front_esr_tracklist)
+     (progn
+       (if __front_esr_tracklist (setq _front_esr_tracklist (car __front_esr_tracklist)))
+       _front_esr_tracklist)))
   (:front_right_esr_tracklist
-   (&optional __front_right_esr_tracklist)
-   (if __front_right_esr_tracklist (setq _front_right_esr_tracklist __front_right_esr_tracklist)) _front_right_esr_tracklist)
+   (&rest __front_right_esr_tracklist)
+   (if (keywordp (car __front_right_esr_tracklist))
+       (send* _front_right_esr_tracklist __front_right_esr_tracklist)
+     (progn
+       (if __front_right_esr_tracklist (setq _front_right_esr_tracklist (car __front_right_esr_tracklist)))
+       _front_right_esr_tracklist)))
   (:front_left_esr_tracklist
-   (&optional __front_left_esr_tracklist)
-   (if __front_left_esr_tracklist (setq _front_left_esr_tracklist __front_left_esr_tracklist)) _front_left_esr_tracklist)
+   (&rest __front_left_esr_tracklist)
+   (if (keywordp (car __front_left_esr_tracklist))
+       (send* _front_left_esr_tracklist __front_left_esr_tracklist)
+     (progn
+       (if __front_left_esr_tracklist (setq _front_left_esr_tracklist (car __front_left_esr_tracklist)))
+       _front_left_esr_tracklist)))
   (:serialization-length
    ()
    (+
@@ -144,12 +156,12 @@
     4
     ;; float32 _fsm4_tracker_counter
     4
-    ;; float32[] _front_esr_tracklist
-    (* 4    (length _front_esr_tracklist)) 4
-    ;; float32[] _front_right_esr_tracklist
-    (* 4    (length _front_right_esr_tracklist)) 4
-    ;; float32[] _front_left_esr_tracklist
-    (* 4    (length _front_left_esr_tracklist)) 4
+    ;; per_msgs/GeometryMsgsRadarObject[] _front_esr_tracklist
+    (apply #'+ (send-all _front_esr_tracklist :serialization-length)) 4
+    ;; per_msgs/GeometryMsgsRadarObject[] _front_right_esr_tracklist
+    (apply #'+ (send-all _front_right_esr_tracklist :serialization-length)) 4
+    ;; per_msgs/GeometryMsgsRadarObject[] _front_left_esr_tracklist
+    (apply #'+ (send-all _front_left_esr_tracklist :serialization-length)) 4
     ))
   (:serialize
    (&optional strm)
@@ -183,20 +195,20 @@
        (sys::poke _fsm4_tracklist (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;; float32 _fsm4_tracker_counter
        (sys::poke _fsm4_tracker_counter (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
-     ;; float32[] _front_esr_tracklist
+     ;; per_msgs/GeometryMsgsRadarObject[] _front_esr_tracklist
      (write-long (length _front_esr_tracklist) s)
-     (dotimes (i (length _front_esr_tracklist))
-       (sys::poke (elt _front_esr_tracklist i) (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     (dolist (elem _front_esr_tracklist)
+       (send elem :serialize s)
        )
-     ;; float32[] _front_right_esr_tracklist
+     ;; per_msgs/GeometryMsgsRadarObject[] _front_right_esr_tracklist
      (write-long (length _front_right_esr_tracklist) s)
-     (dotimes (i (length _front_right_esr_tracklist))
-       (sys::poke (elt _front_right_esr_tracklist i) (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     (dolist (elem _front_right_esr_tracklist)
+       (send elem :serialize s)
        )
-     ;; float32[] _front_left_esr_tracklist
+     ;; per_msgs/GeometryMsgsRadarObject[] _front_left_esr_tracklist
      (write-long (length _front_left_esr_tracklist) s)
-     (dotimes (i (length _front_left_esr_tracklist))
-       (sys::poke (elt _front_left_esr_tracklist i) (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     (dolist (elem _front_left_esr_tracklist)
+       (send elem :serialize s)
        )
      ;;
      (if (null strm) (get-output-stream-string s))))
@@ -230,32 +242,32 @@
      (setq _fsm4_tracklist (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;; float32 _fsm4_tracker_counter
      (setq _fsm4_tracker_counter (sys::peek buf ptr- :float)) (incf ptr- 4)
-   ;; float32[] _front_esr_tracklist
+   ;; per_msgs/GeometryMsgsRadarObject[] _front_esr_tracklist
    (let (n)
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
-     (setq _front_esr_tracklist (instantiate float-vector n))
-     (dotimes (i n)
-     (setf (elt _front_esr_tracklist i) (sys::peek buf ptr- :float)) (incf ptr- 4)
+     (setq _front_esr_tracklist (let (r) (dotimes (i n) (push (instance per_msgs::GeometryMsgsRadarObject :init) r)) r))
+     (dolist (elem- _front_esr_tracklist)
+     (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
      ))
-   ;; float32[] _front_right_esr_tracklist
+   ;; per_msgs/GeometryMsgsRadarObject[] _front_right_esr_tracklist
    (let (n)
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
-     (setq _front_right_esr_tracklist (instantiate float-vector n))
-     (dotimes (i n)
-     (setf (elt _front_right_esr_tracklist i) (sys::peek buf ptr- :float)) (incf ptr- 4)
+     (setq _front_right_esr_tracklist (let (r) (dotimes (i n) (push (instance per_msgs::GeometryMsgsRadarObject :init) r)) r))
+     (dolist (elem- _front_right_esr_tracklist)
+     (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
      ))
-   ;; float32[] _front_left_esr_tracklist
+   ;; per_msgs/GeometryMsgsRadarObject[] _front_left_esr_tracklist
    (let (n)
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
-     (setq _front_left_esr_tracklist (instantiate float-vector n))
-     (dotimes (i n)
-     (setf (elt _front_left_esr_tracklist i) (sys::peek buf ptr- :float)) (incf ptr- 4)
+     (setq _front_left_esr_tracklist (let (r) (dotimes (i n) (push (instance per_msgs::GeometryMsgsRadarObject :init) r)) r))
+     (dolist (elem- _front_left_esr_tracklist)
+     (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
      ))
    ;;
    self)
   )
 
-(setf (get per_msgs::SensorMsgsRadar :md5sum-) "5b695fa4723d4915d6ab0e488542236e")
+(setf (get per_msgs::SensorMsgsRadar :md5sum-) "0c024c9d8ad963f855e814137a581c47")
 (setf (get per_msgs::SensorMsgsRadar :datatype-) "per_msgs/SensorMsgsRadar")
 (setf (get per_msgs::SensorMsgsRadar :definition-)
       "Header header
@@ -272,9 +284,9 @@ float32 rear_sbmp_tracklist
 float32 total_fsm4_tracks
 float32 fsm4_tracklist
 float32 fsm4_tracker_counter
-float32[] front_esr_tracklist
-float32[] front_right_esr_tracklist
-float32[] front_left_esr_tracklist
+GeometryMsgsRadarObject[] front_esr_tracklist
+GeometryMsgsRadarObject[] front_right_esr_tracklist
+GeometryMsgsRadarObject[] front_left_esr_tracklist
 ================================================================================
 MSG: std_msgs/Header
 # Standard metadata for higher-level stamped data types.
@@ -291,10 +303,20 @@ time stamp
 #Frame this data is associated with
 string frame_id
 
+================================================================================
+MSG: per_msgs/GeometryMsgsRadarObject
+Header header
+float32 range  # meters
+float32 range_rate #velocity
+float32 angle_centroid
+float32 obj_vcs_posex
+float32 obj_vcs_posey
+uint8 track_id
+
 ")
 
 
 
-(provide :per_msgs/SensorMsgsRadar "5b695fa4723d4915d6ab0e488542236e")
+(provide :per_msgs/SensorMsgsRadar "0c024c9d8ad963f855e814137a581c47")
 
 

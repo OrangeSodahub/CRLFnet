@@ -4,4 +4,4 @@ float32 range_rate #velocity
 float32 angle_centroid
 float32 obj_vcs_posex
 float32 obj_vcs_posey
-uint32 track_id
+uint8 track_id

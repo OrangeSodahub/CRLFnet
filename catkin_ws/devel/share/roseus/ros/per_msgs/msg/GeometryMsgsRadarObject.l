@@ -78,8 +78,8 @@
     4
     ;; float32 _obj_vcs_posey
     4
-    ;; uint32 _track_id
-    4
+    ;; uint8 _track_id
+    1
     ))
   (:serialize
    (&optional strm)
@@ -97,8 +97,8 @@
        (sys::poke _obj_vcs_posex (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;; float32 _obj_vcs_posey
        (sys::poke _obj_vcs_posey (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
-     ;; uint32 _track_id
-       (write-long _track_id s)
+     ;; uint8 _track_id
+       (write-byte _track_id s)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
@@ -115,13 +115,13 @@
      (setq _obj_vcs_posex (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;; float32 _obj_vcs_posey
      (setq _obj_vcs_posey (sys::peek buf ptr- :float)) (incf ptr- 4)
-   ;; uint32 _track_id
-     (setq _track_id (sys::peek buf ptr- :integer)) (incf ptr- 4)
+   ;; uint8 _track_id
+     (setq _track_id (sys::peek buf ptr- :char)) (incf ptr- 1)
    ;;
    self)
   )
 
-(setf (get per_msgs::GeometryMsgsRadarObject :md5sum-) "f6e9b9d77e2c774b5c49c0eee3fe3bd2")
+(setf (get per_msgs::GeometryMsgsRadarObject :md5sum-) "c025781ebbd73797667e4f989e96e8b9")
 (setf (get per_msgs::GeometryMsgsRadarObject :datatype-) "per_msgs/GeometryMsgsRadarObject")
 (setf (get per_msgs::GeometryMsgsRadarObject :definition-)
       "Header header
@@ -130,7 +130,7 @@ float32 range_rate #velocity
 float32 angle_centroid
 float32 obj_vcs_posex
 float32 obj_vcs_posey
-uint32 track_id
+uint8 track_id
 
 ================================================================================
 MSG: std_msgs/Header
@@ -152,6 +152,6 @@ string frame_id
 
 
 
-(provide :per_msgs/GeometryMsgsRadarObject "f6e9b9d77e2c774b5c49c0eee3fe3bd2")
+(provide :per_msgs/GeometryMsgsRadarObject "c025781ebbd73797667e4f989e96e8b9")
 
 

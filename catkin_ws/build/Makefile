@@ -1806,6 +1806,32 @@ pcl_create/fast:
 .PHONY : pcl_create/fast
 
 #=============================================================================
+# Target rules for targets named radar_plugin
+
+# Build rule for target.
+radar_plugin: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radar_plugin
+.PHONY : radar_plugin
+
+# fast build rule for target.
+radar_plugin/fast:
+	$(MAKE) -f ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/build.make ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/build
+.PHONY : radar_plugin/fast
+
+#=============================================================================
+# Target rules for targets named radarMsgCombiner
+
+# Build rule for target.
+radarMsgCombiner: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 radarMsgCombiner
+.PHONY : radarMsgCombiner
+
+# fast build rule for target.
+radarMsgCombiner/fast:
+	$(MAKE) -f ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/build.make ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/build
+.PHONY : radarMsgCombiner/fast
+
+#=============================================================================
 # Target rules for targets named point_cloud_write1
 
 # Build rule for target.
@@ -2074,6 +2100,8 @@ help:
 	@echo "... topic_tools_generate_messages_py"
 	@echo "... pcl_msgs_generate_messages_py"
 	@echo "... pcl_create"
+	@echo "... radar_plugin"
+	@echo "... radarMsgCombiner"
 	@echo "... point_cloud_write1"
 	@echo "... point_cloud_write2"
 	@echo "... point_cloud_write3"

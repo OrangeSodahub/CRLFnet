@@ -12,6 +12,6 @@ float32 rear_sbmp_tracklist
 float32 total_fsm4_tracks
 float32 fsm4_tracklist
 float32 fsm4_tracker_counter
-float32[] front_esr_tracklist
-float32[] front_right_esr_tracklist
-float32[] front_left_esr_tracklist
+GeometryMsgsRadarObject[] front_esr_tracklist
+GeometryMsgsRadarObject[] front_right_esr_tracklist
+GeometryMsgsRadarObject[] front_left_esr_tracklist
