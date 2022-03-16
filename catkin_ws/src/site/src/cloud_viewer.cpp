@@ -21,9 +21,9 @@ using namespace pcl;
 using namespace io;
 
 int main() {
-    PointCloud<PointXYZ>::Ptr cloud(new PointCloud<PointXYZ>);
+    PointCloud<PointXYZRGB>::Ptr cloud(new PointCloud<PointXYZRGB>); //带颜色时为PointXYZRGB,前后有两处
 
-    if (io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1.pcd", *cloud) == -1) {
+    if (io::loadPCDFile("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud_segmented_on_region_growing.pcd", *cloud) == -1) {
         cerr << "can't read file point_cloud.pcd" << endl;
         return -1;
     }
@@ -38,14 +38,19 @@ int main() {
      * 显示的点云，用户必须先调用removePointCloud()，并提供新的ID号。（在PCL1.1版本之后直接调用updatePointCloud()
      * 就可以了，不必手动调用removePointCloud()就可实现点云更新）
      */
-    viewer->addPointCloud<PointXYZ>(cloud, "sample cloud");
+
+    //带颜色时加这句
+    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> rgb(cloud); //此处cloud为loadPCDFile中的*cloud
+    
+    viewer->addPointCloud<PointXYZRGB>(cloud, "sample cloud"); //带颜色时为RGB
+
     /*修改现实点云的尺寸。用户可通过该方法控制点云在视窗中的显示方式*/
-    viewer->setPointCloudRenderingProperties(visualization::PCL_VISUALIZER_POINT_SIZE, 1, "sample cloud");
+    viewer->setPointCloudRenderingProperties(visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
     /*设置XYZ三个坐标轴的大小和长度，该值也可以缺省
      *查看复杂的点云图像会让用户没有方向感，为了让用户保持正确的方向判断，需要显示坐标轴。三个坐标轴X（R，红色）
      * Y（G，绿色）Z（B，蓝色）分别用三种不同颜色的圆柱体代替。
      */
-    viewer->addCoordinateSystem(1.0);
+    //viewer->addCoordinateSystem(1.0);
     /*通过设置相机参数是用户从默认的角度和方向观察点*/
     viewer->initCameraParameters();
 

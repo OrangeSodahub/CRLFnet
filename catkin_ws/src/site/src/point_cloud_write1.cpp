@@ -9,6 +9,24 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl/point_types.h>
  
+void cloudCB(const sensor_msgs::PointCloud2 &input)
+{
+    pcl::PointCloud<pcl::PointXYZI> cloud; // 点云数据格式为PointXYZ
+    pcl::fromROSMsg(input, cloud);
+    if(pcl::io::savePCDFileASCII ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1.pcd", cloud)>=0)
+    {std::cerr << "Saved point_cloud1.pcd" << " " << cloud.points.size() << "points have been written" << std::endl;}
+}
+ 
+int main (int argc, char **argv)
+{
+    ros::init (argc, argv, "point_cloud_write1");
+    ros::NodeHandle nh;
+    ros::Subscriber bat_sub = nh.subscribe("/velodyne1_points", 10, cloudCB); // //velodyne11_points
+    ros::spin();
+ 
+    return 0;
+}
+
 /*int i=0;
 char ch=(char)(int('0'));
 void call_back(const sensor_msgs::PointCloud2ConstPtr& input)
@@ -43,20 +61,3 @@ main(int argc,char** argv)
   ros::spin ();
 }*/
  
-void cloudCB(const sensor_msgs::PointCloud2 &input)
-{
-    pcl::PointCloud<pcl::PointXYZ> cloud; // 点云数据格式为PointXYZ
-    pcl::fromROSMsg(input, cloud);
-    if(pcl::io::savePCDFileASCII ("/home/zonlin/ROS/catkin_ws/src/site/point_cloud_data/point_cloud1.pcd", cloud)>=0)
-    {std::cerr << "Saved point_cloud1.pcd" << " " << cloud.points.size() << "points have been written" << std::endl;}
-}
- 
-int main (int argc, char **argv)
-{
-    ros::init (argc, argv, "point_cloud_write1");
-    ros::NodeHandle nh;
-    ros::Subscriber bat_sub = nh.subscribe("/velodyne1_points", 10, cloudCB); // //velodyne11_points
-    ros::spin();
- 
-    return 0;
-}

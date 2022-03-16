@@ -1,0 +1,38 @@
+<launch>
+  <!-- Robot model to match with that of Gazebo or the physical robot -->
+  <arg name="model" default="deepracer.urdf" />
+  <!-- More arguments -->
+  <arg name="multi_robot_name" default=""/>
+  <arg name="map_file" default="$(find pkg)/map/map4.yaml"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="move_forward_only" default="false"/>
+
+  <!-- Deepracer URDF model & robot_state_publisher -->
+  <param name="robot_description" textfile="$(find pkg)/urdf/$(arg model)" />
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  </node>
+
+  <!-- Joint state publisher -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping"/>
+  <!-- AMCL -->
+  <include file="$(find pkg)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+  <include file="$(find pkg)/launch/move_base.launch">
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find pkg)/rviz/navigation.rviz"/>
+  </group>
+</launch>

@@ -1,0 +1,8 @@
+prefix=/home/zonlin/ROS/deepracer/catkin_ws/devel
+
+Name: pkg
+Description: Description of pkg
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot
+  name="track2">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="1.33E-17 -1 -0.025"
+        rpy="0 0 0" />
+      <mass
+        value="12480" />
+      <inertia
+        ixx="37440"
+        ixy="2.6701E-13"
+        ixz="-1.4265E-29"
+        iyy="1.0885E-28"
+        iyz="2.0002E-12"
+        izz="37440" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="Green">
+    <inertial>
+      <origin
+        xyz="-0.021288 0.0005 -0.20511"
+        rpy="0 0 0" />
+      <mass
+        value="90.205" />
+      <inertia
+        ixx="203.73"
+        ixy="1.8337E-13"
+        ixz="-11.418"
+        iyy="280.39"
+        iyz="5.1135E-13"
+        izz="76.66" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Green.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Green.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis1"
+    type="fixed">
+    <origin
+      xyz="0 0.01 0"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="Green" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="GaoJiaLuMian">
+    <inertial>
+      <origin
+        xyz="-0.43446 0.31281 -1.4529"
+        rpy="0 0 0" />
+      <mass
+        value="635.07" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/GaoJiaLuMian.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/GaoJiaLuMian.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis2"
+    type="fixed">
+    <origin
+      xyz="0 0 0.01"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="GaoJiaLuMian" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="GaoJiaLiZhu">
+    <inertial>
+      <origin
+        xyz="0.0077567 0.17842 -1.708"
+        rpy="0 0 0" />
+      <mass
+        value="640.46" />
+      <inertia
+        ixx="345.72"
+        ixy="-8.1992"
+        ixz="82.902"
+        iyy="1102.5"
+        iyz="-1.8606"
+        izz="757.1" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/GaoJiaLiZhu.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/GaoJiaLiZhu.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis3"
+    type="fixed">
+    <origin
+      xyz="0 0 0.01"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="GaoJiaLiZhu" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="GaoJiaHuLan">
+    <inertial>
+      <origin
+        xyz="-0.42662 0.34899 -1.3727"
+        rpy="0 0 0" />
+      <mass
+        value="66.326" />
+      <inertia
+        ixx="0.34956"
+        ixy="0.0013582"
+        ixz="-0.038451"
+        iyy="0.35336"
+        iyz="0.012332"
+        izz="0.0046703" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/GaoJiaHuLan.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/GaoJiaHuLan.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis4"
+    type="fixed">
+    <origin
+      xyz="0 0 0.01"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="GaoJiaHuLan" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="DaoLuHuLan">
+    <inertial>
+      <origin
+        xyz="0.064039 0.141 -0.21601"
+        rpy="0 0 0" />
+      <mass
+        value="2204.4" />
+      <inertia
+        ixx="7101"
+        ixy="-7.7475E-14"
+        ixz="-221.52"
+        iyy="9589.6"
+        iyz="-1.3724E-13"
+        izz="2488.6" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/DaoLuHuLan.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/DaoLuHuLan.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis5"
+    type="fixed">
+    <origin
+      xyz="0 0 0.01"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="DaoLuHuLan" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Parking">
+    <inertial>
+      <origin
+        xyz="-0.015 -0.0095 4"
+        rpy="0 0 0" />
+      <mass
+        value="14.976" />
+      <inertia
+        ixx="8.424"
+        ixy="-3.3863E-19"
+        ixz="4.4409E-16"
+        iyy="13.293"
+        iyz="1.3425E-18"
+        izz="4.8691" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Parking.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69412 0.098039 0.098039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Parking.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis6"
+    type="fixed">
+    <origin
+      xyz="0 0 0.01"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="Parking" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="JianZhu">
+    <inertial>
+      <origin
+        xyz="-0.535660882369995 0.091 -0.142348821041457"
+        rpy="0 0 0" />
+      <mass
+        value="1482" />
+      <inertia
+        ixx="2309.92172498835"
+        ixy="7.88860905221012E-31"
+        ixz="-764.746547214597"
+        iyy="3070.9178306123"
+        iyz="0"
+        izz="760.996105623949" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/JianZhu.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/JianZhu.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis7"
+    type="fixed">
+    <origin
+      xyz="0 0 0.01"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="JianZhu" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  
+  <link
+    name="Camera1">
+    <inertial>
+      <origin
+        xyz="0.045514 -0.0011551 -0.11097"
+        rpy="0 0 0" />
+      <mass
+        value="9.1452" />
+      <inertia
+        ixx="0.12819"
+        ixy="0.0059673"
+        ixz="0.047557"
+        iyy="0.3544"
+        iyz="-0.00907"
+        izz="0.22944" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Camera1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Camera1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis9"
+    type="fixed">
+    <origin
+      xyz="-1.4846 -1.1758 0.46888"
+      rpy="6.1228E-17 -5.3433E-19 -3.1329" />
+    <parent
+      link="base_link" />
+    <child
+      link="Camera1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="LeiDa1">
+    <inertial>
+      <origin
+        xyz="-0.063086 0.11045 0.19918"
+        rpy="0 0 0" />
+      <mass
+        value="27.172" />
+      <inertia
+        ixx="8.1535"
+        ixy="0.0012332"
+        ixz="-5.7624E-05"
+        iyy="7.6309"
+        iyz="0.004968"
+        izz="0.53777" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/LeiDa1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/LeiDa1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference-axis10"
+    type="fixed">
+    <origin
+      xyz="-0.19987 -0.93672 0.28895"
+      rpy="1.5708 6.123E-17 1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="LeiDa1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Camera2">
+    <inertial>
+      <origin
+        xyz="-0.13386 0.20588 -0.13696"
+        rpy="0 0 0" />
+      <mass
+        value="14.939" />
+      <inertia
+        ixx="0.64052"
+        ixy="0.23937"
+        ixz="-0.18614"
+        iyy="0.46274"
+        iyz="0.26255"
+        izz="0.71826" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Camera2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/Camera2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference_axis11"
+    type="fixed">
+    <origin
+      xyz="1.21054201286997 -0.238453398504354 0.0151409820672447"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="Camera2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+ <link
+    name="LeiDa2">
+    <inertial>
+      <origin
+        xyz="1.7978 0.10931 0.21166"
+        rpy="0 0 0" />
+      <mass
+        value="34.473" />
+      <inertia
+        ixx="2.2398"
+        ixy="0.029814"
+        ixz="-1.0456"
+        iyy="3.515"
+        iyz="0.016925"
+        izz="2.237" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/LeiDa2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://pkg/meshes/track2/LeiDa2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="reference-axis12"
+    type="fixed">
+    <origin
+      xyz="-0.19987 -0.93672 0.28895"
+      rpy="1.5708 6.123E-17 1.5708" />
+    <parent
+      link="base_link" />
+    <child
+      link="LeiDa2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <gazebo reference="base_link">
+   <material>Gazebo/White</material>
+   <mu1 value="0.5"/>
+   <mu2 value="0.5"/>
+   <kp  value="1000000.0" />
+   <kd  value="1.0" />
+   <fdir1 value="1 0 0"/>
+  </gazebo>
+
+    <gazebo reference="Camera1">
+   <material>Gazebo/Gray</material>
+  </gazebo>
+  <gazebo reference="Camera2">
+   <material>Gazebo/Gray</material>
+  </gazebo>
+  <gazebo reference="Camera3">
+   <material>Gazebo/Gray</material>
+  </gazebo>
+  <gazebo reference="DaoLuHuLan">
+   <material>Gazebo/Residential</material>
+  </gazebo>
+   <gazebo reference="GaoJiaHuLan">
+   <material>Gazebo/Residential</material>
+  </gazebo>
+  <gazebo reference="GaoJiaLiZhu">
+   <material>Gazebo/Residential</material>
+  </gazebo>
+  <gazebo reference="GaoJiaLuMian">
+   <material>Gazebo/White</material>
+   <mu1 value="0.5"/>
+   <mu2 value="0.5"/>
+   <kp  value="1000000.0" />
+   <kd  value="1.0" />
+   <fdir1 value="1 0 0"/>
+  </gazebo>
+  <gazebo reference="Green">
+   <material>Gazebo/Grass</material>
+  </gazebo>
+  <gazebo reference="JianZhu">
+   <material>Gazebo/Bricks</material>
+  </gazebo> 
+  <gazebo reference="LeiDa1">
+   <material>Gazebo/Gray</material>
+  </gazebo>
+  <gazebo reference="LeiDa2">
+   <material>Gazebo/Gray</material>
+  </gazebo>
+    <gazebo reference="Parking">
+   <material>Gazebo/Residential</material>
+  </gazebo>
+</robot>

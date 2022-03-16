@@ -1,0 +1,8 @@
+prefix=/home/robot/catkin_ws/install
+
+Name: stage_first
+Description: Description of stage_first
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: stage stage_ros roscpp std_msgs geometry_msgs sensor_msgs nav_msgs

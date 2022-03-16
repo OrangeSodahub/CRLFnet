@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/zonlin/ROS/SqueezeSeg/SqueezeSeg_ws/install/setup.sh

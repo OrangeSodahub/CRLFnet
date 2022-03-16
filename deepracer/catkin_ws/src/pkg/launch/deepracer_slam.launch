@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <!-- Robot model to match with that of Gazebo or the physical robot -->
+  <arg name="model" default="deepracer.urdf" />
+  <!-- More arguments -->
+  <arg name="multi_robot_name" default=""/>
+  <arg name="open_rviz" default="true"/>
+
+  <!-- GoPiGo3 URDF model & robot_state_publisher -->
+  <param name="robot_description" textfile="$(find pkg)/urdf/$(arg model)" />
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="$(arg multi_robot_name)"/>
+  </node>
+
+  <!-- Joint state publisher -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+
+  <!-- SLAM using Gmapping -->
+  <include file="$(find pkg)/launch/gmapping.launch"/>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find pkg)/rviz/deepracer.rviz"/>
+  </group>
+</launch>

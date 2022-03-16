@@ -102,17 +102,6 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -134,6 +123,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -183,6 +183,21 @@ point_cloud_write1/fast:
 .PHONY : point_cloud_write1/fast
 
 # Convenience name for target.
+site/CMakeFiles/point_cloud_segmentation_on_normals.dir/rule:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_on_normals.dir/rule
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_normals.dir/rule
+
+# Convenience name for target.
+point_cloud_segmentation_on_normals: site/CMakeFiles/point_cloud_segmentation_on_normals.dir/rule
+
+.PHONY : point_cloud_segmentation_on_normals
+
+# fast build rule for target.
+point_cloud_segmentation_on_normals/fast:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build
+.PHONY : point_cloud_segmentation_on_normals/fast
+
+# Convenience name for target.
 site/CMakeFiles/point_cloud_write2.dir/rule:
 	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_write2.dir/rule
 .PHONY : site/CMakeFiles/point_cloud_write2.dir/rule
@@ -228,6 +243,36 @@ image_output/fast:
 .PHONY : image_output/fast
 
 # Convenience name for target.
+site/CMakeFiles/point_cloud_merge.dir/rule:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_merge.dir/rule
+.PHONY : site/CMakeFiles/point_cloud_merge.dir/rule
+
+# Convenience name for target.
+point_cloud_merge: site/CMakeFiles/point_cloud_merge.dir/rule
+
+.PHONY : point_cloud_merge
+
+# fast build rule for target.
+point_cloud_merge/fast:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/build
+.PHONY : point_cloud_merge/fast
+
+# Convenience name for target.
+site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+
+# Convenience name for target.
+point_cloud_segmentation_on_regioin_growing: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+
+.PHONY : point_cloud_segmentation_on_regioin_growing
+
+# fast build rule for target.
+point_cloud_segmentation_on_regioin_growing/fast:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build
+.PHONY : point_cloud_segmentation_on_regioin_growing/fast
+
+# Convenience name for target.
 site/CMakeFiles/cloud_viewer.dir/rule:
 	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/cloud_viewer.dir/rule
 .PHONY : site/CMakeFiles/cloud_viewer.dir/rule
@@ -258,21 +303,6 @@ point_cloud_filter/fast:
 .PHONY : point_cloud_filter/fast
 
 # Convenience name for target.
-site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule:
-	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
-.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
-
-# Convenience name for target.
-point_cloud_segmentation_RANSAC: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
-
-.PHONY : point_cloud_segmentation_RANSAC
-
-# fast build rule for target.
-point_cloud_segmentation_RANSAC/fast:
-	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build
-.PHONY : point_cloud_segmentation_RANSAC/fast
-
-# Convenience name for target.
 site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/rule:
 	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/rule
 .PHONY : site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/rule
@@ -288,34 +318,34 @@ point_cloud_segmentation_ou_cluster/fast:
 .PHONY : point_cloud_segmentation_ou_cluster/fast
 
 # Convenience name for target.
-site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule:
-	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
-.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
+.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
 
 # Convenience name for target.
-point_cloud_segmentation_on_regioin_growing: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+point_cloud_segmentation_RANSAC: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
 
-.PHONY : point_cloud_segmentation_on_regioin_growing
+.PHONY : point_cloud_segmentation_RANSAC
 
 # fast build rule for target.
-point_cloud_segmentation_on_regioin_growing/fast:
-	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build
-.PHONY : point_cloud_segmentation_on_regioin_growing/fast
+point_cloud_segmentation_RANSAC/fast:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build
+.PHONY : point_cloud_segmentation_RANSAC/fast
 
 # Convenience name for target.
-site/CMakeFiles/point_cloud_merge.dir/rule:
-	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_merge.dir/rule
-.PHONY : site/CMakeFiles/point_cloud_merge.dir/rule
+site/CMakeFiles/pcd2bin.dir/rule:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/pcd2bin.dir/rule
+.PHONY : site/CMakeFiles/pcd2bin.dir/rule
 
 # Convenience name for target.
-point_cloud_merge: site/CMakeFiles/point_cloud_merge.dir/rule
+pcd2bin: site/CMakeFiles/pcd2bin.dir/rule
 
-.PHONY : point_cloud_merge
+.PHONY : pcd2bin
 
 # fast build rule for target.
-point_cloud_merge/fast:
-	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/build
-.PHONY : point_cloud_merge/fast
+pcd2bin/fast:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/build
+.PHONY : pcd2bin/fast
 
 src/cloud_viewer.o: src/cloud_viewer.cpp.o
 
@@ -370,6 +400,33 @@ src/image_output.s: src/image_output.cpp.s
 src/image_output.cpp.s:
 	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/image_output.dir/build.make site/CMakeFiles/image_output.dir/src/image_output.cpp.s
 .PHONY : src/image_output.cpp.s
+
+src/pcd2bin.o: src/pcd2bin.cpp.o
+
+.PHONY : src/pcd2bin.o
+
+# target to build an object file
+src/pcd2bin.cpp.o:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/src/pcd2bin.cpp.o
+.PHONY : src/pcd2bin.cpp.o
+
+src/pcd2bin.i: src/pcd2bin.cpp.i
+
+.PHONY : src/pcd2bin.i
+
+# target to preprocess a source file
+src/pcd2bin.cpp.i:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/src/pcd2bin.cpp.i
+.PHONY : src/pcd2bin.cpp.i
+
+src/pcd2bin.s: src/pcd2bin.cpp.s
+
+.PHONY : src/pcd2bin.s
+
+# target to generate assembly for a file
+src/pcd2bin.cpp.s:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/src/pcd2bin.cpp.s
+.PHONY : src/pcd2bin.cpp.s
 
 src/point_cloud_filter.o: src/point_cloud_filter.cpp.o
 
@@ -451,6 +508,33 @@ src/point_cloud_segmentation_RANSAC.s: src/point_cloud_segmentation_RANSAC.cpp.s
 src/point_cloud_segmentation_RANSAC.cpp.s:
 	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/src/point_cloud_segmentation_RANSAC.cpp.s
 .PHONY : src/point_cloud_segmentation_RANSAC.cpp.s
+
+src/point_cloud_segmentation_on_normals.o: src/point_cloud_segmentation_on_normals.cpp.o
+
+.PHONY : src/point_cloud_segmentation_on_normals.o
+
+# target to build an object file
+src/point_cloud_segmentation_on_normals.cpp.o:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o
+.PHONY : src/point_cloud_segmentation_on_normals.cpp.o
+
+src/point_cloud_segmentation_on_normals.i: src/point_cloud_segmentation_on_normals.cpp.i
+
+.PHONY : src/point_cloud_segmentation_on_normals.i
+
+# target to preprocess a source file
+src/point_cloud_segmentation_on_normals.cpp.i:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.i
+.PHONY : src/point_cloud_segmentation_on_normals.cpp.i
+
+src/point_cloud_segmentation_on_normals.s: src/point_cloud_segmentation_on_normals.cpp.s
+
+.PHONY : src/point_cloud_segmentation_on_normals.s
+
+# target to generate assembly for a file
+src/point_cloud_segmentation_on_normals.cpp.s:
+	cd /home/zonlin/ROS/catkin_ws/build && $(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.s
+.PHONY : src/point_cloud_segmentation_on_normals.cpp.s
 
 src/point_cloud_segmentation_on_regioin_growing.o: src/point_cloud_segmentation_on_regioin_growing.cpp.o
 
@@ -598,24 +682,29 @@ help:
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... point_cloud_write1"
+	@echo "... point_cloud_segmentation_on_normals"
 	@echo "... point_cloud_write2"
 	@echo "... point_cloud_write3"
 	@echo "... image_output"
-	@echo "... cloud_viewer"
-	@echo "... point_cloud_filter"
-	@echo "... point_cloud_segmentation_RANSAC"
-	@echo "... point_cloud_segmentation_ou_cluster"
+	@echo "... rebuild_cache"
+	@echo "... edit_cache"
+	@echo "... point_cloud_merge"
 	@echo "... point_cloud_segmentation_on_regioin_growing"
 	@echo "... test"
-	@echo "... rebuild_cache"
-	@echo "... point_cloud_merge"
-	@echo "... edit_cache"
+	@echo "... cloud_viewer"
+	@echo "... point_cloud_filter"
+	@echo "... point_cloud_segmentation_ou_cluster"
+	@echo "... point_cloud_segmentation_RANSAC"
+	@echo "... pcd2bin"
 	@echo "... src/cloud_viewer.o"
 	@echo "... src/cloud_viewer.i"
 	@echo "... src/cloud_viewer.s"
 	@echo "... src/image_output.o"
 	@echo "... src/image_output.i"
 	@echo "... src/image_output.s"
+	@echo "... src/pcd2bin.o"
+	@echo "... src/pcd2bin.i"
+	@echo "... src/pcd2bin.s"
 	@echo "... src/point_cloud_filter.o"
 	@echo "... src/point_cloud_filter.i"
 	@echo "... src/point_cloud_filter.s"
@@ -625,6 +714,9 @@ help:
 	@echo "... src/point_cloud_segmentation_RANSAC.o"
 	@echo "... src/point_cloud_segmentation_RANSAC.i"
 	@echo "... src/point_cloud_segmentation_RANSAC.s"
+	@echo "... src/point_cloud_segmentation_on_normals.o"
+	@echo "... src/point_cloud_segmentation_on_normals.i"
+	@echo "... src/point_cloud_segmentation_on_normals.s"
 	@echo "... src/point_cloud_segmentation_on_regioin_growing.o"
 	@echo "... src/point_cloud_segmentation_on_regioin_growing.i"
 	@echo "... src/point_cloud_segmentation_on_regioin_growing.s"

@@ -322,15 +322,17 @@ point_cloud/clean: point_cloud/CMakeFiles/pcl_create.dir/clean
 
 # Recursive "all" directory target.
 site/all: site/CMakeFiles/point_cloud_write1.dir/all
+site/all: site/CMakeFiles/point_cloud_segmentation_on_normals.dir/all
 site/all: site/CMakeFiles/point_cloud_write2.dir/all
 site/all: site/CMakeFiles/point_cloud_write3.dir/all
 site/all: site/CMakeFiles/image_output.dir/all
+site/all: site/CMakeFiles/point_cloud_merge.dir/all
+site/all: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all
 site/all: site/CMakeFiles/cloud_viewer.dir/all
 site/all: site/CMakeFiles/point_cloud_filter.dir/all
-site/all: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all
 site/all: site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/all
-site/all: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all
-site/all: site/CMakeFiles/point_cloud_merge.dir/all
+site/all: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all
+site/all: site/CMakeFiles/pcd2bin.dir/all
 
 .PHONY : site/all
 
@@ -341,15 +343,17 @@ site/preinstall:
 
 # Recursive "clean" directory target.
 site/clean: site/CMakeFiles/point_cloud_write1.dir/clean
+site/clean: site/CMakeFiles/point_cloud_segmentation_on_normals.dir/clean
 site/clean: site/CMakeFiles/point_cloud_write2.dir/clean
 site/clean: site/CMakeFiles/point_cloud_write3.dir/clean
 site/clean: site/CMakeFiles/image_output.dir/clean
+site/clean: site/CMakeFiles/point_cloud_merge.dir/clean
+site/clean: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean
 site/clean: site/CMakeFiles/cloud_viewer.dir/clean
 site/clean: site/CMakeFiles/point_cloud_filter.dir/clean
-site/clean: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean
 site/clean: site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/clean
-site/clean: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean
-site/clean: site/CMakeFiles/point_cloud_merge.dir/clean
+site/clean: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean
+site/clean: site/CMakeFiles/pcd2bin.dir/clean
 
 .PHONY : site/clean
 
@@ -652,7 +656,7 @@ per_msgs/CMakeFiles/per_msgs_generate_messages_py.dir/all: per_msgs/CMakeFiles/s
 per_msgs/CMakeFiles/per_msgs_generate_messages_py.dir/all: per_msgs/CMakeFiles/_per_msgs_generate_messages_check_deps_SensorMsgsRadar.dir/all
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_py.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_py.dir/depend
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_py.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=28,29,30 "Built target per_msgs_generate_messages_py"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=30,31,32 "Built target per_msgs_generate_messages_py"
 .PHONY : per_msgs/CMakeFiles/per_msgs_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
@@ -682,7 +686,7 @@ per_msgs/CMakeFiles/per_msgs_generate_messages_nodejs.dir/all: per_msgs/CMakeFil
 per_msgs/CMakeFiles/per_msgs_generate_messages_nodejs.dir/all: per_msgs/CMakeFiles/_per_msgs_generate_messages_check_deps_SensorMsgsRadar.dir/all
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_nodejs.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_nodejs.dir/depend
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_nodejs.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=26,27 "Built target per_msgs_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=28,29 "Built target per_msgs_generate_messages_nodejs"
 .PHONY : per_msgs/CMakeFiles/per_msgs_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
@@ -739,7 +743,7 @@ per_msgs/CMakeFiles/per_msgs_generate_messages_lisp.dir/all: per_msgs/CMakeFiles
 per_msgs/CMakeFiles/per_msgs_generate_messages_lisp.dir/all: per_msgs/CMakeFiles/_per_msgs_generate_messages_check_deps_SensorMsgsRadar.dir/all
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_lisp.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_lisp.dir/depend
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_lisp.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=24,25 "Built target per_msgs_generate_messages_lisp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=26,27 "Built target per_msgs_generate_messages_lisp"
 .PHONY : per_msgs/CMakeFiles/per_msgs_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -796,7 +800,7 @@ per_msgs/CMakeFiles/per_msgs_generate_messages_cpp.dir/all: per_msgs/CMakeFiles/
 per_msgs/CMakeFiles/per_msgs_generate_messages_cpp.dir/all: per_msgs/CMakeFiles/_per_msgs_generate_messages_check_deps_SensorMsgsRadar.dir/all
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_cpp.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_cpp.dir/depend
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_cpp.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=19,20 "Built target per_msgs_generate_messages_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=21,22 "Built target per_msgs_generate_messages_cpp"
 .PHONY : per_msgs/CMakeFiles/per_msgs_generate_messages_cpp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2872,7 +2876,7 @@ per_msgs/CMakeFiles/per_msgs_generate_messages_eus.dir/all: per_msgs/CMakeFiles/
 per_msgs/CMakeFiles/per_msgs_generate_messages_eus.dir/all: per_msgs/CMakeFiles/_per_msgs_generate_messages_check_deps_SensorMsgsRadar.dir/all
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_eus.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_eus.dir/depend
 	$(MAKE) -f per_msgs/CMakeFiles/per_msgs_generate_messages_eus.dir/build.make per_msgs/CMakeFiles/per_msgs_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=21,22,23 "Built target per_msgs_generate_messages_eus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=23,24,25 "Built target per_msgs_generate_messages_eus"
 .PHONY : per_msgs/CMakeFiles/per_msgs_generate_messages_eus.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3493,7 +3497,7 @@ per_msgs/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/clean:
 point_cloud/CMakeFiles/pcl_read.dir/all:
 	$(MAKE) -f point_cloud/CMakeFiles/pcl_read.dir/build.make point_cloud/CMakeFiles/pcl_read.dir/depend
 	$(MAKE) -f point_cloud/CMakeFiles/pcl_read.dir/build.make point_cloud/CMakeFiles/pcl_read.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=15,16 "Built target pcl_read"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=17,18 "Built target pcl_read"
 .PHONY : point_cloud/CMakeFiles/pcl_read.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3655,7 +3659,7 @@ point_cloud/CMakeFiles/topic_tools_generate_messages_nodejs.dir/clean:
 point_cloud/CMakeFiles/pcl_write.dir/all:
 	$(MAKE) -f point_cloud/CMakeFiles/pcl_write.dir/build.make point_cloud/CMakeFiles/pcl_write.dir/depend
 	$(MAKE) -f point_cloud/CMakeFiles/pcl_write.dir/build.make point_cloud/CMakeFiles/pcl_write.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=17,18 "Built target pcl_write"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=19,20 "Built target pcl_write"
 .PHONY : point_cloud/CMakeFiles/pcl_write.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3871,7 +3875,7 @@ point_cloud/CMakeFiles/pcl_msgs_generate_messages_py.dir/clean:
 point_cloud/CMakeFiles/pcl_create.dir/all:
 	$(MAKE) -f point_cloud/CMakeFiles/pcl_create.dir/build.make point_cloud/CMakeFiles/pcl_create.dir/depend
 	$(MAKE) -f point_cloud/CMakeFiles/pcl_create.dir/build.make point_cloud/CMakeFiles/pcl_create.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=13,14 "Built target pcl_create"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=15,16 "Built target pcl_create"
 .PHONY : point_cloud/CMakeFiles/pcl_create.dir/all
 
 # Build rule for subdir invocation for target.
@@ -3991,7 +3995,7 @@ ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/all: per_msgs/CMakeFi
 ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/all: per_msgs/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/all
 	$(MAKE) -f ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/build.make ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/depend
 	$(MAKE) -f ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/build.make ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=49,50 "Built target radar_plugin"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=53,54 "Built target radar_plugin"
 .PHONY : ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4018,7 +4022,7 @@ ARS_gazebo_plugin/radar_plugin/CMakeFiles/radar_plugin.dir/clean:
 ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/all:
 	$(MAKE) -f ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/build.make ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/depend
 	$(MAKE) -f ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/build.make ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=47,48 "Built target radarMsgCombiner"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=51,52 "Built target radarMsgCombiner"
 .PHONY : ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4045,7 +4049,7 @@ ARS_gazebo_plugin/radar_plugin/CMakeFiles/radarMsgCombiner.dir/clean:
 site/CMakeFiles/point_cloud_write1.dir/all:
 	$(MAKE) -f site/CMakeFiles/point_cloud_write1.dir/build.make site/CMakeFiles/point_cloud_write1.dir/depend
 	$(MAKE) -f site/CMakeFiles/point_cloud_write1.dir/build.make site/CMakeFiles/point_cloud_write1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=41,42 "Built target point_cloud_write1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=45,46 "Built target point_cloud_write1"
 .PHONY : site/CMakeFiles/point_cloud_write1.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4066,13 +4070,40 @@ site/CMakeFiles/point_cloud_write1.dir/clean:
 .PHONY : site/CMakeFiles/point_cloud_write1.dir/clean
 
 #=============================================================================
+# Target rules for target site/CMakeFiles/point_cloud_segmentation_on_normals.dir
+
+# All Build rule for target.
+site/CMakeFiles/point_cloud_segmentation_on_normals.dir/all:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/depend
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=39,40 "Built target point_cloud_segmentation_on_normals"
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_normals.dir/all
+
+# Build rule for subdir invocation for target.
+site/CMakeFiles/point_cloud_segmentation_on_normals.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_on_normals.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 0
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_normals.dir/rule
+
+# Convenience name for target.
+point_cloud_segmentation_on_normals: site/CMakeFiles/point_cloud_segmentation_on_normals.dir/rule
+
+.PHONY : point_cloud_segmentation_on_normals
+
+# clean rule for target.
+site/CMakeFiles/point_cloud_segmentation_on_normals.dir/clean:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/clean
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_normals.dir/clean
+
+#=============================================================================
 # Target rules for target site/CMakeFiles/point_cloud_write2.dir
 
 # All Build rule for target.
 site/CMakeFiles/point_cloud_write2.dir/all:
 	$(MAKE) -f site/CMakeFiles/point_cloud_write2.dir/build.make site/CMakeFiles/point_cloud_write2.dir/depend
 	$(MAKE) -f site/CMakeFiles/point_cloud_write2.dir/build.make site/CMakeFiles/point_cloud_write2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=43,44 "Built target point_cloud_write2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=47,48 "Built target point_cloud_write2"
 .PHONY : site/CMakeFiles/point_cloud_write2.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4099,7 +4130,7 @@ site/CMakeFiles/point_cloud_write2.dir/clean:
 site/CMakeFiles/point_cloud_write3.dir/all:
 	$(MAKE) -f site/CMakeFiles/point_cloud_write3.dir/build.make site/CMakeFiles/point_cloud_write3.dir/depend
 	$(MAKE) -f site/CMakeFiles/point_cloud_write3.dir/build.make site/CMakeFiles/point_cloud_write3.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=45,46 "Built target point_cloud_write3"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=49,50 "Built target point_cloud_write3"
 .PHONY : site/CMakeFiles/point_cloud_write3.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4147,6 +4178,60 @@ site/CMakeFiles/image_output.dir/clean:
 .PHONY : site/CMakeFiles/image_output.dir/clean
 
 #=============================================================================
+# Target rules for target site/CMakeFiles/point_cloud_merge.dir
+
+# All Build rule for target.
+site/CMakeFiles/point_cloud_merge.dir/all:
+	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/depend
+	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=35,36 "Built target point_cloud_merge"
+.PHONY : site/CMakeFiles/point_cloud_merge.dir/all
+
+# Build rule for subdir invocation for target.
+site/CMakeFiles/point_cloud_merge.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_merge.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 0
+.PHONY : site/CMakeFiles/point_cloud_merge.dir/rule
+
+# Convenience name for target.
+point_cloud_merge: site/CMakeFiles/point_cloud_merge.dir/rule
+
+.PHONY : point_cloud_merge
+
+# clean rule for target.
+site/CMakeFiles/point_cloud_merge.dir/clean:
+	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/clean
+.PHONY : site/CMakeFiles/point_cloud_merge.dir/clean
+
+#=============================================================================
+# Target rules for target site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir
+
+# All Build rule for target.
+site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/depend
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=41,42 "Built target point_cloud_segmentation_on_regioin_growing"
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all
+
+# Build rule for subdir invocation for target.
+site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 0
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+
+# Convenience name for target.
+point_cloud_segmentation_on_regioin_growing: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+
+.PHONY : point_cloud_segmentation_on_regioin_growing
+
+# clean rule for target.
+site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean
+.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean
+
+#=============================================================================
 # Target rules for target site/CMakeFiles/cloud_viewer.dir
 
 # All Build rule for target.
@@ -4180,7 +4265,7 @@ site/CMakeFiles/cloud_viewer.dir/clean:
 site/CMakeFiles/point_cloud_filter.dir/all:
 	$(MAKE) -f site/CMakeFiles/point_cloud_filter.dir/build.make site/CMakeFiles/point_cloud_filter.dir/depend
 	$(MAKE) -f site/CMakeFiles/point_cloud_filter.dir/build.make site/CMakeFiles/point_cloud_filter.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=31,32 "Built target point_cloud_filter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=33,34 "Built target point_cloud_filter"
 .PHONY : site/CMakeFiles/point_cloud_filter.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4201,40 +4286,13 @@ site/CMakeFiles/point_cloud_filter.dir/clean:
 .PHONY : site/CMakeFiles/point_cloud_filter.dir/clean
 
 #=============================================================================
-# Target rules for target site/CMakeFiles/point_cloud_segmentation_RANSAC.dir
-
-# All Build rule for target.
-site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all:
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/depend
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=35,36 "Built target point_cloud_segmentation_RANSAC"
-.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all
-
-# Build rule for subdir invocation for target.
-site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 0
-.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
-
-# Convenience name for target.
-point_cloud_segmentation_RANSAC: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
-
-.PHONY : point_cloud_segmentation_RANSAC
-
-# clean rule for target.
-site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean:
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean
-.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean
-
-#=============================================================================
 # Target rules for target site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir
 
 # All Build rule for target.
 site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/all:
 	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/depend
 	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=39,40 "Built target point_cloud_segmentation_ou_cluster"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=43,44 "Built target point_cloud_segmentation_ou_cluster"
 .PHONY : site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/all
 
 # Build rule for subdir invocation for target.
@@ -4255,58 +4313,58 @@ site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/clean:
 .PHONY : site/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/clean
 
 #=============================================================================
-# Target rules for target site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir
+# Target rules for target site/CMakeFiles/point_cloud_segmentation_RANSAC.dir
 
 # All Build rule for target.
-site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all:
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/depend
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=37,38 "Built target point_cloud_segmentation_on_regioin_growing"
-.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all
+site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/depend
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=37,38 "Built target point_cloud_segmentation_RANSAC"
+.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all
 
 # Build rule for subdir invocation for target.
-site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule: cmake_check_build_system
+site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 0
-.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
 
 # Convenience name for target.
-point_cloud_segmentation_on_regioin_growing: site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/rule
+point_cloud_segmentation_RANSAC: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/rule
 
-.PHONY : point_cloud_segmentation_on_regioin_growing
+.PHONY : point_cloud_segmentation_RANSAC
 
 # clean rule for target.
-site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean:
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean
-.PHONY : site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/clean
+site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean
+.PHONY : site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean
 
 #=============================================================================
-# Target rules for target site/CMakeFiles/point_cloud_merge.dir
+# Target rules for target site/CMakeFiles/pcd2bin.dir
 
 # All Build rule for target.
-site/CMakeFiles/point_cloud_merge.dir/all:
-	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/depend
-	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=33,34 "Built target point_cloud_merge"
-.PHONY : site/CMakeFiles/point_cloud_merge.dir/all
+site/CMakeFiles/pcd2bin.dir/all:
+	$(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/depend
+	$(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/zonlin/ROS/catkin_ws/build/CMakeFiles --progress-num=13,14 "Built target pcd2bin"
+.PHONY : site/CMakeFiles/pcd2bin.dir/all
 
 # Build rule for subdir invocation for target.
-site/CMakeFiles/point_cloud_merge.dir/rule: cmake_check_build_system
+site/CMakeFiles/pcd2bin.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/point_cloud_merge.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 site/CMakeFiles/pcd2bin.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/zonlin/ROS/catkin_ws/build/CMakeFiles 0
-.PHONY : site/CMakeFiles/point_cloud_merge.dir/rule
+.PHONY : site/CMakeFiles/pcd2bin.dir/rule
 
 # Convenience name for target.
-point_cloud_merge: site/CMakeFiles/point_cloud_merge.dir/rule
+pcd2bin: site/CMakeFiles/pcd2bin.dir/rule
 
-.PHONY : point_cloud_merge
+.PHONY : pcd2bin
 
 # clean rule for target.
-site/CMakeFiles/point_cloud_merge.dir/clean:
-	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/clean
-.PHONY : site/CMakeFiles/point_cloud_merge.dir/clean
+site/CMakeFiles/pcd2bin.dir/clean:
+	$(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/clean
+.PHONY : site/CMakeFiles/pcd2bin.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

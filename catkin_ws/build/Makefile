@@ -1845,6 +1845,19 @@ point_cloud_write1/fast:
 .PHONY : point_cloud_write1/fast
 
 #=============================================================================
+# Target rules for targets named point_cloud_segmentation_on_normals
+
+# Build rule for target.
+point_cloud_segmentation_on_normals: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_segmentation_on_normals
+.PHONY : point_cloud_segmentation_on_normals
+
+# fast build rule for target.
+point_cloud_segmentation_on_normals/fast:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_normals.dir/build
+.PHONY : point_cloud_segmentation_on_normals/fast
+
+#=============================================================================
 # Target rules for targets named point_cloud_write2
 
 # Build rule for target.
@@ -1884,6 +1897,32 @@ image_output/fast:
 .PHONY : image_output/fast
 
 #=============================================================================
+# Target rules for targets named point_cloud_merge
+
+# Build rule for target.
+point_cloud_merge: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_merge
+.PHONY : point_cloud_merge
+
+# fast build rule for target.
+point_cloud_merge/fast:
+	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/build
+.PHONY : point_cloud_merge/fast
+
+#=============================================================================
+# Target rules for targets named point_cloud_segmentation_on_regioin_growing
+
+# Build rule for target.
+point_cloud_segmentation_on_regioin_growing: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_segmentation_on_regioin_growing
+.PHONY : point_cloud_segmentation_on_regioin_growing
+
+# fast build rule for target.
+point_cloud_segmentation_on_regioin_growing/fast:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build
+.PHONY : point_cloud_segmentation_on_regioin_growing/fast
+
+#=============================================================================
 # Target rules for targets named cloud_viewer
 
 # Build rule for target.
@@ -1910,19 +1949,6 @@ point_cloud_filter/fast:
 .PHONY : point_cloud_filter/fast
 
 #=============================================================================
-# Target rules for targets named point_cloud_segmentation_RANSAC
-
-# Build rule for target.
-point_cloud_segmentation_RANSAC: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_segmentation_RANSAC
-.PHONY : point_cloud_segmentation_RANSAC
-
-# fast build rule for target.
-point_cloud_segmentation_RANSAC/fast:
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build
-.PHONY : point_cloud_segmentation_RANSAC/fast
-
-#=============================================================================
 # Target rules for targets named point_cloud_segmentation_ou_cluster
 
 # Build rule for target.
@@ -1936,30 +1962,30 @@ point_cloud_segmentation_ou_cluster/fast:
 .PHONY : point_cloud_segmentation_ou_cluster/fast
 
 #=============================================================================
-# Target rules for targets named point_cloud_segmentation_on_regioin_growing
+# Target rules for targets named point_cloud_segmentation_RANSAC
 
 # Build rule for target.
-point_cloud_segmentation_on_regioin_growing: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_segmentation_on_regioin_growing
-.PHONY : point_cloud_segmentation_on_regioin_growing
+point_cloud_segmentation_RANSAC: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_segmentation_RANSAC
+.PHONY : point_cloud_segmentation_RANSAC
 
 # fast build rule for target.
-point_cloud_segmentation_on_regioin_growing/fast:
-	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build
-.PHONY : point_cloud_segmentation_on_regioin_growing/fast
+point_cloud_segmentation_RANSAC/fast:
+	$(MAKE) -f site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build
+.PHONY : point_cloud_segmentation_RANSAC/fast
 
 #=============================================================================
-# Target rules for targets named point_cloud_merge
+# Target rules for targets named pcd2bin
 
 # Build rule for target.
-point_cloud_merge: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_merge
-.PHONY : point_cloud_merge
+pcd2bin: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pcd2bin
+.PHONY : pcd2bin
 
 # fast build rule for target.
-point_cloud_merge/fast:
-	$(MAKE) -f site/CMakeFiles/point_cloud_merge.dir/build.make site/CMakeFiles/point_cloud_merge.dir/build
-.PHONY : point_cloud_merge/fast
+pcd2bin/fast:
+	$(MAKE) -f site/CMakeFiles/pcd2bin.dir/build.make site/CMakeFiles/pcd2bin.dir/build
+.PHONY : pcd2bin/fast
 
 # Help Target
 help:
@@ -2103,15 +2129,17 @@ help:
 	@echo "... radar_plugin"
 	@echo "... radarMsgCombiner"
 	@echo "... point_cloud_write1"
+	@echo "... point_cloud_segmentation_on_normals"
 	@echo "... point_cloud_write2"
 	@echo "... point_cloud_write3"
 	@echo "... image_output"
+	@echo "... point_cloud_merge"
+	@echo "... point_cloud_segmentation_on_regioin_growing"
 	@echo "... cloud_viewer"
 	@echo "... point_cloud_filter"
-	@echo "... point_cloud_segmentation_RANSAC"
 	@echo "... point_cloud_segmentation_ou_cluster"
-	@echo "... point_cloud_segmentation_on_regioin_growing"
-	@echo "... point_cloud_merge"
+	@echo "... point_cloud_segmentation_RANSAC"
+	@echo "... pcd2bin"
 .PHONY : help
 
 
