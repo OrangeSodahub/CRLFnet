@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/zonlin/ROS/deepracer/catkin_ws/build
 include CMakeFiles/clean_test_results.dir/progress.make
 
 CMakeFiles/clean_test_results:
-	/usr/local/bin/python3 /opt/ros/noetic/share/catkin/cmake/test/remove_test_results.py /home/zonlin/ROS/deepracer/catkin_ws/build/test_results
+	/usr/bin/python3 /opt/ros/noetic/share/catkin/cmake/test/remove_test_results.py /home/zonlin/ROS/deepracer/catkin_ws/build/test_results
 
 clean_test_results: CMakeFiles/clean_test_results
 clean_test_results: CMakeFiles/clean_test_results.dir/build.make

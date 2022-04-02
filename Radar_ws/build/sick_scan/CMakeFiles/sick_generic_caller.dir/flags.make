@@ -6,5 +6,5 @@ CXX_FLAGS =  -Wno-format-overflow   -std=gnu++11
 
 CXX_DEFINES = -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"sick_scan\"
 
-CXX_INCLUDES = -I/home/zonlin/ROS/Radar_ws/src/sick_scan/include -I/home/zonlin/ROS/Radar_ws/src/sick_scan/include/tinyxml -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/zonlin/ROS/Radar_ws/src/sick_scan/include/sick_scan -isystem /home/zonlin/ROS/Radar_ws/devel/include -isystem /home/zonlin/ROS/Radar_ws/src/sick_scan/BEFORE 
+CXX_INCLUDES = -I/home/zonlin/ROS/Radar_ws/devel/include -I/home/zonlin/ROS/Radar_ws/src/sick_scan/include -I/home/zonlin/ROS/Radar_ws/src/sick_scan/include/tinyxml -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/home/zonlin/ROS/Radar_ws/src/sick_scan/include/sick_scan 
 

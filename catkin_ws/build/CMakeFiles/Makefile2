@@ -58,7 +58,6 @@ all: per_msgs/all
 all: point_cloud/all
 all: ARS_gazebo_plugin/radar_plugin/all
 all: site/all
-all: site_model/all
 
 .PHONY : all
 
@@ -68,7 +67,6 @@ preinstall: per_msgs/preinstall
 preinstall: point_cloud/preinstall
 preinstall: ARS_gazebo_plugin/radar_plugin/preinstall
 preinstall: site/preinstall
-preinstall: site_model/preinstall
 
 .PHONY : preinstall
 
@@ -83,7 +81,6 @@ clean: per_msgs/clean
 clean: point_cloud/clean
 clean: ARS_gazebo_plugin/radar_plugin/clean
 clean: site/clean
-clean: site_model/clean
 
 .PHONY : clean
 
@@ -356,24 +353,6 @@ site/clean: site/CMakeFiles/point_cloud_segmentation_RANSAC.dir/clean
 site/clean: site/CMakeFiles/pcd2bin.dir/clean
 
 .PHONY : site/clean
-
-#=============================================================================
-# Directory level rules for directory site_model
-
-# Recursive "all" directory target.
-site_model/all:
-
-.PHONY : site_model/all
-
-# Recursive "preinstall" directory target.
-site_model/preinstall:
-
-.PHONY : site_model/preinstall
-
-# Recursive "clean" directory target.
-site_model/clean:
-
-.PHONY : site_model/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/doxygen.dir

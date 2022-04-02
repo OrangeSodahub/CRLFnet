@@ -18,13 +18,12 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/home/zonlin/ROS/Radar_ws/devel/include"
   "/home/zonlin/ROS/Radar_ws/src/sick_scan/include"
   "/home/zonlin/ROS/Radar_ws/src/sick_scan/include/tinyxml"
   "/opt/ros/noetic/include"
   "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   "/home/zonlin/ROS/Radar_ws/src/sick_scan/include/sick_scan"
-  "/home/zonlin/ROS/Radar_ws/devel/include"
-  "/home/zonlin/ROS/Radar_ws/src/sick_scan/BEFORE"
   )
 
 # Targets to which this target links.

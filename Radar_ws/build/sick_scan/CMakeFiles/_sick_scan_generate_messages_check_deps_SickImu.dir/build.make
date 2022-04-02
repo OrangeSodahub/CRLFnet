@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/zonlin/ROS/Radar_ws/build
 include sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_SickImu.dir/progress.make
 
 sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_SickImu:
-	cd /home/zonlin/ROS/Radar_ws/build/sick_scan && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py sick_scan /home/zonlin/ROS/Radar_ws/src/sick_scan/msg/SickImu.msg geometry_msgs/Vector3:geometry_msgs/Quaternion:std_msgs/Header:sensor_msgs/Imu
+	cd /home/zonlin/ROS/Radar_ws/build/sick_scan && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py sick_scan /home/zonlin/ROS/Radar_ws/src/sick_scan/msg/SickImu.msg std_msgs/Header:sensor_msgs/Imu:geometry_msgs/Vector3:geometry_msgs/Quaternion
 
 _sick_scan_generate_messages_check_deps_SickImu: sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_SickImu
 _sick_scan_generate_messages_check_deps_SickImu: sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_SickImu.dir/build.make

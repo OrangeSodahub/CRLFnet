@@ -338,7 +338,7 @@ LSB_RELEASE_EXECUTABLE:FILEPATH=/usr/bin/lsb_release
 NOSETESTS:FILEPATH=/usr/bin/nosetests3
 
 //Path to a program.
-PYTHON_EXECUTABLE:FILEPATH=/usr/local/bin/python3
+PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
 
 //Specify specific Python version to use ('major.minor' or 'major')
 PYTHON_VERSION:STRING=3
@@ -502,15 +502,6 @@ rostime_DIR:PATH=/opt/ros/noetic/share/rostime/cmake
 
 //The directory containing a CMake configuration file for sensor_msgs.
 sensor_msgs_DIR:PATH=/opt/ros/noetic/share/sensor_msgs/cmake
-
-//Value Computed by CMake
-stage_first_BINARY_DIR:STATIC=/home/zonlin/ROS/deepracer/catkin_ws/build/stage_first
-
-//Value Computed by CMake
-stage_first_SOURCE_DIR:STATIC=/home/zonlin/ROS/deepracer/catkin_ws/src/stage_first
-
-//The directory containing a CMake configuration file for stage_ros.
-stage_ros_DIR:PATH=stage_ros_DIR-NOTFOUND
 
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
@@ -729,7 +720,7 @@ CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PY_em
 FIND_PACKAGE_MESSAGE_DETAILS_PY_em:INTERNAL=[/usr/lib/python3/dist-packages/em.py][v()]
 //Details about finding PythonInterp
-FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/local/bin/python3][v3.7.1()]
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python3][v3.8.10()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 GMOCK_FROM_SOURCE_FOUND:INTERNAL=TRUE

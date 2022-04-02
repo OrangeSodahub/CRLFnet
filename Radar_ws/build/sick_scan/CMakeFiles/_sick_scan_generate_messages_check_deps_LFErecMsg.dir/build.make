@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/zonlin/ROS/Radar_ws/build
 include sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_LFErecMsg.dir/progress.make
 
 sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_LFErecMsg:
-	cd /home/zonlin/ROS/Radar_ws/build/sick_scan && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py sick_scan /home/zonlin/ROS/Radar_ws/src/sick_scan/msg/LFErecMsg.msg sick_scan/LFErecFieldMsg:std_msgs/Header
+	cd /home/zonlin/ROS/Radar_ws/build/sick_scan && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py sick_scan /home/zonlin/ROS/Radar_ws/src/sick_scan/msg/LFErecMsg.msg std_msgs/Header:sick_scan/LFErecFieldMsg
 
 _sick_scan_generate_messages_check_deps_LFErecMsg: sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_LFErecMsg
 _sick_scan_generate_messages_check_deps_LFErecMsg: sick_scan/CMakeFiles/_sick_scan_generate_messages_check_deps_LFErecMsg.dir/build.make

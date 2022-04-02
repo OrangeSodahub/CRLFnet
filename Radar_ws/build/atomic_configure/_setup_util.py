@@ -268,7 +268,7 @@ if __name__ == '__main__':
 
         if not args.local:
             # environment at generation time
-            CMAKE_PREFIX_PATH = r'/home/zonlin/ROS/neor_mini/mini_sim18_ws/devel;/home/zonlin/ROS/catkin_ws/devel;/opt/ros/noetic'.split(';')
+            CMAKE_PREFIX_PATH = r'/home/zonlin/ROS/site_ws/devel;/home/zonlin/ROS/neor_mini/mini_sim18_ws/devel;/home/zonlin/ROS/catkin_ws/devel;/opt/ros/noetic'.split(';')
         else:
             # don't consider any other prefix path than this one
             CMAKE_PREFIX_PATH = []

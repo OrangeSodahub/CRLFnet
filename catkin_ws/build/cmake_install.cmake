@@ -135,7 +135,6 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/zonlin/ROS/catkin_ws/build/point_cloud/cmake_install.cmake")
   include("/home/zonlin/ROS/catkin_ws/build/ARS_gazebo_plugin/radar_plugin/cmake_install.cmake")
   include("/home/zonlin/ROS/catkin_ws/build/site/cmake_install.cmake")
-  include("/home/zonlin/ROS/catkin_ws/build/site_model/cmake_install.cmake")
 
 endif()
 

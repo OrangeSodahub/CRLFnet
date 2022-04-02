@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/zonlin/ROS/site_ws/devel/setup.sh
