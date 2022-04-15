@@ -67,14 +67,14 @@ set(site_model_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(site_model_SOURCE_PREFIX /home/zonlin/ROS/site_ws/src/site_model)
-  set(site_model_DEVEL_PREFIX /home/zonlin/ROS/site_ws/devel)
+  set(site_model_SOURCE_PREFIX /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model)
+  set(site_model_DEVEL_PREFIX /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel)
   set(site_model_INSTALL_PREFIX "")
   set(site_model_PREFIX ${site_model_DEVEL_PREFIX})
 else()
   set(site_model_SOURCE_PREFIX "")
   set(site_model_DEVEL_PREFIX "")
-  set(site_model_INSTALL_PREFIX /home/zonlin/ROS/site_ws/install)
+  set(site_model_INSTALL_PREFIX /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/install)
   set(site_model_PREFIX ${site_model_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/zonlin/ROS/site_ws/install/lib;/home/zonlin/ROS/site_ws/devel/lib;/home/zonlin/ROS/neor_mini/mini_sim18_ws/devel/lib;/home/zonlin/ROS/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/install/lib;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib;/home/zonlin/IPP_WorkSpace/ROS_WS/catkin_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

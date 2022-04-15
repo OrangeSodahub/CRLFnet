@@ -3,33 +3,16 @@
   <!-- output the point_cloud data -->
   <node
     name="point_cloud_write"
-    pkg="site"
+    pkg="site_model"
     type="point_cloud_write"
-    args="-d $(find site_model)/src/point_cloud_write.cpp" />
-  <!--<node
-    name="point_cloud_write2"
-    pkg="site"
-    type="point_cloud_write2"
-    args="-d $(find site_model)/src/point_cloud_write2.cpp" />
-  <node
-    name="point_cloud_write3"
-    pkg="site"
-    type="point_cloud_write3"
-    args="-d $(find site_model)/src/point_cloud_write3.cpp" />-->
-
-  <!-- visualize the point_cloud data via cloud_viewer 
-  <node
-    name="cloud_viewer"
-    pkg="site"
-    type="cloud_viewer"
-    args="-d $(find site)/src/cloud_viewer.cpp" />-->
+    args="-d $(find site_model)/src/data_output/point_cloud_write.cpp" />
 
   <!-- output the image -->
   <node
     name="image_output"
-    pkg="site"
+    pkg="site_model"
     type="image_output"
-    args="-d $(find site_model)/src/image_output.cpp" />
+    args="-d $(find site_model)/src/data_output/image_output.cpp" />
 
 
 </launch>

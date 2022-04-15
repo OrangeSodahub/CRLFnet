@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/share/gennodejs/ros/per_msgs/msg/GeometryMsgsRadarObject.js"
-  "/home/zonlin/ROS/site_ws/devel/share/gennodejs/ros/per_msgs/msg/SensorMsgsRadar.js"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/share/gennodejs/ros/per_msgs/msg/GeometryMsgsRadarObject.js"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/share/gennodejs/ros/per_msgs/msg/SensorMsgsRadar.js"
   "CMakeFiles/per_msgs_generate_messages_nodejs"
 )
 

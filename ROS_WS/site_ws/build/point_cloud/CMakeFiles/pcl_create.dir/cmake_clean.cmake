@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/lib/point_cloud/pcl_create"
-  "/home/zonlin/ROS/site_ws/devel/lib/point_cloud/pcl_create.pdb"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/point_cloud/pcl_create"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/point_cloud/pcl_create.pdb"
   "CMakeFiles/pcl_create.dir/src/pcl_create.cpp.o"
 )
 

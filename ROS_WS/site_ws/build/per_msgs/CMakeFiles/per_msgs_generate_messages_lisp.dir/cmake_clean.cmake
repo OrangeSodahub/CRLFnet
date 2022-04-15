@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/share/common-lisp/ros/per_msgs/msg/GeometryMsgsRadarObject.lisp"
-  "/home/zonlin/ROS/site_ws/devel/share/common-lisp/ros/per_msgs/msg/SensorMsgsRadar.lisp"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/share/common-lisp/ros/per_msgs/msg/GeometryMsgsRadarObject.lisp"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/share/common-lisp/ros/per_msgs/msg/SensorMsgsRadar.lisp"
   "CMakeFiles/per_msgs_generate_messages_lisp"
 )
 

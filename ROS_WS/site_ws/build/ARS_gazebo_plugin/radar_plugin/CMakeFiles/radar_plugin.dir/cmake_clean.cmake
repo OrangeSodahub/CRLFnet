@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/lib/libradar_plugin.pdb"
-  "/home/zonlin/ROS/site_ws/devel/lib/libradar_plugin.so"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/libradar_plugin.pdb"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/libradar_plugin.so"
   "CMakeFiles/radar_plugin.dir/src/radar_plugin.cpp.o"
 )
 

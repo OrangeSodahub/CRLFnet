@@ -1,4 +1,4 @@
-prefix=/home/zonlin/ROS/site_ws/install
+prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/install
 
 Name: radar_plugin
 Description: Description of radar_plugin

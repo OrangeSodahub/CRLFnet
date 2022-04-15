@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/lib/point_cloud/pcl_read"
-  "/home/zonlin/ROS/site_ws/devel/lib/point_cloud/pcl_read.pdb"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/point_cloud/pcl_read"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/point_cloud/pcl_read.pdb"
   "CMakeFiles/pcl_read.dir/src/pcl_read.cpp.o"
 )
 

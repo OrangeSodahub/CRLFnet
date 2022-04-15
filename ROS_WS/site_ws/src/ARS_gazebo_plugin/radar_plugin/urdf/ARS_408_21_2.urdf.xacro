@@ -25,7 +25,7 @@ All other specifications of ESR must be left to default values
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 -1.5707963267949"/>
                 <geometry>
-                    <mesh filename="package://site/meshes/ARS_408_21_2_Link.STL" />
+                    <mesh filename="package://site_model/meshes/ARS_408_21_2_Link.STL" />
                 </geometry>
                 <material name="">
                     <color rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
@@ -34,7 +34,7 @@ All other specifications of ESR must be left to default values
             <collision>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
                 <geometry>
-                    <mesh filename="package://site/meshes/ARS_408_21_2_Link.STL" />
+                    <mesh filename="package://site_model/meshes/ARS_408_21_2_Link.STL" />
                 </geometry>
             </collision>
             <inertial>

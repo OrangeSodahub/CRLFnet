@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/share/roseus/ros/per_msgs/manifest.l"
-  "/home/zonlin/ROS/site_ws/devel/share/roseus/ros/per_msgs/msg/GeometryMsgsRadarObject.l"
-  "/home/zonlin/ROS/site_ws/devel/share/roseus/ros/per_msgs/msg/SensorMsgsRadar.l"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/share/roseus/ros/per_msgs/manifest.l"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/share/roseus/ros/per_msgs/msg/GeometryMsgsRadarObject.l"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/share/roseus/ros/per_msgs/msg/SensorMsgsRadar.l"
   "CMakeFiles/per_msgs_generate_messages_eus"
 )
 

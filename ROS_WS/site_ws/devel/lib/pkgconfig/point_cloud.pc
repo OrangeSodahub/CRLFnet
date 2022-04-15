@@ -1,4 +1,4 @@
-prefix=/home/zonlin/ROS/site_ws/devel
+prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel
 
 Name: point_cloud
 Description: Description of point_cloud

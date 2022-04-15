@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/lib/site_model/bin2pcd"
-  "/home/zonlin/ROS/site_ws/devel/lib/site_model/bin2pcd.pdb"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/bin2pcd"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/bin2pcd.pdb"
   "CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o"
 )
 

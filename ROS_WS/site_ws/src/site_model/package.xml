@@ -2,9 +2,9 @@
   <name>site_model</name>
   <version>1.0.0</version>
   <description>
-    <p>URDF Description package for site</p>
+    <p>URDF Description package for site_model</p>
     <p>This package contains configuration data, 3D models and launch files
-for site robot</p>
+for site_model robot</p>
   </description>
   <author>ZonLin</author>
   <maintainer email="gzzyyxy@gmail.com" />
@@ -25,10 +25,12 @@ for site robot</p>
   <build_depend>gazebo_ros</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>message_generation</build_depend>
+  <build_depend>per_msgs</build_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>message_runtime</exec_depend>
   <exec_depend>gazebo_radar_plugin</exec_depend>
+  <exec_depend>per_msgs</exec_depend>
   <export>
     <architecture_independent />
     <!-- Other tools can request additional information be placed here -->

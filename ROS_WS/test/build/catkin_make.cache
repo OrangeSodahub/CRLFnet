@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/zonlin/IPP_WorkSpace/ROS_WS/test/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/IPP_WorkSpace/ROS_WS/test/install -G Unix Makefiles

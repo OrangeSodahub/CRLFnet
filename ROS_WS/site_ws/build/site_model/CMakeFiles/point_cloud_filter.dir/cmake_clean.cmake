@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/lib/site_model/point_cloud_filter"
-  "/home/zonlin/ROS/site_ws/devel/lib/site_model/point_cloud_filter.pdb"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_filter"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_filter.pdb"
   "CMakeFiles/point_cloud_filter.dir/src/point_cloud_filter.cpp.o"
 )
 

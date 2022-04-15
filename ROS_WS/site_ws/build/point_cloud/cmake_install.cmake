@@ -1,8 +1,8 @@
-# Install script for directory: /home/zonlin/ROS/site_ws/src/point_cloud
+# Install script for directory: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/point_cloud
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/zonlin/ROS/site_ws/install")
+  set(CMAKE_INSTALL_PREFIX "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/zonlin/ROS/site_ws/build/point_cloud/catkin_generated/installspace/point_cloud.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/point_cloud/catkin_generated/installspace/point_cloud.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/point_cloud/cmake" TYPE FILE FILES
-    "/home/zonlin/ROS/site_ws/build/point_cloud/catkin_generated/installspace/point_cloudConfig.cmake"
-    "/home/zonlin/ROS/site_ws/build/point_cloud/catkin_generated/installspace/point_cloudConfig-version.cmake"
+    "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/point_cloud/catkin_generated/installspace/point_cloudConfig.cmake"
+    "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/point_cloud/catkin_generated/installspace/point_cloudConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/point_cloud" TYPE FILE FILES "/home/zonlin/ROS/site_ws/src/point_cloud/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/point_cloud" TYPE FILE FILES "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/point_cloud/package.xml")
 endif()
 

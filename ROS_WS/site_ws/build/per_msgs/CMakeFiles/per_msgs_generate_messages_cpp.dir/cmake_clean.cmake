@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/zonlin/ROS/site_ws/devel/include/per_msgs/GeometryMsgsRadarObject.h"
-  "/home/zonlin/ROS/site_ws/devel/include/per_msgs/SensorMsgsRadar.h"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/include/per_msgs/GeometryMsgsRadarObject.h"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/include/per_msgs/SensorMsgsRadar.h"
   "CMakeFiles/per_msgs_generate_messages_cpp"
 )
 

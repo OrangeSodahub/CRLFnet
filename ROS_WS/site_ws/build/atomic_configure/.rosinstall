@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/zonlin/ROS/site_ws/devel/setup.sh
+    local-name: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/setup.sh

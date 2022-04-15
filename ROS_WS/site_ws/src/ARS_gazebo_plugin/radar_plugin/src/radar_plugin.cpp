@@ -55,76 +55,76 @@ void RadarPlugin::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf) {
 	if (_sdf->HasElement("topic")) {
 		radarROSTopic = _sdf->Get<std::string>("topic");
 	}
-	{std::cerr << "radarROSTopic:" << " " << radarROSTopic << std::endl;} // print the radarROSTopicname. ARS_408_21_2/3
+	// {std::cerr << "radarROSTopic:" << " " << radarROSTopic << std::endl;} // print the radarROSTopicname. ARS_408_21_2/3
 
 	this->nearRange = 1.0;
 	//Get minimum range of radar from SDF
 	if (_sdf->HasElement("near")) {
 		_sdf->GetElement("near")->GetValue()->Get(this->nearRange);
 	}
-	{std::cerr << "nearRange:" << " " << nearRange << std::endl;} // print the nearRange. ARS_408_21_2/3
+	// {std::cerr << "nearRange:" << " " << nearRange << std::endl;} // print the nearRange. ARS_408_21_2/3
 
 	this->farRange_mid = 60.0;
 	//Get mid range of radar from SDF
 	if (_sdf->HasElement("far_mid")) {
 		_sdf->GetElement("far_mid")->GetValue()->Get(this->farRange_mid);
 	}
-	{std::cerr << "far_mid:" << " " << this->farRange_mid << std::endl;} // print the nearRange. ARS_408_21_2/3
+	// {std::cerr << "far_mid:" << " " << this->farRange_mid << std::endl;} // print the nearRange. ARS_408_21_2/3
 
 	this->farRange_long = 174.0;
 	//Get long range of radar from SDF
 	if (_sdf->HasElement("far_long")) {
 		_sdf->GetElement("far_long")->GetValue()->Get(this->farRange_long);
 	}
-	{std::cerr << "far_long:" << " " << this->farRange_long << std::endl;} // print the nearRange. ARS_408_21_2/3
+	// {std::cerr << "far_long:" << " " << this->farRange_long << std::endl;} // print the nearRange. ARS_408_21_2/3
 
 	this->hfov_mid = 1.5708;
 	//Get mid horizontal FOV from SDF
 	if (_sdf->HasElement("hfov_mid")) {
 		_sdf->GetElement("hfov_mid")->GetValue()->Get(this->hfov_mid);
 	}
-	{std::cerr << "hfov_mid:" << " " << this->hfov_mid << std::endl;} // print the nearRange. ARS_408_21_2/3
+	// {std::cerr << "hfov_mid:" << " " << this->hfov_mid << std::endl;} // print the nearRange. ARS_408_21_2/3
 
 	this->hfov_long = 0.349;
 	//Get long horizontal FOV from SDF
 	if (_sdf->HasElement("hfov_long")) {
 		_sdf->GetElement("hfov_long")->GetValue()->Get(this->hfov_long);
 	}
-	{std::cerr << "hfov_long:" << " " << this->hfov_long << std::endl;} // print the nearRange. ARS_408_21_2/3
+	// {std::cerr << "hfov_long:" << " " << this->hfov_long << std::endl;} // print the nearRange. ARS_408_21_2/3
 
 	this->vfov = 0.08286;
 	//Get vertical FOV from SDF
 	if (_sdf->HasElement("vfov")) {
 		_sdf->GetElement("vfov")->GetValue()->Get(this->vfov);
 	}
-	{std::cerr << "vfov:" << " " << this->vfov << std::endl;} // print the nearRange. ARS_408_21_2/3
+	// {std::cerr << "vfov:" << " " << this->vfov << std::endl;} // print the nearRange. ARS_408_21_2/3
 
 	this->velTopic = "/sim_car/vel_of_car";
 	//Get topic for car velocity from SDF
 	if (_sdf->HasElement("velTopic")) {
 		_sdf->GetElement("velTopic")->GetValue()->Get(this->velTopic);
 	}
-	{std::cerr << "velTopic:" << " " << this->velTopic << std::endl;} // print the velTopic. ARS_408_21_2/3
+	// {std::cerr << "velTopic:" << " " << this->velTopic << std::endl;} // print the velTopic. ARS_408_21_2/3
 
 	this->radarPointSamples = 20;
 	//Value of "samples" is the square root of total number of points that are considered on an object while checking occlusion
 	if (_sdf->HasElement("samples")) {
 		_sdf->GetElement("samples")->GetValue()->Get(this->radarPointSamples);
 	}
-	{std::cerr << "samples:" << " " << this->radarPointSamples << std::endl;} // print the velTopic. ARS_408_21_2/3
+	// {std::cerr << "samples:" << " " << this->radarPointSamples << std::endl;} // print the velTopic. ARS_408_21_2/3
 
 	//Get noise parameters from SDF
 	if (_sdf->HasElement("noise")) {
 		this->noiseModel = sensors::NoiseFactory::NewNoiseModel(_sdf->GetElement("noise"), "logical_camera");
 	}
-	{std::cerr << "noise:" << " " << noiseModel << std::endl;} // print the velTopic. ARS_408_21_2/3
+	// {std::cerr << "noise:" << " " << noiseModel << std::endl;} // print the velTopic. ARS_408_21_2/3
 
 	this->occlusion = 0.6;
 	//Get occlusion allowance percentage from SDF
 	if (_sdf->HasElement("occlusion")) {
 		_sdf->GetElement("occlusion")->GetValue()->Get(this->occlusion);
 	}
-	{std::cerr << "occlusion:" << " " << this->occlusion << std::endl;} // print the velTopic. ARS_408_21_2/3
+	// {std::cerr << "occlusion:" << " " << this->occlusion << std::endl;} // print the velTopic. ARS_408_21_2/3
 
 	//Subscribers for the two logical cameras
 	this->imageMidSub = this->node->Subscribe(this->logicalCameraMid->Topic(), &RadarPlugin::imageMidCB, this);
@@ -381,10 +381,10 @@ void RadarPlugin::imageMidCB(const ConstLogicalCameraImagePtr &_msg) {
 			if (this->radarName == "ESRFront") {
 				this->sensorMsg.front_esr_tracklist.push_back(this->radarObj);
 			}
-			else if (this->radarName == "ARS_408_21_3") {
+			else if (this->radarName == "ARS_408_21_3") { // Ours
 				this->sensorMsg.front_right_esr_tracklist.push_back(this->radarObj);
 			}
-			else if (this->radarName == "ARS_408_21_2") {
+			else if (this->radarName == "ARS_408_21_2") { // Ours
 				this->sensorMsg.front_left_esr_tracklist.push_back(this->radarObj);
 			}
 			this->objCount += 1;
@@ -437,11 +437,11 @@ void RadarPlugin::imageLongCB(const ConstLogicalCameraImagePtr &_msg) {
 	}
 	else if (this->radarName == "ARS_408_21_3") {
 		this->sensorMsg.total_front_right_esr_tracks = this->ModelsInView.size();
-		std::cerr << "ARS_408_21_3 sensorMsg.total_front_right_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
+		// std::cerr << "ARS_408_21_3 sensorMsg.total_front_right_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
 	}
 	else if (this->radarName == "ARS_408_21_2") {
 		this->sensorMsg.total_front_left_esr_tracks = this->ModelsInView.size();
-		std::cerr << "ARS_408_21_2 sensorMsg.total_front_left_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
+		// std::cerr << "ARS_408_21_2 sensorMsg.total_front_left_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
 	}
 	for (int i=0; i<_msg->model_size() && this->objCount<64; ++i) {
 		std::string modelName = _msg->model(i).name();
@@ -516,13 +516,13 @@ void RadarPlugin::imageLongCB(const ConstLogicalCameraImagePtr &_msg) {
 				if (this->sensorMsg.total_front_right_esr_tracks != 0) {
 					this->sensorMsg.total_front_right_esr_tracks -= 1;
 				}
-				std::cerr << "ARS_408_21_3 sensorMsg.total_front_right_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
+				// std::cerr << "ARS_408_21_3 sensorMsg.total_front_right_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
 			}
 			else if (this->radarName == "ARS_408_21_2") {
 				if (this->sensorMsg.total_front_left_esr_tracks != 0) {
 					this->sensorMsg.total_front_left_esr_tracks -= 1;
 				}
-				std::cerr << "ARS_408_21_2 sensorMsg.total_front_left_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
+				// std::cerr << "ARS_408_21_2 sensorMsg.total_front_left_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
 			}
 			continue;
 		}
@@ -579,13 +579,13 @@ void RadarPlugin::imageLongCB(const ConstLogicalCameraImagePtr &_msg) {
 				if (this->sensorMsg.total_front_right_esr_tracks != 0) {
 					this->sensorMsg.total_front_right_esr_tracks -= 1;
 				}
-				std::cerr << "ARS_408_21_3 sensorMsg.total_front_right_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
+				// std::cerr << "ARS_408_21_3 sensorMsg.total_front_right_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
 			}
 			else if (this->radarName == "EARS_408_21_2") {
 				if (this->sensorMsg.total_front_left_esr_tracks != 0) {
 					this->sensorMsg.total_front_left_esr_tracks -= 1;
 				}
-				std::cerr << "ARS_408_21_2 sensorMsg.total_front_left_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
+				// std::cerr << "ARS_408_21_2 sensorMsg.total_front_left_esr_tracks: " << this->sensorMsg.total_front_left_esr_tracks << std::endl;
 			}
 			continue;
 		}
@@ -596,11 +596,11 @@ void RadarPlugin::imageLongCB(const ConstLogicalCameraImagePtr &_msg) {
 			}
 			else if (this->radarName == "ARS_408_21_3") {
 				this->sensorMsg.front_right_esr_tracklist.push_back(this->radarObj);
-				std::cerr << "ARS_408_21_3 sensorMsg.front_right_esr_tracklist.push_back: " << this->radarObj << std::endl;
+				// std::cerr << "ARS_408_21_3 sensorMsg.front_right_esr_tracklist.push_back: " << this->radarObj << std::endl;
 			}
 			else if (this->radarName == "ARS_408_21_2") {
 				this->sensorMsg.front_left_esr_tracklist.push_back(this->radarObj);
-				std::cerr << "ARS_408_21_2 sensorMsg.front_right_esr_tracklist.push_back: " << this->radarObj << std::endl;
+				// std::cerr << "ARS_408_21_2 sensorMsg.front_right_esr_tracklist.push_back: " << this->radarObj << std::endl;
 			}
 			this->objCount += 1;
 		}
@@ -613,12 +613,12 @@ void RadarPlugin::imageLongCB(const ConstLogicalCameraImagePtr &_msg) {
 	}
 	else if (this->radarName == "ARS_408_21_3") {
 		this->sensorMsg.front_esr_tracker_counter += this->sensorMsg.total_front_right_esr_tracks;
-		std::cerr << "ARS_408_21_3 tracker counter ++" << std::endl;
+		// std::cerr << "ARS_408_21_3 tracker counter ++" << std::endl;
 		
 	}
 	else if (this->radarName == "ARS_408_21_2") {
 		this->sensorMsg.front_esr_tracker_counter += this->sensorMsg.total_front_left_esr_tracks;
-		std::cerr << "ARS_408_21_2 tracker counter ++" << std::endl;
+		// std::cerr << "ARS_408_21_2 tracker counter ++" << std::endl;
 	}
 	this->radarPublisher.publish(this->sensorMsg);
 	this->sensorMsg.front_esr_tracklist.clear();
