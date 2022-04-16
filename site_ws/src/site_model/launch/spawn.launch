@@ -1,0 +1,55 @@
+<launch>
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="verbose" default="false"/>
+  <arg name="model" value="$(find site_model)/urdf/deepracer.urdf"/>
+
+  <!-- Start gazebo and load the world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="verbose" value="$(arg verbose)"/>
+  </include>
+
+  <!-- Spawn the site -->
+  <node
+    name="tf_footprint_base"
+    pkg="tf"
+    type="static_transform_publisher"
+    args="0 0 0 0 0 0 base_link base_footprint 40" />
+  <arg name="gpu" default="false"/>
+  <arg name="organize_cloud" default="false"/>
+  <param
+    name="robot_description"
+    command="$(find xacro)/xacro --inorder '$(find site_model)/urdf/site_model.urdf.xacro' organize_cloud:=$(arg organize_cloud) gpu:=$(arg gpu)" />
+  <node
+    pkg="gazebo_ros"
+    type="spawn_model"
+    name="spawn_model"
+    args="-urdf -param /robot_description -model site_model"/>
+
+    <!-- Spawn deepracer robot into Gazebo 
+    <node name="deepracer_urdf" pkg="gazebo_ros" type="spawn_model" output="screen" args="-file $(find site_model)/urdf/deepracer.urdf -urdf -model deepracer"  />-->
+
+  <node
+    pkg="robot_state_publisher"
+    type="robot_state_publisher"
+    name="robot_state_publisher">
+    <param
+      name="publish_frequency"
+      type="double"
+      value="30.0" />
+  </node>
+  <node
+    name="fake_joint_calibration"
+    pkg="rostopic"
+    type="rostopic"
+    args="pub /calibrated std_msgs/Bool true"/>
+
+</launch>
