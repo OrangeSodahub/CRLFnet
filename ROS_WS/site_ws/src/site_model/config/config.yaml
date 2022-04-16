@@ -12,3 +12,4 @@ topic:
 calib:
   pole2_to_world: [-1.59824637808195,-0.790114867663065,0.461]
   radar2_to_pole2: [0.223770395328486,0.0555628747749927,0.385642831589234]
+  camera_info_dir: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/camera_info/

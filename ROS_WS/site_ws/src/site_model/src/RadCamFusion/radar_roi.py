@@ -1,3 +1,8 @@
+#############################################################
+#   This py file generate the roi of radar detection        #
+#   Author: Yangxiuyu                                       #
+#############################################################
+
 import argparse
 from cProfile import label
 import numpy as np

@@ -2,6 +2,7 @@
 #   This cpp file subscribe the topic of camera_info        #        
 #   according to the sequence or 10 cameras and save        #        
 #   their D/K/R/P matrix to txt files                       #
+#   Author: Yangxiuyu                                       #
 ############################################################*/
 
 #include "ros/ros.h"
@@ -33,9 +34,9 @@ void CamCB11(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout;
     fout.open(filename.c_str());
+    fout << "11" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "11" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -71,9 +72,9 @@ void CamCB12(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "12" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "12" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -109,9 +110,9 @@ void CamCB13(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "13" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "13" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -147,9 +148,9 @@ void CamCB14(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "14" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "14" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -185,9 +186,9 @@ void CamCB2(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "2" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "2" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -223,9 +224,9 @@ void CamCB3(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "3" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "3" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -261,9 +262,9 @@ void CamCB41(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "41" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "41" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -299,9 +300,9 @@ void CamCB42(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "42" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "42" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -337,9 +338,9 @@ void CamCB43(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "43" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "43" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
@@ -375,9 +376,9 @@ void CamCB44(const sensor_msgs::CameraInfo &CamInfo)
     // Save data to txt files
     ofstream fout(filename,ios::app);
     fout << endl;
+    fout << "44" << " ";
     for(int i=0;i<9;i++)
     {
-        fout << "44" << " ";
         fout << D[i] << " ";
     }
     for(int i=0;i<9;i++)
