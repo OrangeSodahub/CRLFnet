@@ -57,27 +57,27 @@ include site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/progress.m
 # Include the compile flags for this target's objects.
 include site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/flags.make
 
-site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o: site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/flags.make
-site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_segmentation_on_normals.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o -c /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_segmentation_on_normals.cpp
+site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o: site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/flags.make
+site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o -c /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp
 
-site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.i"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_segmentation_on_normals.cpp > CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.i
+site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.i"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp > CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.i
 
-site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.s"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_segmentation_on_normals.cpp -o CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.s
+site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.s"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp -o CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.s
 
 # Object files for target point_cloud_segmentation_on_normals
 point_cloud_segmentation_on_normals_OBJECTS = \
-"CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o"
+"CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o"
 
 # External object files for target point_cloud_segmentation_on_normals
 point_cloud_segmentation_on_normals_EXTERNAL_OBJECTS =
 
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_segmentation_on_normals: site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_segmentation_on_normals: site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_segmentation_on_normals: site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_segmentation_on_normals: /opt/ros/noetic/lib/libvision_reconfigure.so
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_segmentation_on_normals: /opt/ros/noetic/lib/libgazebo_ros_utils.so

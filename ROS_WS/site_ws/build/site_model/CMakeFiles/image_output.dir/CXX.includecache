@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/image_output.cpp
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/data_output/image_output.cpp
 ros/ros.h
 -
 image_transport/image_transport.h

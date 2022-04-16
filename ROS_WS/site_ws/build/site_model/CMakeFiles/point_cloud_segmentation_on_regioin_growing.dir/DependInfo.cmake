@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_segmentation_on_regioin_growing.cpp" "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_segmentation_on_regioin_growing.cpp.o"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp" "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

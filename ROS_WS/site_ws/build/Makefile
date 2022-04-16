@@ -1871,6 +1871,19 @@ point_cloud_merge/fast:
 .PHONY : point_cloud_merge/fast
 
 #=============================================================================
+# Target rules for targets named get_cam_info
+
+# Build rule for target.
+get_cam_info: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 get_cam_info
+.PHONY : get_cam_info
+
+# fast build rule for target.
+get_cam_info/fast:
+	$(MAKE) -f site_model/CMakeFiles/get_cam_info.dir/build.make site_model/CMakeFiles/get_cam_info.dir/build
+.PHONY : get_cam_info/fast
+
+#=============================================================================
 # Target rules for targets named cloud_viewer
 
 # Build rule for target.
@@ -2131,6 +2144,7 @@ help:
 	@echo "... point_cloud_write"
 	@echo "... image_output"
 	@echo "... point_cloud_merge"
+	@echo "... get_cam_info"
 	@echo "... cloud_viewer"
 	@echo "... point_cloud_filter"
 	@echo "... point_cloud_segmentation_ou_cluster"

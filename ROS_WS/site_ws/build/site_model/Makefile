@@ -102,6 +102,17 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -123,17 +134,6 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -211,6 +211,21 @@ point_cloud_merge: site_model/CMakeFiles/point_cloud_merge.dir/rule
 point_cloud_merge/fast:
 	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_merge.dir/build.make site_model/CMakeFiles/point_cloud_merge.dir/build
 .PHONY : point_cloud_merge/fast
+
+# Convenience name for target.
+site_model/CMakeFiles/get_cam_info.dir/rule:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site_model/CMakeFiles/get_cam_info.dir/rule
+.PHONY : site_model/CMakeFiles/get_cam_info.dir/rule
+
+# Convenience name for target.
+get_cam_info: site_model/CMakeFiles/get_cam_info.dir/rule
+
+.PHONY : get_cam_info
+
+# fast build rule for target.
+get_cam_info/fast:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/get_cam_info.dir/build.make site_model/CMakeFiles/get_cam_info.dir/build
+.PHONY : get_cam_info/fast
 
 # Convenience name for target.
 site_model/CMakeFiles/cloud_viewer.dir/rule:
@@ -347,329 +362,356 @@ radar_listener/fast:
 	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/build
 .PHONY : radar_listener/fast
 
-src/bin2pcd.o: src/bin2pcd.cpp.o
+src/camera_info/get_cam_info.o: src/camera_info/get_cam_info.cpp.o
 
-.PHONY : src/bin2pcd.o
-
-# target to build an object file
-src/bin2pcd.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/bin2pcd.dir/build.make site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o
-.PHONY : src/bin2pcd.cpp.o
-
-src/bin2pcd.i: src/bin2pcd.cpp.i
-
-.PHONY : src/bin2pcd.i
-
-# target to preprocess a source file
-src/bin2pcd.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/bin2pcd.dir/build.make site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.i
-.PHONY : src/bin2pcd.cpp.i
-
-src/bin2pcd.s: src/bin2pcd.cpp.s
-
-.PHONY : src/bin2pcd.s
-
-# target to generate assembly for a file
-src/bin2pcd.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/bin2pcd.dir/build.make site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.s
-.PHONY : src/bin2pcd.cpp.s
-
-src/cloud_viewer.o: src/cloud_viewer.cpp.o
-
-.PHONY : src/cloud_viewer.o
+.PHONY : src/camera_info/get_cam_info.o
 
 # target to build an object file
-src/cloud_viewer.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/cloud_viewer.dir/build.make site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.o
-.PHONY : src/cloud_viewer.cpp.o
+src/camera_info/get_cam_info.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/get_cam_info.dir/build.make site_model/CMakeFiles/get_cam_info.dir/src/camera_info/get_cam_info.cpp.o
+.PHONY : src/camera_info/get_cam_info.cpp.o
 
-src/cloud_viewer.i: src/cloud_viewer.cpp.i
+src/camera_info/get_cam_info.i: src/camera_info/get_cam_info.cpp.i
 
-.PHONY : src/cloud_viewer.i
+.PHONY : src/camera_info/get_cam_info.i
 
 # target to preprocess a source file
-src/cloud_viewer.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/cloud_viewer.dir/build.make site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.i
-.PHONY : src/cloud_viewer.cpp.i
+src/camera_info/get_cam_info.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/get_cam_info.dir/build.make site_model/CMakeFiles/get_cam_info.dir/src/camera_info/get_cam_info.cpp.i
+.PHONY : src/camera_info/get_cam_info.cpp.i
 
-src/cloud_viewer.s: src/cloud_viewer.cpp.s
+src/camera_info/get_cam_info.s: src/camera_info/get_cam_info.cpp.s
 
-.PHONY : src/cloud_viewer.s
+.PHONY : src/camera_info/get_cam_info.s
 
 # target to generate assembly for a file
-src/cloud_viewer.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/cloud_viewer.dir/build.make site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.s
-.PHONY : src/cloud_viewer.cpp.s
+src/camera_info/get_cam_info.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/get_cam_info.dir/build.make site_model/CMakeFiles/get_cam_info.dir/src/camera_info/get_cam_info.cpp.s
+.PHONY : src/camera_info/get_cam_info.cpp.s
 
-src/image_output.o: src/image_output.cpp.o
+src/data_output/image_output.o: src/data_output/image_output.cpp.o
 
-.PHONY : src/image_output.o
+.PHONY : src/data_output/image_output.o
 
 # target to build an object file
-src/image_output.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/image_output.dir/build.make site_model/CMakeFiles/image_output.dir/src/image_output.cpp.o
-.PHONY : src/image_output.cpp.o
+src/data_output/image_output.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/image_output.dir/build.make site_model/CMakeFiles/image_output.dir/src/data_output/image_output.cpp.o
+.PHONY : src/data_output/image_output.cpp.o
 
-src/image_output.i: src/image_output.cpp.i
+src/data_output/image_output.i: src/data_output/image_output.cpp.i
 
-.PHONY : src/image_output.i
+.PHONY : src/data_output/image_output.i
 
 # target to preprocess a source file
-src/image_output.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/image_output.dir/build.make site_model/CMakeFiles/image_output.dir/src/image_output.cpp.i
-.PHONY : src/image_output.cpp.i
+src/data_output/image_output.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/image_output.dir/build.make site_model/CMakeFiles/image_output.dir/src/data_output/image_output.cpp.i
+.PHONY : src/data_output/image_output.cpp.i
 
-src/image_output.s: src/image_output.cpp.s
+src/data_output/image_output.s: src/data_output/image_output.cpp.s
 
-.PHONY : src/image_output.s
+.PHONY : src/data_output/image_output.s
 
 # target to generate assembly for a file
-src/image_output.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/image_output.dir/build.make site_model/CMakeFiles/image_output.dir/src/image_output.cpp.s
-.PHONY : src/image_output.cpp.s
+src/data_output/image_output.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/image_output.dir/build.make site_model/CMakeFiles/image_output.dir/src/data_output/image_output.cpp.s
+.PHONY : src/data_output/image_output.cpp.s
 
-src/pcd2bin.o: src/pcd2bin.cpp.o
+src/data_output/point_cloud_write.o: src/data_output/point_cloud_write.cpp.o
 
-.PHONY : src/pcd2bin.o
+.PHONY : src/data_output/point_cloud_write.o
 
 # target to build an object file
-src/pcd2bin.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pcd2bin.dir/build.make site_model/CMakeFiles/pcd2bin.dir/src/pcd2bin.cpp.o
-.PHONY : src/pcd2bin.cpp.o
+src/data_output/point_cloud_write.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_write.dir/build.make site_model/CMakeFiles/point_cloud_write.dir/src/data_output/point_cloud_write.cpp.o
+.PHONY : src/data_output/point_cloud_write.cpp.o
 
-src/pcd2bin.i: src/pcd2bin.cpp.i
+src/data_output/point_cloud_write.i: src/data_output/point_cloud_write.cpp.i
 
-.PHONY : src/pcd2bin.i
+.PHONY : src/data_output/point_cloud_write.i
 
 # target to preprocess a source file
-src/pcd2bin.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pcd2bin.dir/build.make site_model/CMakeFiles/pcd2bin.dir/src/pcd2bin.cpp.i
-.PHONY : src/pcd2bin.cpp.i
+src/data_output/point_cloud_write.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_write.dir/build.make site_model/CMakeFiles/point_cloud_write.dir/src/data_output/point_cloud_write.cpp.i
+.PHONY : src/data_output/point_cloud_write.cpp.i
 
-src/pcd2bin.s: src/pcd2bin.cpp.s
+src/data_output/point_cloud_write.s: src/data_output/point_cloud_write.cpp.s
 
-.PHONY : src/pcd2bin.s
+.PHONY : src/data_output/point_cloud_write.s
 
 # target to generate assembly for a file
-src/pcd2bin.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pcd2bin.dir/build.make site_model/CMakeFiles/pcd2bin.dir/src/pcd2bin.cpp.s
-.PHONY : src/pcd2bin.cpp.s
+src/data_output/point_cloud_write.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_write.dir/build.make site_model/CMakeFiles/point_cloud_write.dir/src/data_output/point_cloud_write.cpp.s
+.PHONY : src/data_output/point_cloud_write.cpp.s
 
-src/point_cloud_filter.o: src/point_cloud_filter.cpp.o
+src/data_output/radar_listener.o: src/data_output/radar_listener.cpp.o
 
-.PHONY : src/point_cloud_filter.o
+.PHONY : src/data_output/radar_listener.o
 
 # target to build an object file
-src/point_cloud_filter.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_filter.dir/build.make site_model/CMakeFiles/point_cloud_filter.dir/src/point_cloud_filter.cpp.o
-.PHONY : src/point_cloud_filter.cpp.o
+src/data_output/radar_listener.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/src/data_output/radar_listener.cpp.o
+.PHONY : src/data_output/radar_listener.cpp.o
 
-src/point_cloud_filter.i: src/point_cloud_filter.cpp.i
+src/data_output/radar_listener.i: src/data_output/radar_listener.cpp.i
 
-.PHONY : src/point_cloud_filter.i
+.PHONY : src/data_output/radar_listener.i
 
 # target to preprocess a source file
-src/point_cloud_filter.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_filter.dir/build.make site_model/CMakeFiles/point_cloud_filter.dir/src/point_cloud_filter.cpp.i
-.PHONY : src/point_cloud_filter.cpp.i
+src/data_output/radar_listener.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/src/data_output/radar_listener.cpp.i
+.PHONY : src/data_output/radar_listener.cpp.i
 
-src/point_cloud_filter.s: src/point_cloud_filter.cpp.s
+src/data_output/radar_listener.s: src/data_output/radar_listener.cpp.s
 
-.PHONY : src/point_cloud_filter.s
+.PHONY : src/data_output/radar_listener.s
 
 # target to generate assembly for a file
-src/point_cloud_filter.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_filter.dir/build.make site_model/CMakeFiles/point_cloud_filter.dir/src/point_cloud_filter.cpp.s
-.PHONY : src/point_cloud_filter.cpp.s
+src/data_output/radar_listener.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/src/data_output/radar_listener.cpp.s
+.PHONY : src/data_output/radar_listener.cpp.s
 
-src/point_cloud_merge.o: src/point_cloud_merge.cpp.o
+src/point_cloud_preprocess/bin2pcd.o: src/point_cloud_preprocess/bin2pcd.cpp.o
 
-.PHONY : src/point_cloud_merge.o
+.PHONY : src/point_cloud_preprocess/bin2pcd.o
 
 # target to build an object file
-src/point_cloud_merge.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_merge.dir/build.make site_model/CMakeFiles/point_cloud_merge.dir/src/point_cloud_merge.cpp.o
-.PHONY : src/point_cloud_merge.cpp.o
+src/point_cloud_preprocess/bin2pcd.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/bin2pcd.dir/build.make site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.o
+.PHONY : src/point_cloud_preprocess/bin2pcd.cpp.o
 
-src/point_cloud_merge.i: src/point_cloud_merge.cpp.i
+src/point_cloud_preprocess/bin2pcd.i: src/point_cloud_preprocess/bin2pcd.cpp.i
 
-.PHONY : src/point_cloud_merge.i
+.PHONY : src/point_cloud_preprocess/bin2pcd.i
 
 # target to preprocess a source file
-src/point_cloud_merge.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_merge.dir/build.make site_model/CMakeFiles/point_cloud_merge.dir/src/point_cloud_merge.cpp.i
-.PHONY : src/point_cloud_merge.cpp.i
+src/point_cloud_preprocess/bin2pcd.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/bin2pcd.dir/build.make site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.i
+.PHONY : src/point_cloud_preprocess/bin2pcd.cpp.i
 
-src/point_cloud_merge.s: src/point_cloud_merge.cpp.s
+src/point_cloud_preprocess/bin2pcd.s: src/point_cloud_preprocess/bin2pcd.cpp.s
 
-.PHONY : src/point_cloud_merge.s
+.PHONY : src/point_cloud_preprocess/bin2pcd.s
 
 # target to generate assembly for a file
-src/point_cloud_merge.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_merge.dir/build.make site_model/CMakeFiles/point_cloud_merge.dir/src/point_cloud_merge.cpp.s
-.PHONY : src/point_cloud_merge.cpp.s
+src/point_cloud_preprocess/bin2pcd.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/bin2pcd.dir/build.make site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.s
+.PHONY : src/point_cloud_preprocess/bin2pcd.cpp.s
 
-src/point_cloud_segmentation_RANSAC.o: src/point_cloud_segmentation_RANSAC.cpp.o
+src/point_cloud_preprocess/cloud_viewer.o: src/point_cloud_preprocess/cloud_viewer.cpp.o
 
-.PHONY : src/point_cloud_segmentation_RANSAC.o
+.PHONY : src/point_cloud_preprocess/cloud_viewer.o
 
 # target to build an object file
-src/point_cloud_segmentation_RANSAC.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/src/point_cloud_segmentation_RANSAC.cpp.o
-.PHONY : src/point_cloud_segmentation_RANSAC.cpp.o
+src/point_cloud_preprocess/cloud_viewer.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/cloud_viewer.dir/build.make site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.o
+.PHONY : src/point_cloud_preprocess/cloud_viewer.cpp.o
 
-src/point_cloud_segmentation_RANSAC.i: src/point_cloud_segmentation_RANSAC.cpp.i
+src/point_cloud_preprocess/cloud_viewer.i: src/point_cloud_preprocess/cloud_viewer.cpp.i
 
-.PHONY : src/point_cloud_segmentation_RANSAC.i
+.PHONY : src/point_cloud_preprocess/cloud_viewer.i
 
 # target to preprocess a source file
-src/point_cloud_segmentation_RANSAC.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/src/point_cloud_segmentation_RANSAC.cpp.i
-.PHONY : src/point_cloud_segmentation_RANSAC.cpp.i
+src/point_cloud_preprocess/cloud_viewer.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/cloud_viewer.dir/build.make site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.i
+.PHONY : src/point_cloud_preprocess/cloud_viewer.cpp.i
 
-src/point_cloud_segmentation_RANSAC.s: src/point_cloud_segmentation_RANSAC.cpp.s
+src/point_cloud_preprocess/cloud_viewer.s: src/point_cloud_preprocess/cloud_viewer.cpp.s
 
-.PHONY : src/point_cloud_segmentation_RANSAC.s
+.PHONY : src/point_cloud_preprocess/cloud_viewer.s
 
 # target to generate assembly for a file
-src/point_cloud_segmentation_RANSAC.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/src/point_cloud_segmentation_RANSAC.cpp.s
-.PHONY : src/point_cloud_segmentation_RANSAC.cpp.s
+src/point_cloud_preprocess/cloud_viewer.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/cloud_viewer.dir/build.make site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.s
+.PHONY : src/point_cloud_preprocess/cloud_viewer.cpp.s
 
-src/point_cloud_segmentation_on_normals.o: src/point_cloud_segmentation_on_normals.cpp.o
+src/point_cloud_preprocess/pcd2bin.o: src/point_cloud_preprocess/pcd2bin.cpp.o
 
-.PHONY : src/point_cloud_segmentation_on_normals.o
+.PHONY : src/point_cloud_preprocess/pcd2bin.o
 
 # target to build an object file
-src/point_cloud_segmentation_on_normals.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.o
-.PHONY : src/point_cloud_segmentation_on_normals.cpp.o
+src/point_cloud_preprocess/pcd2bin.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pcd2bin.dir/build.make site_model/CMakeFiles/pcd2bin.dir/src/point_cloud_preprocess/pcd2bin.cpp.o
+.PHONY : src/point_cloud_preprocess/pcd2bin.cpp.o
 
-src/point_cloud_segmentation_on_normals.i: src/point_cloud_segmentation_on_normals.cpp.i
+src/point_cloud_preprocess/pcd2bin.i: src/point_cloud_preprocess/pcd2bin.cpp.i
 
-.PHONY : src/point_cloud_segmentation_on_normals.i
+.PHONY : src/point_cloud_preprocess/pcd2bin.i
 
 # target to preprocess a source file
-src/point_cloud_segmentation_on_normals.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.i
-.PHONY : src/point_cloud_segmentation_on_normals.cpp.i
+src/point_cloud_preprocess/pcd2bin.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pcd2bin.dir/build.make site_model/CMakeFiles/pcd2bin.dir/src/point_cloud_preprocess/pcd2bin.cpp.i
+.PHONY : src/point_cloud_preprocess/pcd2bin.cpp.i
 
-src/point_cloud_segmentation_on_normals.s: src/point_cloud_segmentation_on_normals.cpp.s
+src/point_cloud_preprocess/pcd2bin.s: src/point_cloud_preprocess/pcd2bin.cpp.s
 
-.PHONY : src/point_cloud_segmentation_on_normals.s
+.PHONY : src/point_cloud_preprocess/pcd2bin.s
 
 # target to generate assembly for a file
-src/point_cloud_segmentation_on_normals.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_segmentation_on_normals.cpp.s
-.PHONY : src/point_cloud_segmentation_on_normals.cpp.s
+src/point_cloud_preprocess/pcd2bin.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pcd2bin.dir/build.make site_model/CMakeFiles/pcd2bin.dir/src/point_cloud_preprocess/pcd2bin.cpp.s
+.PHONY : src/point_cloud_preprocess/pcd2bin.cpp.s
 
-src/point_cloud_segmentation_on_regioin_growing.o: src/point_cloud_segmentation_on_regioin_growing.cpp.o
+src/point_cloud_preprocess/point_cloud_filter.o: src/point_cloud_preprocess/point_cloud_filter.cpp.o
 
-.PHONY : src/point_cloud_segmentation_on_regioin_growing.o
+.PHONY : src/point_cloud_preprocess/point_cloud_filter.o
 
 # target to build an object file
-src/point_cloud_segmentation_on_regioin_growing.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_segmentation_on_regioin_growing.cpp.o
-.PHONY : src/point_cloud_segmentation_on_regioin_growing.cpp.o
+src/point_cloud_preprocess/point_cloud_filter.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_filter.dir/build.make site_model/CMakeFiles/point_cloud_filter.dir/src/point_cloud_preprocess/point_cloud_filter.cpp.o
+.PHONY : src/point_cloud_preprocess/point_cloud_filter.cpp.o
 
-src/point_cloud_segmentation_on_regioin_growing.i: src/point_cloud_segmentation_on_regioin_growing.cpp.i
+src/point_cloud_preprocess/point_cloud_filter.i: src/point_cloud_preprocess/point_cloud_filter.cpp.i
 
-.PHONY : src/point_cloud_segmentation_on_regioin_growing.i
+.PHONY : src/point_cloud_preprocess/point_cloud_filter.i
 
 # target to preprocess a source file
-src/point_cloud_segmentation_on_regioin_growing.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_segmentation_on_regioin_growing.cpp.i
-.PHONY : src/point_cloud_segmentation_on_regioin_growing.cpp.i
+src/point_cloud_preprocess/point_cloud_filter.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_filter.dir/build.make site_model/CMakeFiles/point_cloud_filter.dir/src/point_cloud_preprocess/point_cloud_filter.cpp.i
+.PHONY : src/point_cloud_preprocess/point_cloud_filter.cpp.i
 
-src/point_cloud_segmentation_on_regioin_growing.s: src/point_cloud_segmentation_on_regioin_growing.cpp.s
+src/point_cloud_preprocess/point_cloud_filter.s: src/point_cloud_preprocess/point_cloud_filter.cpp.s
 
-.PHONY : src/point_cloud_segmentation_on_regioin_growing.s
+.PHONY : src/point_cloud_preprocess/point_cloud_filter.s
 
 # target to generate assembly for a file
-src/point_cloud_segmentation_on_regioin_growing.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_segmentation_on_regioin_growing.cpp.s
-.PHONY : src/point_cloud_segmentation_on_regioin_growing.cpp.s
+src/point_cloud_preprocess/point_cloud_filter.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_filter.dir/build.make site_model/CMakeFiles/point_cloud_filter.dir/src/point_cloud_preprocess/point_cloud_filter.cpp.s
+.PHONY : src/point_cloud_preprocess/point_cloud_filter.cpp.s
 
-src/point_cloud_segmentation_ou_cluster.o: src/point_cloud_segmentation_ou_cluster.cpp.o
+src/point_cloud_preprocess/point_cloud_merge.o: src/point_cloud_preprocess/point_cloud_merge.cpp.o
 
-.PHONY : src/point_cloud_segmentation_ou_cluster.o
+.PHONY : src/point_cloud_preprocess/point_cloud_merge.o
 
 # target to build an object file
-src/point_cloud_segmentation_ou_cluster.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/src/point_cloud_segmentation_ou_cluster.cpp.o
-.PHONY : src/point_cloud_segmentation_ou_cluster.cpp.o
+src/point_cloud_preprocess/point_cloud_merge.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_merge.dir/build.make site_model/CMakeFiles/point_cloud_merge.dir/src/point_cloud_preprocess/point_cloud_merge.cpp.o
+.PHONY : src/point_cloud_preprocess/point_cloud_merge.cpp.o
 
-src/point_cloud_segmentation_ou_cluster.i: src/point_cloud_segmentation_ou_cluster.cpp.i
+src/point_cloud_preprocess/point_cloud_merge.i: src/point_cloud_preprocess/point_cloud_merge.cpp.i
 
-.PHONY : src/point_cloud_segmentation_ou_cluster.i
+.PHONY : src/point_cloud_preprocess/point_cloud_merge.i
 
 # target to preprocess a source file
-src/point_cloud_segmentation_ou_cluster.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/src/point_cloud_segmentation_ou_cluster.cpp.i
-.PHONY : src/point_cloud_segmentation_ou_cluster.cpp.i
+src/point_cloud_preprocess/point_cloud_merge.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_merge.dir/build.make site_model/CMakeFiles/point_cloud_merge.dir/src/point_cloud_preprocess/point_cloud_merge.cpp.i
+.PHONY : src/point_cloud_preprocess/point_cloud_merge.cpp.i
 
-src/point_cloud_segmentation_ou_cluster.s: src/point_cloud_segmentation_ou_cluster.cpp.s
+src/point_cloud_preprocess/point_cloud_merge.s: src/point_cloud_preprocess/point_cloud_merge.cpp.s
 
-.PHONY : src/point_cloud_segmentation_ou_cluster.s
+.PHONY : src/point_cloud_preprocess/point_cloud_merge.s
 
 # target to generate assembly for a file
-src/point_cloud_segmentation_ou_cluster.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/src/point_cloud_segmentation_ou_cluster.cpp.s
-.PHONY : src/point_cloud_segmentation_ou_cluster.cpp.s
+src/point_cloud_preprocess/point_cloud_merge.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_merge.dir/build.make site_model/CMakeFiles/point_cloud_merge.dir/src/point_cloud_preprocess/point_cloud_merge.cpp.s
+.PHONY : src/point_cloud_preprocess/point_cloud_merge.cpp.s
 
-src/point_cloud_write.o: src/point_cloud_write.cpp.o
+src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.o: src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.o
 
-.PHONY : src/point_cloud_write.o
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.o
 
 # target to build an object file
-src/point_cloud_write.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_write.dir/build.make site_model/CMakeFiles/point_cloud_write.dir/src/point_cloud_write.cpp.o
-.PHONY : src/point_cloud_write.cpp.o
+src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.o
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.o
 
-src/point_cloud_write.i: src/point_cloud_write.cpp.i
+src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.i: src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.i
 
-.PHONY : src/point_cloud_write.i
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.i
 
 # target to preprocess a source file
-src/point_cloud_write.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_write.dir/build.make site_model/CMakeFiles/point_cloud_write.dir/src/point_cloud_write.cpp.i
-.PHONY : src/point_cloud_write.cpp.i
+src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.i
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.i
 
-src/point_cloud_write.s: src/point_cloud_write.cpp.s
+src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.s: src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.s
 
-.PHONY : src/point_cloud_write.s
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.s
 
 # target to generate assembly for a file
-src/point_cloud_write.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_write.dir/build.make site_model/CMakeFiles/point_cloud_write.dir/src/point_cloud_write.cpp.s
-.PHONY : src/point_cloud_write.cpp.s
+src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.s
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.cpp.s
 
-src/radar_listener.o: src/radar_listener.cpp.o
+src/point_cloud_preprocess/point_cloud_segmentation_on_normals.o: src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o
 
-.PHONY : src/radar_listener.o
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_normals.o
 
 # target to build an object file
-src/radar_listener.cpp.o:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/src/radar_listener.cpp.o
-.PHONY : src/radar_listener.cpp.o
+src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.o
 
-src/radar_listener.i: src/radar_listener.cpp.i
+src/point_cloud_preprocess/point_cloud_segmentation_on_normals.i: src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.i
 
-.PHONY : src/radar_listener.i
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_normals.i
 
 # target to preprocess a source file
-src/radar_listener.cpp.i:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/src/radar_listener.cpp.i
-.PHONY : src/radar_listener.cpp.i
+src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.i
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.i
 
-src/radar_listener.s: src/radar_listener.cpp.s
+src/point_cloud_preprocess/point_cloud_segmentation_on_normals.s: src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.s
 
-.PHONY : src/radar_listener.s
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_normals.s
 
 # target to generate assembly for a file
-src/radar_listener.cpp.s:
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/src/radar_listener.cpp.s
-.PHONY : src/radar_listener.cpp.s
+src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.s
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp.s
+
+src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.o: src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.o
+
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.o
+
+# target to build an object file
+src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.o
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.o
+
+src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.i: src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.i
+
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.i
+
+# target to preprocess a source file
+src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.i
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.i
+
+src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.s: src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.s
+
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.s
+
+# target to generate assembly for a file
+src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.s
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp.s
+
+src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.o: src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.o
+
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.o
+
+# target to build an object file
+src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.o
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.o
+
+src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.i: src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.i
+
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.i
+
+# target to preprocess a source file
+src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.i
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.i
+
+src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.s: src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.s
+
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.s
+
+# target to generate assembly for a file
+src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/build.make site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.s
+.PHONY : src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.cpp.s
 
 # Help Target
 help:
@@ -681,12 +723,13 @@ help:
 	@echo "... install/local"
 	@echo "... install"
 	@echo "... list_install_components"
+	@echo "... test"
 	@echo "... point_cloud_write"
 	@echo "... image_output"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... point_cloud_merge"
-	@echo "... test"
+	@echo "... get_cam_info"
 	@echo "... cloud_viewer"
 	@echo "... point_cloud_filter"
 	@echo "... point_cloud_segmentation_ou_cluster"
@@ -696,42 +739,45 @@ help:
 	@echo "... point_cloud_segmentation_on_normals"
 	@echo "... point_cloud_segmentation_on_regioin_growing"
 	@echo "... radar_listener"
-	@echo "... src/bin2pcd.o"
-	@echo "... src/bin2pcd.i"
-	@echo "... src/bin2pcd.s"
-	@echo "... src/cloud_viewer.o"
-	@echo "... src/cloud_viewer.i"
-	@echo "... src/cloud_viewer.s"
-	@echo "... src/image_output.o"
-	@echo "... src/image_output.i"
-	@echo "... src/image_output.s"
-	@echo "... src/pcd2bin.o"
-	@echo "... src/pcd2bin.i"
-	@echo "... src/pcd2bin.s"
-	@echo "... src/point_cloud_filter.o"
-	@echo "... src/point_cloud_filter.i"
-	@echo "... src/point_cloud_filter.s"
-	@echo "... src/point_cloud_merge.o"
-	@echo "... src/point_cloud_merge.i"
-	@echo "... src/point_cloud_merge.s"
-	@echo "... src/point_cloud_segmentation_RANSAC.o"
-	@echo "... src/point_cloud_segmentation_RANSAC.i"
-	@echo "... src/point_cloud_segmentation_RANSAC.s"
-	@echo "... src/point_cloud_segmentation_on_normals.o"
-	@echo "... src/point_cloud_segmentation_on_normals.i"
-	@echo "... src/point_cloud_segmentation_on_normals.s"
-	@echo "... src/point_cloud_segmentation_on_regioin_growing.o"
-	@echo "... src/point_cloud_segmentation_on_regioin_growing.i"
-	@echo "... src/point_cloud_segmentation_on_regioin_growing.s"
-	@echo "... src/point_cloud_segmentation_ou_cluster.o"
-	@echo "... src/point_cloud_segmentation_ou_cluster.i"
-	@echo "... src/point_cloud_segmentation_ou_cluster.s"
-	@echo "... src/point_cloud_write.o"
-	@echo "... src/point_cloud_write.i"
-	@echo "... src/point_cloud_write.s"
-	@echo "... src/radar_listener.o"
-	@echo "... src/radar_listener.i"
-	@echo "... src/radar_listener.s"
+	@echo "... src/camera_info/get_cam_info.o"
+	@echo "... src/camera_info/get_cam_info.i"
+	@echo "... src/camera_info/get_cam_info.s"
+	@echo "... src/data_output/image_output.o"
+	@echo "... src/data_output/image_output.i"
+	@echo "... src/data_output/image_output.s"
+	@echo "... src/data_output/point_cloud_write.o"
+	@echo "... src/data_output/point_cloud_write.i"
+	@echo "... src/data_output/point_cloud_write.s"
+	@echo "... src/data_output/radar_listener.o"
+	@echo "... src/data_output/radar_listener.i"
+	@echo "... src/data_output/radar_listener.s"
+	@echo "... src/point_cloud_preprocess/bin2pcd.o"
+	@echo "... src/point_cloud_preprocess/bin2pcd.i"
+	@echo "... src/point_cloud_preprocess/bin2pcd.s"
+	@echo "... src/point_cloud_preprocess/cloud_viewer.o"
+	@echo "... src/point_cloud_preprocess/cloud_viewer.i"
+	@echo "... src/point_cloud_preprocess/cloud_viewer.s"
+	@echo "... src/point_cloud_preprocess/pcd2bin.o"
+	@echo "... src/point_cloud_preprocess/pcd2bin.i"
+	@echo "... src/point_cloud_preprocess/pcd2bin.s"
+	@echo "... src/point_cloud_preprocess/point_cloud_filter.o"
+	@echo "... src/point_cloud_preprocess/point_cloud_filter.i"
+	@echo "... src/point_cloud_preprocess/point_cloud_filter.s"
+	@echo "... src/point_cloud_preprocess/point_cloud_merge.o"
+	@echo "... src/point_cloud_preprocess/point_cloud_merge.i"
+	@echo "... src/point_cloud_preprocess/point_cloud_merge.s"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.o"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.i"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_RANSAC.s"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_on_normals.o"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_on_normals.i"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_on_normals.s"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.o"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.i"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.s"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.o"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.i"
+	@echo "... src/point_cloud_preprocess/point_cloud_segmentation_ou_cluster.s"
 .PHONY : help
 
 

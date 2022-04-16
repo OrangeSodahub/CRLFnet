@@ -57,27 +57,27 @@ include site_model/CMakeFiles/bin2pcd.dir/progress.make
 # Include the compile flags for this target's objects.
 include site_model/CMakeFiles/bin2pcd.dir/flags.make
 
-site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o: site_model/CMakeFiles/bin2pcd.dir/flags.make
-site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/bin2pcd.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o -c /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/bin2pcd.cpp
+site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.o: site_model/CMakeFiles/bin2pcd.dir/flags.make
+site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.o: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/bin2pcd.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.o"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.o -c /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/bin2pcd.cpp
 
-site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.i"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/bin2pcd.cpp > CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.i
+site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.i"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/bin2pcd.cpp > CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.i
 
-site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.s"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/bin2pcd.cpp -o CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.s
+site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.s"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/bin2pcd.cpp -o CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.s
 
 # Object files for target bin2pcd
 bin2pcd_OBJECTS = \
-"CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o"
+"CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.o"
 
 # External object files for target bin2pcd
 bin2pcd_EXTERNAL_OBJECTS =
 
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/bin2pcd: site_model/CMakeFiles/bin2pcd.dir/src/bin2pcd.cpp.o
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/bin2pcd: site_model/CMakeFiles/bin2pcd.dir/src/point_cloud_preprocess/bin2pcd.cpp.o
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/bin2pcd: site_model/CMakeFiles/bin2pcd.dir/build.make
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/bin2pcd: /opt/ros/noetic/lib/libvision_reconfigure.so
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/bin2pcd: /opt/ros/noetic/lib/libgazebo_ros_utils.so

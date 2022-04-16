@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_segmentation_on_regioin_growing.cpp
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp
 iostream
 -
 vector

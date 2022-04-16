@@ -120,6 +120,7 @@ add_executable(bin2pcd src/point_cloud_preprocess/bin2pcd.cpp)
 add_executable(point_cloud_segmentation_on_regioin_growing src/point_cloud_preprocess/point_cloud_segmentation_on_regioin_growing.cpp)
 add_executable(point_cloud_segmentation_on_normals src/point_cloud_preprocess/point_cloud_segmentation_on_normals.cpp)
 add_executable(radar_listener src/data_output/radar_listener.cpp)
+add_executable(get_cam_info src/camera_info/get_cam_info.cpp)
 
 # Link your application with libraries
 target_link_libraries(point_cloud_write ${catkin_LIBRARIES} ${PCL_LIBRARIES})
@@ -134,6 +135,7 @@ target_link_libraries(bin2pcd ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_
 target_link_libraries(point_cloud_segmentation_on_regioin_growing ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
 target_link_libraries(point_cloud_segmentation_on_normals ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
 target_link_libraries(radar_listener ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
+target_link_libraries(get_cam_info ${catkin_LIBRARIES})
 
 #############
 ## Install ##

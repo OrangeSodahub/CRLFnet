@@ -6,9 +6,19 @@
 #include <per_msgs/SensorMsgsRadar.h>
 #include <per_msgs/GeometryMsgsRadarObject.h>
 #include <vector>
+#include <fstream>
+#include <iostream>
+#include <time.h>
+#include <string>
+
+using namespace std;
 
 void RadarCB(const per_msgs::SensorMsgsRadar &Radarmsg)
-{ 
+{
+    time_t currentTime=time(NULL);
+	char chCurrentTime[256];
+    
+
 	std::cerr << "Successfully" << std::endl;
 	ros::NodeHandle nh; 
 	ros::Publisher radar_pub = nh.advertise<sensor_msgs::PointCloud2> ("/radar_show_2", 1);     
@@ -20,6 +30,11 @@ void RadarCB(const per_msgs::SensorMsgsRadar &Radarmsg)
 	std::cerr << "left_tracklist_size: " << Radarmsg.front_left_esr_tracklist.size() << std::endl;
 	if (v_num!=0)
 	{
+		// Set the file name
+		strftime(chCurrentTime,sizeof(chCurrentTime),"%Y%m%d %H%M%S",localtime(&currentTime));
+		string stCurrentTime=chCurrentTime;
+		string filename="/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/radar_data/data"+stCurrentTime+".txt";
+
 		cloud.width = v_num; 
 		cloud.height = 1; 
 		cloud.points.resize(cloud.width * cloud.height); 
@@ -31,11 +46,24 @@ void RadarCB(const per_msgs::SensorMsgsRadar &Radarmsg)
 			cloud.points[i].z = 2; 
 		}
 
-		//Convert the cloud to ROS message 
+		// Convert the cloud to ROS message 
 		pcl::toROSMsg(cloud, output); 
 		output.header.frame_id = "/base_link"; 
 
+		// Publish the data
 		radar_pub.publish(output);
+
+		// Save data to txt files
+		ofstream fout;
+		fout.open(filename.c_str());
+		int i=0;
+		while(i<v_num)
+		{
+			fout<< i << " " << cloud.points[i].x <<" "<< cloud.points[i].y << endl;
+			i++;
+		}
+		fout<<flush;
+		fout.close();
 	}
 }
 

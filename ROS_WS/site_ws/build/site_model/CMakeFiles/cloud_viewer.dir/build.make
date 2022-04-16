@@ -57,27 +57,27 @@ include site_model/CMakeFiles/cloud_viewer.dir/progress.make
 # Include the compile flags for this target's objects.
 include site_model/CMakeFiles/cloud_viewer.dir/flags.make
 
-site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.o: site_model/CMakeFiles/cloud_viewer.dir/flags.make
-site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.o: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/cloud_viewer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.o"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.o -c /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/cloud_viewer.cpp
+site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.o: site_model/CMakeFiles/cloud_viewer.dir/flags.make
+site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.o: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/cloud_viewer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.o"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.o -c /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/cloud_viewer.cpp
 
-site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.i"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/cloud_viewer.cpp > CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.i
+site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.i"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/cloud_viewer.cpp > CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.i
 
-site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.s"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/cloud_viewer.cpp -o CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.s
+site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.s"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/point_cloud_preprocess/cloud_viewer.cpp -o CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.s
 
 # Object files for target cloud_viewer
 cloud_viewer_OBJECTS = \
-"CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.o"
+"CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.o"
 
 # External object files for target cloud_viewer
 cloud_viewer_EXTERNAL_OBJECTS =
 
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/cloud_viewer: site_model/CMakeFiles/cloud_viewer.dir/src/cloud_viewer.cpp.o
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/cloud_viewer: site_model/CMakeFiles/cloud_viewer.dir/src/point_cloud_preprocess/cloud_viewer.cpp.o
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/cloud_viewer: site_model/CMakeFiles/cloud_viewer.dir/build.make
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/cloud_viewer: /opt/ros/noetic/lib/libvision_reconfigure.so
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/cloud_viewer: /opt/ros/noetic/lib/libgazebo_ros_utils.so

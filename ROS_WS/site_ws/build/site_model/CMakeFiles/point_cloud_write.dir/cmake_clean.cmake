@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_write"
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/site_model/point_cloud_write.pdb"
-  "CMakeFiles/point_cloud_write.dir/src/point_cloud_write.cpp.o"
+  "CMakeFiles/point_cloud_write.dir/src/data_output/point_cloud_write.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

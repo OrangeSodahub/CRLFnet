@@ -1,0 +1,14 @@
+#################################################################################
+#                          Config Files for Python                              #
+#################################################################################
+data: 
+  cam_dir: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/camera_data/
+  rad_dir: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/radar_data/
+output:
+  RadCamFusion_dir: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/output/RadCamFusion/
+topic:
+  radar_2: /ARS_408_21_2_Topic
+  radar_3: /ARS_408_21_3_Topic
+calib:
+  pole2_to_world: [-1.59824637808195,-0.790114867663065,0.461]
+  radar2_to_pole2: [0.223770395328486,0.0555628747749927,0.385642831589234]
