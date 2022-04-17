@@ -7,31 +7,32 @@ import math
 import numpy as np
 from tomlkit import string
 
-def world_to_pixel(config: dict, pole_name: string, camera_name: string):
-    world_to_camera_ = world_to_camera(config,pole_name,camera_name)
+# transform matrix
+def world_to_pixel(config: dict, pole_name: string, camera_name: string, x: int, y: int):
+    instance, world_to_camera_ = world_to_camera(config,pole_name,camera_name, x, y)
     camera_to_pixel_ = camera_to_pixel(config,camera_name)
 
     world_to_pixel_ = np.matmul(camera_to_pixel_,world_to_camera_)
-    print("world_to_image:")
+    print("world_to_pixel:")
     print(world_to_pixel_)
 
-    return world_to_pixel_
+    return instance, world_to_pixel_
 
 # camera external parameter matrix
-def world_to_camera(config: dict, pole_name: string, camera_name: string):
+def world_to_camera(config: dict, pole_name: string, camera_name: string, x: int, y: int):
     pole = config['calib']['pole_pose'][pole_name]
     camera = config['calib']['camera_pose'][camera_name]
 
     world_to_pole = RTmatrix(pole)
-#     print("world_to_pole:")
-#     print(world_to_pole)
     pole_to_camera = RTmatrix(camera)
-#     print("pole_to_camera:")
-#     print(pole_to_camera)
     world_to_camera_ = np.matmul(world_to_pole,pole_to_camera)
+
+    # caculate the absolute coordinate x of camera and instance
+    instance = y - (-1.250682844)
+    
     print("world_to_camera")
     print(world_to_camera_)
-    return world_to_camera_
+    return instance, world_to_camera_
 
 def RTmatrix(pose):
     # Translation matrix
@@ -49,10 +50,10 @@ def RTmatrix(pose):
             [0,               1,               0],
             [-math.sin(p_angle),0,math.cos(p_angle)]]
     Rz = [[math.cos(y_angle),-math.sin(y_angle),0],
-           [math.sin(y_angle),math.cos(y_angle),0],
-           [0                ,0                ,1]]
+            [math.sin(y_angle),math.cos(y_angle),0],
+            [0                ,0                ,1]]
 
-    R = np.matmul(Rx,np.matmul(Ry,Rz))
+    R = np.matmul(Rz,np.matmul(Ry,Rx)) # Wrong:R=RxRyRz
 
     # RTmatrix 
     O1 = np.transpose([[0],[0],[0],[1]])

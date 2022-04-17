@@ -13,7 +13,6 @@ import yaml
 import cv2
 import os
 import calib
-# from ..calib.calib import *
 
 def main(config: dict):
     # load data and set output dir
@@ -24,7 +23,7 @@ def main(config: dict):
 
     # get radar
     size, x_poses, y_poses = get_radar_pts(data_rad_dir)
-    transform = calib.world_to_pixel(config,"pole2","camera2")
+    instance, transform = calib.world_to_pixel(config,"pole2","camera2",x_poses[0],y_poses[0])
     print("transform matrix:")
     print(transform)
 
@@ -34,7 +33,7 @@ def main(config: dict):
     print(y_poses)
 
     world_pose = [[x_poses[0]],[y_poses[0]],[2],[1]]
-    pixel_pose = np.matmul(transform,world_pose)
+    pixel_pose = np.matmul(transform,world_pose) / instance
     print("pixel_pose:")
     print(pixel_pose)
 
@@ -43,14 +42,14 @@ def main(config: dict):
         img = cv2.imread(fname)
 
         # draw boxes
-        pt1 = (200, 0) #left,up=num1,num2
-        pt2 = (200+100, 480) #right,down=num1+num3,num2+num4
+        pt1 = (round(pixel_pose[0][0]), 0) #left,up=num1,num2
+        pt2 = (round(pixel_pose[0][0])+100, 480) #right,down=num1+num3,num2+num4
         cv2.rectangle(img, pt1, pt2, (0, 255, 0), 2) # color and thickness of box
         
         label = 'vehicle'
         score = 0.596
         font = cv2.FONT_HERSHEY_SIMPLEX  # 定义字体
-        img = cv2.putText(img, '{} {:.3f}'.format(label,score), (10, 10), font, 1, (0, 255, 255), 4)
+        img = cv2.putText(img, '{} {:.3f}'.format(label,score), (100, 100), font, 0.5, (0, 255, 255), 1.5)
                             # img               content         坐标(右上角坐标)    font size   color   thickness
         
     # save results
