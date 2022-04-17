@@ -1,0 +1,8 @@
+prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/install
+
+Name: radar_msgs
+Description: Description of radar_msgs
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 
