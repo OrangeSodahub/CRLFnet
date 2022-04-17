@@ -1,5 +1,5 @@
 #############################################################
-#   This py file generate the roi of radar detection        #
+#   This py file generate the roi of radar detection.       #
 #   Author: Yangxiuyu                                       #
 #############################################################
 
@@ -12,6 +12,7 @@ from termcolor import colored
 import yaml
 import cv2
 import os
+import calib
 
 def main(config: dict):
     # load data and set output dir
@@ -21,25 +22,34 @@ def main(config: dict):
     os.makedirs(output_dir,exist_ok=True)
 
     # get radar
-    radar2_topic = config['topic']['radar_2']
-    pole2_to_world = config['calib']['pole2_to_world']
-    radar2_to_pole2 = config['calib']['radar2_to_pole2']
-    print(pole2_to_world+radar2_to_pole2)
     size, x_poses, y_poses = get_radar_pts(data_rad_dir)
+    instance, transform = calib.world_to_pixel(config,"pole2","camera2",x_poses[0],y_poses[0])
+    print("transform matrix:")
+    print(transform)
+
+    print("x_poses:")
+    print(x_poses)
+    print("y_poses:")
+    print(y_poses)
+
+    world_pose = [[x_poses[0]],[y_poses[0]],[2],[1]]
+    pixel_pose = np.matmul(transform,world_pose) / instance
+    print("pixel_pose:")
+    print(pixel_pose)
 
     for i in range(size):
         fname = data_cam_dir+'image2.jpg'
         img = cv2.imread(fname)
 
         # draw boxes
-        pt1 = (200, 0) #left,up=num1,num2
-        pt2 = (200+100, 480) #right,down=num1+num3,num2+num4
+        pt1 = (round(pixel_pose[0][0]), 0) #left,up=num1,num2
+        pt2 = (round(pixel_pose[0][0])+100, 480) #right,down=num1+num3,num2+num4
         cv2.rectangle(img, pt1, pt2, (0, 255, 0), 2) # color and thickness of box
         
         label = 'vehicle'
         score = 0.596
         font = cv2.FONT_HERSHEY_SIMPLEX  # 定义字体
-        img = cv2.putText(img, '{} {:.3f}'.format(label,score), (10, 10), font, 1, (0, 255, 255), 4)
+        img = cv2.putText(img, '{} {:.3f}'.format(label,score), (100, 100), font, 0.5, (0, 255, 255), 1.5)
                             # img               content         坐标(右上角坐标)    font size   color   thickness
         
     # save results
@@ -55,9 +65,6 @@ def get_radar_pts(data_rad_dir: string):
     else:
         x_poses = data[:,1:2]
         y_poses = data[:,2:3]
-    print(data)
-    print(x_poses)
-    print(y_poses)
     return size, x_poses, y_poses
 
 if __name__=='__main__':
