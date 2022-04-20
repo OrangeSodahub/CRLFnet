@@ -944,7 +944,7 @@
     <visual>
       <origin
         xyz="0 0 0"
-        rpy="1.5707963267949 -3.14159265358979 -1.5707963267949" />
+        rpy="1.5707963267949 -3.14159265358979 0" />
       <geometry>
         <mesh
           filename="package://site_model/meshes/camera2_Link.STL" />
@@ -1417,13 +1417,13 @@
 
     <!-- Radar_2 in package 'radar_plugin' -->
   <xacro:include filename="$(find radar_plugin)/urdf/ARS_408_21_2.urdf.xacro"/>
-    <xacro:ARS_408_21_2 parent="pole2_Link" name="ARS_408_21_2" radarTopic="/ARS_408_21_2_Topic" velTopic="/ARS_408_21_2_velTopic" occlusion="0.6" noiseDev="0.05" samplePoints="20">
+    <xacro:ARS_408_21_2 parent="pole2_Link" name="ARS_408_21_2" radarTopic="/ARS_408_21_2_Topic" velTopic="/ARS_408_21_2_velTopic" occlusion="0.6" noiseDev="0.00" samplePoints="100">
       <origin xyz="0.223770395328486 0.0555628747749927 0.385642831589234" rpy="1.5707963267949 1.5707963267949 3.14159265358979" />
   </xacro:ARS_408_21_2>
 
     <!-- Radar_3 in package 'radar_plugin' -->
   <xacro:include filename="$(find radar_plugin)/urdf/ARS_408_21_3.urdf.xacro"/>
-    <xacro:ARS_408_21_3 parent="pole3_Link" name="ARS_408_21_3" radarTopic="/ARS_408_21_3_Topic" velTopic="/ARS_408_21_3_velTopic" occlusion="0.6" noiseDev="0.05" samplePoints="20">
+    <xacro:ARS_408_21_3 parent="pole3_Link" name="ARS_408_21_3" radarTopic="/ARS_408_21_3_Topic" velTopic="/ARS_408_21_3_velTopic" occlusion="0.6" noiseDev="0.00" samplePoints="100">
       <origin xyz="0.00850070942083281 0.0363917038027359 0.207831556225299" rpy="-1.5707963267949 1.5707963267949 0" />
   </xacro:ARS_408_21_3>
 
@@ -2348,7 +2348,6 @@
   <xacro:include filename="$(find site_model)/urdf/deepracer.urdf.xacro"/>
     <xacro:deepracer parent="base_link" name="deepracer">
   </xacro:deepracer>-->
-
 
   
 </robot>
