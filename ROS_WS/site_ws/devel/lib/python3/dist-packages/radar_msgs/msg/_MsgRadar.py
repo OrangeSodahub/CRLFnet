@@ -10,12 +10,14 @@ import radar_msgs.msg
 import std_msgs.msg
 
 class MsgRadar(genpy.Message):
-  _md5sum = "6c979660ea9f3cab98f883793f57d5c9"
+  _md5sum = "a3c7315f9e8449ffdf3d76f6033062a8"
   _type = "radar_msgs/MsgRadar"
   _has_header = True  # flag to mark the presence of a Header object
   _full_text = """Header header
-float32 total_vehicles
-MsgObject[] ObjectList
+float32 total_vehicles_left
+float32 total_vehicles_right
+MsgObject[] ObjectList_left
+MsgObject[] ObjectList_right
 ================================================================================
 MSG: std_msgs/Header
 # Standard metadata for higher-level stamped data types.
@@ -41,8 +43,8 @@ float32 angle_centroid
 float32 obj_vcs_posex
 float32 obj_vcs_posey
 uint8 track_id"""
-  __slots__ = ['header','total_vehicles','ObjectList']
-  _slot_types = ['std_msgs/Header','float32','radar_msgs/MsgObject[]']
+  __slots__ = ['header','total_vehicles_left','total_vehicles_right','ObjectList_left','ObjectList_right']
+  _slot_types = ['std_msgs/Header','float32','float32','radar_msgs/MsgObject[]','radar_msgs/MsgObject[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -52,7 +54,7 @@ uint8 track_id"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       header,total_vehicles,ObjectList
+       header,total_vehicles_left,total_vehicles_right,ObjectList_left,ObjectList_right
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -63,14 +65,20 @@ uint8 track_id"""
       # message fields cannot be None, assign default values for those that are
       if self.header is None:
         self.header = std_msgs.msg.Header()
-      if self.total_vehicles is None:
-        self.total_vehicles = 0.
-      if self.ObjectList is None:
-        self.ObjectList = []
+      if self.total_vehicles_left is None:
+        self.total_vehicles_left = 0.
+      if self.total_vehicles_right is None:
+        self.total_vehicles_right = 0.
+      if self.ObjectList_left is None:
+        self.ObjectList_left = []
+      if self.ObjectList_right is None:
+        self.ObjectList_right = []
     else:
       self.header = std_msgs.msg.Header()
-      self.total_vehicles = 0.
-      self.ObjectList = []
+      self.total_vehicles_left = 0.
+      self.total_vehicles_right = 0.
+      self.ObjectList_left = []
+      self.ObjectList_right = []
 
   def _get_types(self):
     """
@@ -92,11 +100,11 @@ uint8 track_id"""
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      _x = self.total_vehicles
-      buff.write(_get_struct_f().pack(_x))
-      length = len(self.ObjectList)
+      _x = self
+      buff.write(_get_struct_2f().pack(_x.total_vehicles_left, _x.total_vehicles_right))
+      length = len(self.ObjectList_left)
       buff.write(_struct_I.pack(length))
-      for val1 in self.ObjectList:
+      for val1 in self.ObjectList_left:
         _v1 = val1.header
         _x = _v1.seq
         buff.write(_get_struct_I().pack(_x))
@@ -104,6 +112,23 @@ uint8 track_id"""
         _x = _v2
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
         _x = _v1.frame_id
+        length = len(_x)
+        if python3 or type(_x) == unicode:
+          _x = _x.encode('utf-8')
+          length = len(_x)
+        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
+        _x = val1
+        buff.write(_get_struct_5fB().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
+      length = len(self.ObjectList_right)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.ObjectList_right:
+        _v3 = val1.header
+        _x = _v3.seq
+        buff.write(_get_struct_I().pack(_x))
+        _v4 = _v3.stamp
+        _x = _v4
+        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
+        _x = _v3.frame_id
         length = len(_x)
         if python3 or type(_x) == unicode:
           _x = _x.encode('utf-8')
@@ -124,8 +149,10 @@ uint8 track_id"""
     try:
       if self.header is None:
         self.header = std_msgs.msg.Header()
-      if self.ObjectList is None:
-        self.ObjectList = None
+      if self.ObjectList_left is None:
+        self.ObjectList_left = None
+      if self.ObjectList_right is None:
+        self.ObjectList_right = None
       end = 0
       _x = self
       start = end
@@ -140,21 +167,22 @@ uint8 track_id"""
         self.header.frame_id = str[start:end].decode('utf-8', 'rosmsg')
       else:
         self.header.frame_id = str[start:end]
+      _x = self
       start = end
-      end += 4
-      (self.total_vehicles,) = _get_struct_f().unpack(str[start:end])
+      end += 8
+      (_x.total_vehicles_left, _x.total_vehicles_right,) = _get_struct_2f().unpack(str[start:end])
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      self.ObjectList = []
+      self.ObjectList_left = []
       for i in range(0, length):
         val1 = radar_msgs.msg.MsgObject()
-        _v3 = val1.header
+        _v5 = val1.header
         start = end
         end += 4
-        (_v3.seq,) = _get_struct_I().unpack(str[start:end])
-        _v4 = _v3.stamp
-        _x = _v4
+        (_v5.seq,) = _get_struct_I().unpack(str[start:end])
+        _v6 = _v5.stamp
+        _x = _v6
         start = end
         end += 8
         (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
@@ -164,90 +192,18 @@ uint8 track_id"""
         start = end
         end += length
         if python3:
-          _v3.frame_id = str[start:end].decode('utf-8', 'rosmsg')
+          _v5.frame_id = str[start:end].decode('utf-8', 'rosmsg')
         else:
-          _v3.frame_id = str[start:end]
+          _v5.frame_id = str[start:end]
         _x = val1
         start = end
         end += 21
         (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fB().unpack(str[start:end])
-        self.ObjectList.append(val1)
-      return self
-    except struct.error as e:
-      raise genpy.DeserializationError(e)  # most likely buffer underfill
-
-
-  def serialize_numpy(self, buff, numpy):
-    """
-    serialize message with numpy array types into buffer
-    :param buff: buffer, ``StringIO``
-    :param numpy: numpy python module
-    """
-    try:
-      _x = self
-      buff.write(_get_struct_3I().pack(_x.header.seq, _x.header.stamp.secs, _x.header.stamp.nsecs))
-      _x = self.header.frame_id
-      length = len(_x)
-      if python3 or type(_x) == unicode:
-        _x = _x.encode('utf-8')
-        length = len(_x)
-      buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      _x = self.total_vehicles
-      buff.write(_get_struct_f().pack(_x))
-      length = len(self.ObjectList)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.ObjectList:
-        _v5 = val1.header
-        _x = _v5.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v6 = _v5.stamp
-        _x = _v6
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v5.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_5fB().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
-    except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
-    except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
-
-  def deserialize_numpy(self, str, numpy):
-    """
-    unpack serialized message in str into this message instance using numpy for array types
-    :param str: byte array of serialized message, ``str``
-    :param numpy: numpy python module
-    """
-    if python3:
-      codecs.lookup_error("rosmsg").msg_type = self._type
-    try:
-      if self.header is None:
-        self.header = std_msgs.msg.Header()
-      if self.ObjectList is None:
-        self.ObjectList = None
-      end = 0
-      _x = self
-      start = end
-      end += 12
-      (_x.header.seq, _x.header.stamp.secs, _x.header.stamp.nsecs,) = _get_struct_3I().unpack(str[start:end])
+        self.ObjectList_left.append(val1)
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      start = end
-      end += length
-      if python3:
-        self.header.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-      else:
-        self.header.frame_id = str[start:end]
-      start = end
-      end += 4
-      (self.total_vehicles,) = _get_struct_f().unpack(str[start:end])
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.ObjectList = []
+      self.ObjectList_right = []
       for i in range(0, length):
         val1 = radar_msgs.msg.MsgObject()
         _v7 = val1.header
@@ -272,7 +228,157 @@ uint8 track_id"""
         start = end
         end += 21
         (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fB().unpack(str[start:end])
-        self.ObjectList.append(val1)
+        self.ObjectList_right.append(val1)
+      return self
+    except struct.error as e:
+      raise genpy.DeserializationError(e)  # most likely buffer underfill
+
+
+  def serialize_numpy(self, buff, numpy):
+    """
+    serialize message with numpy array types into buffer
+    :param buff: buffer, ``StringIO``
+    :param numpy: numpy python module
+    """
+    try:
+      _x = self
+      buff.write(_get_struct_3I().pack(_x.header.seq, _x.header.stamp.secs, _x.header.stamp.nsecs))
+      _x = self.header.frame_id
+      length = len(_x)
+      if python3 or type(_x) == unicode:
+        _x = _x.encode('utf-8')
+        length = len(_x)
+      buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
+      _x = self
+      buff.write(_get_struct_2f().pack(_x.total_vehicles_left, _x.total_vehicles_right))
+      length = len(self.ObjectList_left)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.ObjectList_left:
+        _v9 = val1.header
+        _x = _v9.seq
+        buff.write(_get_struct_I().pack(_x))
+        _v10 = _v9.stamp
+        _x = _v10
+        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
+        _x = _v9.frame_id
+        length = len(_x)
+        if python3 or type(_x) == unicode:
+          _x = _x.encode('utf-8')
+          length = len(_x)
+        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
+        _x = val1
+        buff.write(_get_struct_5fB().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
+      length = len(self.ObjectList_right)
+      buff.write(_struct_I.pack(length))
+      for val1 in self.ObjectList_right:
+        _v11 = val1.header
+        _x = _v11.seq
+        buff.write(_get_struct_I().pack(_x))
+        _v12 = _v11.stamp
+        _x = _v12
+        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
+        _x = _v11.frame_id
+        length = len(_x)
+        if python3 or type(_x) == unicode:
+          _x = _x.encode('utf-8')
+          length = len(_x)
+        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
+        _x = val1
+        buff.write(_get_struct_5fB().pack(_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id))
+    except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
+    except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
+
+  def deserialize_numpy(self, str, numpy):
+    """
+    unpack serialized message in str into this message instance using numpy for array types
+    :param str: byte array of serialized message, ``str``
+    :param numpy: numpy python module
+    """
+    if python3:
+      codecs.lookup_error("rosmsg").msg_type = self._type
+    try:
+      if self.header is None:
+        self.header = std_msgs.msg.Header()
+      if self.ObjectList_left is None:
+        self.ObjectList_left = None
+      if self.ObjectList_right is None:
+        self.ObjectList_right = None
+      end = 0
+      _x = self
+      start = end
+      end += 12
+      (_x.header.seq, _x.header.stamp.secs, _x.header.stamp.nsecs,) = _get_struct_3I().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      start = end
+      end += length
+      if python3:
+        self.header.frame_id = str[start:end].decode('utf-8', 'rosmsg')
+      else:
+        self.header.frame_id = str[start:end]
+      _x = self
+      start = end
+      end += 8
+      (_x.total_vehicles_left, _x.total_vehicles_right,) = _get_struct_2f().unpack(str[start:end])
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.ObjectList_left = []
+      for i in range(0, length):
+        val1 = radar_msgs.msg.MsgObject()
+        _v13 = val1.header
+        start = end
+        end += 4
+        (_v13.seq,) = _get_struct_I().unpack(str[start:end])
+        _v14 = _v13.stamp
+        _x = _v14
+        start = end
+        end += 8
+        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        start = end
+        end += length
+        if python3:
+          _v13.frame_id = str[start:end].decode('utf-8', 'rosmsg')
+        else:
+          _v13.frame_id = str[start:end]
+        _x = val1
+        start = end
+        end += 21
+        (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fB().unpack(str[start:end])
+        self.ObjectList_left.append(val1)
+      start = end
+      end += 4
+      (length,) = _struct_I.unpack(str[start:end])
+      self.ObjectList_right = []
+      for i in range(0, length):
+        val1 = radar_msgs.msg.MsgObject()
+        _v15 = val1.header
+        start = end
+        end += 4
+        (_v15.seq,) = _get_struct_I().unpack(str[start:end])
+        _v16 = _v15.stamp
+        _x = _v16
+        start = end
+        end += 8
+        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
+        start = end
+        end += 4
+        (length,) = _struct_I.unpack(str[start:end])
+        start = end
+        end += length
+        if python3:
+          _v15.frame_id = str[start:end].decode('utf-8', 'rosmsg')
+        else:
+          _v15.frame_id = str[start:end]
+        _x = val1
+        start = end
+        end += 21
+        (_x.range, _x.range_rate, _x.angle_centroid, _x.obj_vcs_posex, _x.obj_vcs_posey, _x.track_id,) = _get_struct_5fB().unpack(str[start:end])
+        self.ObjectList_right.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -287,6 +393,12 @@ def _get_struct_2I():
     if _struct_2I is None:
         _struct_2I = struct.Struct("<2I")
     return _struct_2I
+_struct_2f = None
+def _get_struct_2f():
+    global _struct_2f
+    if _struct_2f is None:
+        _struct_2f = struct.Struct("<2f")
+    return _struct_2f
 _struct_3I = None
 def _get_struct_3I():
     global _struct_3I
@@ -299,9 +411,3 @@ def _get_struct_5fB():
     if _struct_5fB is None:
         _struct_5fB = struct.Struct("<5fB")
     return _struct_5fB
-_struct_f = None
-def _get_struct_f():
-    global _struct_f
-    if _struct_f is None:
-        _struct_f = struct.Struct("<f")
-    return _struct_f

@@ -24,8 +24,10 @@ def main(config: dict):
     # get calib parameters
     calib = np.loadtxt(calib_dir+'calib.txt')
 
-    # get radar
+    # get radar msgs
     size, x_poses, y_poses = get_radar_pts(data_rad_dir)
+
+    # get pixel points
     world_pose = [[x_poses[0]],[y_poses[0]],[0.46],[1]]
     pixel_pose = get_pixel_pose(calib,"pole2","camera2",world_pose)
     print("pixel_pose:")
@@ -59,6 +61,10 @@ def main(config: dict):
     cv2.imwrite(output_dir+'image2.jpg', img)
 
 def get_radar_pts(data_rad_dir: string):
+    """
+         size: number of vehicles
+         x_poses, y_poses: array of x,y coordinates in world coordinates of vehicles
+    """
     data = np.loadtxt(data_rad_dir+'data20220419 232258.txt')
     size = data.ndim # num of vechicles
     print(size)
@@ -71,6 +77,12 @@ def get_radar_pts(data_rad_dir: string):
     return size, x_poses, y_poses
 
 def get_pixel_pose(calib: np.array, pole_name: string, camera_name: string, world_pose: np.array):
+    """
+        world_pose -> camera_pose : external parameter of camera
+        camera_pose -> pixel_pose : internal parameter of camera
+        tips: shift is need between external and internal parameter
+    """
+    # get external and internal parameter of camera
     world_to_camera = calib[4][1:17].reshape(4,4)
     camera_to_pixel = calib[4][17:30].reshape(3,4)
 

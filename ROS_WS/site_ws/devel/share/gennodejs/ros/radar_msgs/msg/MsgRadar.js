@@ -21,8 +21,10 @@ class MsgRadar {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.header = null;
-      this.total_vehicles = null;
-      this.ObjectList = null;
+      this.total_vehicles_left = null;
+      this.total_vehicles_right = null;
+      this.ObjectList_left = null;
+      this.ObjectList_right = null;
     }
     else {
       if (initObj.hasOwnProperty('header')) {
@@ -31,17 +33,29 @@ class MsgRadar {
       else {
         this.header = new std_msgs.msg.Header();
       }
-      if (initObj.hasOwnProperty('total_vehicles')) {
-        this.total_vehicles = initObj.total_vehicles
+      if (initObj.hasOwnProperty('total_vehicles_left')) {
+        this.total_vehicles_left = initObj.total_vehicles_left
       }
       else {
-        this.total_vehicles = 0.0;
+        this.total_vehicles_left = 0.0;
       }
-      if (initObj.hasOwnProperty('ObjectList')) {
-        this.ObjectList = initObj.ObjectList
+      if (initObj.hasOwnProperty('total_vehicles_right')) {
+        this.total_vehicles_right = initObj.total_vehicles_right
       }
       else {
-        this.ObjectList = [];
+        this.total_vehicles_right = 0.0;
+      }
+      if (initObj.hasOwnProperty('ObjectList_left')) {
+        this.ObjectList_left = initObj.ObjectList_left
+      }
+      else {
+        this.ObjectList_left = [];
+      }
+      if (initObj.hasOwnProperty('ObjectList_right')) {
+        this.ObjectList_right = initObj.ObjectList_right
+      }
+      else {
+        this.ObjectList_right = [];
       }
     }
   }
@@ -50,12 +64,20 @@ class MsgRadar {
     // Serializes a message object of type MsgRadar
     // Serialize message field [header]
     bufferOffset = std_msgs.msg.Header.serialize(obj.header, buffer, bufferOffset);
-    // Serialize message field [total_vehicles]
-    bufferOffset = _serializer.float32(obj.total_vehicles, buffer, bufferOffset);
-    // Serialize message field [ObjectList]
-    // Serialize the length for message field [ObjectList]
-    bufferOffset = _serializer.uint32(obj.ObjectList.length, buffer, bufferOffset);
-    obj.ObjectList.forEach((val) => {
+    // Serialize message field [total_vehicles_left]
+    bufferOffset = _serializer.float32(obj.total_vehicles_left, buffer, bufferOffset);
+    // Serialize message field [total_vehicles_right]
+    bufferOffset = _serializer.float32(obj.total_vehicles_right, buffer, bufferOffset);
+    // Serialize message field [ObjectList_left]
+    // Serialize the length for message field [ObjectList_left]
+    bufferOffset = _serializer.uint32(obj.ObjectList_left.length, buffer, bufferOffset);
+    obj.ObjectList_left.forEach((val) => {
+      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
+    });
+    // Serialize message field [ObjectList_right]
+    // Serialize the length for message field [ObjectList_right]
+    bufferOffset = _serializer.uint32(obj.ObjectList_right.length, buffer, bufferOffset);
+    obj.ObjectList_right.forEach((val) => {
       bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
     });
     return bufferOffset;
@@ -67,14 +89,23 @@ class MsgRadar {
     let data = new MsgRadar(null);
     // Deserialize message field [header]
     data.header = std_msgs.msg.Header.deserialize(buffer, bufferOffset);
-    // Deserialize message field [total_vehicles]
-    data.total_vehicles = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [ObjectList]
-    // Deserialize array length for message field [ObjectList]
+    // Deserialize message field [total_vehicles_left]
+    data.total_vehicles_left = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [total_vehicles_right]
+    data.total_vehicles_right = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [ObjectList_left]
+    // Deserialize array length for message field [ObjectList_left]
     len = _deserializer.uint32(buffer, bufferOffset);
-    data.ObjectList = new Array(len);
+    data.ObjectList_left = new Array(len);
     for (let i = 0; i < len; ++i) {
-      data.ObjectList[i] = MsgObject.deserialize(buffer, bufferOffset)
+      data.ObjectList_left[i] = MsgObject.deserialize(buffer, bufferOffset)
+    }
+    // Deserialize message field [ObjectList_right]
+    // Deserialize array length for message field [ObjectList_right]
+    len = _deserializer.uint32(buffer, bufferOffset);
+    data.ObjectList_right = new Array(len);
+    for (let i = 0; i < len; ++i) {
+      data.ObjectList_right[i] = MsgObject.deserialize(buffer, bufferOffset)
     }
     return data;
   }
@@ -82,10 +113,13 @@ class MsgRadar {
   static getMessageSize(object) {
     let length = 0;
     length += std_msgs.msg.Header.getMessageSize(object.header);
-    object.ObjectList.forEach((val) => {
+    object.ObjectList_left.forEach((val) => {
       length += MsgObject.getMessageSize(val);
     });
-    return length + 8;
+    object.ObjectList_right.forEach((val) => {
+      length += MsgObject.getMessageSize(val);
+    });
+    return length + 16;
   }
 
   static datatype() {
@@ -95,15 +129,17 @@ class MsgRadar {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '6c979660ea9f3cab98f883793f57d5c9';
+    return 'a3c7315f9e8449ffdf3d76f6033062a8';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
     Header header
-    float32 total_vehicles
-    MsgObject[] ObjectList
+    float32 total_vehicles_left
+    float32 total_vehicles_right
+    MsgObject[] ObjectList_left
+    MsgObject[] ObjectList_right
     ================================================================================
     MSG: std_msgs/Header
     # Standard metadata for higher-level stamped data types.
@@ -145,21 +181,38 @@ class MsgRadar {
       resolved.header = new std_msgs.msg.Header()
     }
 
-    if (msg.total_vehicles !== undefined) {
-      resolved.total_vehicles = msg.total_vehicles;
+    if (msg.total_vehicles_left !== undefined) {
+      resolved.total_vehicles_left = msg.total_vehicles_left;
     }
     else {
-      resolved.total_vehicles = 0.0
+      resolved.total_vehicles_left = 0.0
     }
 
-    if (msg.ObjectList !== undefined) {
-      resolved.ObjectList = new Array(msg.ObjectList.length);
-      for (let i = 0; i < resolved.ObjectList.length; ++i) {
-        resolved.ObjectList[i] = MsgObject.Resolve(msg.ObjectList[i]);
+    if (msg.total_vehicles_right !== undefined) {
+      resolved.total_vehicles_right = msg.total_vehicles_right;
+    }
+    else {
+      resolved.total_vehicles_right = 0.0
+    }
+
+    if (msg.ObjectList_left !== undefined) {
+      resolved.ObjectList_left = new Array(msg.ObjectList_left.length);
+      for (let i = 0; i < resolved.ObjectList_left.length; ++i) {
+        resolved.ObjectList_left[i] = MsgObject.Resolve(msg.ObjectList_left[i]);
       }
     }
     else {
-      resolved.ObjectList = []
+      resolved.ObjectList_left = []
+    }
+
+    if (msg.ObjectList_right !== undefined) {
+      resolved.ObjectList_right = new Array(msg.ObjectList_right.length);
+      for (let i = 0; i < resolved.ObjectList_right.length; ++i) {
+        resolved.ObjectList_right[i] = MsgObject.Resolve(msg.ObjectList_right[i]);
+      }
+    }
+    else {
+      resolved.ObjectList_right = []
     }
 
     return resolved;

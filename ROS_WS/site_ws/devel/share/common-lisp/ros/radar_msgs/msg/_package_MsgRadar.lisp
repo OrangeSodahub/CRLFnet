@@ -1,8 +1,12 @@
 (cl:in-package radar_msgs-msg)
 (cl:export '(HEADER-VAL
           HEADER
-          TOTAL_VEHICLES-VAL
-          TOTAL_VEHICLES
-          OBJECTLIST-VAL
-          OBJECTLIST
+          TOTAL_VEHICLES_LEFT-VAL
+          TOTAL_VEHICLES_LEFT
+          TOTAL_VEHICLES_RIGHT-VAL
+          TOTAL_VEHICLES_RIGHT
+          OBJECTLIST_LEFT-VAL
+          OBJECTLIST_LEFT
+          OBJECTLIST_RIGHT-VAL
+          OBJECTLIST_RIGHT
 ))

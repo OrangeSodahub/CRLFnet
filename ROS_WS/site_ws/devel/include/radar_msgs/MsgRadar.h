@@ -17,6 +17,7 @@
 
 #include <std_msgs/Header.h>
 #include <radar_msgs/MsgObject.h>
+#include <radar_msgs/MsgObject.h>
 
 namespace radar_msgs
 {
@@ -27,13 +28,17 @@ struct MsgRadar_
 
   MsgRadar_()
     : header()
-    , total_vehicles(0.0)
-    , ObjectList()  {
+    , total_vehicles_left(0.0)
+    , total_vehicles_right(0.0)
+    , ObjectList_left()
+    , ObjectList_right()  {
     }
   MsgRadar_(const ContainerAllocator& _alloc)
     : header(_alloc)
-    , total_vehicles(0.0)
-    , ObjectList(_alloc)  {
+    , total_vehicles_left(0.0)
+    , total_vehicles_right(0.0)
+    , ObjectList_left(_alloc)
+    , ObjectList_right(_alloc)  {
   (void)_alloc;
     }
 
@@ -42,11 +47,17 @@ struct MsgRadar_
    typedef  ::std_msgs::Header_<ContainerAllocator>  _header_type;
   _header_type header;
 
-   typedef float _total_vehicles_type;
-  _total_vehicles_type total_vehicles;
+   typedef float _total_vehicles_left_type;
+  _total_vehicles_left_type total_vehicles_left;
 
-   typedef std::vector< ::radar_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::radar_msgs::MsgObject_<ContainerAllocator> >::other >  _ObjectList_type;
-  _ObjectList_type ObjectList;
+   typedef float _total_vehicles_right_type;
+  _total_vehicles_right_type total_vehicles_right;
+
+   typedef std::vector< ::radar_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::radar_msgs::MsgObject_<ContainerAllocator> >::other >  _ObjectList_left_type;
+  _ObjectList_left_type ObjectList_left;
+
+   typedef std::vector< ::radar_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::radar_msgs::MsgObject_<ContainerAllocator> >::other >  _ObjectList_right_type;
+  _ObjectList_right_type ObjectList_right;
 
 
 
@@ -78,8 +89,10 @@ template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::radar_msgs::MsgRadar_<ContainerAllocator1> & lhs, const ::radar_msgs::MsgRadar_<ContainerAllocator2> & rhs)
 {
   return lhs.header == rhs.header &&
-    lhs.total_vehicles == rhs.total_vehicles &&
-    lhs.ObjectList == rhs.ObjectList;
+    lhs.total_vehicles_left == rhs.total_vehicles_left &&
+    lhs.total_vehicles_right == rhs.total_vehicles_right &&
+    lhs.ObjectList_left == rhs.ObjectList_left &&
+    lhs.ObjectList_right == rhs.ObjectList_right;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -136,12 +149,12 @@ struct MD5Sum< ::radar_msgs::MsgRadar_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "6c979660ea9f3cab98f883793f57d5c9";
+    return "a3c7315f9e8449ffdf3d76f6033062a8";
   }
 
   static const char* value(const ::radar_msgs::MsgRadar_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x6c979660ea9f3cabULL;
-  static const uint64_t static_value2 = 0x98f883793f57d5c9ULL;
+  static const uint64_t static_value1 = 0xa3c7315f9e8449ffULL;
+  static const uint64_t static_value2 = 0xdf3d76f6033062a8ULL;
 };
 
 template<class ContainerAllocator>
@@ -161,8 +174,10 @@ struct Definition< ::radar_msgs::MsgRadar_<ContainerAllocator> >
   static const char* value()
   {
     return "Header header\n"
-"float32 total_vehicles\n"
-"MsgObject[] ObjectList\n"
+"float32 total_vehicles_left\n"
+"float32 total_vehicles_right\n"
+"MsgObject[] ObjectList_left\n"
+"MsgObject[] ObjectList_right\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
 "# Standard metadata for higher-level stamped data types.\n"
@@ -207,8 +222,10 @@ namespace serialization
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
       stream.next(m.header);
-      stream.next(m.total_vehicles);
-      stream.next(m.ObjectList);
+      stream.next(m.total_vehicles_left);
+      stream.next(m.total_vehicles_right);
+      stream.next(m.ObjectList_left);
+      stream.next(m.ObjectList_right);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -230,15 +247,25 @@ struct Printer< ::radar_msgs::MsgRadar_<ContainerAllocator> >
     s << indent << "header: ";
     s << std::endl;
     Printer< ::std_msgs::Header_<ContainerAllocator> >::stream(s, indent + "  ", v.header);
-    s << indent << "total_vehicles: ";
-    Printer<float>::stream(s, indent + "  ", v.total_vehicles);
-    s << indent << "ObjectList[]" << std::endl;
-    for (size_t i = 0; i < v.ObjectList.size(); ++i)
+    s << indent << "total_vehicles_left: ";
+    Printer<float>::stream(s, indent + "  ", v.total_vehicles_left);
+    s << indent << "total_vehicles_right: ";
+    Printer<float>::stream(s, indent + "  ", v.total_vehicles_right);
+    s << indent << "ObjectList_left[]" << std::endl;
+    for (size_t i = 0; i < v.ObjectList_left.size(); ++i)
     {
-      s << indent << "  ObjectList[" << i << "]: ";
+      s << indent << "  ObjectList_left[" << i << "]: ";
       s << std::endl;
       s << indent;
-      Printer< ::radar_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.ObjectList[i]);
+      Printer< ::radar_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.ObjectList_left[i]);
+    }
+    s << indent << "ObjectList_right[]" << std::endl;
+    for (size_t i = 0; i < v.ObjectList_right.size(); ++i)
+    {
+      s << indent << "  ObjectList_right[" << i << "]: ";
+      s << std::endl;
+      s << indent;
+      Printer< ::radar_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.ObjectList_right[i]);
     }
   }
 };
