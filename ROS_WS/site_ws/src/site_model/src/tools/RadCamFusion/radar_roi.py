@@ -23,12 +23,9 @@ def main(config: dict):
 
     # get radar
     size, x_poses, y_poses = get_radar_pts(data_rad_dir)
-    instance, transform = calib.world_to_pixel(config,"pole2","camera2",x_poses[0],y_poses[0])
-    print("transform matrix:")
-    print(transform)
 
-    world_pose = [[x_poses[0]],[y_poses[0]],[2],[1]]
-    pixel_pose = np.matmul(transform,world_pose) / instance
+    world_pose = [[x_poses[0]],[y_poses[0]],[0.46],[1]]
+    pixel_pose = calib.world_to_pixel(config,"pole2","camera2",world_pose)
     print("pixel_pose:")
     print(pixel_pose)
 
@@ -38,15 +35,16 @@ def main(config: dict):
 
         # location of detection on the image unit pixel
         x_pixel = round(pixel_pose[0][0])
+        y_pixel = round(pixel_pose[1][0])
 
         # draw dot
-        pt1 = (x_pixel-2,238)
-        pt2 = (x_pixel+2,242)
+        pt1 = (x_pixel-2,y_pixel-2)
+        pt2 = (x_pixel+2,y_pixel+2)
         cv2.rectangle(img, pt1, pt2, (0, 0, 255), 3)
 
         # draw roi
         pt1 = (x_pixel-50, 0) #left,up=num1,num2
-        pt2 = (x_pixel+50, 480) #right,down=num1+num3,num2+num4
+        pt2 = (x_pixel+50, 479) #right,down=num1+num3,num2+num4
         cv2.rectangle(img, pt1, pt2, (0, 255, 0), 1) # color and thickness of box
         
         label = 'vehicle'
@@ -59,7 +57,7 @@ def main(config: dict):
     cv2.imwrite(output_dir+'image2.jpg', img)
 
 def get_radar_pts(data_rad_dir: string):
-    data = np.loadtxt(data_rad_dir+'data20220415 230928.txt')
+    data = np.loadtxt(data_rad_dir+'data20220419 232258.txt')
     size = data.ndim # num of vechicles
     print(size)
     if size==1:

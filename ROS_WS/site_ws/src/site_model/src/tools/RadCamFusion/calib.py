@@ -8,31 +8,63 @@ import numpy as np
 from tomlkit import string
 
 # transform matrix
-def world_to_pixel(config: dict, pole_name: string, camera_name: string, x: int, y: int):
-    instance, world_to_camera_ = world_to_camera(config,pole_name,camera_name, x, y)
+def world_to_pixel(config: dict, pole_name: string, camera_name: string, world_pose: np.array):
+    world_to_camera_ = world_to_camera(config,pole_name,camera_name)
     camera_to_pixel_ = camera_to_pixel(config,camera_name)
 
+    # caculate the transfrom matrix
     world_to_pixel_ = np.matmul(camera_to_pixel_,world_to_camera_)
     print("world_to_pixel:")
     print(world_to_pixel_)
 
-    return instance, world_to_pixel_
+    print("world_pose:")
+    print(world_pose)
+    # coordinates in camera coordinates
+    camera_coordinates = np.matmul(world_to_camera_, world_pose)
+    instance = camera_coordinates[0]
+    print("instance:")
+    print(instance)
+    print("camera_coordinates:")
+    print(camera_coordinates)
+    camera_coordinates_shift = [camera_coordinates[1],
+                                camera_coordinates[2],
+                               -camera_coordinates[0],
+                               -instance] / (-instance)
+    print("camera_corrdinates_shift:")
+    print(camera_coordinates_shift)
+    
+    # corrdinates in pixel coordinates
+    pixel_pose = np.matmul(camera_to_pixel_, camera_coordinates_shift)
+
+    return pixel_pose
 
 # camera external parameter matrix
-def world_to_camera(config: dict, pole_name: string, camera_name: string, x: int, y: int):
+def world_to_camera(config: dict, pole_name: string, camera_name: string):
     pole = config['calib']['pole_pose'][pole_name]
     camera = config['calib']['camera_pose'][camera_name]
 
     world_to_pole = RTmatrix(pole)
     pole_to_camera = RTmatrix(camera)
-    world_to_camera_ = np.matmul(world_to_pole,pole_to_camera)
+    world_to_camera_ = np.matmul(pole_to_camera,world_to_pole) # Wrong: world_to_Pole * pole_to_camera
 
-    # caculate the absolute coordinate x of camera and instance
-    instance = y - (-1.250682844)
-    
+    # test
+    # world_pose = [[-1.59824637808195],[-0.790114867663065],[0.461],[1]]
+    # print("********************")
+    # print(np.matmul(world_to_pole,world_pose))
+    # print("********************")
+    # pole_pose = [[0],[0],[1],[1]]
+    # print("********************")
+    # print(np.matmul(pole_to_camera,pole_pose))
+    # print("********************")
+
+    # print("world_to_pole:")
+    # print(world_to_pole)
+    # print("pole_to_camera:")
+    # print(pole_to_camera)
     print("world_to_camera")
     print(world_to_camera_)
-    return instance, world_to_camera_
+
+    return world_to_camera_
 
 def RTmatrix(pose):
     # Translation matrix
@@ -60,6 +92,9 @@ def RTmatrix(pose):
     RT = np.append(R,T,axis=1)
     result = np.append(RT,O1,axis=0)
 
+    # Inverse the matrix
+    result = np.linalg.inv(result)
+
     return result
 
 # use the internal parameter matrix of camera
@@ -67,7 +102,7 @@ def camera_to_pixel(config: dict, camera_name: string):
     camera_info_dir = config['calib']['camera_info_dir']
     K = np.loadtxt(camera_info_dir+'camera_info.txt')[4][28:40]
     K = K.reshape(3,4)
-    print("internal parameter:")
+    print("camera_to_pixel:")
     print(K)
 
     return K
