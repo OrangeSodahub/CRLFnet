@@ -1,14 +1,63 @@
 #############################################################
 #   This py file caculate the calibration matrix            #
+#   Output txt file to tools/calib/                         #
 #   Author: Yangxiuyu                                       #
 #############################################################
 
 import math
+from termcolor import colored
+import argparse
+import yaml
+import os
 import numpy as np
 from tomlkit import string
 
+def main(config: dict):
+    """
+        generate the calib matrix
+    """
+    # Transform dict
+    camera_name = {0: 11,
+                1: 12,
+                2: 13,
+                3: 14,
+                4: 2,
+                5: 3,
+                6: 41,
+                7: 42,
+                8: 43,
+                9: 44
+                }
+    pole_name = {0: "pole1",
+                1: "pole1",
+                2: "pole1",
+                3: "pole1",
+                4: "pole2",
+                5: "pole3",
+                6: "pole4",
+                7: "pole4",
+                8: "pole4",
+                9: "pole4"
+            }
+
+    # Generate 'calib' array
+    world_to_camera_, camera_to_pixel_ = world_to_pixel(config, pole_name[0], camera_name[0])
+    camera_cur = np.append(world_to_camera_.flatten(),camera_to_pixel_.flatten(),axis=0)
+    calib = [np.append([camera_name[0]],camera_cur,axis=0)]
+    for i in range(1,10):
+        world_to_camera_, camera_to_pixel_ = world_to_pixel(config, pole_name[i], camera_name[i])
+        camera_cur = np.append(world_to_camera_.flatten(),camera_to_pixel_.flatten(),axis=0)
+        camera_cur = np.append([camera_name[i]],camera_cur,axis=0)
+        calib = np.append(calib,[camera_cur],axis=0)
+
+    # Save the file
+    calib_dir = config['calib']['calib_dir']
+    os.makedirs(calib_dir,exist_ok=True)
+    np.savetxt(calib_dir+'calib.txt', calib)
+
+
 # transform matrix
-def world_to_pixel(config: dict, pole_name: string, camera_name: string, world_pose: np.array):
+def world_to_pixel(config: dict, pole_name: string, camera_name: string):
     """
         input: world_pose
         output: pixel_pose
@@ -24,18 +73,7 @@ def world_to_pixel(config: dict, pole_name: string, camera_name: string, world_p
     # print("world_to_pixel:")
     # print(world_to_pixel_)
 
-    # coordinates in camera coordinates
-    camera_coordinates = np.matmul(world_to_camera_, world_pose)
-    instance = camera_coordinates[0]
-    camera_coordinates_shift = [camera_coordinates[1],
-                                camera_coordinates[2],
-                               -camera_coordinates[0],
-                               -instance] / (-instance)
-    
-    # corrdinates in pixel coordinates
-    pixel_pose = np.matmul(camera_to_pixel_, camera_coordinates_shift)
-
-    return pixel_pose
+    return world_to_camera_, camera_to_pixel_
 
 # camera external parameter matrix
 def world_to_camera(config: dict, pole_name: string, camera_name: string):
@@ -115,3 +153,23 @@ def camera_to_pixel(config: dict, camera_name: string):
     # print(K)
 
     return K
+
+
+if __name__=='__main__':
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/config/config.yaml")
+    args = parser.parse_args()
+
+    params = parser.parse_args()
+
+    with open(params.config, 'r') as f:
+        try:
+            config = yaml.load(f,Loader=yaml.FullLoader)
+
+        except:
+            print(colored('Config file could not be read','red'))
+            exit(1)
+        
+        main(config)
+        print(colored('Calib parameter generated.', 'green'))
