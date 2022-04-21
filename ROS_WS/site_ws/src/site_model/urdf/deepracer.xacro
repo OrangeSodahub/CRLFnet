@@ -1,13 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
      Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="deepracer">
-
-<xacro:macro name="deepracer" params="parent:=base_link name:=deepracer">
+<robot name="deepracer">
 
 <!-- Links and Joints -->
-    
+  <link name="base_link" />
+<gazebo reference="base_link">
+    <pose>0 0 0 0 0 0</pose>
+</gazebo>
   <link name="chassis">
     <inertial>
       <origin
@@ -29,7 +30,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/chassis.STL" />
+          filename="package://pkg/meshes/deepracer/chassis.STL" />
       </geometry>
     </visual>
   </link>
@@ -62,7 +63,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/left_rear_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/left_rear_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -71,7 +72,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/left_rear_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/left_rear_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -93,6 +94,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_rear_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_rear_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_rear_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="right_rear_wheel">
@@ -116,7 +129,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/right_rear_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/right_rear_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -125,7 +138,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/right_rear_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/right_rear_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -148,6 +161,18 @@
       velocity="100" />
   </joint>
   
+    <transmission name="right_rear_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_rear_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_rear_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="left_steering_hinge">
@@ -171,14 +196,14 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/left_steering_hinge.STL" />
+          filename="package://pkg/meshes/deepracer/left_steering_hinge.STL" />
       </geometry>
     </visual>
   </link>
   
   <joint
     name="left_steering_hinge_joint"
-    type="fixed">
+    type="continuous">
     <origin
       xyz="0.082311 0.079601 0.011759"
       rpy="0 0 0" />
@@ -195,6 +220,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_steering_hinge_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="left_front_wheel">
@@ -218,7 +255,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/left_front_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/left_front_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -227,7 +264,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/left_front_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/left_front_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -249,6 +286,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_front_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="right_steering_hinge">
@@ -272,14 +321,14 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/right_steering_hinge.STL" />
+          filename="package://pkg/meshes/deepracer/right_steering_hinge.STL" />
       </geometry>
     </visual>
   </link>
   
   <joint
     name="right_steering_hinge_joint"
-    type="fixed">
+    type="continuous">
     <origin
       xyz="0.082311 -0.079601 0.011759"
       rpy="0 0 0" />
@@ -295,6 +344,20 @@
       effort="10"
       velocity="100" />
   </joint>
+  
+  <transmission name="right_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_steering_hinge_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+  
   <link
     name="right_front_wheel">
     <inertial>
@@ -317,7 +380,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/right_front_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/right_front_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -326,7 +389,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/right_front_wheel.STL" />
+          filename="package://pkg/meshes/deepracer/right_front_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -347,6 +410,19 @@
       effort="10"
       velocity="100" />
   </joint>
+  
+    <transmission name="right_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_front_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="zed_camera_link_leftcam">
@@ -370,7 +446,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/zed_camera_link_leftcam.STL" />
+          filename="package://pkg/meshes/deepracer/zed_camera_link_leftcam.STL" />
       </geometry>
     </visual>
   </link>
@@ -410,7 +486,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/camera_link_leftcam.STL" />
+          filename="package://pkg/meshes/deepracer/camera_link_leftcam.STL" />
       </geometry>
     </visual> -->
   </link>
@@ -449,7 +525,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/zed_camera_link_rightcam.STL" />
+          filename="package://pkg/meshes/deepracer/zed_camera_link_rightcam.STL" />
       </geometry>
     </visual>
   </link>
@@ -483,15 +559,15 @@
         iyz="0"
         izz="1e-6" />
     </inertial>
-<!--     <visual>
+    <visual>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/camera_link_rightcam.STL" />
+          filename="package://pkg/meshes/deepracer/camera_link_rightcam.STL" />
       </geometry>
-    </visual> -->
+    </visual> 
   </link>
 
   <joint
@@ -529,7 +605,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/laser.STL" />
+          filename="package://pkg/meshes/deepracer/laser.STL" />
       </geometry>
     </visual>
     <collision>
@@ -538,7 +614,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/laser.STL" />
+          filename="package://pkg/meshes/deepracer/laser.STL" />
       </geometry>
     </collision>
   </link>
@@ -548,7 +624,7 @@
     type="fixed">
     <origin
       xyz="0.02913 0 0.16145" 
-      rpy="0 0 3.1416" />
+      rpy="0 0 0" />
     <parent
       link="chassis" />
     <child
@@ -578,7 +654,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/car_body_link_lidar_v3.STL" />
+          filename="package://pkg/meshes/deepracer/car_body_link_lidar_v3.STL" />
       </geometry>
     </visual>
     <collision>
@@ -587,7 +663,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://site_model/meshes/deepracer/car_body_link_lidar_v3.STL" />
+          filename="package://pkg/meshes/deepracer/car_body_link_lidar_v3.STL" />
       </geometry>
     </collision>
   </link>
@@ -610,61 +686,71 @@
 
 <!-- Vehicle body -->
   <gazebo reference = "chassis">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/Grey</material>
    <mu1 value="0.0"/>
    <mu2 value="0.0"/>
    <kp  value="1000000.0" />
   </gazebo>
   <gazebo reference = "left_rear_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "left_front_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "right_rear_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "right_front_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "left_steering_hinge">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "right_steering_hinge">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "zed_camera_link_leftcam">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "zed_camera_link_rightcam">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "car_body_link_v3">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/Grey</material>
   </gazebo>
   
 <!-- Chassis Controller-->
-   <gazebo>
+   <!--gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
       <updateRate>30</updateRate>
       <robotNamespace>/</robotNamespace>
@@ -674,17 +760,23 @@
       <rightRearJoint>right_rear_wheel_joint</rightRearJoint>
       <wheelSeparation>0.159202</wheelSeparation>
       <wheelDiameter>0.06</wheelDiameter>
-      
       <robotBaseFrame>base_link</robotBaseFrame>
-      
       <torque>20</torque>
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
-      <covariance_x>0.0001</covariance_x>
-      <covariance_y>0.0001</covariance_y>
-      <covariance_yaw>0.0001</covariance_yaw>
+      <covariance_x>0</covariance_x>
+      <covariance_y>0</covariance_y>
+      <covariance_yaw>0</covariance_yaw>
       <broadcastTF>true</broadcastTF>
+    </plugin>
+  </gazebo-->
+  
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <legacyModeNS>true</legacyModeNS>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    <robotNamespace>$(arg bodyframe)</robotNamespace>
     </plugin>
   </gazebo>
   
@@ -765,14 +857,16 @@
     <sensor type="ray" name="hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
       <visualize>false</visualize>
-      <update_rate>30</update_rate>
+      <update_rate>10</update_rate>
       <ray>
         <scan>
           <horizontal>
             <samples>600</samples>
             <resolution>1</resolution>
-            <min_angle>-2.61799</min_angle>
-            <max_angle>2.61799</max_angle>
+             <min_angle>-3.1415926</min_angle>
+             <max_angle>3.1415926</max_angle>
+            <!--min_angle>0.52351</min_angle>
+            <max_angle>5.75949</max_angle-->
           </horizontal>
         </scan>
         <range>
@@ -782,30 +876,27 @@
         </range>
         <noise>
           <mean>0.0</mean>
-          <stddev>0.01</stddev>
+          <stddev>0</stddev>
         </noise>
       </ray>
 
        <plugin name="rp_lidar" filename="libgazebo_ros_laser.so">
           <topicName>scan</topicName>
-          <frameName>base_link</frameName>
+          <frameName>laser</frameName>
         </plugin>
     </sensor>
   </gazebo>
-  <!--Send Position Information-->
+
   <gazebo>
     <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
   	<alwaysOn>true</alwaysOn>
   	<updateRate>30.0</updateRate>
   	<bodyName>base_link</bodyName>
   	<topicName>base_pose_ground_truth</topicName>
-  	<gaussianNoise>0.01</gaussianNoise>
+  	<gaussianNoise>0</gaussianNoise>
   	<frameName>world</frameName>
   	<xyzOffsets>0 0 0</xyzOffsets>
   	<rpyOffsets>0 0 0</rpyOffsets>
     </plugin>
   </gazebo>
-
-</xacro:macro>
-  
 </robot>
