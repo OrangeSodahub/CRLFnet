@@ -9,6 +9,7 @@ import rospy
 from per_msgs.msg._SensorMsgsRadar import * # Radar message class
 from radar_msgs.msg._MsgRadar import *
 from radar_msgs.msg._MsgObject import *
+import std_msgs.msg
 
 msgradar = MsgRadar()
 
@@ -39,15 +40,18 @@ def msgs_publish_3(msgs: SensorMsgsRadar):
         msgradar.total_vehicles_right = round(msgs.total_front_right_esr_tracks)
         msgradar.ObjectList_right.clear()
         for i in range(msgradar.total_vehicles_right):
-           object = MsgObject() # define a new list
+           object = MsgObject()
            object.obj_vcs_posex = msgs.front_right_esr_tracklist[i].obj_vcs_posex
            object.obj_vcs_posey = msgs.front_right_esr_tracklist[i].obj_vcs_posey
            object.range_rate = msgs.front_right_esr_tracklist[i].range_rate
            msgradar.ObjectList_right.append(object)
 
-    pub = rospy.Publisher("/radar_msgs", MsgRadar) # MsgRadar is the defined message type
-    rate = rospy.Rate(10) # publish msgs rated at 10Hz
+    pub = rospy.Publisher("/radar_msgs_combined", MsgRadar) # MsgRadar is the defined message type
+    # rate = rospy.Rate(10) # publish msgs rated at 10Hz
+    MsgRadar.header = std_msgs.msg.Header()
+    MsgRadar.header.stamp = rospy.Time.now() # Add time stamp
     pub.publish(msgradar)
+    # rate.sleep()
 
 
 if __name__ == '__main__':
