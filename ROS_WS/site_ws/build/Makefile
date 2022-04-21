@@ -2169,6 +2169,32 @@ radar_listener/fast:
 	$(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/build
 .PHONY : radar_listener/fast
 
+#=============================================================================
+# Target rules for targets named gazebo_ros_velodyne_gpu_laser
+
+# Build rule for target.
+gazebo_ros_velodyne_gpu_laser: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 gazebo_ros_velodyne_gpu_laser
+.PHONY : gazebo_ros_velodyne_gpu_laser
+
+# fast build rule for target.
+gazebo_ros_velodyne_gpu_laser/fast:
+	$(MAKE) -f velodyne/velodyne_gazebo_plugins/CMakeFiles/gazebo_ros_velodyne_gpu_laser.dir/build.make velodyne/velodyne_gazebo_plugins/CMakeFiles/gazebo_ros_velodyne_gpu_laser.dir/build
+.PHONY : gazebo_ros_velodyne_gpu_laser/fast
+
+#=============================================================================
+# Target rules for targets named gazebo_ros_velodyne_laser
+
+# Build rule for target.
+gazebo_ros_velodyne_laser: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 gazebo_ros_velodyne_laser
+.PHONY : gazebo_ros_velodyne_laser
+
+# fast build rule for target.
+gazebo_ros_velodyne_laser/fast:
+	$(MAKE) -f velodyne/velodyne_gazebo_plugins/CMakeFiles/gazebo_ros_velodyne_laser.dir/build.make velodyne/velodyne_gazebo_plugins/CMakeFiles/gazebo_ros_velodyne_laser.dir/build
+.PHONY : gazebo_ros_velodyne_laser/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2336,6 +2362,8 @@ help:
 	@echo "... point_cloud_segmentation_on_normals"
 	@echo "... point_cloud_segmentation_on_regioin_growing"
 	@echo "... radar_listener"
+	@echo "... gazebo_ros_velodyne_gpu_laser"
+	@echo "... gazebo_ros_velodyne_laser"
 .PHONY : help
 
 

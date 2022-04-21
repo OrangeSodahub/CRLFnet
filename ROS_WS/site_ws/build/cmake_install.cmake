@@ -133,9 +133,12 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/gtest/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/per_msgs/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/radar_msgs/cmake_install.cmake")
+  include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/velodyne/velodyne_description/cmake_install.cmake")
+  include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/velodyne/velodyne_simulator/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/point_cloud/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/ARS_gazebo_plugin/radar_plugin/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/cmake_install.cmake")
+  include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/velodyne/velodyne_gazebo_plugins/cmake_install.cmake")
 
 endif()
 
