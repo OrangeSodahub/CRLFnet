@@ -30,8 +30,8 @@ def radar_roi(config: dict, radar_msgs: MsgRadar):
         y_pose = radar_msgs.ObjectList_left[i].obj_vcs_posey
         world_pose = [[x_pose],[y_pose],[0.46],[1]] # 0.46 is preset
         pixel_pose = get_pixel_pose(calib,"pole2","camera2",world_pose)
-        print("pixel_pose_left:")
-        print(pixel_pose)
+        # print("pixel_pose_left:")
+        # print(pixel_pose)
 
         # location of detection on the image unit pixel
         x_pixel = round(pixel_pose[0][0])
@@ -48,8 +48,8 @@ def radar_roi(config: dict, radar_msgs: MsgRadar):
         y_pose = radar_msgs.ObjectList_right[i].obj_vcs_posey
         world_pose = [[x_pose],[y_pose],[0.46],[1]]
         pixel_pose = get_pixel_pose(calib,"pole3","camera3",world_pose)
-        print("pixel_pose_right:")
-        print(pixel_pose)
+        # print("pixel_pose_right:")
+        # print(pixel_pose)
 
         # location of detection on the image unit pixel
         x_pixel = round(pixel_pose[0][0])
