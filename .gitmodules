@@ -1,0 +1,3 @@
+[submodeule "labelCloud"]
+    path = ROS_WS/PointCloud_Annotation/labelCloud
+    url = https://github.com/OrangeSodahub/labelCloud.git
