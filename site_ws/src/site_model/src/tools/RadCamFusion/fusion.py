@@ -23,10 +23,8 @@ import radar_roi
 
 global counter
 counter = 0
-def fusion(radar, image2):
-    print("image2:")
-    print("image3:")
-    print("radar:")
+def fusion(radar, image2, image3):
+    print("ok")
 
     # radar_roi
     x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right = radar_roi.radar_roi(config, radar)
@@ -37,15 +35,15 @@ def fusion(radar, image2):
 
     # draw
     # if params.draw_output == True:
-    draw_output(x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right, image2)
+    # draw_output(x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right, image2)
 
 def draw_output(x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right, image2: Image):
     output_dir = config['output']['RadCamFusion_dir']
     os.makedirs(output_dir, exist_ok=True)
     # left
+    img = CvBridge().imgmsg_to_cv2(image2, 'bgr8')
     num_left = len(x_pixels_left)
     for i in range(num_left):
-        img = CvBridge().imgmsg_to_cv2(image2, 'bgr8')
         # draw dot
         pt1 = (x_pixels_left[i]-2, y_pixels_left[i]-2)
         pt2 = (x_pixels_left[i]+2, y_pixels_left[i]+2)
@@ -84,7 +82,7 @@ if __name__ == '__main__':
     sub_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     sub_image_3 = message_filters.Subscriber('/image_raw_3', Image)
  
-    sync = message_filters.TimeSynchronizer([sub_radar, sub_image_2], 10)# syncronize time stamps
+    sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 10, 1)# syncronize time stamps
     sync.registerCallback(fusion)
     print("Begin.")
     rospy.spin()
