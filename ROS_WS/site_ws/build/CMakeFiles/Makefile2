@@ -58,6 +58,7 @@ all: per_msgs/all
 all: radar_msgs/all
 all: velodyne/velodyne_description/all
 all: velodyne/velodyne_simulator/all
+all: pkg/all
 all: point_cloud/all
 all: ARS_gazebo_plugin/radar_plugin/all
 all: site_model/all
@@ -71,6 +72,7 @@ preinstall: per_msgs/preinstall
 preinstall: radar_msgs/preinstall
 preinstall: velodyne/velodyne_description/preinstall
 preinstall: velodyne/velodyne_simulator/preinstall
+preinstall: pkg/preinstall
 preinstall: point_cloud/preinstall
 preinstall: ARS_gazebo_plugin/radar_plugin/preinstall
 preinstall: site_model/preinstall
@@ -89,6 +91,7 @@ clean: per_msgs/clean
 clean: radar_msgs/clean
 clean: velodyne/velodyne_description/clean
 clean: velodyne/velodyne_simulator/clean
+clean: pkg/clean
 clean: point_cloud/clean
 clean: ARS_gazebo_plugin/radar_plugin/clean
 clean: site_model/clean
@@ -291,6 +294,24 @@ per_msgs/clean: per_msgs/CMakeFiles/nav_msgs_generate_messages_lisp.dir/clean
 per_msgs/clean: per_msgs/CMakeFiles/actionlib_msgs_generate_messages_cpp.dir/clean
 
 .PHONY : per_msgs/clean
+
+#=============================================================================
+# Directory level rules for directory pkg
+
+# Recursive "all" directory target.
+pkg/all:
+
+.PHONY : pkg/all
+
+# Recursive "preinstall" directory target.
+pkg/preinstall:
+
+.PHONY : pkg/preinstall
+
+# Recursive "clean" directory target.
+pkg/clean:
+
+.PHONY : pkg/clean
 
 #=============================================================================
 # Directory level rules for directory point_cloud

@@ -178,6 +178,13 @@
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/velodyne/velodyne_simulator/CMakeFiles/rebuild_cache.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/velodyne/velodyne_simulator/CMakeFiles/edit_cache.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/velodyne/velodyne_simulator/CMakeFiles/test.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/pkg/CMakeFiles/install/strip.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/pkg/CMakeFiles/install/local.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/pkg/CMakeFiles/install.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/pkg/CMakeFiles/list_install_components.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/pkg/CMakeFiles/rebuild_cache.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/pkg/CMakeFiles/edit_cache.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/pkg/CMakeFiles/test.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/point_cloud/CMakeFiles/install/strip.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/point_cloud/CMakeFiles/install/local.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/point_cloud/CMakeFiles/list_install_components.dir

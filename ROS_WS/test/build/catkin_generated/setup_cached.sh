@@ -8,7 +8,7 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/zonlin/IPP_WorkSpace/ROS_WS/test/devel:$CMAKE_PREFIX_PATH"
-export LD_LIBRARY_PATH='/home/zonlin/IPP_WorkSpace/ROS_WS/catkin_ws/devel/lib:/opt/ros/noetic/lib:/opt/ros/noetic/lib/x86_64-linux-gnu:/usr/local/cuda-11.3/lib64'
+export LD_LIBRARY_PATH='/home/zonlin/IPP_WorkSpace/ROS_WS/test/devel/lib:/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib:/home/zonlin/IPP_WorkSpace/ROS_WS/catkin_ws/devel/lib:/opt/ros/noetic/lib:/opt/ros/noetic/lib/x86_64-linux-gnu:/usr/local/cuda-11.3/lib64'
 export PATH='/opt/ros/noetic/bin:/usr/local/cuda-11.3/bin:/home/zonlin/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'
 export PWD='/home/zonlin/IPP_WorkSpace/ROS_WS/test/build'
 export ROS_PACKAGE_PATH="/home/zonlin/IPP_WorkSpace/ROS_WS/test/src:$ROS_PACKAGE_PATH"

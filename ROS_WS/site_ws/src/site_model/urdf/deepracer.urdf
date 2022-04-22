@@ -30,7 +30,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/chassis.STL" />
+          filename="package://site_model/meshes/deepracer/chassis.STL" />
       </geometry>
     </visual>
   </link>
@@ -63,7 +63,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_rear_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/left_rear_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -72,7 +72,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_rear_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/left_rear_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -129,7 +129,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_rear_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/right_rear_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -138,7 +138,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_rear_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/right_rear_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -196,7 +196,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_steering_hinge.STL" />
+          filename="package://site_model/meshes/deepracer/left_steering_hinge.STL" />
       </geometry>
     </visual>
   </link>
@@ -255,7 +255,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_front_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/left_front_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -264,7 +264,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/left_front_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/left_front_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -321,7 +321,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_steering_hinge.STL" />
+          filename="package://site_model/meshes/deepracer/right_steering_hinge.STL" />
       </geometry>
     </visual>
   </link>
@@ -380,7 +380,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_front_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/right_front_wheel.STL" />
       </geometry>
     </visual>
     <collision>
@@ -389,7 +389,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/right_front_wheel.STL" />
+          filename="package://site_model/meshes/deepracer/right_front_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -446,7 +446,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/zed_camera_link_leftcam.STL" />
+          filename="package://site_model/meshes/deepracer/zed_camera_link_leftcam.STL" />
       </geometry>
     </visual>
   </link>
@@ -486,7 +486,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/camera_link_leftcam.STL" />
+          filename="package://site_model/meshes/deepracer/camera_link_leftcam.STL" />
       </geometry>
     </visual> -->
   </link>
@@ -525,7 +525,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/zed_camera_link_rightcam.STL" />
+          filename="package://site_model/meshes/deepracer/zed_camera_link_rightcam.STL" />
       </geometry>
     </visual>
   </link>
@@ -565,7 +565,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/camera_link_rightcam.STL" />
+          filename="package://site_model/meshes/deepracer/camera_link_rightcam.STL" />
       </geometry>
     </visual> 
   </link>
@@ -605,7 +605,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/laser.STL" />
+          filename="package://site_model/meshes/deepracer/laser.STL" />
       </geometry>
     </visual>
     <collision>
@@ -614,7 +614,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/laser.STL" />
+          filename="package://site_model/meshes/deepracer/laser.STL" />
       </geometry>
     </collision>
   </link>
@@ -654,7 +654,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/car_body_link_lidar_v3.STL" />
+          filename="package://site_model/meshes/deepracer/car_body_link_lidar_v3.STL" />
       </geometry>
     </visual>
     <collision>
@@ -663,7 +663,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://pkg/meshes/deepracer/car_body_link_lidar_v3.STL" />
+          filename="package://site_model/meshes/deepracer/car_body_link_lidar_v3.STL" />
       </geometry>
     </collision>
   </link>
@@ -695,8 +695,8 @@
   <gazebo reference = "left_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="500"/>
-   <mu2 value="500"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -704,8 +704,8 @@
   <gazebo reference = "left_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="500"/>
-   <mu2 value="500"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -713,8 +713,8 @@
   <gazebo reference = "right_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="500"/>
-   <mu2 value="500"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -722,8 +722,8 @@
   <gazebo reference = "right_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="500"/>
-   <mu2 value="500"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>

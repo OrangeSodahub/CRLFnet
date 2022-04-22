@@ -1,0 +1,8 @@
+prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/test/devel
+
+Name: pkg
+Description: Description of pkg
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
