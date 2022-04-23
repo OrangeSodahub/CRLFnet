@@ -22,7 +22,7 @@ def main():
 
     lidar_11_fixed = caculate(0, -0.475, -0.2, r_angle_pole1, p_angle_pole1, y_angle_pole1, -0.415985705489921, 1.11290021179622, 0.481)
     lidar_12_fixed = caculate(0, -0.475, 1.2, r_angle_pole1, p_angle_pole1, y_angle_pole1, -0.415985705489921, 1.11290021179622, 0.481)
-    lidar_2_fixed = caculate(0, -0.38, 1.14, r_angle_pole4, p_angle_pole4, y_angle_pole4, 0.000974248361056473, 0.150707650139425, 0.480970397293368)
+    lidar_2_fixed = caculate(0, -0.28919, 1.14, r_angle_pole4, p_angle_pole4, y_angle_pole4, 0.000974248361056473, 0.150707650139425, 0.480970397293368)
 
     print("lidar11:")
     print(lidar_11_fixed)

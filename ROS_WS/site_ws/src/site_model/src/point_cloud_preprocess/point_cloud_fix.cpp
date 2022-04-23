@@ -22,7 +22,7 @@ typedef pcl::PointCloud<PointT> PointCloudT;
 
 #define lidar2_x 9.74248361e-04
 #define lidar2_y -9.89292350e-01
-#define lidar2_z 1.00970397e-01
+#define lidar2_z 1.91780397e-01
 
 int main()
 {
