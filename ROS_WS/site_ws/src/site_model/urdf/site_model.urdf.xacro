@@ -163,7 +163,7 @@
 
 <!-- Lidar11 points1 -->
   <joint name="velodyne11_base_mount_joint" type="fixed">
-    <origin rpy="-1.570796327 0 0" xyz="0 -0.475 -0.2"/>
+    <origin rpy="-1.570796327 -0.7853981634 0" xyz="0 -0.475 -0.2"/>
     <parent link="pole1_Link"/>
     <child link="velodyne11_base_link"/>
   </joint>
@@ -252,7 +252,7 @@
 
   <!-- Lidar12 points 2-->
   <joint name="velodyne12_base_mount_joint" type="fixed">
-    <origin rpy="-1.570796327 0 0" xyz="0 -0.475 1.2"/>
+    <origin rpy="-1.570796327 -0.7853981634 0" xyz="0 -0.475 1.2"/>
     <parent link="pole1_Link"/>
     <child link="velodyne12_base_link"/>
   </joint>
