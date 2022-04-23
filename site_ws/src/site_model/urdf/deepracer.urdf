@@ -94,6 +94,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_rear_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_rear_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_rear_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="right_rear_wheel">
@@ -149,6 +161,18 @@
       velocity="100" />
   </joint>
   
+    <transmission name="right_rear_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_rear_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_rear_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="left_steering_hinge">
@@ -179,7 +203,7 @@
   
   <joint
     name="left_steering_hinge_joint"
-    type="fixed">
+    type="continuous">
     <origin
       xyz="0.082311 0.079601 0.011759"
       rpy="0 0 0" />
@@ -196,6 +220,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_steering_hinge_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="left_front_wheel">
@@ -250,6 +286,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_front_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="right_steering_hinge">
@@ -280,7 +328,7 @@
   
   <joint
     name="right_steering_hinge_joint"
-    type="fixed">
+    type="continuous">
     <origin
       xyz="0.082311 -0.079601 0.011759"
       rpy="0 0 0" />
@@ -296,6 +344,20 @@
       effort="10"
       velocity="100" />
   </joint>
+  
+  <transmission name="right_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_steering_hinge_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+  
   <link
     name="right_front_wheel">
     <inertial>
@@ -348,6 +410,19 @@
       effort="10"
       velocity="100" />
   </joint>
+  
+    <transmission name="right_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_front_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="zed_camera_link_leftcam">
@@ -620,37 +695,37 @@
   <gazebo reference = "left_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "left_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "right_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "right_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="5"/>
+   <mu2 value="5"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "left_steering_hinge">
@@ -675,7 +750,7 @@
   </gazebo>
   
 <!-- Chassis Controller-->
-   <gazebo>
+   <!--gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
       <updateRate>30</updateRate>
       <robotNamespace>/</robotNamespace>
@@ -686,7 +761,7 @@
       <wheelSeparation>0.159202</wheelSeparation>
       <wheelDiameter>0.06</wheelDiameter>
       <robotBaseFrame>base_link</robotBaseFrame>
-      <torque>100</torque>
+      <torque>20</torque>
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
@@ -694,6 +769,14 @@
       <covariance_y>0</covariance_y>
       <covariance_yaw>0</covariance_yaw>
       <broadcastTF>true</broadcastTF>
+    </plugin>
+  </gazebo-->
+  
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <legacyModeNS>true</legacyModeNS>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    <robotNamespace>/deepracer</robotNamespace>
     </plugin>
   </gazebo>
   
@@ -774,14 +857,16 @@
     <sensor type="ray" name="hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
       <visualize>false</visualize>
-      <update_rate>30</update_rate>
+      <update_rate>10</update_rate>
       <ray>
         <scan>
           <horizontal>
             <samples>600</samples>
             <resolution>1</resolution>
-            <min_angle>0.52351</min_angle>
-            <max_angle>5.75949</max_angle>
+             <min_angle>-3.1415926</min_angle>
+             <max_angle>3.1415926</max_angle>
+            <!--min_angle>0.52351</min_angle>
+            <max_angle>5.75949</max_angle-->
           </horizontal>
         </scan>
         <range>
@@ -797,7 +882,7 @@
 
        <plugin name="rp_lidar" filename="libgazebo_ros_laser.so">
           <topicName>scan</topicName>
-          <frameName>base_link</frameName>
+          <frameName>laser</frameName>
         </plugin>
     </sensor>
   </gazebo>

@@ -19,52 +19,53 @@ int main(int argc, char **argv)
     ros::init (argc, argv, "point_cloud_segmentation"); // node
     ros::NodeHandle nh;
     //初始化
-    pcl::PointCloud<pcl::PointXYZ> cloud; // 原始数据(已滤波及降采样)
-    pcl::PointCloud<pcl::PointXYZ> cloud_segmented; // 点云分割后数据
+    pcl::PointCloud<pcl::PointXYZI> cloud; // 原始数据(未滤波及降采样)
+    pcl::PointCloud<pcl::PointXYZI> cloud_filtered; // 滤波后数据
+    pcl::PointCloud<pcl::PointXYZI> cloud_segmented; // 点云分割后数据
 
-    ros::Publisher ind_pub = nh.advertise<pcl_msgs::PointIndices>("point_indices", 1);
-    ros::Publisher coef_pub = nh.advertise<pcl_msgs::ModelCoefficients>("planar_coef", 1);
-
-    pcl::io::loadPCDFile ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/point_cloud_data/point_cloud_filtered_downsampled.pcd", cloud);
-    std::cerr << "point_cloud_segmented.pcd:" << " " << cloud.points.size() << "points have been loaded" << std::endl;
-
-    //RANSAC算法 分割
-	pcl::ModelCoefficients coefficients;//初始化模型系数
-    pcl::PointIndices::Ptr inliers(new pcl::PointIndices());//初始化索引参数
-    pcl::SACSegmentation<pcl::PointXYZ> segmentation;//创建算法
-    segmentation.setModelType(pcl::SACMODEL_PLANE);//设置分割模型为平面模型
-    segmentation.setMethodType(pcl::SAC_RANSAC);//设置迭代算法
-    segmentation.setMaxIterations(1000);//设置最大迭代次数
-    segmentation.setDistanceThreshold(0.01);//设置到模型的最大距离
-    segmentation.setInputCloud(cloud.makeShared());//输入点云(已经过滤波和降采样)
-    segmentation.segment(*inliers, coefficients);//输出点云结果  ×inliers是结果点云的索引，coe是模型系数
-
-    //发布模型系数
-    pcl_msgs::ModelCoefficients ros_coefficients;
-    pcl_conversions::fromPCL(coefficients, ros_coefficients);//pcl->msg
-        
-    //发布抽样的内点索引
-    pcl_msgs::PointIndices ros_inliers;
-    pcl_conversions::fromPCL(*inliers, ros_inliers);
-
-    //创建分割点云，从点云中提取内点
-    pcl::ExtractIndices<pcl::PointXYZ> extract;
-    extract.setInputCloud(cloud.makeShared());
-    extract.setIndices(inliers);
-    extract.setNegative(true); // 注意false和true的区别
-    extract.filter(cloud_segmented);
-
-    //保存点云文件
-    if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_ws/site_ws/src/site_model/point_cloud_data/point_cloud_segmented_on_RANSAC.pcd", cloud_segmented)>=0)
-    {std::cerr << "Saved point_cloud_segmented_on_RANSAC.pcd" << " " << cloud_segmented.points.size() << "points have been written" << std::endl;}
-     
-    ros::Rate loop_rate(1);
-    while (ros::ok())
+    int i = 1;
+    for(;i<1701;i++)
     {
-        ind_pub.publish(ros_inliers);
-        coef_pub.publish(ros_coefficients); // 发布
-        ros::spinOnce();
-        loop_rate.sleep();
+        std::string num = std::to_string(i);
+
+        pcl::io::loadPCDFile ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/combined/point_cloud_"+num+".pcd", cloud);
+
+        //剔除离群值
+        pcl::StatisticalOutlierRemoval<pcl::PointXYZI> statFilter;
+        statFilter.setInputCloud(cloud.makeShared());
+        statFilter.setMeanK(10);
+        statFilter.setStddevMulThresh(0.2);
+        statFilter.filter(cloud_filtered);
+
+        //RANSAC算法 分割
+        pcl::ModelCoefficients coefficients;//初始化模型系数
+        pcl::PointIndices::Ptr inliers(new pcl::PointIndices());//初始化索引参数
+        pcl::SACSegmentation<pcl::PointXYZI> segmentation;//创建算法
+        segmentation.setModelType(pcl::SACMODEL_PLANE);//设置分割模型为平面模型
+        segmentation.setMethodType(pcl::SAC_RANSAC);//设置迭代算法
+        segmentation.setMaxIterations(1000);//设置最大迭代次数
+        segmentation.setDistanceThreshold(0.01);//设置到模型的最大距离
+        segmentation.setInputCloud(cloud_filtered.makeShared());//输入点云(已经过滤波和降采样)
+        segmentation.segment(*inliers, coefficients);//输出点云结果  ×inliers是结果点云的索引，coe是模型系数
+
+        //发布模型系数
+        pcl_msgs::ModelCoefficients ros_coefficients;
+        pcl_conversions::fromPCL(coefficients, ros_coefficients);//pcl->msg
+            
+        //发布抽样的内点索引
+        pcl_msgs::PointIndices ros_inliers;
+        pcl_conversions::fromPCL(*inliers, ros_inliers);
+
+        //创建分割点云，从点云中提取内点
+        pcl::ExtractIndices<pcl::PointXYZI> extract;
+        extract.setInputCloud(cloud_filtered.makeShared());
+        extract.setIndices(inliers);
+        extract.setNegative(true); // 注意false和true的区别
+        extract.filter(cloud_segmented);
+
+        //保存点云文件
+        if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/filtered/point_cloud_data_"+num+".pcd", cloud_segmented)>=0)
+        {std::cerr << "Saved point_cloud_filtered_"+num+".pcd" << " " << cloud_segmented.points.size() << "points have been written." << std::endl;}
     }
  
     return 0;

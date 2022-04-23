@@ -25,10 +25,10 @@ public:
         statFilter.filter(cloud_filtered); // 输出结果到点云
 
         //缩减采样
-        pcl::VoxelGrid<pcl::PointXYZ> voxelSampler; // 初始化 体素栅格滤波器
-        voxelSampler.setInputCloud(cloud_filtered.makeShared()); // 输入点云
-        voxelSampler.setLeafSize(0.005f, 0.005f, 0.005f); // 每个体素的长宽高0.01m
-        voxelSampler.filter(cloud_downsampled); // 输出点云结果
+        // pcl::VoxelGrid<pcl::PointXYZ> voxelSampler; // 初始化 体素栅格滤波器
+        // voxelSampler.setInputCloud(cloud_filtered.makeShared()); // 输入点云
+        // voxelSampler.setLeafSize(0.005f, 0.005f, 0.005f); // 每个体素的长宽高0.01m
+        // voxelSampler.filter(cloud_downsampled); // 输出点云结果
 
         //保存点云文件
         if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/point_cloud_data/point_cloud_filtered_downsampled.pcd", cloud_downsampled)>=0)

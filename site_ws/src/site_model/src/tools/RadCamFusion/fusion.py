@@ -35,7 +35,7 @@ def fusion(radar, image2, image3):
 
     # draw
     # if params.draw_output == True:
-    # draw_output(x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right, image2)
+    draw_output(x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right, image2)
 
 def draw_output(x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right, image2: Image):
     output_dir = config['output']['RadCamFusion_dir']
