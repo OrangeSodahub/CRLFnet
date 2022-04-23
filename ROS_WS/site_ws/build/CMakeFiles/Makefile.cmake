@@ -732,6 +732,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir/DependInfo.cmake"
   "site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir/DependInfo.cmake"
   "site_model/CMakeFiles/pcd2bin.dir/DependInfo.cmake"
+  "site_model/CMakeFiles/point_cloud_fix.dir/DependInfo.cmake"
   "site_model/CMakeFiles/bin2pcd.dir/DependInfo.cmake"
   "site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir/DependInfo.cmake"
   "site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir/DependInfo.cmake"

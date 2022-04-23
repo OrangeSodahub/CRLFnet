@@ -303,6 +303,21 @@ pcd2bin/fast:
 .PHONY : pcd2bin/fast
 
 # Convenience name for target.
+site_model/CMakeFiles/point_cloud_fix.dir/rule:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site_model/CMakeFiles/point_cloud_fix.dir/rule
+.PHONY : site_model/CMakeFiles/point_cloud_fix.dir/rule
+
+# Convenience name for target.
+point_cloud_fix: site_model/CMakeFiles/point_cloud_fix.dir/rule
+
+.PHONY : point_cloud_fix
+
+# fast build rule for target.
+point_cloud_fix/fast:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_fix.dir/build.make site_model/CMakeFiles/point_cloud_fix.dir/build
+.PHONY : point_cloud_fix/fast
+
+# Convenience name for target.
 site_model/CMakeFiles/bin2pcd.dir/rule:
 	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site_model/CMakeFiles/bin2pcd.dir/rule
 .PHONY : site_model/CMakeFiles/bin2pcd.dir/rule
@@ -578,6 +593,33 @@ src/point_cloud_preprocess/point_cloud_filter.cpp.s:
 	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_filter.dir/build.make site_model/CMakeFiles/point_cloud_filter.dir/src/point_cloud_preprocess/point_cloud_filter.cpp.s
 .PHONY : src/point_cloud_preprocess/point_cloud_filter.cpp.s
 
+src/point_cloud_preprocess/point_cloud_fix.o: src/point_cloud_preprocess/point_cloud_fix.cpp.o
+
+.PHONY : src/point_cloud_preprocess/point_cloud_fix.o
+
+# target to build an object file
+src/point_cloud_preprocess/point_cloud_fix.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_fix.dir/build.make site_model/CMakeFiles/point_cloud_fix.dir/src/point_cloud_preprocess/point_cloud_fix.cpp.o
+.PHONY : src/point_cloud_preprocess/point_cloud_fix.cpp.o
+
+src/point_cloud_preprocess/point_cloud_fix.i: src/point_cloud_preprocess/point_cloud_fix.cpp.i
+
+.PHONY : src/point_cloud_preprocess/point_cloud_fix.i
+
+# target to preprocess a source file
+src/point_cloud_preprocess/point_cloud_fix.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_fix.dir/build.make site_model/CMakeFiles/point_cloud_fix.dir/src/point_cloud_preprocess/point_cloud_fix.cpp.i
+.PHONY : src/point_cloud_preprocess/point_cloud_fix.cpp.i
+
+src/point_cloud_preprocess/point_cloud_fix.s: src/point_cloud_preprocess/point_cloud_fix.cpp.s
+
+.PHONY : src/point_cloud_preprocess/point_cloud_fix.s
+
+# target to generate assembly for a file
+src/point_cloud_preprocess/point_cloud_fix.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/point_cloud_fix.dir/build.make site_model/CMakeFiles/point_cloud_fix.dir/src/point_cloud_preprocess/point_cloud_fix.cpp.s
+.PHONY : src/point_cloud_preprocess/point_cloud_fix.cpp.s
+
 src/point_cloud_preprocess/point_cloud_merge.o: src/point_cloud_preprocess/point_cloud_merge.cpp.o
 
 .PHONY : src/point_cloud_preprocess/point_cloud_merge.o
@@ -735,6 +777,7 @@ help:
 	@echo "... point_cloud_segmentation_ou_cluster"
 	@echo "... point_cloud_segmentation_RANSAC"
 	@echo "... pcd2bin"
+	@echo "... point_cloud_fix"
 	@echo "... bin2pcd"
 	@echo "... point_cloud_segmentation_on_normals"
 	@echo "... point_cloud_segmentation_on_regioin_growing"
@@ -763,6 +806,9 @@ help:
 	@echo "... src/point_cloud_preprocess/point_cloud_filter.o"
 	@echo "... src/point_cloud_preprocess/point_cloud_filter.i"
 	@echo "... src/point_cloud_preprocess/point_cloud_filter.s"
+	@echo "... src/point_cloud_preprocess/point_cloud_fix.o"
+	@echo "... src/point_cloud_preprocess/point_cloud_fix.i"
+	@echo "... src/point_cloud_preprocess/point_cloud_fix.s"
 	@echo "... src/point_cloud_preprocess/point_cloud_merge.o"
 	@echo "... src/point_cloud_preprocess/point_cloud_merge.i"
 	@echo "... src/point_cloud_preprocess/point_cloud_merge.s"

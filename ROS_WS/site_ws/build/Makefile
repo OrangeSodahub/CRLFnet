@@ -2118,6 +2118,19 @@ pcd2bin/fast:
 .PHONY : pcd2bin/fast
 
 #=============================================================================
+# Target rules for targets named point_cloud_fix
+
+# Build rule for target.
+point_cloud_fix: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 point_cloud_fix
+.PHONY : point_cloud_fix
+
+# fast build rule for target.
+point_cloud_fix/fast:
+	$(MAKE) -f site_model/CMakeFiles/point_cloud_fix.dir/build.make site_model/CMakeFiles/point_cloud_fix.dir/build
+.PHONY : point_cloud_fix/fast
+
+#=============================================================================
 # Target rules for targets named bin2pcd
 
 # Build rule for target.
@@ -2358,6 +2371,7 @@ help:
 	@echo "... point_cloud_segmentation_ou_cluster"
 	@echo "... point_cloud_segmentation_RANSAC"
 	@echo "... pcd2bin"
+	@echo "... point_cloud_fix"
 	@echo "... bin2pcd"
 	@echo "... point_cloud_segmentation_on_normals"
 	@echo "... point_cloud_segmentation_on_regioin_growing"

@@ -232,6 +232,7 @@
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/point_cloud_segmentation_ou_cluster.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/point_cloud_segmentation_RANSAC.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/pcd2bin.dir
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/point_cloud_fix.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/bin2pcd.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/point_cloud_segmentation_on_normals.dir
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/site_model/CMakeFiles/point_cloud_segmentation_on_regioin_growing.dir
