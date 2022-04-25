@@ -1,5 +1,6 @@
 ## Modify
 ### PointRCNN
+Add pytorch1.2+
 1. /lib/utils/roipool3d/src/roipool3d.cpp:
 ```
 6 | AT_CHECK ===> TORCH_CHECK
