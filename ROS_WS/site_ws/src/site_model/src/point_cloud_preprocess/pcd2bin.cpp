@@ -32,10 +32,23 @@ int main (int argc, char **argv)
 {
     ros::init (argc, argv, "pcd2bin");
     ros::NodeHandle nh;
-    string in_file = "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/point_cloud_data/bin2pcd/integrated.pcd";
-    string out_file = "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/point_cloud_data/pcd2bin/integrated.bin";
-    pcd2bin(in_file, out_file);
-    //ros::spin();
+
+    int i = 0;
+    for(;i<1700;i++)
+    {
+      std::string num,
+                  zero = to_string(0);
+      if(i<10) num = zero + zero + zero + zero + zero + to_string(+i);
+      if(i>=10 && i<100) num = zero + zero + zero + zero + to_string(+i);
+      if(i>=100 && i<1000) num = zero + zero + zero + to_string(+i);
+      if(i>=1000 && i<10000) num = zero + zero + std::to_string(+i);
+
+      string in_file = "/home/zonlin//IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/filtered/"+num+".pcd";
+      string out_file = "/home/zonlin//IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/bin/"+num+".bin";
+
+      pcd2bin(in_file, out_file);
+      cout << num + ".pcd converted successfully." << endl;
+    }
  
     return 0;
 }

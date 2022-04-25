@@ -27,6 +27,8 @@ class GTDatabaseGenerator(KittiDataset):
             self.classes = ('Background', 'Pedestrian')
         elif classes == 'Cyclist':
             self.classes = ('Background', 'Cyclist')
+        elif classes == 'vehicle': # self-defined class
+            self.classes = ('Background', 'vehicle')
         else:
             assert False, "Invalid classes: %s" % classes
 

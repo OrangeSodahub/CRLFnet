@@ -11,3 +11,7 @@
 11 | AT_CHECK ===> TORCH_CHECK
 22 | THCState_getCurrentStream(state) ===> c10::cuda::getCurrentCUDAStream()
 ```
+3. /lib/config.py
+```
+187 | yaml.load(f) ===> yaml.load(f, Loader=yaml.FullLoader)
+```
