@@ -243,7 +243,7 @@ ubuntu-drivers-common==0.0.0
 ufw==0.36
 unattended-upgrades==0.1
 urdfdom-py==0.4.0
-urllib3==1.24.2
+urllib3==1.26.5
 usb-creator==0.3.3
 vincenty==0.1.4
 virtualenv==15.1.0
