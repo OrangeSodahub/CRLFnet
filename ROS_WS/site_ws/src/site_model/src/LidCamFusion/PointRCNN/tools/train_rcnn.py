@@ -33,7 +33,7 @@ parser.add_argument('--mgpus', action='store_true', default=False, help='whether
 parser.add_argument("--ckpt", type=str, default=None, help="continue training from this checkpoint")
 parser.add_argument("--rpn_ckpt", type=str, default=None, help="specify the well-trained rpn checkpoint")
 
-parser.add_argument("--gt_database", type=str, default='gt_database/train_gt_database_3level_Car.pkl',
+parser.add_argument("--gt_database", type=str, default='gt_database/train_gt_database_3level_vehicle.pkl', # change default 'Car' to 'vehicle' 2022.04.25
                     help='generated gt database for augmentation')
 parser.add_argument("--rcnn_training_roi_dir", type=str, default=None,
                     help='specify the saved rois for rcnn training when using rcnn_offline mode')

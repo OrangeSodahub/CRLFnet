@@ -25,6 +25,9 @@ class KittiRCNNDataset(KittiDataset):
         elif classes == 'Cyclist':
             self.classes = ('Background', 'Cyclist')
             aug_scene_root_dir = os.path.join(root_dir, 'KITTI', 'aug_scene_cyclist')
+        elif classes == 'vehicle': # self-defined 2022.04.25
+            self.classes = ('Background', 'vehicle')
+            aug_scene_root_dir = os.path.join(root_dir, 'KITTI', 'aug_scene_vehicle')
         else:
             assert False, "Invalid classes: %s" % classes
 
