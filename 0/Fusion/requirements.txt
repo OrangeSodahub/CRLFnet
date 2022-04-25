@@ -137,7 +137,7 @@ qt-gui==0.3.11
 qt-gui-cpp==0.3.11
 qt-gui-py-common==0.3.11
 qtconsole==4.4.3
-reportlab==3.4.0
+reportlab==3.5.55
 requests==2.21.0
 requests-unixsocket==0.1.5
 resource-retriever==1.12.4
