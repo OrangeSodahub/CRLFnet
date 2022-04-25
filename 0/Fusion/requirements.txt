@@ -6,7 +6,7 @@ apturl==0.5.2
 asn1crypto==0.24.0
 astor==0.7.1
 attrs==19.1.0
-Babel==2.6.0
+Babel==2.9.1
 backcall==0.1.0
 bleach==3.1.2
 bondpy==1.8.3
