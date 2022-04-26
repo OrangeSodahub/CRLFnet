@@ -168,6 +168,21 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+site_model/CMakeFiles/pointcloud_listener.dir/rule:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site_model/CMakeFiles/pointcloud_listener.dir/rule
+.PHONY : site_model/CMakeFiles/pointcloud_listener.dir/rule
+
+# Convenience name for target.
+pointcloud_listener: site_model/CMakeFiles/pointcloud_listener.dir/rule
+
+.PHONY : pointcloud_listener
+
+# fast build rule for target.
+pointcloud_listener/fast:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pointcloud_listener.dir/build.make site_model/CMakeFiles/pointcloud_listener.dir/build
+.PHONY : pointcloud_listener/fast
+
+# Convenience name for target.
 site_model/CMakeFiles/point_cloud_write.dir/rule:
 	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f CMakeFiles/Makefile2 site_model/CMakeFiles/point_cloud_write.dir/rule
 .PHONY : site_model/CMakeFiles/point_cloud_write.dir/rule
@@ -376,6 +391,33 @@ radar_listener: site_model/CMakeFiles/radar_listener.dir/rule
 radar_listener/fast:
 	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/radar_listener.dir/build.make site_model/CMakeFiles/radar_listener.dir/build
 .PHONY : radar_listener/fast
+
+src/LidCamFusion/pointcloud_listener.o: src/LidCamFusion/pointcloud_listener.cpp.o
+
+.PHONY : src/LidCamFusion/pointcloud_listener.o
+
+# target to build an object file
+src/LidCamFusion/pointcloud_listener.cpp.o:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pointcloud_listener.dir/build.make site_model/CMakeFiles/pointcloud_listener.dir/src/LidCamFusion/pointcloud_listener.cpp.o
+.PHONY : src/LidCamFusion/pointcloud_listener.cpp.o
+
+src/LidCamFusion/pointcloud_listener.i: src/LidCamFusion/pointcloud_listener.cpp.i
+
+.PHONY : src/LidCamFusion/pointcloud_listener.i
+
+# target to preprocess a source file
+src/LidCamFusion/pointcloud_listener.cpp.i:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pointcloud_listener.dir/build.make site_model/CMakeFiles/pointcloud_listener.dir/src/LidCamFusion/pointcloud_listener.cpp.i
+.PHONY : src/LidCamFusion/pointcloud_listener.cpp.i
+
+src/LidCamFusion/pointcloud_listener.s: src/LidCamFusion/pointcloud_listener.cpp.s
+
+.PHONY : src/LidCamFusion/pointcloud_listener.s
+
+# target to generate assembly for a file
+src/LidCamFusion/pointcloud_listener.cpp.s:
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build && $(MAKE) -f site_model/CMakeFiles/pointcloud_listener.dir/build.make site_model/CMakeFiles/pointcloud_listener.dir/src/LidCamFusion/pointcloud_listener.cpp.s
+.PHONY : src/LidCamFusion/pointcloud_listener.cpp.s
 
 src/camera_info/get_cam_info.o: src/camera_info/get_cam_info.cpp.o
 
@@ -766,6 +808,7 @@ help:
 	@echo "... install"
 	@echo "... list_install_components"
 	@echo "... test"
+	@echo "... pointcloud_listener"
 	@echo "... point_cloud_write"
 	@echo "... image_output"
 	@echo "... rebuild_cache"
@@ -782,6 +825,9 @@ help:
 	@echo "... point_cloud_segmentation_on_normals"
 	@echo "... point_cloud_segmentation_on_regioin_growing"
 	@echo "... radar_listener"
+	@echo "... src/LidCamFusion/pointcloud_listener.o"
+	@echo "... src/LidCamFusion/pointcloud_listener.i"
+	@echo "... src/LidCamFusion/pointcloud_listener.s"
 	@echo "... src/camera_info/get_cam_info.o"
 	@echo "... src/camera_info/get_cam_info.i"
 	@echo "... src/camera_info/get_cam_info.s"

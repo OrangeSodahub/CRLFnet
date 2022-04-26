@@ -2170,6 +2170,19 @@ radarMsgCombiner/fast:
 .PHONY : radarMsgCombiner/fast
 
 #=============================================================================
+# Target rules for targets named pointcloud_listener
+
+# Build rule for target.
+pointcloud_listener: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pointcloud_listener
+.PHONY : pointcloud_listener
+
+# fast build rule for target.
+pointcloud_listener/fast:
+	$(MAKE) -f site_model/CMakeFiles/pointcloud_listener.dir/build.make site_model/CMakeFiles/pointcloud_listener.dir/build
+.PHONY : pointcloud_listener/fast
+
+#=============================================================================
 # Target rules for targets named point_cloud_write
 
 # Build rule for target.
@@ -2544,6 +2557,7 @@ help:
 	@echo "... pcl_create"
 	@echo "... radar_plugin"
 	@echo "... radarMsgCombiner"
+	@echo "... pointcloud_listener"
 	@echo "... point_cloud_write"
 	@echo "... image_output"
 	@echo "... point_cloud_merge"
