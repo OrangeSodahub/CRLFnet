@@ -1,0 +1,8 @@
+prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel
+
+Name: radar_plugin
+Description: Description of radar_plugin
+Version: 1.0.0
+Cflags: -I/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/ARS_gazebo_plugin/radar_plugin/include
+Libs: -L${prefix}/lib 
+Requires: gazebo_ros message_runtime roscpp

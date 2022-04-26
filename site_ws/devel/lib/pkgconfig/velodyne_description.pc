@@ -1,0 +1,8 @@
+prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel
+
+Name: velodyne_description
+Description: Description of velodyne_description
+Version: 1.0.9
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

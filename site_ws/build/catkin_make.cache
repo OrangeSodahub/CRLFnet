@@ -1,0 +1,2 @@
+ARS_gazebo_plugin/radar_plugin:camera_msgs:per_msgs:pkg:point_cloud:radar_msgs:site_model:velodyne/velodyne_description:velodyne/velodyne_gazebo_plugins:velodyne/velodyne_simulator
+-DCATKIN_DEVEL_PREFIX=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/install -G Unix Makefiles
