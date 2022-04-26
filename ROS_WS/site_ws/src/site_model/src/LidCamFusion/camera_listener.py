@@ -1,7 +1,6 @@
 #############################################################
 #   This py file subscribe the topic of cameras and publish #
 #   the integrated information.                             #
-#   Author: Yangxiuyu                                       #
 #############################################################
 
 from sqlalchemy import true
@@ -12,13 +11,24 @@ import std_msgs.msg
 import numpy as np
 import message_filters
 
-msgcamera = MsgCamera()
+def camera_listener(image11, image12, image13, image14, image41, image42, image43, image44, ):
+    # integrate
+    msgcamera = MsgCamera()
+    mark = [image11, image12, image13, image14, image41, image42, image43, image44]
+    for i in mark:
+        msgcamera.camera.append(i)
+        # print(type(i))
 
-def camera_listener(image11, image12, image13, image14, image41, image42, image43, image44):
-    
+    # Add time stamp
+    msgcamera.header = std_msgs.msg.Header()
+    msgcamera.header.stamp = rospy.Time.now()
+    # Publish
+    pub = rospy.Publisher("/camera_msgs_combined", MsgCamera, queue_size=1)
+    pub.publish(msgcamera)
+    # print(msgcamera.header)
 
 if __name__ == '__main__':
-    rospy.init_node('/camera_msgs_combined', anonymous=True)
+    rospy.init_node('camera_listener', anonymous=True)
 
     sub_image_11 = message_filters.Subscriber('/image_raw_11', MsgObject)
     sub_image_12 = message_filters.Subscriber('/image_raw_12', MsgObject)
