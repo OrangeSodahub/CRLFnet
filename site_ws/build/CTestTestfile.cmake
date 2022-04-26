@@ -7,6 +7,7 @@
 subdirs("gtest")
 subdirs("camera_msgs")
 subdirs("per_msgs")
+subdirs("pointcloud_list")
 subdirs("radar_msgs")
 subdirs("velodyne/velodyne_description")
 subdirs("velodyne/velodyne_simulator")

@@ -9,15 +9,11 @@
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/src/data_output/point_cloud_write.cpp
 ros/ros.h
 -
-pcl/point_cloud.h
--
 sensor_msgs/PointCloud2.h
 -
 pcl_conversions/pcl_conversions.h
 -
 pcl/io/pcd_io.h
--
-sensor_msgs/PointCloud2.h
 -
 pcl/point_types.h
 -

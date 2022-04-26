@@ -38,10 +38,7 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/camera_msgs/msg" TYPE FILE FILES
-    "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgObject.msg"
-    "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg"
-    )
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/camera_msgs/msg" TYPE FILE FILES "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)

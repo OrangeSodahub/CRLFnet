@@ -122,7 +122,7 @@ add_executable(point_cloud_segmentation_on_normals src/point_cloud_preprocess/po
 add_executable(radar_listener src/data_output/radar_listener.cpp)
 add_executable(get_cam_info src/camera_info/get_cam_info.cpp)
 add_executable(point_cloud_fix src/point_cloud_preprocess/point_cloud_fix.cpp)
-add_executable(pointcloud_listener src/LidCamFusion/pointcloud_listener.cpp)
+add_executable(pointcloud_combiner src/LidCamFusion/pointcloud_combiner.cpp)
 
 # Link your application with libraries
 target_link_libraries(point_cloud_write ${catkin_LIBRARIES} ${PCL_LIBRARIES})
@@ -139,7 +139,7 @@ target_link_libraries(point_cloud_segmentation_on_normals ${catkin_LIBRARIES} ${
 target_link_libraries(radar_listener ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
 target_link_libraries(get_cam_info ${catkin_LIBRARIES})
 target_link_libraries(point_cloud_fix ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
-target_link_libraries(pointcloud_listener ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
+target_link_libraries(pointcloud_combiner ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} ${PCL_LIBRARIES} pcl_visualization)
 
 #############
 ## Install ##
