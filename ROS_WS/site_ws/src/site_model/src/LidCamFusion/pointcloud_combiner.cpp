@@ -64,6 +64,7 @@ void pointcloud_combiner(pointcloud_msgs::MsgPointCloud pointcloud_list)
 
     // Combine
     PointCloudT cloud = cloud11_pcl + cloud12_pcl + cloud2_pcl;
+    cout << "Combined cloud size: " << cloud.points.size() << endl;
 
     // Publish
     ros::NodeHandle nh_pub;
@@ -73,7 +74,6 @@ void pointcloud_combiner(pointcloud_msgs::MsgPointCloud pointcloud_list)
     output.header.frame_id = "point_cloud";
     output.header.stamp = ros::Time::now();
     pub.publish(output);
-    cout << "Point Cloud Combined." << endl;
 }
 
 int main (int argc, char **argv)
