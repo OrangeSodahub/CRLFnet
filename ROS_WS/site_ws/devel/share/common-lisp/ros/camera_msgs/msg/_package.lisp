@@ -3,7 +3,5 @@
   (:export
    "<MSGCAMERA>"
    "MSGCAMERA"
-   "<MSGOBJECT>"
-   "MSGOBJECT"
   ))
 

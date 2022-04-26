@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(pointcloud_msgs)
+project(pointcloud_list)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -23,7 +23,7 @@ find_package(gazebo REQUIRED)
 ## Generate messages in the 'per_msgs' folder
 add_message_files(
   FILES
-  MsgPointCloud.msg
+  ListPointCloud.msg
   )
 ## Generate added messages and services with any dependencies listed here
 generate_messages(

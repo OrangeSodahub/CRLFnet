@@ -1,2 +1,2 @@
 Header header
-sensor_msgs/image[] camera
+sensor_msgs/Image[] camera

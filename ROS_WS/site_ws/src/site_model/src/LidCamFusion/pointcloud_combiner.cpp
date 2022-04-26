@@ -9,7 +9,6 @@
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 // self_defined pointcloud_list
-#include <pointcloud_msgs/MsgObject.h>
 #include <pointcloud_msgs/MsgPointCloud.h>
 using namespace std;
 

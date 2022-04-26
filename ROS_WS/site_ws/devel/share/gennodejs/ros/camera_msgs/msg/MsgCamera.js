@@ -11,8 +11,8 @@ const _deserializer = _ros_msg_utils.Deserialize;
 const _arrayDeserializer = _deserializer.Array;
 const _finder = _ros_msg_utils.Find;
 const _getByteLength = _ros_msg_utils.getByteLength;
-let MsgObject = require('./MsgObject.js');
 let std_msgs = _finder('std_msgs');
+let sensor_msgs = _finder('sensor_msgs');
 
 //-----------------------------------------------------------
 
@@ -47,7 +47,7 @@ class MsgCamera {
     // Serialize the length for message field [camera]
     bufferOffset = _serializer.uint32(obj.camera.length, buffer, bufferOffset);
     obj.camera.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
+      bufferOffset = sensor_msgs.msg.Image.serialize(val, buffer, bufferOffset);
     });
     return bufferOffset;
   }
@@ -63,7 +63,7 @@ class MsgCamera {
     len = _deserializer.uint32(buffer, bufferOffset);
     data.camera = new Array(len);
     for (let i = 0; i < len; ++i) {
-      data.camera[i] = MsgObject.deserialize(buffer, bufferOffset)
+      data.camera[i] = sensor_msgs.msg.Image.deserialize(buffer, bufferOffset)
     }
     return data;
   }
@@ -72,7 +72,7 @@ class MsgCamera {
     let length = 0;
     length += std_msgs.msg.Header.getMessageSize(object.header);
     object.camera.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
+      length += sensor_msgs.msg.Image.getMessageSize(val);
     });
     return length + 4;
   }
@@ -91,7 +91,7 @@ class MsgCamera {
     // Returns full string definition for message
     return `
     Header header
-    MsgObject[] camera
+    sensor_msgs/Image[] camera
     ================================================================================
     MSG: std_msgs/Header
     # Standard metadata for higher-level stamped data types.
@@ -109,7 +109,7 @@ class MsgCamera {
     string frame_id
     
     ================================================================================
-    MSG: camera_msgs/MsgObject
+    MSG: sensor_msgs/Image
     # This message contains an uncompressed image
     # (0, 0) is at top-left corner of image
     #
@@ -137,6 +137,7 @@ class MsgCamera {
     uint8 is_bigendian    # is this data bigendian?
     uint32 step           # Full row length in bytes
     uint8[] data          # actual matrix data, size is (step * rows)
+    
     `;
   }
 
@@ -156,7 +157,7 @@ class MsgCamera {
     if (msg.camera !== undefined) {
       resolved.camera = new Array(msg.camera.length);
       for (let i = 0; i < resolved.camera.length; ++i) {
-        resolved.camera[i] = MsgObject.Resolve(msg.camera[i]);
+        resolved.camera[i] = sensor_msgs.msg.Image.Resolve(msg.camera[i]);
       }
     }
     else {

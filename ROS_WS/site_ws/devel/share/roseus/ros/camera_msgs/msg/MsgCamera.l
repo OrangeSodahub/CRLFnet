@@ -10,6 +10,8 @@
 
 (in-package "ROS")
 ;;//! \htmlinclude MsgCamera.msg.html
+(if (not (find-package "SENSOR_MSGS"))
+  (ros::roseus-add-msgs "sensor_msgs"))
 (if (not (find-package "STD_MSGS"))
   (ros::roseus-add-msgs "std_msgs"))
 
@@ -47,7 +49,7 @@
    (+
     ;; std_msgs/Header _header
     (send _header :serialization-length)
-    ;; camera_msgs/MsgObject[] _camera
+    ;; sensor_msgs/Image[] _camera
     (apply #'+ (send-all _camera :serialization-length)) 4
     ))
   (:serialize
@@ -56,7 +58,7 @@
               (make-string-output-stream (send self :serialization-length)))))
      ;; std_msgs/Header _header
        (send _header :serialize s)
-     ;; camera_msgs/MsgObject[] _camera
+     ;; sensor_msgs/Image[] _camera
      (write-long (length _camera) s)
      (dolist (elem _camera)
        (send elem :serialize s)
@@ -67,10 +69,10 @@
    (buf &optional (ptr- 0))
    ;; std_msgs/Header _header
      (send _header :deserialize buf ptr-) (incf ptr- (send _header :serialization-length))
-   ;; camera_msgs/MsgObject[] _camera
+   ;; sensor_msgs/Image[] _camera
    (let (n)
      (setq n (sys::peek buf ptr- :integer)) (incf ptr- 4)
-     (setq _camera (let (r) (dotimes (i n) (push (instance camera_msgs::MsgObject :init) r)) r))
+     (setq _camera (let (r) (dotimes (i n) (push (instance sensor_msgs::Image :init) r)) r))
      (dolist (elem- _camera)
      (send elem- :deserialize buf ptr-) (incf ptr- (send elem- :serialization-length))
      ))
@@ -82,7 +84,7 @@
 (setf (get camera_msgs::MsgCamera :datatype-) "camera_msgs/MsgCamera")
 (setf (get camera_msgs::MsgCamera :definition-)
       "Header header
-MsgObject[] camera
+sensor_msgs/Image[] camera
 ================================================================================
 MSG: std_msgs/Header
 # Standard metadata for higher-level stamped data types.
@@ -100,7 +102,7 @@ time stamp
 string frame_id
 
 ================================================================================
-MSG: camera_msgs/MsgObject
+MSG: sensor_msgs/Image
 # This message contains an uncompressed image
 # (0, 0) is at top-left corner of image
 #
@@ -128,6 +130,7 @@ string encoding       # Encoding of pixels -- channel meaning, ordering, size
 uint8 is_bigendian    # is this data bigendian?
 uint32 step           # Full row length in bytes
 uint8[] data          # actual matrix data, size is (step * rows)
+
 ")
 
 

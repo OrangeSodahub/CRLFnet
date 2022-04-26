@@ -53,32 +53,23 @@ CMAKE_BINARY_DIR = /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build
 # Include the progress variables for this target.
 include camera_msgs/CMakeFiles/camera_msgs_generate_messages_py.dir/progress.make
 
-camera_msgs/CMakeFiles/camera_msgs_generate_messages_py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgObject.py
 camera_msgs/CMakeFiles/camera_msgs_generate_messages_py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py
 camera_msgs/CMakeFiles/camera_msgs_generate_messages_py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/__init__.py
 
 
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgObject.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgObject.py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgObject.msg
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgObject.py: /opt/ros/noetic/share/std_msgs/msg/Header.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python from MSG camera_msgs/MsgObject"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/camera_msgs && ../catkin_generated/env_cached.sh /usr/local/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgObject.msg -Icamera_msgs:/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p camera_msgs -o /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg
-
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgObject.msg
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py: /opt/ros/noetic/share/std_msgs/msg/Header.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG camera_msgs/MsgCamera"
-	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/camera_msgs && ../catkin_generated/env_cached.sh /usr/local/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg -Icamera_msgs:/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p camera_msgs -o /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg
+/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py: /opt/ros/noetic/share/sensor_msgs/msg/Image.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python from MSG camera_msgs/MsgCamera"
+	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/camera_msgs && ../catkin_generated/env_cached.sh /usr/local/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg -Icamera_msgs:/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p camera_msgs -o /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg
 
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/__init__.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
-/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/__init__.py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgObject.py
 /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/__init__.py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python msg __init__.py for camera_msgs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python msg __init__.py for camera_msgs"
 	cd /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/camera_msgs && ../catkin_generated/env_cached.sh /usr/local/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg --initpy
 
 camera_msgs_generate_messages_py: camera_msgs/CMakeFiles/camera_msgs_generate_messages_py
-camera_msgs_generate_messages_py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgObject.py
 camera_msgs_generate_messages_py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/_MsgCamera.py
 camera_msgs_generate_messages_py: /home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/camera_msgs/msg/__init__.py
 camera_msgs_generate_messages_py: camera_msgs/CMakeFiles/camera_msgs_generate_messages_py.dir/build.make

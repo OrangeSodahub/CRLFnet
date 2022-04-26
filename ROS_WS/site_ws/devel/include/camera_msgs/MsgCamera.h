@@ -16,7 +16,7 @@
 #include <ros/message_operations.h>
 
 #include <std_msgs/Header.h>
-#include <camera_msgs/MsgObject.h>
+#include <sensor_msgs/Image.h>
 
 namespace camera_msgs
 {
@@ -40,7 +40,7 @@ struct MsgCamera_
    typedef  ::std_msgs::Header_<ContainerAllocator>  _header_type;
   _header_type header;
 
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera_type;
+   typedef std::vector< ::sensor_msgs::Image_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::sensor_msgs::Image_<ContainerAllocator> >::other >  _camera_type;
   _camera_type camera;
 
 
@@ -155,7 +155,7 @@ struct Definition< ::camera_msgs::MsgCamera_<ContainerAllocator> >
   static const char* value()
   {
     return "Header header\n"
-"MsgObject[] camera\n"
+"sensor_msgs/Image[] camera\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
 "# Standard metadata for higher-level stamped data types.\n"
@@ -173,7 +173,7 @@ struct Definition< ::camera_msgs::MsgCamera_<ContainerAllocator> >
 "string frame_id\n"
 "\n"
 "================================================================================\n"
-"MSG: camera_msgs/MsgObject\n"
+"MSG: sensor_msgs/Image\n"
 "# This message contains an uncompressed image\n"
 "# (0, 0) is at top-left corner of image\n"
 "#\n"
@@ -248,7 +248,7 @@ struct Printer< ::camera_msgs::MsgCamera_<ContainerAllocator> >
       s << indent << "  camera[" << i << "]: ";
       s << std::endl;
       s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera[i]);
+      Printer< ::sensor_msgs::Image_<ContainerAllocator> >::stream(s, indent + "    ", v.camera[i]);
     }
   }
 };

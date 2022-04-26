@@ -6,7 +6,7 @@ python3 = True if sys.hexversion > 0x03000000 else False
 import genpy
 import struct
 
-import camera_msgs.msg
+import sensor_msgs.msg
 import std_msgs.msg
 
 class MsgCamera(genpy.Message):
@@ -14,7 +14,7 @@ class MsgCamera(genpy.Message):
   _type = "camera_msgs/MsgCamera"
   _has_header = True  # flag to mark the presence of a Header object
   _full_text = """Header header
-MsgObject[] camera
+sensor_msgs/Image[] camera
 ================================================================================
 MSG: std_msgs/Header
 # Standard metadata for higher-level stamped data types.
@@ -32,7 +32,7 @@ time stamp
 string frame_id
 
 ================================================================================
-MSG: camera_msgs/MsgObject
+MSG: sensor_msgs/Image
 # This message contains an uncompressed image
 # (0, 0) is at top-left corner of image
 #
@@ -59,9 +59,10 @@ string encoding       # Encoding of pixels -- channel meaning, ordering, size
 
 uint8 is_bigendian    # is this data bigendian?
 uint32 step           # Full row length in bytes
-uint8[] data          # actual matrix data, size is (step * rows)"""
+uint8[] data          # actual matrix data, size is (step * rows)
+"""
   __slots__ = ['header','camera']
-  _slot_types = ['std_msgs/Header','camera_msgs/MsgObject[]']
+  _slot_types = ['std_msgs/Header','sensor_msgs/Image[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -174,7 +175,7 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
       (length,) = _struct_I.unpack(str[start:end])
       self.camera = []
       for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
+        val1 = sensor_msgs.msg.Image()
         _v3 = val1.header
         start = end
         end += 4
@@ -304,7 +305,7 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
       (length,) = _struct_I.unpack(str[start:end])
       self.camera = []
       for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
+        val1 = sensor_msgs.msg.Image()
         _v7 = val1.header
         start = end
         end += 4
