@@ -8,54 +8,29 @@ from sqlalchemy import true
 import rospy
 from camera_msgs.msg._MsgObject import * 
 from camera_msgs.msg._MsgCamera import * # camera msgs class
-from sensor_msgs.msg import Image
 import std_msgs.msg
+import numpy as np
+import message_filters
 
 msgcamera = MsgCamera()
 
-def radar_listener():
-    rospy.init_node("radar_listener", anonymous=true)
-
-    sub2 = rospy.Subscriber("/ARS_408_21_2_Topic", SensorMsgsRadar, msgs_publish_2)
-    sub3 = rospy.Subscriber("/ARS_408_21_3_Topic", SensorMsgsRadar, msgs_publish_3)
-    rospy.spin()    
-
-def msgs_publish_2(msgs: SensorMsgsRadar):
-    """
-        Receive per_msgs::SensorMsgsRadar continuously
-        Publish radar_msgs::MsgRadar at a rate of 10Hz
-    """
-    if msgs.total_front_left_esr_tracks != 0: # if num of vehicles is not 0
-        msgradar.total_vehicles_left = round(msgs.total_front_left_esr_tracks)
-        msgradar.ObjectList_left.clear() # every time write msgs clear lists first
-        for i in range(msgradar.total_vehicles_left):
-           object = MsgObject() # define a new list
-           object.obj_vcs_posex = msgs.front_left_esr_tracklist[i].obj_vcs_posex
-           object.obj_vcs_posey = msgs.front_left_esr_tracklist[i].obj_vcs_posey
-           object.range_rate = msgs.front_left_esr_tracklist[i].range_rate
-           msgradar.ObjectList_left.append(object)
-
-def msgs_publish_3(msgs: SensorMsgsRadar):
-    if msgs.total_front_right_esr_tracks !=0:
-        msgradar.total_vehicles_right = round(msgs.total_front_right_esr_tracks)
-        msgradar.ObjectList_right.clear()
-        for i in range(msgradar.total_vehicles_right):
-           object = MsgObject()
-           object.obj_vcs_posex = msgs.front_right_esr_tracklist[i].obj_vcs_posex
-           object.obj_vcs_posey = msgs.front_right_esr_tracklist[i].obj_vcs_posey
-           object.range_rate = msgs.front_right_esr_tracklist[i].range_rate
-           msgradar.ObjectList_right.append(object)
-
-    pub = rospy.Publisher("/radar_msgs_combined", MsgRadar) # MsgRadar is the defined message type
-    # rate = rospy.Rate(10) # publish msgs rated at 10Hz
-    MsgRadar.header = std_msgs.msg.Header()
-    MsgRadar.header.stamp = rospy.Time.now() # Add time stamp
-    pub.publish(msgradar)
-    # rate.sleep()
-
+def camera_listener(image11, image12, image13, image14, image41, image42, image43, image44):
+    
 
 if __name__ == '__main__':
-    try:
-        radar_listener()
-    except rospy.ROSInterruptException:
-        pass
+    rospy.init_node('/camera_msgs_combined', anonymous=True)
+
+    sub_image_11 = message_filters.Subscriber('/image_raw_11', MsgObject)
+    sub_image_12 = message_filters.Subscriber('/image_raw_12', MsgObject)
+    sub_image_13 = message_filters.Subscriber('/image_raw_13', MsgObject)
+    sub_image_14 = message_filters.Subscriber('/image_raw_14', MsgObject)
+    sub_image_41 = message_filters.Subscriber('/image_raw_41', MsgObject)
+    sub_image_42 = message_filters.Subscriber('/image_raw_42', MsgObject)
+    sub_image_43 = message_filters.Subscriber('/image_raw_43', MsgObject)
+    sub_image_44 = message_filters.Subscriber('/image_raw_44', MsgObject)
+ 
+    sync = message_filters.ApproximateTimeSynchronizer([sub_image_11, sub_image_12, sub_image_13, sub_image_14, 
+                                                        sub_image_41, sub_image_42, sub_image_43, sub_image_44], 10, 1)# syncronize time stamps
+    sync.registerCallback(camera_listener)
+    print("Begin.")
+    rospy.spin()

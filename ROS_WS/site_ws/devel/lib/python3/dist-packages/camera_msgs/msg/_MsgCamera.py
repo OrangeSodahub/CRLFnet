@@ -10,19 +10,11 @@ import camera_msgs.msg
 import std_msgs.msg
 
 class MsgCamera(genpy.Message):
-  _md5sum = "88f6649107b59053b7d1e61aca764255"
+  _md5sum = "3fabcdea7625c1fd8242127e85ce45f6"
   _type = "camera_msgs/MsgCamera"
   _has_header = True  # flag to mark the presence of a Header object
   _full_text = """Header header
-MsgObject[] camera11
-MsgObject[] camera12
-MsgObject[] camera13
-MsgObject[] camera14
-MsgObject[] camera41
-MsgObject[] camera42
-MsgObject[] camera43
-MsgObject[] camera44
-
+MsgObject[] camera
 ================================================================================
 MSG: std_msgs/Header
 # Standard metadata for higher-level stamped data types.
@@ -68,8 +60,8 @@ string encoding       # Encoding of pixels -- channel meaning, ordering, size
 uint8 is_bigendian    # is this data bigendian?
 uint32 step           # Full row length in bytes
 uint8[] data          # actual matrix data, size is (step * rows)"""
-  __slots__ = ['header','camera11','camera12','camera13','camera14','camera41','camera42','camera43','camera44']
-  _slot_types = ['std_msgs/Header','camera_msgs/MsgObject[]','camera_msgs/MsgObject[]','camera_msgs/MsgObject[]','camera_msgs/MsgObject[]','camera_msgs/MsgObject[]','camera_msgs/MsgObject[]','camera_msgs/MsgObject[]','camera_msgs/MsgObject[]']
+  __slots__ = ['header','camera']
+  _slot_types = ['std_msgs/Header','camera_msgs/MsgObject[]']
 
   def __init__(self, *args, **kwds):
     """
@@ -79,7 +71,7 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       header,camera11,camera12,camera13,camera14,camera41,camera42,camera43,camera44
+       header,camera
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -90,32 +82,11 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
       # message fields cannot be None, assign default values for those that are
       if self.header is None:
         self.header = std_msgs.msg.Header()
-      if self.camera11 is None:
-        self.camera11 = []
-      if self.camera12 is None:
-        self.camera12 = []
-      if self.camera13 is None:
-        self.camera13 = []
-      if self.camera14 is None:
-        self.camera14 = []
-      if self.camera41 is None:
-        self.camera41 = []
-      if self.camera42 is None:
-        self.camera42 = []
-      if self.camera43 is None:
-        self.camera43 = []
-      if self.camera44 is None:
-        self.camera44 = []
+      if self.camera is None:
+        self.camera = []
     else:
       self.header = std_msgs.msg.Header()
-      self.camera11 = []
-      self.camera12 = []
-      self.camera13 = []
-      self.camera14 = []
-      self.camera41 = []
-      self.camera42 = []
-      self.camera43 = []
-      self.camera44 = []
+      self.camera = []
 
   def _get_types(self):
     """
@@ -137,9 +108,9 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera11)
+      length = len(self.camera)
       buff.write(_struct_I.pack(length))
-      for val1 in self.camera11:
+      for val1 in self.camera:
         _v1 = val1.header
         _x = _v1.seq
         buff.write(_get_struct_I().pack(_x))
@@ -147,230 +118,6 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
         _x = _v2
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
         _x = _v1.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera12)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera12:
-        _v3 = val1.header
-        _x = _v3.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v4 = _v3.stamp
-        _x = _v4
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v3.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera13)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera13:
-        _v5 = val1.header
-        _x = _v5.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v6 = _v5.stamp
-        _x = _v6
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v5.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera14)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera14:
-        _v7 = val1.header
-        _x = _v7.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v8 = _v7.stamp
-        _x = _v8
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v7.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera41)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera41:
-        _v9 = val1.header
-        _x = _v9.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v10 = _v9.stamp
-        _x = _v10
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v9.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera42)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera42:
-        _v11 = val1.header
-        _x = _v11.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v12 = _v11.stamp
-        _x = _v12
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v11.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera43)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera43:
-        _v13 = val1.header
-        _x = _v13.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v14 = _v13.stamp
-        _x = _v14
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v13.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera44)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera44:
-        _v15 = val1.header
-        _x = _v15.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v16 = _v15.stamp
-        _x = _v16
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v15.frame_id
         length = len(_x)
         if python3 or type(_x) == unicode:
           _x = _x.encode('utf-8')
@@ -406,22 +153,8 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
     try:
       if self.header is None:
         self.header = std_msgs.msg.Header()
-      if self.camera11 is None:
-        self.camera11 = None
-      if self.camera12 is None:
-        self.camera12 = None
-      if self.camera13 is None:
-        self.camera13 = None
-      if self.camera14 is None:
-        self.camera14 = None
-      if self.camera41 is None:
-        self.camera41 = None
-      if self.camera42 is None:
-        self.camera42 = None
-      if self.camera43 is None:
-        self.camera43 = None
-      if self.camera44 is None:
-        self.camera44 = None
+      if self.camera is None:
+        self.camera = None
       end = 0
       _x = self
       start = end
@@ -439,15 +172,15 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      self.camera11 = []
+      self.camera = []
       for i in range(0, length):
         val1 = camera_msgs.msg.MsgObject()
-        _v17 = val1.header
+        _v3 = val1.header
         start = end
         end += 4
-        (_v17.seq,) = _get_struct_I().unpack(str[start:end])
-        _v18 = _v17.stamp
-        _x = _v18
+        (_v3.seq,) = _get_struct_I().unpack(str[start:end])
+        _v4 = _v3.stamp
+        _x = _v4
         start = end
         end += 8
         (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
@@ -457,9 +190,9 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
         start = end
         end += length
         if python3:
-          _v17.frame_id = str[start:end].decode('utf-8', 'rosmsg')
+          _v3.frame_id = str[start:end].decode('utf-8', 'rosmsg')
         else:
-          _v17.frame_id = str[start:end]
+          _v3.frame_id = str[start:end]
         _x = val1
         start = end
         end += 8
@@ -483,343 +216,7 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
         start = end
         end += length
         val1.data = str[start:end]
-        self.camera11.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera12 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v19 = val1.header
-        start = end
-        end += 4
-        (_v19.seq,) = _get_struct_I().unpack(str[start:end])
-        _v20 = _v19.stamp
-        _x = _v20
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v19.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v19.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera12.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera13 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v21 = val1.header
-        start = end
-        end += 4
-        (_v21.seq,) = _get_struct_I().unpack(str[start:end])
-        _v22 = _v21.stamp
-        _x = _v22
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v21.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v21.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera13.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera14 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v23 = val1.header
-        start = end
-        end += 4
-        (_v23.seq,) = _get_struct_I().unpack(str[start:end])
-        _v24 = _v23.stamp
-        _x = _v24
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v23.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v23.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera14.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera41 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v25 = val1.header
-        start = end
-        end += 4
-        (_v25.seq,) = _get_struct_I().unpack(str[start:end])
-        _v26 = _v25.stamp
-        _x = _v26
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v25.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v25.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera41.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera42 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v27 = val1.header
-        start = end
-        end += 4
-        (_v27.seq,) = _get_struct_I().unpack(str[start:end])
-        _v28 = _v27.stamp
-        _x = _v28
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v27.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v27.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera42.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera43 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v29 = val1.header
-        start = end
-        end += 4
-        (_v29.seq,) = _get_struct_I().unpack(str[start:end])
-        _v30 = _v29.stamp
-        _x = _v30
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v29.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v29.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera43.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera44 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v31 = val1.header
-        start = end
-        end += 4
-        (_v31.seq,) = _get_struct_I().unpack(str[start:end])
-        _v32 = _v31.stamp
-        _x = _v32
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v31.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v31.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera44.append(val1)
+        self.camera.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -840,240 +237,16 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
         _x = _x.encode('utf-8')
         length = len(_x)
       buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera11)
+      length = len(self.camera)
       buff.write(_struct_I.pack(length))
-      for val1 in self.camera11:
-        _v33 = val1.header
-        _x = _v33.seq
+      for val1 in self.camera:
+        _v5 = val1.header
+        _x = _v5.seq
         buff.write(_get_struct_I().pack(_x))
-        _v34 = _v33.stamp
-        _x = _v34
+        _v6 = _v5.stamp
+        _x = _v6
         buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v33.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera12)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera12:
-        _v35 = val1.header
-        _x = _v35.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v36 = _v35.stamp
-        _x = _v36
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v35.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera13)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera13:
-        _v37 = val1.header
-        _x = _v37.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v38 = _v37.stamp
-        _x = _v38
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v37.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera14)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera14:
-        _v39 = val1.header
-        _x = _v39.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v40 = _v39.stamp
-        _x = _v40
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v39.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera41)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera41:
-        _v41 = val1.header
-        _x = _v41.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v42 = _v41.stamp
-        _x = _v42
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v41.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera42)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera42:
-        _v43 = val1.header
-        _x = _v43.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v44 = _v43.stamp
-        _x = _v44
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v43.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera43)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera43:
-        _v45 = val1.header
-        _x = _v45.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v46 = _v45.stamp
-        _x = _v46
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v45.frame_id
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_2I().pack(_x.height, _x.width))
-        _x = val1.encoding
-        length = len(_x)
-        if python3 or type(_x) == unicode:
-          _x = _x.encode('utf-8')
-          length = len(_x)
-        buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-        _x = val1
-        buff.write(_get_struct_BI().pack(_x.is_bigendian, _x.step))
-        _x = val1.data
-        length = len(_x)
-        # - if encoded as a list instead, serialize as bytes instead of string
-        if type(_x) in [list, tuple]:
-          buff.write(struct.Struct('<I%sB'%length).pack(length, *_x))
-        else:
-          buff.write(struct.Struct('<I%ss'%length).pack(length, _x))
-      length = len(self.camera44)
-      buff.write(_struct_I.pack(length))
-      for val1 in self.camera44:
-        _v47 = val1.header
-        _x = _v47.seq
-        buff.write(_get_struct_I().pack(_x))
-        _v48 = _v47.stamp
-        _x = _v48
-        buff.write(_get_struct_2I().pack(_x.secs, _x.nsecs))
-        _x = _v47.frame_id
+        _x = _v5.frame_id
         length = len(_x)
         if python3 or type(_x) == unicode:
           _x = _x.encode('utf-8')
@@ -1110,22 +283,8 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
     try:
       if self.header is None:
         self.header = std_msgs.msg.Header()
-      if self.camera11 is None:
-        self.camera11 = None
-      if self.camera12 is None:
-        self.camera12 = None
-      if self.camera13 is None:
-        self.camera13 = None
-      if self.camera14 is None:
-        self.camera14 = None
-      if self.camera41 is None:
-        self.camera41 = None
-      if self.camera42 is None:
-        self.camera42 = None
-      if self.camera43 is None:
-        self.camera43 = None
-      if self.camera44 is None:
-        self.camera44 = None
+      if self.camera is None:
+        self.camera = None
       end = 0
       _x = self
       start = end
@@ -1143,15 +302,15 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
       start = end
       end += 4
       (length,) = _struct_I.unpack(str[start:end])
-      self.camera11 = []
+      self.camera = []
       for i in range(0, length):
         val1 = camera_msgs.msg.MsgObject()
-        _v49 = val1.header
+        _v7 = val1.header
         start = end
         end += 4
-        (_v49.seq,) = _get_struct_I().unpack(str[start:end])
-        _v50 = _v49.stamp
-        _x = _v50
+        (_v7.seq,) = _get_struct_I().unpack(str[start:end])
+        _v8 = _v7.stamp
+        _x = _v8
         start = end
         end += 8
         (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
@@ -1161,9 +320,9 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
         start = end
         end += length
         if python3:
-          _v49.frame_id = str[start:end].decode('utf-8', 'rosmsg')
+          _v7.frame_id = str[start:end].decode('utf-8', 'rosmsg')
         else:
-          _v49.frame_id = str[start:end]
+          _v7.frame_id = str[start:end]
         _x = val1
         start = end
         end += 8
@@ -1187,343 +346,7 @@ uint8[] data          # actual matrix data, size is (step * rows)"""
         start = end
         end += length
         val1.data = str[start:end]
-        self.camera11.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera12 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v51 = val1.header
-        start = end
-        end += 4
-        (_v51.seq,) = _get_struct_I().unpack(str[start:end])
-        _v52 = _v51.stamp
-        _x = _v52
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v51.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v51.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera12.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera13 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v53 = val1.header
-        start = end
-        end += 4
-        (_v53.seq,) = _get_struct_I().unpack(str[start:end])
-        _v54 = _v53.stamp
-        _x = _v54
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v53.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v53.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera13.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera14 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v55 = val1.header
-        start = end
-        end += 4
-        (_v55.seq,) = _get_struct_I().unpack(str[start:end])
-        _v56 = _v55.stamp
-        _x = _v56
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v55.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v55.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera14.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera41 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v57 = val1.header
-        start = end
-        end += 4
-        (_v57.seq,) = _get_struct_I().unpack(str[start:end])
-        _v58 = _v57.stamp
-        _x = _v58
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v57.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v57.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera41.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera42 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v59 = val1.header
-        start = end
-        end += 4
-        (_v59.seq,) = _get_struct_I().unpack(str[start:end])
-        _v60 = _v59.stamp
-        _x = _v60
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v59.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v59.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera42.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera43 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v61 = val1.header
-        start = end
-        end += 4
-        (_v61.seq,) = _get_struct_I().unpack(str[start:end])
-        _v62 = _v61.stamp
-        _x = _v62
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v61.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v61.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera43.append(val1)
-      start = end
-      end += 4
-      (length,) = _struct_I.unpack(str[start:end])
-      self.camera44 = []
-      for i in range(0, length):
-        val1 = camera_msgs.msg.MsgObject()
-        _v63 = val1.header
-        start = end
-        end += 4
-        (_v63.seq,) = _get_struct_I().unpack(str[start:end])
-        _v64 = _v63.stamp
-        _x = _v64
-        start = end
-        end += 8
-        (_x.secs, _x.nsecs,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          _v63.frame_id = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          _v63.frame_id = str[start:end]
-        _x = val1
-        start = end
-        end += 8
-        (_x.height, _x.width,) = _get_struct_2I().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        if python3:
-          val1.encoding = str[start:end].decode('utf-8', 'rosmsg')
-        else:
-          val1.encoding = str[start:end]
-        _x = val1
-        start = end
-        end += 5
-        (_x.is_bigendian, _x.step,) = _get_struct_BI().unpack(str[start:end])
-        start = end
-        end += 4
-        (length,) = _struct_I.unpack(str[start:end])
-        start = end
-        end += length
-        val1.data = str[start:end]
-        self.camera44.append(val1)
+        self.camera.append(val1)
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill

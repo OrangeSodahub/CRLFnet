@@ -17,13 +17,6 @@
 
 #include <std_msgs/Header.h>
 #include <camera_msgs/MsgObject.h>
-#include <camera_msgs/MsgObject.h>
-#include <camera_msgs/MsgObject.h>
-#include <camera_msgs/MsgObject.h>
-#include <camera_msgs/MsgObject.h>
-#include <camera_msgs/MsgObject.h>
-#include <camera_msgs/MsgObject.h>
-#include <camera_msgs/MsgObject.h>
 
 namespace camera_msgs
 {
@@ -34,25 +27,11 @@ struct MsgCamera_
 
   MsgCamera_()
     : header()
-    , camera11()
-    , camera12()
-    , camera13()
-    , camera14()
-    , camera41()
-    , camera42()
-    , camera43()
-    , camera44()  {
+    , camera()  {
     }
   MsgCamera_(const ContainerAllocator& _alloc)
     : header(_alloc)
-    , camera11(_alloc)
-    , camera12(_alloc)
-    , camera13(_alloc)
-    , camera14(_alloc)
-    , camera41(_alloc)
-    , camera42(_alloc)
-    , camera43(_alloc)
-    , camera44(_alloc)  {
+    , camera(_alloc)  {
   (void)_alloc;
     }
 
@@ -61,29 +40,8 @@ struct MsgCamera_
    typedef  ::std_msgs::Header_<ContainerAllocator>  _header_type;
   _header_type header;
 
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera11_type;
-  _camera11_type camera11;
-
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera12_type;
-  _camera12_type camera12;
-
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera13_type;
-  _camera13_type camera13;
-
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera14_type;
-  _camera14_type camera14;
-
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera41_type;
-  _camera41_type camera41;
-
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera42_type;
-  _camera42_type camera42;
-
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera43_type;
-  _camera43_type camera43;
-
-   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera44_type;
-  _camera44_type camera44;
+   typedef std::vector< ::camera_msgs::MsgObject_<ContainerAllocator> , typename ContainerAllocator::template rebind< ::camera_msgs::MsgObject_<ContainerAllocator> >::other >  _camera_type;
+  _camera_type camera;
 
 
 
@@ -115,14 +73,7 @@ template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::camera_msgs::MsgCamera_<ContainerAllocator1> & lhs, const ::camera_msgs::MsgCamera_<ContainerAllocator2> & rhs)
 {
   return lhs.header == rhs.header &&
-    lhs.camera11 == rhs.camera11 &&
-    lhs.camera12 == rhs.camera12 &&
-    lhs.camera13 == rhs.camera13 &&
-    lhs.camera14 == rhs.camera14 &&
-    lhs.camera41 == rhs.camera41 &&
-    lhs.camera42 == rhs.camera42 &&
-    lhs.camera43 == rhs.camera43 &&
-    lhs.camera44 == rhs.camera44;
+    lhs.camera == rhs.camera;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -179,12 +130,12 @@ struct MD5Sum< ::camera_msgs::MsgCamera_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "88f6649107b59053b7d1e61aca764255";
+    return "3fabcdea7625c1fd8242127e85ce45f6";
   }
 
   static const char* value(const ::camera_msgs::MsgCamera_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x88f6649107b59053ULL;
-  static const uint64_t static_value2 = 0xb7d1e61aca764255ULL;
+  static const uint64_t static_value1 = 0x3fabcdea7625c1fdULL;
+  static const uint64_t static_value2 = 0x8242127e85ce45f6ULL;
 };
 
 template<class ContainerAllocator>
@@ -204,15 +155,7 @@ struct Definition< ::camera_msgs::MsgCamera_<ContainerAllocator> >
   static const char* value()
   {
     return "Header header\n"
-"MsgObject[] camera11\n"
-"MsgObject[] camera12\n"
-"MsgObject[] camera13\n"
-"MsgObject[] camera14\n"
-"MsgObject[] camera41\n"
-"MsgObject[] camera42\n"
-"MsgObject[] camera43\n"
-"MsgObject[] camera44\n"
-"\n"
+"MsgObject[] camera\n"
 "================================================================================\n"
 "MSG: std_msgs/Header\n"
 "# Standard metadata for higher-level stamped data types.\n"
@@ -277,14 +220,7 @@ namespace serialization
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
       stream.next(m.header);
-      stream.next(m.camera11);
-      stream.next(m.camera12);
-      stream.next(m.camera13);
-      stream.next(m.camera14);
-      stream.next(m.camera41);
-      stream.next(m.camera42);
-      stream.next(m.camera43);
-      stream.next(m.camera44);
+      stream.next(m.camera);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -306,69 +242,13 @@ struct Printer< ::camera_msgs::MsgCamera_<ContainerAllocator> >
     s << indent << "header: ";
     s << std::endl;
     Printer< ::std_msgs::Header_<ContainerAllocator> >::stream(s, indent + "  ", v.header);
-    s << indent << "camera11[]" << std::endl;
-    for (size_t i = 0; i < v.camera11.size(); ++i)
+    s << indent << "camera[]" << std::endl;
+    for (size_t i = 0; i < v.camera.size(); ++i)
     {
-      s << indent << "  camera11[" << i << "]: ";
+      s << indent << "  camera[" << i << "]: ";
       s << std::endl;
       s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera11[i]);
-    }
-    s << indent << "camera12[]" << std::endl;
-    for (size_t i = 0; i < v.camera12.size(); ++i)
-    {
-      s << indent << "  camera12[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera12[i]);
-    }
-    s << indent << "camera13[]" << std::endl;
-    for (size_t i = 0; i < v.camera13.size(); ++i)
-    {
-      s << indent << "  camera13[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera13[i]);
-    }
-    s << indent << "camera14[]" << std::endl;
-    for (size_t i = 0; i < v.camera14.size(); ++i)
-    {
-      s << indent << "  camera14[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera14[i]);
-    }
-    s << indent << "camera41[]" << std::endl;
-    for (size_t i = 0; i < v.camera41.size(); ++i)
-    {
-      s << indent << "  camera41[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera41[i]);
-    }
-    s << indent << "camera42[]" << std::endl;
-    for (size_t i = 0; i < v.camera42.size(); ++i)
-    {
-      s << indent << "  camera42[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera42[i]);
-    }
-    s << indent << "camera43[]" << std::endl;
-    for (size_t i = 0; i < v.camera43.size(); ++i)
-    {
-      s << indent << "  camera43[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera43[i]);
-    }
-    s << indent << "camera44[]" << std::endl;
-    for (size_t i = 0; i < v.camera44.size(); ++i)
-    {
-      s << indent << "  camera44[" << i << "]: ";
-      s << std::endl;
-      s << indent;
-      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera44[i]);
+      Printer< ::camera_msgs::MsgObject_<ContainerAllocator> >::stream(s, indent + "    ", v.camera[i]);
     }
   }
 };

@@ -21,14 +21,7 @@ class MsgCamera {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.header = null;
-      this.camera11 = null;
-      this.camera12 = null;
-      this.camera13 = null;
-      this.camera14 = null;
-      this.camera41 = null;
-      this.camera42 = null;
-      this.camera43 = null;
-      this.camera44 = null;
+      this.camera = null;
     }
     else {
       if (initObj.hasOwnProperty('header')) {
@@ -37,53 +30,11 @@ class MsgCamera {
       else {
         this.header = new std_msgs.msg.Header();
       }
-      if (initObj.hasOwnProperty('camera11')) {
-        this.camera11 = initObj.camera11
+      if (initObj.hasOwnProperty('camera')) {
+        this.camera = initObj.camera
       }
       else {
-        this.camera11 = [];
-      }
-      if (initObj.hasOwnProperty('camera12')) {
-        this.camera12 = initObj.camera12
-      }
-      else {
-        this.camera12 = [];
-      }
-      if (initObj.hasOwnProperty('camera13')) {
-        this.camera13 = initObj.camera13
-      }
-      else {
-        this.camera13 = [];
-      }
-      if (initObj.hasOwnProperty('camera14')) {
-        this.camera14 = initObj.camera14
-      }
-      else {
-        this.camera14 = [];
-      }
-      if (initObj.hasOwnProperty('camera41')) {
-        this.camera41 = initObj.camera41
-      }
-      else {
-        this.camera41 = [];
-      }
-      if (initObj.hasOwnProperty('camera42')) {
-        this.camera42 = initObj.camera42
-      }
-      else {
-        this.camera42 = [];
-      }
-      if (initObj.hasOwnProperty('camera43')) {
-        this.camera43 = initObj.camera43
-      }
-      else {
-        this.camera43 = [];
-      }
-      if (initObj.hasOwnProperty('camera44')) {
-        this.camera44 = initObj.camera44
-      }
-      else {
-        this.camera44 = [];
+        this.camera = [];
       }
     }
   }
@@ -92,52 +43,10 @@ class MsgCamera {
     // Serializes a message object of type MsgCamera
     // Serialize message field [header]
     bufferOffset = std_msgs.msg.Header.serialize(obj.header, buffer, bufferOffset);
-    // Serialize message field [camera11]
-    // Serialize the length for message field [camera11]
-    bufferOffset = _serializer.uint32(obj.camera11.length, buffer, bufferOffset);
-    obj.camera11.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
-    });
-    // Serialize message field [camera12]
-    // Serialize the length for message field [camera12]
-    bufferOffset = _serializer.uint32(obj.camera12.length, buffer, bufferOffset);
-    obj.camera12.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
-    });
-    // Serialize message field [camera13]
-    // Serialize the length for message field [camera13]
-    bufferOffset = _serializer.uint32(obj.camera13.length, buffer, bufferOffset);
-    obj.camera13.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
-    });
-    // Serialize message field [camera14]
-    // Serialize the length for message field [camera14]
-    bufferOffset = _serializer.uint32(obj.camera14.length, buffer, bufferOffset);
-    obj.camera14.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
-    });
-    // Serialize message field [camera41]
-    // Serialize the length for message field [camera41]
-    bufferOffset = _serializer.uint32(obj.camera41.length, buffer, bufferOffset);
-    obj.camera41.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
-    });
-    // Serialize message field [camera42]
-    // Serialize the length for message field [camera42]
-    bufferOffset = _serializer.uint32(obj.camera42.length, buffer, bufferOffset);
-    obj.camera42.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
-    });
-    // Serialize message field [camera43]
-    // Serialize the length for message field [camera43]
-    bufferOffset = _serializer.uint32(obj.camera43.length, buffer, bufferOffset);
-    obj.camera43.forEach((val) => {
-      bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
-    });
-    // Serialize message field [camera44]
-    // Serialize the length for message field [camera44]
-    bufferOffset = _serializer.uint32(obj.camera44.length, buffer, bufferOffset);
-    obj.camera44.forEach((val) => {
+    // Serialize message field [camera]
+    // Serialize the length for message field [camera]
+    bufferOffset = _serializer.uint32(obj.camera.length, buffer, bufferOffset);
+    obj.camera.forEach((val) => {
       bufferOffset = MsgObject.serialize(val, buffer, bufferOffset);
     });
     return bufferOffset;
@@ -149,61 +58,12 @@ class MsgCamera {
     let data = new MsgCamera(null);
     // Deserialize message field [header]
     data.header = std_msgs.msg.Header.deserialize(buffer, bufferOffset);
-    // Deserialize message field [camera11]
-    // Deserialize array length for message field [camera11]
+    // Deserialize message field [camera]
+    // Deserialize array length for message field [camera]
     len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera11 = new Array(len);
+    data.camera = new Array(len);
     for (let i = 0; i < len; ++i) {
-      data.camera11[i] = MsgObject.deserialize(buffer, bufferOffset)
-    }
-    // Deserialize message field [camera12]
-    // Deserialize array length for message field [camera12]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera12 = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.camera12[i] = MsgObject.deserialize(buffer, bufferOffset)
-    }
-    // Deserialize message field [camera13]
-    // Deserialize array length for message field [camera13]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera13 = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.camera13[i] = MsgObject.deserialize(buffer, bufferOffset)
-    }
-    // Deserialize message field [camera14]
-    // Deserialize array length for message field [camera14]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera14 = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.camera14[i] = MsgObject.deserialize(buffer, bufferOffset)
-    }
-    // Deserialize message field [camera41]
-    // Deserialize array length for message field [camera41]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera41 = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.camera41[i] = MsgObject.deserialize(buffer, bufferOffset)
-    }
-    // Deserialize message field [camera42]
-    // Deserialize array length for message field [camera42]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera42 = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.camera42[i] = MsgObject.deserialize(buffer, bufferOffset)
-    }
-    // Deserialize message field [camera43]
-    // Deserialize array length for message field [camera43]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera43 = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.camera43[i] = MsgObject.deserialize(buffer, bufferOffset)
-    }
-    // Deserialize message field [camera44]
-    // Deserialize array length for message field [camera44]
-    len = _deserializer.uint32(buffer, bufferOffset);
-    data.camera44 = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      data.camera44[i] = MsgObject.deserialize(buffer, bufferOffset)
+      data.camera[i] = MsgObject.deserialize(buffer, bufferOffset)
     }
     return data;
   }
@@ -211,31 +71,10 @@ class MsgCamera {
   static getMessageSize(object) {
     let length = 0;
     length += std_msgs.msg.Header.getMessageSize(object.header);
-    object.camera11.forEach((val) => {
+    object.camera.forEach((val) => {
       length += MsgObject.getMessageSize(val);
     });
-    object.camera12.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
-    });
-    object.camera13.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
-    });
-    object.camera14.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
-    });
-    object.camera41.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
-    });
-    object.camera42.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
-    });
-    object.camera43.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
-    });
-    object.camera44.forEach((val) => {
-      length += MsgObject.getMessageSize(val);
-    });
-    return length + 32;
+    return length + 4;
   }
 
   static datatype() {
@@ -245,22 +84,14 @@ class MsgCamera {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '88f6649107b59053b7d1e61aca764255';
+    return '3fabcdea7625c1fd8242127e85ce45f6';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
     Header header
-    MsgObject[] camera11
-    MsgObject[] camera12
-    MsgObject[] camera13
-    MsgObject[] camera14
-    MsgObject[] camera41
-    MsgObject[] camera42
-    MsgObject[] camera43
-    MsgObject[] camera44
-    
+    MsgObject[] camera
     ================================================================================
     MSG: std_msgs/Header
     # Standard metadata for higher-level stamped data types.
@@ -322,84 +153,14 @@ class MsgCamera {
       resolved.header = new std_msgs.msg.Header()
     }
 
-    if (msg.camera11 !== undefined) {
-      resolved.camera11 = new Array(msg.camera11.length);
-      for (let i = 0; i < resolved.camera11.length; ++i) {
-        resolved.camera11[i] = MsgObject.Resolve(msg.camera11[i]);
+    if (msg.camera !== undefined) {
+      resolved.camera = new Array(msg.camera.length);
+      for (let i = 0; i < resolved.camera.length; ++i) {
+        resolved.camera[i] = MsgObject.Resolve(msg.camera[i]);
       }
     }
     else {
-      resolved.camera11 = []
-    }
-
-    if (msg.camera12 !== undefined) {
-      resolved.camera12 = new Array(msg.camera12.length);
-      for (let i = 0; i < resolved.camera12.length; ++i) {
-        resolved.camera12[i] = MsgObject.Resolve(msg.camera12[i]);
-      }
-    }
-    else {
-      resolved.camera12 = []
-    }
-
-    if (msg.camera13 !== undefined) {
-      resolved.camera13 = new Array(msg.camera13.length);
-      for (let i = 0; i < resolved.camera13.length; ++i) {
-        resolved.camera13[i] = MsgObject.Resolve(msg.camera13[i]);
-      }
-    }
-    else {
-      resolved.camera13 = []
-    }
-
-    if (msg.camera14 !== undefined) {
-      resolved.camera14 = new Array(msg.camera14.length);
-      for (let i = 0; i < resolved.camera14.length; ++i) {
-        resolved.camera14[i] = MsgObject.Resolve(msg.camera14[i]);
-      }
-    }
-    else {
-      resolved.camera14 = []
-    }
-
-    if (msg.camera41 !== undefined) {
-      resolved.camera41 = new Array(msg.camera41.length);
-      for (let i = 0; i < resolved.camera41.length; ++i) {
-        resolved.camera41[i] = MsgObject.Resolve(msg.camera41[i]);
-      }
-    }
-    else {
-      resolved.camera41 = []
-    }
-
-    if (msg.camera42 !== undefined) {
-      resolved.camera42 = new Array(msg.camera42.length);
-      for (let i = 0; i < resolved.camera42.length; ++i) {
-        resolved.camera42[i] = MsgObject.Resolve(msg.camera42[i]);
-      }
-    }
-    else {
-      resolved.camera42 = []
-    }
-
-    if (msg.camera43 !== undefined) {
-      resolved.camera43 = new Array(msg.camera43.length);
-      for (let i = 0; i < resolved.camera43.length; ++i) {
-        resolved.camera43[i] = MsgObject.Resolve(msg.camera43[i]);
-      }
-    }
-    else {
-      resolved.camera43 = []
-    }
-
-    if (msg.camera44 !== undefined) {
-      resolved.camera44 = new Array(msg.camera44.length);
-      for (let i = 0; i < resolved.camera44.length; ++i) {
-        resolved.camera44[i] = MsgObject.Resolve(msg.camera44[i]);
-      }
-    }
-    else {
-      resolved.camera44 = []
+      resolved.camera = []
     }
 
     return resolved;
