@@ -131,6 +131,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/gtest/cmake_install.cmake")
+  include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/camera_msgs/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/per_msgs/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/radar_msgs/cmake_install.cmake")
   include("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/build/velodyne/velodyne_description/cmake_install.cmake")

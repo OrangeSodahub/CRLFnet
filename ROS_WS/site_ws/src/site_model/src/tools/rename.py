@@ -25,7 +25,7 @@ for i in f:
     if len(f[n][17:]) == 5:
         newname = '00000' + str(int(a[:-4])-1) + '.txt'
     
-    # print("旧文件名:",oldname,"新文件名:",newname)
+    # print(oldname,'=====>',newname)
 
     # 对文件改名
     os.rename(path+oldname, path+newname)
