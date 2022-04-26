@@ -19,7 +19,7 @@ add_custom_target(camera_msgs_generate_messages ALL)
 
 get_filename_component(_filename "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg" NAME_WE)
 add_custom_target(_camera_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "camera_msgs" "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg" "std_msgs/Header:sensor_msgs/Image"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "camera_msgs" "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg" "sensor_msgs/Image:std_msgs/Header"
 )
 
 #
@@ -31,7 +31,7 @@ add_custom_target(_camera_msgs_generate_messages_check_deps_${_filename}
 _generate_msg_cpp(camera_msgs
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/camera_msgs
 )
 
@@ -64,7 +64,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS camera_msgs_generate_messages_cpp)
 _generate_msg_eus(camera_msgs
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/camera_msgs
 )
 
@@ -97,7 +97,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS camera_msgs_generate_messages_eus)
 _generate_msg_lisp(camera_msgs
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/camera_msgs
 )
 
@@ -130,7 +130,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS camera_msgs_generate_messages_lisp)
 _generate_msg_nodejs(camera_msgs
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/camera_msgs
 )
 
@@ -163,7 +163,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS camera_msgs_generate_messages_nodej
 _generate_msg_py(camera_msgs
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/camera_msgs/msg/MsgCamera.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/camera_msgs
 )
 

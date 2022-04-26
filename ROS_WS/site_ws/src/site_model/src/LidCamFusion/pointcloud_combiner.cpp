@@ -27,12 +27,16 @@ typedef pcl::PointCloud<PointT> PointCloudT;
 #define lidar2_y -9.89292350e-01
 #define lidar2_z 1.91780397e-01
 
-void pointcloud_combiner(const pointcloud_msgs::MsgPointCloud& pointcloud_list)
+void pointcloud_combiner(pointcloud_msgs::MsgPointCloud pointcloud_list)
 {
-    
+    // define pointcloud type: sensor_msgs::PointCloud2
+    sensor_msgs::PointCloud2 cloud11, cloud12, cloud2;
+    cloud11 = pointcloud_list.pointcloud[0];
+    cloud12 = pointcloud_list.pointcloud[1];
+    cloud2 = pointcloud_list.pointcloud[2];
     // Transform cloud from type sensor_msgs::PointCloud2 to pcl::PointCloud
     PointCloudT cloud11_pcl, cloud12_pcl, cloud2_pcl;
-    pcl::fromROSMsg(pointcloud_list.pointcloud[0], cloud11_pcl);
+    pcl::fromROSMsg(cloud11, cloud11_pcl);
     pcl::fromROSMsg(cloud12, cloud12_pcl);
     pcl::fromROSMsg(cloud2, cloud2_pcl);
 
@@ -63,8 +67,8 @@ void pointcloud_combiner(const pointcloud_msgs::MsgPointCloud& pointcloud_list)
 
     // Publish
     ros::NodeHandle nh_pub;
-    ros::Publisher pub = nh_pub.advertise<PointCloud2>("/point_cloud_combined", 1);
-    PointCloud2 output;
+    ros::Publisher pub = nh_pub.advertise<sensor_msgs::PointCloud2>("/point_cloud_combined", 1);
+    sensor_msgs::PointCloud2 output;
     pcl::toROSMsg(cloud, output);
     output.header.frame_id = "point_cloud";
     output.header.stamp = ros::Time::now();

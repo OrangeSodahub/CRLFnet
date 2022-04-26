@@ -2326,6 +2326,19 @@ point_cloud_write/fast:
 .PHONY : point_cloud_write/fast
 
 #=============================================================================
+# Target rules for targets named pointcloud_combiner
+
+# Build rule for target.
+pointcloud_combiner: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pointcloud_combiner
+.PHONY : pointcloud_combiner
+
+# fast build rule for target.
+pointcloud_combiner/fast:
+	$(MAKE) -f site_model/CMakeFiles/pointcloud_combiner.dir/build.make site_model/CMakeFiles/pointcloud_combiner.dir/build
+.PHONY : pointcloud_combiner/fast
+
+#=============================================================================
 # Target rules for targets named image_output
 
 # Build rule for target.
@@ -2699,6 +2712,7 @@ help:
 	@echo "... radar_plugin"
 	@echo "... radarMsgCombiner"
 	@echo "... point_cloud_write"
+	@echo "... pointcloud_combiner"
 	@echo "... image_output"
 	@echo "... point_cloud_merge"
 	@echo "... get_cam_info"
