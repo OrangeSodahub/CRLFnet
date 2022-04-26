@@ -1,12 +1,10 @@
 #include <ros/ros.h>
-#include <pcl/point_cloud.h>
 //msgs type and conversion
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl_conversions/pcl_conversions.h>
 //pcd io
 #include <pcl/io/pcd_io.h>
 //point types
-#include <sensor_msgs/PointCloud2.h>
 #include <pcl/point_types.h>
  
 int i = 1;

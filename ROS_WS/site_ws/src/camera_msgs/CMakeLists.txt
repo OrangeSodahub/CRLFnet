@@ -23,7 +23,6 @@ find_package(gazebo REQUIRED)
 ## Generate messages in the 'per_msgs' folder
 add_message_files(
   FILES
-  MsgObject.msg
   MsgCamera.msg
   )
 ## Generate added messages and services with any dependencies listed here

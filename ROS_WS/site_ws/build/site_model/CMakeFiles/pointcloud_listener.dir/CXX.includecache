@@ -25,6 +25,8 @@ message_filters/time_synchronizer.h
 -
 message_filters/sync_policies/approximate_time.h
 -
+boost/bind.hpp
+-
 
 /opt/ros/noetic/include/message_filters/connection.h
 boost/function.hpp
