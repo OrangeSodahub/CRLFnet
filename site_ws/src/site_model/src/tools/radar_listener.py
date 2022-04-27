@@ -15,6 +15,7 @@ msgradar = MsgRadar()
 
 def radar_listener():
     rospy.init_node("radar_listener", anonymous=true)
+    print("Radar Listener Begin.")
 
     sub2 = rospy.Subscriber("/ARS_408_21_2_Topic", SensorMsgsRadar, msgs_publish_2)
     sub3 = rospy.Subscriber("/ARS_408_21_3_Topic", SensorMsgsRadar, msgs_publish_3)
