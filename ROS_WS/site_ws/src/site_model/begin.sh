@@ -11,7 +11,7 @@ sleep 10
 
 # control
 gnome-terminal --tab "racecar_control" -- bash -c "cd ../../../../;rosrun pkg keyboard_teleop.py"
-echo "racecar.launch succeed."
+echo "Controllor Set."
 sleep 10
 
 # radar
