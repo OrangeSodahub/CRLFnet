@@ -24,6 +24,11 @@ gnome-terminal --tab "camera_listener" -- bash -c "cd src/LidCamFusion/;python c
 echo "Camera Listener Begin."
 sleep 5
 
+# radar-camera fusion
+gnome-terminal --tab "radar-camera fusion" -- bash -c "cd src/tools/RadCamFusion/;python fusion.py --draw_output False"
+echo "Radar-Camera Fusion Begin."
+sleep 5
+
 # lidar
 gnome-terminal --tab "lidar_listener" -- bash -c "cd src/LidCamFusion/;python pointcloud_listener.py"
 echo "Lidar Listener Begin."
