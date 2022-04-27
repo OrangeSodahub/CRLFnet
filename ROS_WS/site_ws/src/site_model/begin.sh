@@ -16,17 +16,17 @@ sleep 10
 
 # radar
 gnome-terminal --tab "radar_listener" -- bash -c "cd src/tools/;python radar_listener.py"
-echo "radar_listener succeed."
+echo "Radar Listener Begin."
 sleep 5
 
 # camera
 gnome-terminal --tab "camera_listener" -- bash -c "cd src/LidCamFusion/;python camera_listener.py"
-echo "camera_listener succeed."
+echo "Camera Listener Begin."
 sleep 5
 
 # lidar
 gnome-terminal --tab "lidar_listener" -- bash -c "cd src/LidCamFusion/;python pointcloud_listener.py"
-echo "lidar_listener succeed."
+echo "Lidar Listener Begin."
 sleep 5
 gnome-terminal --tab "pointcloud_combiner" -- bash -c "cd ../../../../;rosrun site_model pointcloud_combiner"
 echo "pointcloud combine succeed."

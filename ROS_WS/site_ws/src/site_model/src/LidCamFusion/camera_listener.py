@@ -42,5 +42,5 @@ if __name__ == '__main__':
     sync = message_filters.ApproximateTimeSynchronizer([sub_image_11, sub_image_12, sub_image_13, sub_image_14, 
                                                         sub_image_41, sub_image_42, sub_image_43, sub_image_44], 10, 1)# syncronize time stamps
     sync.registerCallback(camera_listener)
-    print("Begin.")
+    print("Camera Listener Begin.")
     rospy.spin()
