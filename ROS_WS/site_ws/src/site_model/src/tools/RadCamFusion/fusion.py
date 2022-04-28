@@ -4,7 +4,6 @@
 #############################################################
 
 import argparse
-from typing import Counter
 import numpy as np
 import parser
 import yaml
