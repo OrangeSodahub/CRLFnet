@@ -23,7 +23,6 @@ import radar_roi
 global counter
 counter = 0
 def fusion(radar, image2, image3):
-    print("ok")
 
     # radar_roi
     x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right = radar_roi.radar_roi(config, radar)
@@ -83,5 +82,5 @@ if __name__ == '__main__':
  
     sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 10, 1)# syncronize time stamps
     sync.registerCallback(fusion)
-    print("Begin.")
+    print("Radar Camera Fusion Begin.")
     rospy.spin()

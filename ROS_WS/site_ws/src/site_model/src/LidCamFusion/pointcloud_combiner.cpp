@@ -78,7 +78,7 @@ void pointcloud_combiner(pointcloud_msgs::MsgPointCloud pointcloud_list)
 
 int main (int argc, char **argv)
 {
-    ros::init (argc, argv, "point_cloud_listener");
+    ros::init (argc, argv, "pointcloud_cominer");
     ros::NodeHandle nh;
 
     ros::Subscriber sub = nh.subscribe("/pointcloud_list", 1, pointcloud_combiner); // //velodyne11_points

@@ -5,14 +5,9 @@ gnome-terminal --tab "spawn.launch" -- bash -c "cd ../../../../;roslaunch site_m
 echo "spawn.launch succeed."
 sleep 10
 
-{gnome-terminal --tab "racecar.launch" -- bash -c "cd ../../../../;roslaunch pkg racecar.launch"
-echo "racecar.launch succeed."
-sleep 10
-
-# control
-gnome-terminal --tab "racecar_control" -- bash -c "cd ../../../../;rosrun pkg keyboard_teleop.py"
-echo "Controllor Set."
-sleep 10
+# preperation
+gnome-terminal --tab "preparation" --bash -c "cd ../../../../;rosrun site_model get_cam_info;"
+sleep 5
 
 # radar
 gnome-terminal --tab "radar_listener" -- bash -c "cd src/tools/;python radar_listener.py"
@@ -34,4 +29,4 @@ gnome-terminal --tab "lidar_listener" -- bash -c "cd src/LidCamFusion/;python po
 echo "Lidar Listener Begin."
 sleep 5
 gnome-terminal --tab "pointcloud_combiner" -- bash -c "cd ../../../../;rosrun site_model pointcloud_combiner"
-echo "pointcloud combine succeed."
+echo "Pointcloud Combine Begin."
