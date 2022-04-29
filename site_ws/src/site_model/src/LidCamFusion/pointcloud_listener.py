@@ -23,7 +23,7 @@ def pointcloud_listener(cloud11, cloud12, cloud2):
     pub.publish(msgcloud)
 
 if __name__ == '__main__':
-    rospy.init_node('camera_listener', anonymous=True)
+    rospy.init_node('lidar_listener', anonymous=True)
 
     sub_cloudpts_11 = message_filters.Subscriber('/velodyne1_points', PointCloud2)
     sub_cloudpts_12 = message_filters.Subscriber('/velodyne2_points', PointCloud2)
