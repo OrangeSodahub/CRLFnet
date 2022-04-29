@@ -7,17 +7,17 @@
 from sqlalchemy import true
 import rospy
 from per_msgs.msg._SensorMsgsRadar import *
-from radar_msgs.msg._MsgRadar import *
-from radar_msgs.msg._MsgObject import *
+# radar message type
+from msgs.msg._MsgRadar import *
+from msgs.msg._MsgRadarObject import *
 import message_filters
-import std_msgs.msg
 
 def radar_listener(radar2: SensorMsgsRadar, radar3: SensorMsgsRadar):
     msgradar = MsgRadar()
     if radar2.total_front_left_esr_tracks != 0: # if num of vehicles is not 0
         msgradar.total_vehicles_left = round(radar2.total_front_left_esr_tracks)
         for i in range(msgradar.total_vehicles_left):
-           object = MsgObject() # define a new list
+           object = MsgRadarObject() # define a new list
            object.obj_vcs_posex = radar2.front_left_esr_tracklist[i].obj_vcs_posex
            object.obj_vcs_posey = radar2.front_left_esr_tracklist[i].obj_vcs_posey
            object.range_rate = radar2.front_left_esr_tracklist[i].range_rate
@@ -26,7 +26,7 @@ def radar_listener(radar2: SensorMsgsRadar, radar3: SensorMsgsRadar):
     if radar3.total_front_right_esr_tracks !=0:
         msgradar.total_vehicles_right = round(radar3.total_front_right_esr_tracks)
         for i in range(msgradar.total_vehicles_right):
-           object = MsgObject()
+           object = MsgRadarObject()
            object.obj_vcs_posex = radar3.front_right_esr_tracklist[i].obj_vcs_posex
            object.obj_vcs_posey = radar3.front_right_esr_tracklist[i].obj_vcs_posey
            object.range_rate = radar3.front_right_esr_tracklist[i].range_rate

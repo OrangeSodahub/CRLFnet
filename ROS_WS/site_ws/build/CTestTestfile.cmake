@@ -5,10 +5,8 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
-subdirs("camera_msgs")
+subdirs("msgs")
 subdirs("per_msgs")
-subdirs("pointcloud_list")
-subdirs("radar_msgs")
 subdirs("velodyne/velodyne_description")
 subdirs("velodyne/velodyne_simulator")
 subdirs("pkg")

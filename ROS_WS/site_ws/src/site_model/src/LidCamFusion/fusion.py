@@ -4,17 +4,15 @@
 #############################################################
 
 import argparse
-import numpy as np
 import parser
 import yaml
-import os
 import rospy
 from termcolor import colored
 import message_filters
 # pointcloud type
 from sensor_msgs.msg import PointCloud2
 # Image type
-from camera_msgs.msg._MsgCamera import * # camera msgs class
+from msgs.msg._MsgCamera import * # camera msgs class
 # Object Detection tool
 import OpenPCDet.tools
 

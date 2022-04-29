@@ -1,0 +1,5 @@
+Header header
+float32 total_vehicles_left
+float32 total_vehicles_right
+MsgRadarObject[] ObjectList_left
+MsgRadarObject[] ObjectList_right

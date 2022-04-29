@@ -19,7 +19,7 @@ add_custom_target(pointcloud_list_generate_messages ALL)
 
 get_filename_component(_filename "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg" NAME_WE)
 add_custom_target(_pointcloud_list_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "pointcloud_list" "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg" "sensor_msgs/PointField:std_msgs/Header:sensor_msgs/PointCloud2"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "pointcloud_list" "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg" "std_msgs/Header:sensor_msgs/PointField:sensor_msgs/PointCloud2"
 )
 
 #
@@ -31,7 +31,7 @@ add_custom_target(_pointcloud_list_generate_messages_check_deps_${_filename}
 _generate_msg_cpp(pointcloud_list
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/pointcloud_list
 )
 
@@ -64,7 +64,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS pointcloud_list_generate_messages_c
 _generate_msg_eus(pointcloud_list
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/pointcloud_list
 )
 
@@ -97,7 +97,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS pointcloud_list_generate_messages_e
 _generate_msg_lisp(pointcloud_list
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/pointcloud_list
 )
 
@@ -130,7 +130,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS pointcloud_list_generate_messages_l
 _generate_msg_nodejs(pointcloud_list
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/pointcloud_list
 )
 
@@ -163,7 +163,7 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS pointcloud_list_generate_messages_n
 _generate_msg_py(pointcloud_list
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/pointcloud_list/msg/ListPointCloud.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointField.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/PointCloud2.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/pointcloud_list
 )
 

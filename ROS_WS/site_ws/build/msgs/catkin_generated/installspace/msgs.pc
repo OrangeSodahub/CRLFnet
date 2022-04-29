@@ -1,0 +1,8 @@
+prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/install
+
+Name: msgs
+Description: Description of msgs
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 

@@ -8,10 +8,10 @@ import std_msgs.msg
 import message_filters
 from sensor_msgs.msg import PointCloud2
 # self-defined msg
-from pointcloud_msgs.msg._MsgPointCloud import *
+from msgs.msg._ListPointCloud import *
 
 def pointcloud_listener(cloud11, cloud12, cloud2):
-    msgcloud = MsgPointCloud()
+    msgcloud = ListPointCloud()
     msgcloud.pointcloud.append(cloud11)
     msgcloud.pointcloud.append(cloud12)
     msgcloud.pointcloud.append(cloud2)
@@ -19,7 +19,7 @@ def pointcloud_listener(cloud11, cloud12, cloud2):
     msgcloud.header = std_msgs.msg.Header()
     msgcloud.header.stamp = rospy.Time.now()
     # Publish
-    pub = rospy.Publisher("/pointcloud_list", MsgPointCloud, queue_size=1)
+    pub = rospy.Publisher("/pointcloud_list", ListPointCloud, queue_size=1)
     pub.publish(msgcloud)
 
 if __name__ == '__main__':
