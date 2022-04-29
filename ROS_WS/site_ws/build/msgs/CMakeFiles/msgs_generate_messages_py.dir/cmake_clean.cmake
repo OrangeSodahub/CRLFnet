@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/msgs/msg/_ListPointCloud.py"
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/msgs/msg/_MsgCamera.py"
+  "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/msgs/msg/_MsgRadCam.py"
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/msgs/msg/_MsgRadar.py"
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/msgs/msg/_MsgRadarObject.py"
   "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/lib/python3/dist-packages/msgs/msg/__init__.py"

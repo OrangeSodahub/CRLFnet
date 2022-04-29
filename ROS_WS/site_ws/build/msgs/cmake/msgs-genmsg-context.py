@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/ListPointCloud.msg;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/MsgCamera.msg;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/MsgRadar.msg;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/MsgRadarObject.msg"
+messages_str = "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/ListPointCloud.msg;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/MsgCamera.msg;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/MsgRadar.msg;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/MsgRadarObject.msg;/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/msgs/msg/MsgRadCam.msg"
 services_str = ""
 pkg_name = "msgs"
 dependencies_str = "sensor_msgs;std_msgs;geometry_msgs"

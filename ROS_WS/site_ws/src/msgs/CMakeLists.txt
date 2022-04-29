@@ -27,6 +27,7 @@ add_message_files(
   MsgCamera.msg
   MsgRadar.msg
   MsgRadarObject.msg
+  MsgRadCam.msg
   )
 ## Generate added messages and services with any dependencies listed here
 generate_messages(

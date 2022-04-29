@@ -10,6 +10,8 @@
     (:file "_package_ListPointCloud" :depends-on ("_package"))
     (:file "MsgCamera" :depends-on ("_package_MsgCamera"))
     (:file "_package_MsgCamera" :depends-on ("_package"))
+    (:file "MsgRadCam" :depends-on ("_package_MsgRadCam"))
+    (:file "_package_MsgRadCam" :depends-on ("_package"))
     (:file "MsgRadar" :depends-on ("_package_MsgRadar"))
     (:file "_package_MsgRadar" :depends-on ("_package"))
     (:file "MsgRadarObject" :depends-on ("_package_MsgRadarObject"))
