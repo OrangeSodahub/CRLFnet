@@ -8,10 +8,11 @@ import numpy as np
 import parser
 import yaml
 import os
-import rospy, math, random, cv_bridge, cv2
+import rospy
+import cv2
 import message_filters
 from termcolor import colored
-from cv_bridge import CvBridge,CvBridgeError
+from cv_bridge import CvBridge
 # camera message type
 from sensor_msgs.msg import Image
 # radar message type
@@ -23,7 +24,7 @@ from msgs.msg._MsgRadCam import *
 
 global counter
 counter = 0
-def fusion(radar: MsgRadar, image2, image3):
+def fusion(radar: MsgRadar, image2: Image, image3: Image):
 
     # radar_roi
     (x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right,
@@ -100,15 +101,15 @@ def fusion(radar: MsgRadar, image2, image3):
     # draw
     if params.draw_output == True:
         # draw on image2
-        draw_output(match_left, radar_left_single, image_left_single, image2)
+        draw_output(match_left, radar_left_single, image_left_single, image2, 'radar2/')
         # draw on image3
-        draw_output(match_right, radar_right_single, image_right_single, image3)
+        draw_output(match_right, radar_right_single, image_right_single, image3, 'radar3/')
 
 
-def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), image: np.array(np.array(int)), image2: Image):
+def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), camera: np.array(np.array(int)), image: Image, radar_name: str):
     output_dir = config['output']['RadCamFusion_dir']
     os.makedirs(output_dir, exist_ok=True)
-    img = CvBridge().imgmsg_to_cv2(image2, 'bgr8')
+    img = CvBridge().imgmsg_to_cv2(image, 'bgr8')
     # draw match
     if len(match)!=0:
         for obj_match in match:
@@ -123,17 +124,17 @@ def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), 
         num = len(radar[0])
         for i in range(num):
             pt1 = (radar[0][i],0)
-            pt2 = (radar[1][i],479)
+            pt2 = (radar[1][i],image.height-1)
             cv2.rectangle(img, pt1, pt2, (255,0,0), 3)
-    # draw image
-    if len(image)!=0:
-        for obj_img in image:
+    # draw camera
+    if len(camera)!=0:
+        for obj_img in camera:
             pt1 = (obj_img[0],obj_match[1])
             pt2 = (obj_img[2],obj_match[3])
             cv2.rectangle(img, pt1, pt2, (0,0,255), 3)
 
     global counter
-    cv2.imwrite(output_dir+'image2_'+str(counter)+'.jpg', img)
+    cv2.imwrite(output_dir+radar_name+'image_'+str(counter)+'.jpg', img)
     counter += 1
 
 
@@ -156,7 +157,7 @@ if __name__ == '__main__':
     sub_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     sub_image_3 = message_filters.Subscriber('/image_raw_3', Image)
  
-    sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 10, 1)# syncronize time stamps
+    sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 1, 1)# syncronize time stamps
     sync.registerCallback(fusion)
     print("Radar Camera Fusion Begin.")
     rospy.spin()
