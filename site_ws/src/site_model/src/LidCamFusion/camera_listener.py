@@ -6,7 +6,7 @@
 from sqlalchemy import true
 import rospy
 from sensor_msgs.msg import Image
-from camera_msgs.msg._MsgCamera import * # camera msgs class
+from msgs.msg._MsgCamera import *  # camera msgs class
 import std_msgs.msg
 import numpy as np
 import message_filters

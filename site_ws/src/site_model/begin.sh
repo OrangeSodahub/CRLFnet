@@ -3,10 +3,10 @@
 # launch
 gnome-terminal --tab "spawn.launch" -- bash -c "cd ../../../../;roslaunch site_model spawn.launch"
 echo "spawn.launch succeed."
-sleep 10
+sleep 20
 
 # preperation
-gnome-terminal --tab "preparation" --bash -c "cd ../../../../;rosrun site_model get_cam_info;"
+gnome-terminal --tab "preparation" --bash -c "cd ../../../../;rosrun site_model get_cam_info"
 sleep 5
 echo "Camera Info received."
 

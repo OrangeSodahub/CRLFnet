@@ -10,7 +10,7 @@ from termcolor import colored
 import cv2
 import os
 # radar message type
-from radar_msgs.msg._MsgRadar import *
+from msgs.msg._MsgRadar import *
 
 def radar_roi(config: dict, radar_msgs: MsgRadar):
     # get calib parameters

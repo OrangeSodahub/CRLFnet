@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>pointcloud_list</name>
+  <name>msgs</name>
   <version>0.0.0</version>
-  <description>The pointcloud_msgs package</description>
+  <description>The msgs package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

@@ -1,24 +1,17 @@
 #############################################################
-#   This py file get the lidar and camera info (time syncr  #
-#   onize) and make fusion.                                 #
+#   This py file acts as agent representing the overhead.   #
 #############################################################
 
 import argparse
+import numpy as np
 import parser
 import yaml
 import rospy
 from termcolor import colored
 import message_filters
-# pointcloud type
-from sensor_msgs.msg import PointCloud2
-# Image type
-from msgs.msg._MsgCamera import * # camera msgs class
-# Object Detection tool
-import OpenPCDet.tools
 
-def fusion(pointcloud, image):
-    # image roi
-    print(image.header)
+def main():
+    print("Agent One Set.")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -32,12 +25,12 @@ if __name__ == '__main__':
             print(colored('Config file could not be read.','red'))
             exit(1)
 
-    rospy.init_node('lidar_camera_fusion', anonymous=True)
+    rospy.init_node('agent_one', anonymous=True)
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
  
     sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera], 10, 1)# syncronize time stamps
-    sync.registerCallback(fusion)
+    sync.registerCallback(main)
     print("Lidar Camera Fusion Begin.")
     rospy.spin()
