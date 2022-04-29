@@ -3,3 +3,5 @@
 .vscode/
 *.pdf
 .pdf
+*/build
+*/devel

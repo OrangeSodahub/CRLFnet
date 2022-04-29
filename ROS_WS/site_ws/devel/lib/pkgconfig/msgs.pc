@@ -1,8 +1,0 @@
-prefix=/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel
-
-Name: msgs
-Description: Description of msgs
-Version: 0.0.0
-Cflags: -I/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/devel/include
-Libs: -L${prefix}/lib 
-Requires: 
