@@ -6,7 +6,7 @@ echo "spawn.launch succeed."
 sleep 20
 
 # preperation
-gnome-terminal --tab "preparation" --bash -c "cd ../../../../;rosrun site_model get_cam_info;"
+gnome-terminal --tab "preparation" --bash -c "cd ../../../../;rosrun site_model get_cam_info"
 sleep 5
 echo "Camera Info received."
 
