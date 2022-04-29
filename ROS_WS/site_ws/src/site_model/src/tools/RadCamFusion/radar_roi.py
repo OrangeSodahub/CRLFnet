@@ -4,11 +4,6 @@
 #############################################################
 
 import numpy as np
-from tomlkit import string
-import rospy
-from termcolor import colored
-import cv2
-import os
 # radar message type
 from msgs.msg._MsgRadar import *
 
@@ -24,50 +19,67 @@ def radar_roi(config: dict, radar_msgs: MsgRadar):
     # left
     x_pixels_left = []
     y_pixels_left = []
+    x_pixels_left_1 = []
+    x_pixels_left_2 = []
     for i in range(round(num_left)):
         # get pixel points
         x_pose = radar_msgs.ObjectList_left[i].obj_vcs_posex
         y_pose = radar_msgs.ObjectList_left[i].obj_vcs_posey
         world_pose = [[x_pose],[y_pose],[0.46],[1]] # 0.46 is preset
-        pixel_pose = get_pixel_pose(calib,"pole2","camera2",world_pose)
+        world_pose_1 = [[x_pose-0.11],[y_pose],[y_pose],[0.46],[1]] # 0.11 is preset
+        world_pose_2 = [[x_pose+0.11],[y_pose],[y_pose],[0.46],[1]]
+        pixel_pose = get_pixel_pose(calib,"camera2",world_pose)
+        pixel_pose_1 = get_pixel_pose(calib,"camera2",world_pose_1)
+        pixel_pose_2 = get_pixel_pose(calib,"camera2",world_pose_2)
         # print("pixel_pose_left:")
         # print(pixel_pose)
 
         # location of detection on the image unit pixel
-        x_pixel = round(pixel_pose[0][0])
-        y_pixel = round(pixel_pose[1][0])
-        x_pixels_left.append(x_pixel)
-        y_pixels_left.append(y_pixel)
+        x_pixels_left.append(round(pixel_pose[0][0]))
+        y_pixels_left.append(round(pixel_pose[1][0]))
+        x_pixels_left_1.append(round(pixel_pose_1[0][0]))
+        x_pixels_left_2.append(round(pixel_pose_2[1][0]))
 
     # right
     x_pixels_right = []
     y_pixels_right = []
+    x_pixels_right_1 = []
+    x_pixels_right_2 = []
     for i in range(round(num_right)):
         # get pixel points
         x_pose = radar_msgs.ObjectList_right[i].obj_vcs_posex
         y_pose = radar_msgs.ObjectList_right[i].obj_vcs_posey
         world_pose = [[x_pose],[y_pose],[0.46],[1]]
-        pixel_pose = get_pixel_pose(calib,"pole3","camera3",world_pose)
+        world_pose_1 = [[x_pose-0.11],[y_pose],[y_pose],[0.46],[1]]
+        world_pose_2 = [[x_pose+0.11],[y_pose],[y_pose],[0.46],[1]]
+        pixel_pose = get_pixel_pose(calib,"camera3",world_pose)
+        pixel_pose_1 = get_pixel_pose(calib,"camera3",world_pose_1)
+        pixel_pose_2 = get_pixel_pose(calib,"camera3",world_pose_2)
         # print("pixel_pose_right:")
         # print(pixel_pose)
 
         # location of detection on the image unit pixel
-        x_pixel = round(pixel_pose[0][0])
-        y_pixel = round(pixel_pose[1][0])
-        x_pixels_right.append(x_pixel)
-        y_pixels_right.append(y_pixel)
+        x_pixels_right.append(round(pixel_pose[0][0]))
+        y_pixels_right.append(round(pixel_pose[1][0]))
+        x_pixels_right_1.append(round(pixel_pose_1[0][0]))
+        x_pixels_right_2.append(round(pixel_pose_2[1][0]))
 
-    return x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right
+    return (x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right,
+            x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2)
 
-def get_pixel_pose(calib: np.array, pole_name: string, camera_name: string, world_pose: np.array):
+def get_pixel_pose(calib: np.array, camera_name: str, world_pose: np.array):
     """
         world_pose -> camera_pose : external parameter of camera
         camera_pose -> pixel_pose : internal parameter of camera
         tips: shift is need between external and internal parameter
     """
+    # transform from camera name to camera number
+    transform = {'camera2': 4,
+                 'camera3': 5
+                }
     # get external and internal parameter of camera
-    world_to_camera = calib[4][1:17].reshape(4,4)
-    camera_to_pixel = calib[4][17:30].reshape(3,4)
+    world_to_camera = calib[transform[camera_name]][1:17].reshape(4,4)
+    camera_to_pixel = calib[transform[camera_name]][17:30].reshape(3,4)
 
     # coordinates in camera coordinates
     camera_pose = np.matmul(world_to_camera, world_pose)
