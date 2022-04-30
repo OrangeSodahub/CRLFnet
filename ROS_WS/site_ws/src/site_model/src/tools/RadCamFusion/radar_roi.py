@@ -4,10 +4,11 @@
 #############################################################
 
 import numpy as np
+from torch import det
 # radar message type
 from msgs.msg._MsgRadar import *
 
-def radar_roi(config: dict, radar_msgs: MsgRadar):
+def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, height3: int, width3: int):
     # get calib parameters
     calib_dir = config['calib']['calib_dir']
     calib = np.loadtxt(calib_dir+'calib.txt')
@@ -35,10 +36,14 @@ def radar_roi(config: dict, radar_msgs: MsgRadar):
         # print(pixel_pose)
 
         # location of detection on the image unit pixel
-        x_pixels_left.append(round(pixel_pose[0][0]))
-        y_pixels_left.append(round(pixel_pose[1][0]))
-        x_pixels_left_1.append(round(pixel_pose_1[0][0]))
-        x_pixels_left_2.append(round(pixel_pose_2[1][0]))
+        cur_x_pixels_left = detect_bound(pixel_pose[0][0],0,width3)
+        cur_y_pixels_left = detect_bound(pixel_pose[1][0],0,height3)
+        cur_x_pixels_left_1 = detect_bound(pixel_pose_1[0][0],0,width3)
+        cur_x_pixels_left_2 = detect_bound(pixel_pose_2[0][0],0,width3)
+        x_pixels_left.append(round(cur_x_pixels_left))
+        y_pixels_left.append(round(cur_y_pixels_left))
+        x_pixels_left_1.append(round(cur_x_pixels_left_1))
+        x_pixels_left_2.append(round(cur_x_pixels_left_2))
 
     # right
     x_pixels_right = []
@@ -59,10 +64,14 @@ def radar_roi(config: dict, radar_msgs: MsgRadar):
         # print(pixel_pose)
 
         # location of detection on the image unit pixel
-        x_pixels_right.append(round(pixel_pose[0][0]))
-        y_pixels_right.append(round(pixel_pose[1][0]))
-        x_pixels_right_1.append(round(pixel_pose_1[0][0]))
-        x_pixels_right_2.append(round(pixel_pose_2[1][0]))
+        cur_x_pixels_right = detect_bound(pixel_pose[0][0],0,width3)
+        cur_y_pixels_right = detect_bound(pixel_pose[1][0],0,height3)
+        cur_x_pixels_right_1 = detect_bound(pixel_pose_1[0][0],0,width3)
+        cur_x_pixels_right_2 = detect_bound(pixel_pose_2[0][0],0,width3)
+        x_pixels_right.append(round(cur_x_pixels_right))
+        y_pixels_right.append(round(cur_y_pixels_right))
+        x_pixels_right_1.append(round(cur_x_pixels_right_1))
+        x_pixels_right_2.append(round(cur_x_pixels_right_2))
 
     return (x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right,
             x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2)
@@ -95,3 +104,10 @@ def get_pixel_pose(calib: np.array, camera_name: str, world_pose: np.array):
     pixel_pose = np.matmul(camera_to_pixel, camera_pose_shift)
 
     return pixel_pose
+
+def detect_bound(obj:int, low: int, upper: int):
+    if obj < low:
+        obj = low
+    if obj > upper:
+        obj = upper
+    return obj

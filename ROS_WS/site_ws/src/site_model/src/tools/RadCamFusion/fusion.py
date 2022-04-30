@@ -28,7 +28,8 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
 
     # radar_roi
     (x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right,
-    x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2) = radar_roi.radar_roi(config, radar)
+    x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2) = radar_roi.radar_roi(config, radar, image2.height, image2.width,
+                                                                                                               image3.height, image3.width)
     # image_roi
     labels_left = [[]]
     labels_right = [[]]
