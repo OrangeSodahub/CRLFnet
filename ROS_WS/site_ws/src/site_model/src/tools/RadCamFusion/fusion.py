@@ -101,10 +101,12 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     
     # draw
     if params.draw_output == True:
-        # draw on image2
-        draw_output(match_left, radar_left_single, image_left_single, image2, 'radar2/')
-        # draw on image3
-        draw_output(match_right, radar_right_single, image_right_single, image3, 'radar3/')
+        if msgradcam.match_left+msgradcam.camera_left+msgradcam.radar_left!=0:
+            # draw on image2
+            draw_output(match_left, radar_left_single, image_left_single, image2, 'radar2/')
+        if msgradcam.match_right+msgradcam.camera_right+msgradcam.radar_right!=0:
+            # draw on image3
+            draw_output(match_right, radar_right_single, image_right_single, image3, 'radar3/')
 
 
 def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), camera: np.array(np.array(int)), image: Image, radar_name: str):

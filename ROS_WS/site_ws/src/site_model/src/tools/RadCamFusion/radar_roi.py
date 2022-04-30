@@ -36,10 +36,10 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         # print(pixel_pose)
 
         # location of detection on the image unit pixel
-        cur_x_pixels_left = detect_bound(pixel_pose[0][0],0,width3)
-        cur_y_pixels_left = detect_bound(pixel_pose[1][0],0,height3)
-        cur_x_pixels_left_1 = detect_bound(pixel_pose_1[0][0],0,width3)
-        cur_x_pixels_left_2 = detect_bound(pixel_pose_2[0][0],0,width3)
+        cur_x_pixels_left = boundary_detection(pixel_pose[0][0],0,width3)
+        cur_y_pixels_left = boundary_detection(pixel_pose[1][0],0,height3)
+        cur_x_pixels_left_1 = boundary_detection(pixel_pose_1[0][0],0,width3)
+        cur_x_pixels_left_2 = boundary_detection(pixel_pose_2[0][0],0,width3)
         x_pixels_left.append(round(cur_x_pixels_left))
         y_pixels_left.append(round(cur_y_pixels_left))
         x_pixels_left_1.append(round(cur_x_pixels_left_1))
@@ -64,10 +64,10 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         # print(pixel_pose)
 
         # location of detection on the image unit pixel
-        cur_x_pixels_right = detect_bound(pixel_pose[0][0],0,width3)
-        cur_y_pixels_right = detect_bound(pixel_pose[1][0],0,height3)
-        cur_x_pixels_right_1 = detect_bound(pixel_pose_1[0][0],0,width3)
-        cur_x_pixels_right_2 = detect_bound(pixel_pose_2[0][0],0,width3)
+        cur_x_pixels_right = boundary_detection(pixel_pose[0][0],0,width3)
+        cur_y_pixels_right = boundary_detection(pixel_pose[1][0],0,height3)
+        cur_x_pixels_right_1 = boundary_detection(pixel_pose_1[0][0],0,width3)
+        cur_x_pixels_right_2 = boundary_detection(pixel_pose_2[0][0],0,width3)
         x_pixels_right.append(round(cur_x_pixels_right))
         y_pixels_right.append(round(cur_y_pixels_right))
         x_pixels_right_1.append(round(cur_x_pixels_right_1))
@@ -105,7 +105,7 @@ def get_pixel_pose(calib: np.array, camera_name: str, world_pose: np.array):
 
     return pixel_pose
 
-def detect_bound(obj:int, low: int, upper: int):
+def boundary_detection(obj:int, low: int, upper: int):
     if obj < low:
         obj = low
     if obj > upper:
