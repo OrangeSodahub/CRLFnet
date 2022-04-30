@@ -15,10 +15,20 @@ from sensor_msgs.msg import PointCloud2
 from msgs.msg._MsgCamera import * # camera msgs class
 # Object Detection tool
 import OpenPCDet.tools
+# fusion message type
+from msgs.msg._MsgLidCam import *
 
 def fusion(pointcloud, image):
     # image roi
-    print(image.header)
+
+    # pointcloud roi
+    
+    msglidcam = MsgLidCam()
+    msglidcam.header.stamp = rospy.Time.now()
+
+    # publish result
+    pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
+    pub.publish(msglidcam)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -37,7 +47,7 @@ if __name__ == '__main__':
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
  
-    sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera], 10, 1)# syncronize time stamps
+    sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera], 1, 1)# syncronize time stamps
     sync.registerCallback(fusion)
     print("Lidar Camera Fusion Begin.")
     rospy.spin()
