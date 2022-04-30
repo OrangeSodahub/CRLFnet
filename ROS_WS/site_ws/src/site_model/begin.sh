@@ -3,12 +3,17 @@
 # launch
 gnome-terminal --tab "spawn.launch" -- bash -c "cd ../../../../;roslaunch site_model spawn.launch"
 echo "spawn.launch succeed."
-sleep 20
+sleep 30
 
 # preperation
 gnome-terminal --tab "preparation" --bash -c "cd ../../../../;rosrun site_model get_cam_info"
 sleep 5
 echo "Camera Info received."
+
+# generate calibration
+gnome-terminal --tab "calibration" --bash -c "cd src/tools/RadCamFusion/;python generate_calib.py"
+sleep 5
+echo "Calibration Generated."
 
 # radar
 gnome-terminal --tab "radar_listener" -- bash -c "cd src/tools/;python radar_listener.py"

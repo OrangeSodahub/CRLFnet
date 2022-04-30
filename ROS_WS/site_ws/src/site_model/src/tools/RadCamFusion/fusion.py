@@ -42,8 +42,9 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     radar_right_single = [[]]
     image_right_single = [[]]
     ## left
-    if radar.total_vehicles_left!=0 and len(labels_left)!=0:
-        for radar_left1, radar_left2 in x_pixels_left_1, x_pixels_left_2:
+    if radar.total_vehicles_left!=0 and len(labels_left[0])!=0: # empty 2-dimention array has a size of 1
+        print("labels_left:"+str(len(labels_left)))
+        for radar_left1, radar_left2 in zip(x_pixels_left_1, x_pixels_left_2):
             for image_left in labels_left:
                 match_left1 = max(radar_left1,image_left[0])
                 match_left2 = min(radar_left2,image_left[0])
@@ -59,14 +60,14 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
                 x_pixels_left_1.remove(radar_left1)
                 x_pixels_left_2.remove(radar_left2)
                 labels_left.remove(image_left)
-    if radar.total_vehicles_left==0 and len(labels_left)!=0:
+    if radar.total_vehicles_left==0 and len(labels_left[0])!=0:
         image_left_single = labels_left
-    if radar.total_vehicles_left!=0 and len(labels_left)==0:
+    if radar.total_vehicles_left!=0 and len(labels_left[0])==0:
         radar_left_single = [x_pixels_left_1, x_pixels_left_2]
     
     ## right
-    if radar.total_vehicles_right!=0 and len(labels_right)!=0:
-        for radar_right1, radar_right2 in x_pixels_right_1, x_pixels_right_2:
+    if radar.total_vehicles_right!=0 and len(labels_right[0])!=0:
+        for radar_right1, radar_right2 in zip(x_pixels_right_1, x_pixels_right_2):
             for image_right in labels_right:
                 match_right1 = max(radar_right1,image_right[0])
                 match_right2 = min(radar_right2,image_right[0])
@@ -82,19 +83,19 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
                 x_pixels_right_1.remove(radar_right1)
                 x_pixels_right_2.remove(radar_right2)
                 labels_right.remove(image_right)
-    if radar.total_vehicles_right==0 and len(labels_right)!=0:
+    if radar.total_vehicles_right==0 and len(labels_right[0])!=0:
         image_right_single = labels_right
-    if radar.total_vehicles_right!=0 and len(labels_right)==0:
+    if radar.total_vehicles_right!=0 and len(labels_right[0])==0:
         radar_right_single = [x_pixels_right_1, x_pixels_right_2]
 
     # publish the results
     msgradcam = MsgRadCam()
-    msgradcam.match_left = len(match_left)
+    msgradcam.match_left = len(match_left[0])
     msgradcam.radar_left = len(radar_left_single[0])
-    msgradcam.camera_left = len(image_left_single)
-    msgradcam.match_right = len(match_right)
+    msgradcam.camera_left = len(image_left_single[0])
+    msgradcam.match_right = len(match_right[0])
     msgradcam.radar_right = len(radar_right_single[0])
-    msgradcam.camera_right = len(image_right_single)
+    msgradcam.camera_right = len(image_right_single[0])
 
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam)
     pub.publish(msgradcam)
@@ -114,7 +115,7 @@ def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), 
     os.makedirs(output_dir, exist_ok=True)
     img = CvBridge().imgmsg_to_cv2(image, 'bgr8')
     # draw match
-    if len(match)!=0:
+    if len(match[0])!=0: # empty match has a size of 1
         for obj_match in match:
             pt1 = (obj_match[0],obj_match[1])
             pt2 = (obj_match[2],obj_match[3])
@@ -130,12 +131,13 @@ def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), 
             pt2 = (radar[1][i],image.height-1)
             cv2.rectangle(img, pt1, pt2, (255,0,0), 3)
     # draw camera
-    if len(camera)!=0:
+    if len(camera[0])!=0:
         for obj_img in camera:
             pt1 = (obj_img[0],obj_match[1])
             pt2 = (obj_img[2],obj_match[3])
             cv2.rectangle(img, pt1, pt2, (0,0,255), 3)
 
+    # if drawn == True:
     global counter
     cv2.imwrite(output_dir+radar_name+'image_'+str(counter)+'.jpg', img)
     counter += 1

@@ -27,8 +27,8 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         x_pose = radar_msgs.ObjectList_left[i].obj_vcs_posex
         y_pose = radar_msgs.ObjectList_left[i].obj_vcs_posey
         world_pose = [[x_pose],[y_pose],[0.46],[1]] # 0.46 is preset
-        world_pose_1 = [[x_pose-0.11],[y_pose],[y_pose],[0.46],[1]] # 0.11 is preset
-        world_pose_2 = [[x_pose+0.11],[y_pose],[y_pose],[0.46],[1]]
+        world_pose_1 = [[x_pose-0.11],[y_pose],[0.46],[1]] # 0.11 is preset
+        world_pose_2 = [[x_pose+0.11],[y_pose],[0.46],[1]]
         pixel_pose = get_pixel_pose(calib,"camera2",world_pose)
         pixel_pose_1 = get_pixel_pose(calib,"camera2",world_pose_1)
         pixel_pose_2 = get_pixel_pose(calib,"camera2",world_pose_2)
@@ -55,8 +55,8 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         x_pose = radar_msgs.ObjectList_right[i].obj_vcs_posex
         y_pose = radar_msgs.ObjectList_right[i].obj_vcs_posey
         world_pose = [[x_pose],[y_pose],[0.46],[1]]
-        world_pose_1 = [[x_pose-0.11],[y_pose],[y_pose],[0.46],[1]]
-        world_pose_2 = [[x_pose+0.11],[y_pose],[y_pose],[0.46],[1]]
+        world_pose_1 = [[x_pose-0.11],[y_pose],[0.46],[1]]
+        world_pose_2 = [[x_pose+0.11],[y_pose],[0.46],[1]]
         pixel_pose = get_pixel_pose(calib,"camera3",world_pose)
         pixel_pose_1 = get_pixel_pose(calib,"camera3",world_pose_1)
         pixel_pose_2 = get_pixel_pose(calib,"camera3",world_pose_2)
