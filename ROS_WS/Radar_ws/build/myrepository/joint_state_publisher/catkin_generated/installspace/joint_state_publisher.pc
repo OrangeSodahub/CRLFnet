@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: joint_state_publisher
-Description: Description of joint_state_publisher
-Version: 1.12.12
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

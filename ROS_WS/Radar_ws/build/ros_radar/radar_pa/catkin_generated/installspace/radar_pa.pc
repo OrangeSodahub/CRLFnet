@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: radar_pa
-Description: Description of radar_pa
-Version: 1.0.1
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: rospy std_msgs geometry_msgs sensor_msgs can_msgs radar_pa_msgs

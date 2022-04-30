@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: delphi_esr_msgs
-Description: Description of delphi_esr_msgs
-Version: 2.3.1
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: message_runtime std_msgs

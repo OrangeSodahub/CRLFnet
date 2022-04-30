@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: canopen_chain_node
-Description: Description of canopen_chain_node
-Version: 0.7.6
-Cflags: -I${prefix}/include -I/usr/include
-Libs: -L${prefix}/lib -lcanopen_ros_chain /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0
-Requires: canopen_master diagnostic_updater message_runtime pluginlib roscpp socketcan_interface std_srvs

@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/SqueezeSeg/SqueezeSeg_ws/devel
-
-Name: squeezeseg_ros
-Description: Description of squeezeseg_ros
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: radar_pkg
-Description: Description of radar_pkg
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -lradar_pkg
-Requires: roscpp rospy std_msgs

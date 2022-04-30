@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/devel
-
-Name: canopen_402
-Description: Description of canopen_402
-Version: 0.7.6
-Cflags: -I/home/zonlin/ROS/Radar_ws/src/myrepository/ros_canopen/canopen_402/include -I/usr/include
-Libs: -L${prefix}/lib -lcanopen_402
-Requires: canopen_master

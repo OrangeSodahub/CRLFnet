@@ -1,2 +1,0 @@
-ros_rslidar/rslidar:ros_rslidar/rslidar_driver:ros_rslidar/rslidar_msgs:ros_rslidar/rslidar_pointcloud:ros_rslidar/rslidar_sync
--DCATKIN_DEVEL_PREFIX=/home/zonlin/ROS/rslidar_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/ROS/rslidar_ws/install -G Unix Makefiles

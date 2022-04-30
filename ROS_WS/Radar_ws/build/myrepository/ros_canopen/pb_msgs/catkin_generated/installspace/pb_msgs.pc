@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: pb_msgs
-Description: Description of pb_msgs
-Version: 0.7.6
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: message_runtime std_msgs

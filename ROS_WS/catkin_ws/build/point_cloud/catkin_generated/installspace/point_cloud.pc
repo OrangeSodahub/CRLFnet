@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/catkin_ws/install
-
-Name: point_cloud
-Description: Description of point_cloud
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

@@ -1,2 +1,0 @@
-SqueezeSeg_Ros
--DCATKIN_DEVEL_PREFIX=/home/zonlin/ROS/SqueezeSeg/SqueezeSeg_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zonlin/ROS/SqueezeSeg/SqueezeSeg_ws/install -G Unix Makefiles

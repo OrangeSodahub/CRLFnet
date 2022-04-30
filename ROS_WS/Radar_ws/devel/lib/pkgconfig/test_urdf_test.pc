@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/devel
-
-Name: test_urdf_test
-Description: Description of test_urdf_test
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

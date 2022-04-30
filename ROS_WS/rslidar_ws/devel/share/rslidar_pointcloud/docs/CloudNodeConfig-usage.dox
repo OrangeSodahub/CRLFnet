@@ -1,7 +1,0 @@
-\subsubsection usage Usage
-\verbatim
-<node name="cloud_node" pkg="rslidar_pointcloud" type="cloud_node">
-  <param name="time_offset" type="double" value="0.0" />
-</node>
-\endverbatim
-

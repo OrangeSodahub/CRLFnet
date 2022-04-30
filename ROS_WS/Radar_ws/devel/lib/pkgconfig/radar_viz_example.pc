@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/devel
-
-Name: radar_viz_example
-Description: Description of radar_viz_example
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

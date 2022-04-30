@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: radar_camera_fusion
-Description: Description of radar_camera_fusion
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

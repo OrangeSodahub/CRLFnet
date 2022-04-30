@@ -1,8 +1,0 @@
-prefix=/home/zonlin/ROS/Radar_ws/install
-
-Name: socketcan_interface
-Description: Description of socketcan_interface
-Version: 0.7.6
-Cflags: -I${prefix}/include -I/usr/include
-Libs: -L${prefix}/lib -lsocketcan_interface_string /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0 /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0 /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
-Requires: 
