@@ -8,8 +8,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
-// self_defined pointcloud_list
-#include <pointcloud_msgs/MsgPointCloud.h>
+#include <msgs/ListPointCloud.h>
 using namespace std;
 
 typedef pcl::PointXYZI PointT; // 注意点云格式是：XYZ还是XYZRGB,XYZI
@@ -39,7 +38,7 @@ public:
         pub = nh.advertise<sensor_msgs::PointCloud2>("/point_cloud_combined", 1);
         sub = nh.subscribe("/pointcloud_list", 1, &pointcloud_combiner::callback, this);
     }
-    void callback(const pointcloud_msgs::MsgPointCloud& pointcloud_list)
+    void callback(const msgs::ListPointCloud& pointcloud_list)
     {
         // define pointcloud type: sensor_msgs::PointCloud2
         sensor_msgs::PointCloud2 cloud11, cloud12, cloud2;
