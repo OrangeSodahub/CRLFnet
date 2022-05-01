@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file generate the roi of radar detection.       #
 #   Author: Yangxiuyu                                       #
 #############################################################
 
+import os
 import numpy as np
 from torch import det
 # radar message type
@@ -11,7 +14,7 @@ from msgs.msg._MsgRadar import *
 def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, height3: int, width3: int):
     # get calib parameters
     calib_dir = config['calib']['calib_dir']
-    calib = np.loadtxt(calib_dir+'calib.txt')
+    calib = np.loadtxt(os.path.join(calib_dir, 'calib.txt'))
 
     # get radar pts
     num_left = radar_msgs.total_vehicles_left # num of vechicles
