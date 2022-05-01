@@ -1,8 +1,0 @@
-prefix=/home/zzy/CRLFnet/install
-
-Name: radar_plugin
-Description: Description of radar_plugin
-Version: 1.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: gazebo_ros message_runtime roscpp

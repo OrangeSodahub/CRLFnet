@@ -1,8 +1,0 @@
-prefix=/home/zzy/CRLFnet/devel
-
-Name: image_predict
-Description: Description of image_predict
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
