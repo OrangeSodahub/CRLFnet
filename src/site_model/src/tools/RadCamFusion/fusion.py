@@ -149,7 +149,6 @@ def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), 
             pt2 = (obj_img[2],obj_match[3])
             cv2.rectangle(img, pt1, pt2, (0,0,255), 3)
 
-    # if drawn == True:
     global counter
     cv2.imwrite(output_dir+radar_name+'image_'+str(counter)+'.jpg', img)
     counter += 1
@@ -158,7 +157,7 @@ def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zzy/CRLFnet/src/site_model/config/config.yaml")
-    parser.add_argument("--draw_output", help="wehter to draw rois and output", metavar="FILE", required=False, default=False)
+    parser.add_argument("--draw_output", help="wehter to draw rois and output", default='False', action='store_true', required=False)
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:
