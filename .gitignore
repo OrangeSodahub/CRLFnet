@@ -1,3 +1,5 @@
 .vscode
 *.vscode/
 .vscode/
+/build
+/devel
