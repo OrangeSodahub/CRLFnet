@@ -71,9 +71,15 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
                 x_pixels_left_1.remove(radar_left1)
                 x_pixels_left_2.remove(radar_left2)
                 labels_left.remove(image_left)
+<<<<<<< HEAD:src/site_model/src/tools/RadCamFusion/fusion.py
     if radar.total_vehicles_left == 0 and len(labels_left[0]) != 0:
         image_left_single = labels_left
     if radar.total_vehicles_left != 0 and len(labels_left[0]) == 0:
+=======
+    if radar.total_vehicles_left==0 and len(labels_left[0])!=0:
+        image_left_single = labels_left
+    if radar.total_vehicles_left!=0 and len(labels_left[0])==0:
+>>>>>>> master:site_ws/src/site_model/src/tools/RadCamFusion/fusion.py
         radar_left_single = [x_pixels_left_1, x_pixels_left_2]
     
     ## right
@@ -107,7 +113,10 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     msgradcam.match_right = len(match_right[0])
     msgradcam.radar_right = len(radar_right_single[0])
     msgradcam.camera_right = len(image_right_single[0])
+<<<<<<< HEAD:src/site_model/src/tools/RadCamFusion/fusion.py
     msgradcam.header.stamp = rospy.Time.now()
+=======
+>>>>>>> master:site_ws/src/site_model/src/tools/RadCamFusion/fusion.py
 
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam)
     pub.publish(msgradcam)
