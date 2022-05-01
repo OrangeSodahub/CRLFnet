@@ -7,10 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/zzy/CRLFnet/devel:$CMAKE_PREFIX_PATH"
-export LD_LIBRARY_PATH="/home/zzy/CRLFnet/devel/lib:$LD_LIBRARY_PATH"
-export PKG_CONFIG_PATH="/home/zzy/CRLFnet/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/zzy/CRLFnet/build'
-export PYTHONPATH="/home/zzy/CRLFnet/devel/lib/python3/dist-packages:$PYTHONPATH"
-export ROSLISP_PACKAGE_DIRECTORIES='/home/zzy/CRLFnet/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/zzy/CRLFnet/src:$ROS_PACKAGE_PATH"

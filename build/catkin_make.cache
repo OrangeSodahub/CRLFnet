@@ -1,2 +1,2 @@
 ARS_gazebo_plugin/radar_plugin:msgs:per_msgs:pkg:point_cloud:site_model:velodyne/velodyne_description:velodyne/velodyne_gazebo_plugins:velodyne/velodyne_simulator
--DCATKIN_DEVEL_PREFIX=/home/zzy/CRLFnet/devel -DCMAKE_INSTALL_PREFIX=/home/zzy/CRLFnet/install -G Unix Makefiles
+-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCATKIN_DEVEL_PREFIX=/home/zzy/CRLFnet/devel -DCMAKE_INSTALL_PREFIX=/home/zzy/CRLFnet/install -G Unix Makefiles
