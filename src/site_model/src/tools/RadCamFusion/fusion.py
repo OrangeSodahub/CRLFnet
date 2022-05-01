@@ -107,6 +107,7 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     msgradcam.match_right = len(match_right[0])
     msgradcam.radar_right = len(radar_right_single[0])
     msgradcam.camera_right = len(image_right_single[0])
+    msgradcam.header.stamp = rospy.Time.now()
 
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam)
     pub.publish(msgradcam)
