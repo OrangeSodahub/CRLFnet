@@ -3,7 +3,6 @@
 #   the integrated information.                             #
 #############################################################
 
-from sqlalchemy import true
 import rospy
 from sensor_msgs.msg import Image
 from msgs.msg._MsgCamera import *  # camera msgs class

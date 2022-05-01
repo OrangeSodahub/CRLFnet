@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file get the radar and camera info (time syncr  #
 #   onize) and make fusion.                                 #
@@ -19,20 +21,29 @@ from sensor_msgs.msg import Image
 from msgs.msg._MsgRadar import *
 # radar roi generate
 import radar_roi
+# image detection
+import image_roi
+# yolo
+from yolo.yolo import YOLO
 # fusion message type
 from msgs.msg._MsgRadCam import *
 
 global counter
 counter = 0
 def fusion(radar: MsgRadar, image2: Image, image3: Image):
+    global yolo
+
+    print("+------------------+")
 
     # radar_roi
     (x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right,
     x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2) = radar_roi.radar_roi(config, radar, image2.height, image2.width,
                                                                                                                image3.height, image3.width)
     # image_roi
-    labels_left = [[]]
-    labels_right = [[]]
+    print("  Image 2: ", end='')
+    labels_left = image_roi.image_roi(image2, yolo=yolo)
+    print("  Image 3: ", end='')
+    labels_right = image_roi.image_roi(image3, yolo=yolo)
 
     # fusion
     match_left = [[]]
@@ -60,9 +71,15 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
                 x_pixels_left_1.remove(radar_left1)
                 x_pixels_left_2.remove(radar_left2)
                 labels_left.remove(image_left)
+<<<<<<< HEAD:src/site_model/src/tools/RadCamFusion/fusion.py
+    if radar.total_vehicles_left == 0 and len(labels_left[0]) != 0:
+        image_left_single = labels_left
+    if radar.total_vehicles_left != 0 and len(labels_left[0]) == 0:
+=======
     if radar.total_vehicles_left==0 and len(labels_left[0])!=0:
         image_left_single = labels_left
     if radar.total_vehicles_left!=0 and len(labels_left[0])==0:
+>>>>>>> master:site_ws/src/site_model/src/tools/RadCamFusion/fusion.py
         radar_left_single = [x_pixels_left_1, x_pixels_left_2]
     
     ## right
@@ -96,6 +113,10 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     msgradcam.match_right = len(match_right[0])
     msgradcam.radar_right = len(radar_right_single[0])
     msgradcam.camera_right = len(image_right_single[0])
+<<<<<<< HEAD:src/site_model/src/tools/RadCamFusion/fusion.py
+    msgradcam.header.stamp = rospy.Time.now()
+=======
+>>>>>>> master:site_ws/src/site_model/src/tools/RadCamFusion/fusion.py
 
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam)
     pub.publish(msgradcam)
@@ -145,7 +166,7 @@ def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/config/config.yaml")
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zzy/CRLFnet/src/site_model/config/config.yaml")
     parser.add_argument("--draw_output", help="wehter to draw rois and output", metavar="FILE", required=False, default=False)
     params = parser.parse_args()
 
@@ -161,8 +182,10 @@ if __name__ == '__main__':
     sub_radar = message_filters.Subscriber('/radar_msgs_combined', MsgRadar)
     sub_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     sub_image_3 = message_filters.Subscriber('/image_raw_3', Image)
+
+    yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
  
-    sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 1, 1)# syncronize time stamps
+    sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 1, 1) # syncronize time stamps
     sync.registerCallback(fusion)
     print("Radar Camera Fusion Begin.")
     rospy.spin()
