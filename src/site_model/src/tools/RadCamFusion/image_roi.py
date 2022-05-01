@@ -2,7 +2,6 @@
 
 
 from PIL import Image
-
 import ros_numpy
 
 from yolo.yolo import YOLO

@@ -1,4 +1,5 @@
-from hashlib import new
+#!/usr/bin/env python3
+
 import os
 path = "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/rename/"
 

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file subscribe the topic of cameras and publish #
 #   the integrated information.                             #

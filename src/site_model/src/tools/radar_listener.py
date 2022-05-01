@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file subscribe the topic of radars and save     #
 #	the poses information of vehicles.						#
 #   Author: Yangxiuyu                                       #
 #############################################################
 
-from sqlalchemy import true
 import rospy
 from per_msgs.msg._SensorMsgsRadar import *
 # radar message type
@@ -37,7 +38,7 @@ def radar_listener(radar2: SensorMsgsRadar, radar3: SensorMsgsRadar):
     pub.publish(msgradar)
 
 if __name__ == '__main__':
-    rospy.init_node("radar_listener", anonymous=true)
+    rospy.init_node("radar_listener", anonymous=True)
 
     sub_radar_2 = message_filters.Subscriber("/ARS_408_21_2_Topic", SensorMsgsRadar)
     sub_radar_3 = message_filters.Subscriber("/ARS_408_21_3_Topic", SensorMsgsRadar)

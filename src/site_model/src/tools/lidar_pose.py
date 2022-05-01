@@ -1,13 +1,11 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file caculate the pose of liders.               #
 #   Author: Yangxiuyu                                       #
 #############################################################
 
 import math
-from termcolor import colored
-import argparse
-import yaml
-import os
 import numpy as np
 
 def main():

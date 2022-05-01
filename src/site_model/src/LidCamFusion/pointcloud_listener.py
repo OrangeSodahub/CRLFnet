@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file subscribe the topic of lidars and output a #
 #   list of them.                                           #

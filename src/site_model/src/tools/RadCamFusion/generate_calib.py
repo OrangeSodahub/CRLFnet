@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file caculate the calibration matrix            #
 #   Output txt file to tools/calib/                         #

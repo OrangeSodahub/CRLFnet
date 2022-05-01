@@ -7,7 +7,6 @@
 
 import os
 import numpy as np
-from torch import det
 # radar message type
 from msgs.msg._MsgRadar import *
 

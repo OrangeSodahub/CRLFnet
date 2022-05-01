@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #############################################################
 #   This py file get the lidar and camera info (time syncr  #
 #   onize) and make fusion.                                 #
