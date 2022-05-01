@@ -1,0 +1,8 @@
+prefix=/home/zzy/CRLFnet/install
+
+Name: msgs
+Description: Description of msgs
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 
