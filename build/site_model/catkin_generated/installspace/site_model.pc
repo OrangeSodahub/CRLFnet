@@ -1,0 +1,8 @@
+prefix=/home/zzy/CRLFnet/install
+
+Name: site_model
+Description: Description of site_model
+Version: 1.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: gazebo_ros message_runtime roscpp
