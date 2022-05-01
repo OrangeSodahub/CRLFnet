@@ -9,8 +9,12 @@ import yaml
 import rospy
 from termcolor import colored
 import message_filters
+# radar camera fusion message type
+from msgs.msg._MsgRadCam import *
+# lidar camera fusion message type
+from msgs.msg._MsgLidCam import *
 
-def main():
+def main(msgradcam: MsgRadCam, msglidcam: MsgLidCam):
     print("Agent One Set.")
 
 if __name__ == '__main__':
@@ -27,10 +31,10 @@ if __name__ == '__main__':
 
     rospy.init_node('agent_one', anonymous=True)
 
-    sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
-    sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
+    sub_msgradcam = message_filters.Subscriber('/radar_camera_fused', MsgRadCam)
+    sub_msglidcam = message_filters.Subscriber('/lidar_camera_fused', MsgLidCam)
  
-    sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera], 10, 1)# syncronize time stamps
+    sync = message_filters.ApproximateTimeSynchronizer([sub_msgradcam, sub_msglidcam], 1, 1)# syncronize time stamps
     sync.registerCallback(main)
-    print("Lidar Camera Fusion Begin.")
+    print("Agent Set.")
     rospy.spin()

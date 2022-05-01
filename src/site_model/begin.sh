@@ -41,3 +41,7 @@ sleep 5
 # lidar-camera fusion
 gnome-terminal --tab "lidar-camera fusion" -- bash -c "cd src/LidCamFusion/;python fusion.py"
 echo "Lidar-Camera Fusion Begin."
+
+# agents
+gnome-terminal --tab "agent" -- bash -c "cd src/agent/;python agent1.py"
+echo "Agent1 Set."
