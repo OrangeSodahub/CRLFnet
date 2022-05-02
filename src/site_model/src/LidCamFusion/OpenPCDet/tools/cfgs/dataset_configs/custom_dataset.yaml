@@ -8,10 +8,10 @@ DATA_SPLIT: {
     'test': val
 }
 
-# INFO_PATH: {
-#     'train': [kitti_infos_train.pkl],
-#     'test': [kitti_infos_val.pkl],
-# }
+INFO_PATH: {
+    'train': [custom_infos_train.pkl],
+    'test': [custom_infos_val.pkl],
+}
 
 GET_ITEM_LIST: ["points"]
 FOV_POINTS_ONLY: True

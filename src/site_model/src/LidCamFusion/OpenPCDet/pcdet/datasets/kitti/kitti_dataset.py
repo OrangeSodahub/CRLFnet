@@ -187,6 +187,7 @@ class KittiDataset(DatasetTemplate):
                 num_gt = len(annotations['name'])
                 index = list(range(num_objects)) + [-1] * (num_gt - num_objects)
                 annotations['index'] = np.array(index, dtype=np.int32)
+                # print("annotations['index']:", annotations['index'])
 
                 loc = annotations['location'][:num_objects]
                 dims = annotations['dimensions'][:num_objects]
@@ -196,6 +197,7 @@ class KittiDataset(DatasetTemplate):
                 loc_lidar[:, 2] += h[:, 0] / 2
                 gt_boxes_lidar = np.concatenate([loc_lidar, l, w, h, -(np.pi / 2 + rots[..., np.newaxis])], axis=1)
                 annotations['gt_boxes_lidar'] = gt_boxes_lidar
+                print(annotations)
 
                 info['annos'] = annotations
 

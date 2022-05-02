@@ -1,6 +1,6 @@
 # CRLFnet
 The source code of the CRLFnet.
-
+# Rad-Cam Fusion
 ## Some Common Problems:
 Please read carefully if you want to run the code!
 
@@ -47,3 +47,21 @@ If you run the code for the first time, maybe you have to use the command
 ###
     chmod +x {file name}.py
 to enable the system to run certain files like "radar_listener.py".
+
+# Lid-Cam Fusion
+Config files:
+
+tools/cfgs/custom_models/pv_rcnn.yaml：Model configs
+
+tools/cfgs/dataset_configs/custom_dataset.yaml：Dataset configs
+
+## Run
+### Create dataset infos
+File **custom_infos_train.pkl** and **custom_infos_test.pkl** will be saved to data/custom.
+```python
+python -m pcdet.datasets.custom.custom_dataset create_custom_infos tools/cfgs/dataset_configs/custom_dataset.yaml
+```
+### Train
+```python
+python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 1 --workers 1 --epochs 10
+```
