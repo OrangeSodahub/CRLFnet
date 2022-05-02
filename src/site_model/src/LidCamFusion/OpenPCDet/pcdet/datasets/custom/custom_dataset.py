@@ -34,8 +34,8 @@ class CustomDataset(DatasetTemplate):
 
         self.custom_infos = []
         self.include_custom_data(self.mode)
-        print("****************************custom_infos*************************")
-        print(self.custom_infos)
+        # print("****************************custom_infos*************************")
+        # print(self.custom_infos)
         self.ext = ext
 
                 
@@ -52,41 +52,42 @@ class CustomDataset(DatasetTemplate):
         info = copy.deepcopy(self.custom_infos[index])
 
         sample_idx = info['point_cloud']['lidar_idx']
-
-
-
+        get_item_list = self.dataset_cfg.get('GET_ITEM_LIST', ['points'])
+        
         """
         Function:
             Read 'velodyne' folder as pointclouds
             Read 'label_2' folder as labels
             Return type 'dict'
         """
-        lidar_file = os.path.join(self.root_split_path,
-                               'velodyne', (self.sample_id_list[index]+self.ext))
-        if self.ext == '.bin':
-            points = np.fromfile(lidar_file, dtype=np.float32).reshape(-1, 4)
-        elif self.ext == '.npy':
-            points = np.load(lidar_file)
-        else:
-            raise NotImplementedError
+        # lidar_file = os.path.join(self.root_split_path,
+        #                        'velodyne', (self.sample_id_list[index]+self.ext))
+        # if self.ext == '.bin':
+        #     points = np.fromfile(lidar_file, dtype=np.float32).reshape(-1, 4)
+        # elif self.ext == '.npy':
+        #     points = np.load(lidar_file)
+        # else:
+        #     raise NotImplementedError
 
         input_dict = {
-            'points': points,
             'frame_id': self.sample_id_list[index],
         }
-        # gt_boxes
-        # gt = self.create_groundtruth_database(self.sample_id_list[index])
-        # if 'annos' in gt:
-        #     annos = gt['annos']
-        #     annos = common_utils.drop_info_with_name(annos, name='DontCare')
-        #     loc, dims, rots = annos['location'], annos['dimensions'], annos['rotation_y']
-        #     gt_names = annos['name']
-        #     gt_boxes_lidar = annos['gt_boxes_lidar']
 
-        #     input_dict.update({
-        #         'gt_names': gt_names,
-        #         'gt_boxes': gt_boxes_lidar
-        #     })
+        if 'annos' in info:
+            annos = info['annos']
+            annos = common_utils.drop_info_with_name(annos, name='DontCare')
+            loc, dims, rots = annos['location'], annos['dimensions'], annos['rotation_y']
+            gt_names = annos['name']
+            gt_boxes_lidar = annos['gt_boxes_lidar']
+        
+        if 'points' in get_item_list:
+            points = self.get_lidar(sample_idx)
+            input_dict['points'] = points
+            
+            input_dict.update({
+                'gt_names': gt_names,
+                'gt_boxes': gt_boxes_lidar
+            })
 
         data_dict = self.prepare_data(data_dict=input_dict)
         return data_dict
