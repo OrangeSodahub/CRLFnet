@@ -31,6 +31,8 @@ Since the trainning is not finished, the model data is temporarily from the auth
 ### Problem #5: Model Data
 If yolo can't find "coco_classes.txt", "yolo_weights.pth" or other similar files, please check whether the folder "tools/RadCamFusion/yolo/model_data" exists. If it doesn't exist, please download it from https://github.com/bubbliiiing/yolo3-pytorch
 
+New trained Custom Model: https://drive.google.com/file/d/1-cMNDnujVCtvtDKlq9kGuJAk0jpeXUb4/view?usp=sharing
+
 
 ## How to run the code:
 Run the following instructions in WORKSPACE in order. 
