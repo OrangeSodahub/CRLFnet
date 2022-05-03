@@ -72,3 +72,5 @@ python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 1 --work
 Two models **PV-RCNN**, **PointRCNN** are supported now.
 
 ### Predict
+
+https://github.com/open-mmlab/OpenPCDet/issues/140
