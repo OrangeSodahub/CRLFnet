@@ -1,9 +1,13 @@
+[![DOI](https://zenodo.org/badge/477069057.svg)](https://zenodo.org/badge/latestdoi/477069057)
 # CRLFnet
 The source code of the CRLFnet.
 
-## INSTALL
+## INSTALL & BUILD
 
 **Env:** Ubuntu20.04 + ROS(Noetic) + Python3.x
+**Notice:** 
+- If using Google-colab, there is a recommanded environment: **CUDA10.2+PyTorch1.6**. It is proved that **CUDA11.3+PyTorch1.11** is incorrect.
+- Build the `pcdet` using correct version of CUDA, when a build process occurred errors , before change the version of CUDA and the next build **Delete** the entire `build` folder.
 
 # Rad-Cam Fusion
 ## Preparation:
@@ -32,7 +36,7 @@ How to install: https://blog.csdn.net/mywxm/article/details/121945880
 ### #4 Weights
 New trained Custom Model: https://drive.google.com/file/d/1-cMNDnujVCtvtDKlq9kGuJAk0jpeXUb4/view?usp=sharing
 
-### Problem #5: Model Data
+### #5: Model Data
 If yolo can't find "coco_classes.txt", "yolo_weights.pth" or other similar files, please check whether the folder "tools/RadCamFusion/yolo/model_data" exists. If it doesn't exist, please download it from https://github.com/bubbliiiing/yolo3-pytorch
 
 ## Run:
@@ -73,4 +77,6 @@ Two models **PV-RCNN**, **PointRCNN** are supported now.
 
 ### Predict
 
-https://github.com/open-mmlab/OpenPCDet/issues/140
+
+# Issues
+- Confused: set the batch_size=1 and still out of memory: https://github.com/open-mmlab/OpenPCDet/issues/140
