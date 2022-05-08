@@ -1,4 +1,13 @@
-language: ruby
-rvm:
- - 2.2
- - jruby
+language: python
+sudo: enabled
+python:
+    - "3.8"
+env:
+    global:
+     - TRAVIS=true
+# command to install dependencies
+install:
+    - pip install -r requirements.txt
+    
+#script:
+#    python manage.py test
