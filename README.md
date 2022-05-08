@@ -2,6 +2,8 @@
 # CRLFnet
 [![Build Status](https://app.travis-ci.com/OrangeSodahub/CRLFnet.svg?branch=master)](https://app.travis-ci.com/OrangeSodahub/CRLFnet)
 [![pages-build-deployment](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/0859d98473647f42d498/test_coverage)](https://codeclimate.com/github/OrangeSodahub/CRLFnet/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0859d98473647f42d498/maintainability)](https://codeclimate.com/github/OrangeSodahub/CRLFnet/maintainability)
 [![Codecov](https://codecov.io/gh/OrangeSodahub/CRLFnet/branch/master/graph/badge.svg)](https://codecov.io/gh/OrangeSodahub/CRLFnet)
 ![GitHub](https://img.shields.io/github/license/OrangeSodahub/CRLFnet)
 ![GitHub top language](https://img.shields.io/github/languages/top/OrangeSodahub/CRLFnet)
