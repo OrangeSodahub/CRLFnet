@@ -1,6 +1,7 @@
 
 # CRLFnet
 ![Build Status](https://github.com/OrangeSodahub/CRLFnet/workflows/build/badge.svg)
+[![pages-build-deployment](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment)
 [![Codecov](https://codecov.io/gh/OrangeSodahub/CRLFnet/branch/master/graph/badge.svg)](https://codecov.io/gh/OrangeSodahub/CRLFnet)
 ![GitHub](https://img.shields.io/github/license/OrangeSodahub/CRLFnet)
 ![GitHub top language](https://img.shields.io/github/languages/top/OrangeSodahub/CRLFnet)
