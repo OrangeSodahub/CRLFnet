@@ -5,6 +5,7 @@ The source code of the CRLFnet.
 ## INSTALL & BUILD
 
 **Env:** Ubuntu20.04 + ROS(Noetic) + Python3.x
+
 **Notice:** 
 - If using Google-colab, there is a recommanded environment: **CUDA10.2+PyTorch1.6**. It is proved that **CUDA11.3+PyTorch1.11** is incorrect.
 - Build the `pcdet` using correct version of CUDA, when a build process occurred errors , before change the version of CUDA and the next build **Delete** the entire `build` folder.
@@ -24,7 +25,7 @@ Notice that absolute paths may conflict with yours. Some of the absolute paths a
  | config.yaml                      |             |
 
 ### #2 GPU Usage
-If you are using GPU, you should set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo**.py". Also, if the program crashes due to GPU settings, try to set `cuda` to `False`.
+If you are using GPU, you should set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo.py**". Also, if the program crashes due to GPU settings, try to set `cuda` to `False`.
 
 ### #3 "ros_numpy" Package
 Please download and install "ros_numpy". This package is used to convert image format.
