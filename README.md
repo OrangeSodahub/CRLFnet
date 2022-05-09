@@ -1,6 +1,6 @@
 
 # CRLFnet
-[![Build Status](https://app.travis-ci.com/OrangeSodahub/CRLFnet.svg?branch=master)](https://app.travis-ci.com/OrangeSodahub/CRLFnet)
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 [![pages-build-deployment](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0859d98473647f42d498/test_coverage)](https://codeclimate.com/github/OrangeSodahub/CRLFnet/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0859d98473647f42d498/maintainability)](https://codeclimate.com/github/OrangeSodahub/CRLFnet/maintainability)
@@ -9,7 +9,6 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/OrangeSodahub/CRLFnet)
 ![GitHub last commit](https://img.shields.io/github/last-commit/OrangeSodahub/CRLFnet)
 [![DOI](https://zenodo.org/badge/477069057.svg)](https://zenodo.org/badge/latestdoi/477069057)
-[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 The source code of the CRLFnet.
 
