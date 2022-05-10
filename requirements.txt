@@ -136,7 +136,7 @@ jupyter-client==7.1.2
 jupyter-console==6.4.3
 jupyter-core==4.9.2
 jupyter-packaging==0.11.1
-jupyter-server==1.13.5
+jupyter-server==1.15.4
 jupyterlab==3.3.1
 jupyterlab-pygments==0.1.2
 jupyterlab-server==2.10.3
@@ -188,7 +188,7 @@ netifaces==0.10.4
 networkx==2.7.1
 ninja==1.10.2.3
 nose==1.3.7
-notebook==6.4.8
+notebook==6.4.10
 notebook-shim==0.1.0
 numba==0.55.1
 numpy==1.21.5
@@ -198,14 +198,14 @@ oauth2client==4.1.2
 oauthlib==3.1.0
 olefile==0.46
 open3d==0.14.1
-opencv-python==3.4.17.63
+opencv-python==4.2.0.32
 opencv-python-headless==4.5.5.62
 opt-einsum==3.3.0
 osrf-pycommon==2.0.1
 packaging==21.3
 pandas==1.4.1
 pandocfilters==1.5.0
-paramiko==2.6.0
+paramiko==2.10.1
 parso==0.8.3
 pathspec==0.9.0
 pbr==5.8.1
@@ -404,7 +404,7 @@ traitlets==5.1.1
 traits==6.3.2
 traitsui==7.3.0
 trimesh==3.10.2
-Twisted==18.9.0
+Twisted==22.4.0
 txaio==2.10.0
 typing_extensions==4.0.1
 u-msgpack-python==2.1
