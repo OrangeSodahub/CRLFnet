@@ -55,7 +55,6 @@ cv-bridge==1.16.0
 cycler==0.10.0
 Cython==0.29.14
 dbus-python==1.2.16
--e git+https://github.com/lbin/DCNv2.git@25b416d3fe8922f1f70086d9872652ac03eefeeb#egg=DCNv2
 debugpy==1.5.1
 decorator==5.1.1
 defer==1.0.6
