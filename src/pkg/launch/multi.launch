@@ -19,18 +19,40 @@
         <arg name="headless" value="$(arg headless)"/>
     </include>
 
+    <!--node name="track_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-file $(find pkg)/urdf/track42.urdf -urdf -model track -x 0 -y 0 -z 0"  /-->
+
+
     <!-- 加载机器人模型描述参数 -->
     <group ns="deepracer1">
     <param name="robot_description" command="$(find xacro)/xacro '$(find pkg)/urdf/deepracer.xacro' bodyframe:=deepracer1 ns:=deepracer1"/> 
-    	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
-    	</node> 
+    	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
    	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  output="screen" >
          <param name="publish_frequency" type="double" value="30.0" />
          <param name="tf_prefix" value="deepracer1" />
 	</node>
 	 
     	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model deepracer1 -param robot_description -x 0"/>   
+    args="-urdf -model deepracer1 -param robot_description -y -1.7 -x 1.87 -z 0.00 -Y 1.5708"/>   
+    	 <!-- 从yaml文件加载联合控制器的参数 -->
+	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
+	
+	<!-- 加载控制器 spawner -->
+	
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="false" output="screen"  
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+
+
+      <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen" >
+	  <param name="robot_name" value="deepracer1"/>
+	  </node>
+
+
+
     </group>
     
     <group ns="deepracer2">
@@ -42,10 +64,27 @@
          <param name="tf_prefix" value="deepracer2" />
 	</node>
     	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model deepracer2 -param robot_description -y -1"/>   
+    args="-urdf -model deepracer2 -param robot_description -y -2.2 -x 1.87 -z 0.00 -Y 1.5708"/>   
+    <!-- 从yaml文件加载联合控制器的参数 -->
+	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
+	
+	<!-- 加载控制器 spawner -->
+	
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="false" output="screen"   
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+
+
+      <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen" >
+      <param name="robot_name" value="deepracer2"/>
+	</node>
     </group>
     
-     <group ns="deepracer3">
+
+    <group ns="deepracer3">
     <param name="robot_description" command="$(find xacro)/xacro '$(find pkg)/urdf/deepracer.xacro' bodyframe:=deepracer3 ns:=deepracer3"/> 
     	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
     	</node> 
@@ -54,7 +93,23 @@
          <param name="tf_prefix" value="deepracer3" />
 	</node>
     	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model deepracer3 -param robot_description -y -2"/>   
+    args="-urdf -model deepracer3 -param robot_description -y -2.7 -x 1.87 -z 0.0 -Y 1.5708"/>   
+
+	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
+	
+
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="false" output="screen" 
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+
+
+      <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen" >
+	  <param name="robot_name" value="deepracer3"/>
+	  </node>
+
     </group>
     
     <group ns="deepracer4">
@@ -66,7 +121,23 @@
          <param name="tf_prefix" value="deepracer4" />
 	</node>
     	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model deepracer4 -param robot_description -y -3"/>   
+    args="-urdf -model deepracer4 -param robot_description -y -3.2 -x 1.87 -z 0.00 -Y 1.5708"/>   
+
+	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
+	
+
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="false" output="screen" 
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+
+
+      <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen" >
+	  <param name="robot_name" value="deepracer4"/>
+	  </node>
+
     </group>
     
     <group ns="deepracer5">
@@ -78,6 +149,24 @@
          <param name="tf_prefix" value="deepracer5" />
 	</node>
     	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model deepracer5 -param robot_description -y -4"/>   
-    </group>
+    args="-urdf -model deepracer5 -param robot_description -y -3.7 -x 1.87 -z 0.00 -Y 1.5708"/>   
+    
+
+	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
+	
+	
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="false" output="screen" 
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+
+
+    <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen" >
+	  <param name="robot_name" value="deepracer5"/>
+	  </node>
+	  </group>
+	  
 </launch>
+   

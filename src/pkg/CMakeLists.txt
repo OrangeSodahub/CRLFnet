@@ -10,7 +10,12 @@ project(pkg)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  std_msgs
+  geometry_msgs
+  nav_msgs
+  sensor_msgs
   tf
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -47,11 +52,11 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
+ add_message_files(
+   FILES
+   status.msg
 #   Message2.msg
-# )
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -68,10 +73,10 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs  # Or other packages containing msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -105,8 +110,9 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES pkg
-#  CATKIN_DEPENDS roscpp rospy tf
+  CATKIN_DEPENDS roscpp rospy tf message_runtime
 #  DEPENDS system_lib
+
 )
 
 ###########
@@ -204,3 +210,29 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(leader scripts/platoon/leader.cpp)
+target_link_libraries(leader ${catkin_LIBRARIES})
+#add_dependencies(master stage_first_generate_messages_cpp)
+
+#add_executable(slave scripts/platoon/slave.cpp)
+#target_link_libraries(slave ${catkin_LIBRARIES})
+
+add_executable(main scripts/platoon/main.cpp)
+target_link_libraries(main ${catkin_LIBRARIES})
+add_dependencies(main ${PROJECT_NAME}_generate_messages_cpp)
+
+add_executable(tf_broadcaster scripts/platoon/tf_broadcaster.cpp)
+target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
+
+add_executable(follower1 scripts/platoon/follower1.cpp)
+target_link_libraries(follower1 ${catkin_LIBRARIES})
+
+add_executable(follower2 scripts/platoon/follower2.cpp)
+target_link_libraries(follower2 ${catkin_LIBRARIES})
+
+add_executable(follower3 scripts/platoon/follower3.cpp)
+target_link_libraries(follower3 ${catkin_LIBRARIES})
+
+add_executable(follower4 scripts/platoon/follower4.cpp)
+target_link_libraries(follower4 ${catkin_LIBRARIES})

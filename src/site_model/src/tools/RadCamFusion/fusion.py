@@ -41,9 +41,9 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
                                                                                                                image3.height, image3.width)
     # image_roi
     print("  Image 2: ", end='')
-    labels_left = image_roi.image_roi(image2, yolo=yolo)
+    labels_left = [[]]# image_roi.image_roi(image2, yolo=yolo)
     print("  Image 3: ", end='')
-    labels_right = image_roi.image_roi(image3, yolo=yolo)
+    labels_right = [[]]# image_roi.image_roi(image3, yolo=yolo)
 
     # fusion
     match_left = [[]]
@@ -156,7 +156,7 @@ def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zzy/CRLFnet/src/site_model/config/config.yaml")
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/CRLFnet/src/site_model/config/config.yaml")
     parser.add_argument("--draw_output", help="wehter to draw rois and output", default='False', action='store_true', required=False)
     params = parser.parse_args()
 
@@ -173,7 +173,7 @@ if __name__ == '__main__':
     sub_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     sub_image_3 = message_filters.Subscriber('/image_raw_3', Image)
 
-    yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
+    #yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
  
     sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 1, 1) # syncronize time stamps
     sync.registerCallback(fusion)

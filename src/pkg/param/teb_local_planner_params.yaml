@@ -14,7 +14,7 @@ TebLocalPlannerROS:
   global_plan_overwrite_orientation: False
 
 #指定考虑优化的全局计划子集的最大长度,如果为0或负数：禁用；长度也受本地Costmap大小的限制
-  max_global_plan_lookahead_dist: 3.0 
+  max_global_plan_lookahead_dist: 1.5 
 
   feasibility_check_no_poses: 1 #检测位姿可到达的时间间隔，default：4
     
@@ -54,8 +54,8 @@ TebLocalPlannerROS:
   footprint_model: # types: "point", "circular", "two_circles", "line", "polygon" 多边形勿重复第一个顶点，会自动闭合
     type: "line"
     # radius: 0.2 # for type "circular"
-    line_start: [-0.081663, 0.0] # for type "line"
-    line_end: [0.082311, 0.0] # for type "line"
+    line_start: [-0.051663, 0.0] # for type "line"
+    line_end: [0.052311, 0.0] # for type "line"
     # front_offset: 0.2 # for type "two_circles"
     # front_radius: 0.2 # for type "two_circles"
     # rear_offset: 0.2 # for type "two_circles"
@@ -73,7 +73,7 @@ TebLocalPlannerROS:
   # complete_global_plan: True   
   # Obstacles
       
-  min_obstacle_dist: 0.05 # 与障碍的最小期望距离,
+  min_obstacle_dist: 0.1 # 与障碍的最小期望距离,
   include_costmap_obstacles: True #应否考虑到局部costmap的障碍设置为True后才能规避实时探测到的、建图时不存在的障碍物。
   costmap_obstacles_behind_robot_dist: 2.0 #考虑后面n米内的障碍物
   obstacle_poses_affected: 30 #为了保持距离，每个障碍物位置都与轨道上最近的位置相连。
@@ -97,7 +97,6 @@ TebLocalPlannerROS:
   weight_optimaltime: 1
   weight_obstacle: 50
   weight_dynamic_obstacle: 10 # not in use yet
-  alternative_time_cost: False # not in use yet
   selection_alternative_time_cost: False
   # Homotopy Class Planner
 

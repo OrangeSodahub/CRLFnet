@@ -695,8 +695,8 @@
   <gazebo reference = "left_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -704,8 +704,8 @@
   <gazebo reference = "left_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -713,8 +713,8 @@
   <gazebo reference = "right_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -722,8 +722,8 @@
   <gazebo reference = "right_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
