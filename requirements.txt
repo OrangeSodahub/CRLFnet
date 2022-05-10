@@ -378,10 +378,6 @@ tensorboard==2.2.2
 tensorboard-data-server==0.6.1
 tensorboard-plugin-wit==1.8.1
 tensorboardX==2.5
-tensorflow-estimator==2.2.0
-tensorflow-gpu==2.2.0
-tensorflow-io-gcs-filesystem==0.24.0
-tensorflow-serving-api-gpu==2.8.0
 termcolor==1.1.0
 terminado==0.13.3
 testpath==0.6.0
