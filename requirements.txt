@@ -416,7 +416,7 @@ unattended-upgrades==0.1
 unidiff==0.5.5
 urdfdom-py==0.4.6
 uritemplate==0.6
-urllib3==1.25.8
+urllib3==1.26.5
 usb-creator==0.3.7
 vcstools==0.1.42
 vincenty==0.1.4
