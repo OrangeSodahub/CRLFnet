@@ -47,7 +47,7 @@ constantly==15.1.0
 controller-manager==0.19.5
 controller-manager-msgs==0.19.5
 cPython==0.0.6
-cryptography==2.8
+cryptography==3.3.2
 cumm-cu113==0.2.8
 cupshelpers==1.0
 cv-bridge==1.16.0
