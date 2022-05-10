@@ -2,7 +2,6 @@ absl-py==1.0.0
 addict==2.4.0
 aiohttp==3.8.1
 aiosignal==1.2.0
-angles==1.9.13
 anyio==3.5.0
 appdirs==1.4.3
 apptools==5.1.0
