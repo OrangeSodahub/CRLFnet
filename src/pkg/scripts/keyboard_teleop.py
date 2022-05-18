@@ -38,10 +38,9 @@ def vels(speed,turn):
 
 if __name__=="__main__":
   settings = termios.tcgetattr(sys.stdin)
-  robot_name = rospy.get_param('~robot_name','deepracer1')
-  pub = rospy.Publisher("/"+robot_name+"/ackermann_cmd_mux/output", AckermannDriveStamped,queue_size=1)
+  pub = rospy.Publisher("/ackermann_cmd_mux/output", AckermannDriveStamped,queue_size=1)
   rospy.init_node('keyop')
- 
+
   x = 0
   th = 0
   status = 0

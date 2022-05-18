@@ -45,3 +45,6 @@ echo "Lidar-Camera Fusion Begin."
 # agents
 gnome-terminal --tab "agent" -- bash -c "cd src/agent/;python agent1.py"
 echo "Agent1 Set."
+
+# convert rosbag to txt
+# rostopic echo -b file_name.bag -p /topic_name > Txt_name.txt

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<launch>
-
- <include file="$(find pkg)/launch/multi.launch"/>
- <include file="$(find pkg)/launch/platoon.launch"/>
- <!--node name="gazebo_teleop" pkg="pkg" type="keyboard_teleop.py">
- <param name="robot_name" value="deepracer1"/>
- </node-->
-</launch>

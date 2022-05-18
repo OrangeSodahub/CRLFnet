@@ -11,6 +11,6 @@
     </node>-->
     <node name="gazebo_odometry" pkg="pkg" type="gazebo_odometry.py"/>
     <node name="rviz" pkg="rviz" type="rviz"
-         args="-d $(find pkg)/rviz/deepracer.rviz" required="true"/>
+         args="-d $(find pkg)/rviz/movebase.rviz" required="true"/>
 
 </launch>
