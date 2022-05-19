@@ -7,7 +7,7 @@ import numpy as np
 import random
 
 count = 0
-f = codecs.open('D:/CourseMaterials/IPP/CRLFnet/src/site_model/src/dispatch/rosbag/B.txt', mode='r', encoding='utf-8')  # 打开txt文件，以‘utf-8’编码读取
+f = codecs.open('D:/CourseMaterials/IPP/CRLFnet/src/site_model/src/dispatch/rosbag/B1.txt', mode='r', encoding='utf-8')  # 打开txt文件，以‘utf-8’编码读取
 lines = f.readlines()
 time = []
 time_tmp = 0
@@ -37,8 +37,8 @@ for i in range(len(time)):
         flag = -1
     else:
         flag = 1
-    if time[i]<83 or time[i]>92:
-        velocity[i] = yvals[i] + flag * (velocity[i] - yvals[i])**2 * 3
+    # if time[i]<83 or time[i]>92:
+    velocity[i] = yvals[i] + flag * (velocity[i] - yvals[i])**2 * 3
 
 del time[0:80]
 print(len(time))
