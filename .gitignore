@@ -1,3 +1,4 @@
+# Vscode
 .vscode
 *.vscode/
 .vscode/
@@ -5,3 +6,7 @@
 # ROS FILE
 /build
 /devel
+
+# PyCarm
+*idea/
+.idea/
