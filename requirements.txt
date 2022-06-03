@@ -141,11 +141,6 @@ jupyterlab==3.3.1
 jupyterlab-pygments==0.1.2
 jupyterlab-server==2.10.3
 jupyterlab-widgets==1.0.2
-kazam==1.4.5
-keras==2.8.0
-Keras-Applications==1.0.8
-Keras-Preprocessing==1.1.2
-keras-resnet==0.2.0
 keyring==18.0.1
 kiwisolver==1.0.1
 language-selector==0.1
