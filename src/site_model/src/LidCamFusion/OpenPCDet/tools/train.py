@@ -1,4 +1,3 @@
-import _init_path
 import argparse
 import datetime
 import glob
@@ -14,8 +13,8 @@ from pcdet.config import cfg, cfg_from_list, cfg_from_yaml_file, log_config_to_f
 from pcdet.datasets import build_dataloader
 from pcdet.models import build_network, model_fn_decorator
 from pcdet.utils import common_utils
-from train_utils.optimization import build_optimizer, build_scheduler
-from train_utils.train_utils import train_model
+from tools.train_utils.optimization import build_optimizer, build_scheduler
+from tools.train_utils.train_utils import train_model
 
 
 def parse_config():
@@ -79,6 +78,7 @@ def main():
         common_utils.set_random_seed(666)
 
     output_dir = cfg.ROOT_DIR / 'output' / cfg.EXP_GROUP_PATH / cfg.TAG / args.extra_tag
+    print("output_dir: ", output_dir)
     ckpt_dir = output_dir / 'ckpt'
     output_dir.mkdir(parents=True, exist_ok=True)
     ckpt_dir.mkdir(parents=True, exist_ok=True)
@@ -177,7 +177,7 @@ def main():
     logger.info('**********************End training %s/%s(%s)**********************\n\n\n'
                 % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
 
-    # 2022.04.30
+    # 2022.04.30: Remove evaluation
     # logger.info('**********************Start evaluation %s/%s(%s)**********************' %
     #             (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
     # test_set, test_loader, sampler = build_dataloader(

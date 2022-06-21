@@ -10,3 +10,6 @@
 # PyCarm
 *idea/
 .idea/
+
+# Virtual Env
+crlfnet_env/
