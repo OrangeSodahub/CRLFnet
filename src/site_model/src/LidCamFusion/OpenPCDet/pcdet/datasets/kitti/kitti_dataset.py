@@ -187,7 +187,6 @@ class KittiDataset(DatasetTemplate):
                 num_gt = len(annotations['name'])
                 index = list(range(num_objects)) + [-1] * (num_gt - num_objects)
                 annotations['index'] = np.array(index, dtype=np.int32)
-                # print("annotations['index']:", annotations['index'])
 
                 loc = annotations['location'][:num_objects]
                 dims = annotations['dimensions'][:num_objects]

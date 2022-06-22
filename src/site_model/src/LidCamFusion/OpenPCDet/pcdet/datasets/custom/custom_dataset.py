@@ -1,6 +1,7 @@
 import copy
 import pickle
 import os
+from cv2 import split
 
 import numpy as np
 from skimage import io
@@ -118,7 +119,7 @@ class CustomDataset(DatasetTemplate):
             # add to pts infos
             info['point_cloud'] = pc_info
 
-            # no images neither calibs
+            # no images, calibs are need to transform the labels
 
             type_to_id = {'Car': 1, 'Pedestrian': 2, 'Cyclist': 3}
             if has_label:
@@ -128,8 +129,10 @@ class CustomDataset(DatasetTemplate):
                 annotations = {}
                 # add to annotations ==> refer to 'object3d_custom' (no truncated,occluded,alpha,bbox)
                 annotations['name'] = np.array([obj.cls_type for obj in obj_list]) # 1-dimension
-                annotations['dimensions'] = np.array([[obj.l, obj.h, obj.w] for obj in obj_list]) # lhw(camera) format 2-dimension
-                annotations['location'] = np.concatenate([obj.loc.reshape(1,3) for obj in obj_list]) # 2-dimension only one so no concatenate
+                # hwl(camera) format 2-dimension: The kitti-labels are in camera-coord
+                # h,w,l -> 0.21,0.22,0.33 (see object3d_custom.py h=label[8], w=label[9], l=label[10])
+                annotations['dimensions'] = np.array([[obj.l, obj.h, obj.w] for obj in obj_list])
+                annotations['location'] = np.concatenate([obj.loc.reshape(1,3) for obj in obj_list])
                 annotations['rotation_y'] = np.array([obj.ry for obj in obj_list]) # 1-dimension
 
                 num_objects = len([obj.cls_type for obj in obj_list if obj.cls_type != 'DontCare'])
@@ -137,13 +140,17 @@ class CustomDataset(DatasetTemplate):
                 index = list(range(num_objects)) + [-1] * (num_gt - num_objects)
                 annotations['index'] = np.array(index, dtype=np.int32)
 
-                # attention 'rots'
                 loc = annotations['location'][:num_objects]
                 dims = annotations['dimensions'][:num_objects]
                 rots = annotations['rotation_y'][:num_objects]
+                # camera -> lidar: The points of custom_dataset are already in lidar-coord
+                # But the labels are in camera-coord and need to transform
+                loc_lidar = self.get_calib(loc)
                 l, h, w = dims[:, 0:1], dims[:, 1:2], dims[:, 2:3]
-                # see https://zhuanlan.zhihu.com/p/152120636
-                gt_boxes_lidar = np.concatenate([loc, l, w, h, rots[..., np.newaxis]], axis=1) # 2-dimension array
+                # bottom center -> object center: no need for loc_lidar[:, 2] += h[:, 0] / 2
+                # print("sample_idx: ", sample_idx, "loc: ", loc, "loc_lidar: " , sample_idx, loc_lidar)
+                # get gt_boxes_lidar see https://zhuanlan.zhihu.com/p/152120636
+                gt_boxes_lidar = np.concatenate([loc_lidar, l, w, h, (np.pi / 2 - rots[..., np.newaxis])], axis=1) # 2-dimension array
                 annotations['gt_boxes_lidar'] = gt_boxes_lidar
                 
                 # add annotation info
@@ -159,6 +166,20 @@ class CustomDataset(DatasetTemplate):
         return list(infos)
                 
 
+    def get_calib(self, loc):
+        """
+        The transform formual of labelCloud: ROOT/labelCloud/io/labels/kitti.py: import labels
+            if self.transformed:
+                centroid = centroid[2], -centroid[0], centroid[1] - 2.3
+            dimensions = [float(v) for v in line_elements[8:11]]
+            if self.transformed:
+                dimensions = dimensions[2], dimensions[1], dimensions[0]
+            bbox = BBox(*centroid, *dimensions)
+        """
+        loc_lidar = np.concatenate([np.array((float(loc_obj[2]), float(-loc_obj[0]), float(loc_obj[1]-2.3)), dtype=np.float32).reshape(1,3) for loc_obj in loc])
+        return loc_lidar
+                
+
     def get_label(self, idx):
         # get labels
         label_file = self.root_split_path / 'label_2' / ('%s.txt' % idx)
@@ -166,7 +187,7 @@ class CustomDataset(DatasetTemplate):
         return object3d_custom.get_objects_from_label(label_file)
 
 
-    def get_lidar(self, idx):
+    def get_lidar(self, idx, getitem):
         """
             Loads point clouds for a sample
                 Args:
@@ -175,8 +196,10 @@ class CustomDataset(DatasetTemplate):
                     np.array(N, 4): point cloud.
         """
         # get lidar statistics
-        lidar_file = self.root_split_path + '/velodyne/' + ('%s.bin' % idx)
-        # assert lidar_file.exists()
+        if getitem == True:
+            lidar_file = self.root_split_path + '/velodyne/' + ('%s.bin' % idx)
+        else:
+            lidar_file = self.root_split_path / 'velodyne' / ('%s.bin' % idx)
         return np.fromfile(str(lidar_file), dtype=np.float32).reshape(-1, 4)
 
 
@@ -191,72 +214,128 @@ class CustomDataset(DatasetTemplate):
         self.sample_id_list = [x.strip() for x in open(split_dir).readlines()] if split_dir.exists() else None
 
 
-    # @staticmethod
-    # def generate_prediction_dicts(batch_dict, pred_dicts, class_names, output_path=None):
-    #     """
-    #     Args:
-    #         batch_dict:
-    #             frame_id:
-    #         pred_dicts: list of pred_dicts
-    #             pred_boxes: (N,7), Tensor
-    #             pred_scores: (N), Tensor
-    #             pred_lables: (N), Tensor
-    #         class_names:
-    #         output_path:
+    # ????????????????????????????????
+    def create_groundtruth_database(self, info_path=None, used_classes=None, split='train'):
+        import torch
 
-    #     Returns:
+        database_save_path = Path(self.root_path) / ('gt_database' if split == 'train' else ('gt_database_%s' % split))
+        db_info_save_path = Path(self.root_path) / ('kitti_dbinfos_%s.pkl' % split)
 
-    #     """
-    #     def get_template_prediction(num_smaples):
-    #         ret_dict = {
-    #             'name': np.zeros(num_smaples), 'alpha' : np.zeros(num_smaples),
-    #             'dimensions': np.zeros([num_smaples, 3]), 'location': np.zeros([num_smaples, 3]),
-    #             'rotation_y': np.zero(num_smaples), 'score': np.zeros(num_smaples),
-    #             'boxes_lidar': np.zeros([num_smaples, 7])
-    #         }
-    #         return ret_dict
+        database_save_path.mkdir(parents=True, exist_ok=True)
+        all_db_infos = {}
 
-    #     def generate_single_sample_dict(batch_index, box_dict):
-    #         pred_scores = box_dict['pred_scores'].cpu().numpy()
-    #         pred_boxes = box_dict['pred_boxes'].cpu().numpy()
-    #         pred_labels = box_dict['pred_labels'].cpu().numpy()
-    #         pred_dict = get_template_prediction(pred_scores.shape[0])
-    #         if pred_scores.shape[0] == 0:
-    #             return pred_dict
+        # Open 'custom_train_info.pkl'
+        with open(info_path, 'rb') as f:
+            infos = pickle.load(f)
 
-    #         pred_dict['name'] = np.array(class_names)[pred_labels - 1]
-    #         pred_dict['alpha'] = -np.arctan2(-pred_boxes[:, 1], pred_boxes[:, 0]) + pred_boxes_camera[:, 6]
-    #         # pred_dict['dimensions'] = pred_boxes_camera[:, 3:6]
-    #         # pred_dict['location'] = pred_boxes_camera[:, 0:3]
-    #         # pred_dict['rotation_y'] = pred_boxes_camera[:, 6]
-    #         pred_dict['score'] = pred_scores
-    #         pred_dict['boxes_lidar'] = pred_boxes
+        # For each .bin file
+        for k in range(len(infos)):
+            print('gt_database sample: %d/%d' % (k + 1, len(infos)))
+            # Get current scene info
+            info = infos[k]
+            sample_idx = info['point_cloud']['lidar_idx']
+            points = self.get_lidar(sample_idx, False)
+            annos = info['annos']
+            names = annos['name']
+            gt_boxes = annos['gt_boxes_lidar']
 
-    #         return pred_dict
+            num_obj = gt_boxes.shape[0]
+            point_indices = roiaware_pool3d_utils.points_in_boxes_cpu(
+                torch.from_numpy(points[:, 0:3]), torch.from_numpy(gt_boxes)
+            ).numpy()  # (nboxes, npoints)
 
-    #     annos = []
-    #     for index, box_dict in enumerate(pred_dicts):
-    #         frame_id = batch_dict['frame_id'][index]
+            for i in range(num_obj):
+                filename = '%s_%s_%d.bin' % (sample_idx, names[i], i)
+                filepath = database_save_path / filename
+                gt_points = points[point_indices[i] > 0]
+                # print(sample_idx, len(gt_points))
 
-    #         single_pred_dict = generate_single_sample_dict(index, box_dict)
-    #         single_pred_dict['frame_id'] = frame_id
-    #         annos.append(single_pred_dict)
+                gt_points[:, :3] -= gt_boxes[i, :3]
+                with open(filepath, 'w') as f:
+                    gt_points.tofile(f)
 
-    #         if output_path is not None:
-    #             cur_det_file = output_path / ('%s.txt' % frame_id)
-    #             with open(cur_det_file, 'w') as f:
-    #                 bbox = single_pred_dict['bbox']
-    #                 loc = single_pred_dict['location']
-    #                 dims = single_pred_dict['dimensions']  # lhw -> hwl
+                if (used_classes is None) or names[i] in used_classes:
+                    db_path = str(filepath.relative_to(self.root_path))  # gt_database/xxxxx.bin
+                    db_info = {'name': names[i], 'path': db_path, 'gt_idx': i,
+                               'box3d_lidar': gt_boxes[i], 'num_points_in_gt': gt_points.shape[0]}
+                    if names[i] in all_db_infos:
+                        all_db_infos[names[i]].append(db_info)
+                    else:
+                        all_db_infos[names[i]] = [db_info]
 
-    #                 for idx in range(len(bbox)):
-    #                     print('%s -1 -1 %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f'
-    #                         % (single_pred_dict['name'][idx], single_pred_dict['alpha'][idx],
-    #                             bbox[idx][0], bbox[idx][1], bbox[idx][2], bbox[idx][3],
-    #                             dims[idx][1], dims[idx][2], dims[idx][0], loc[idx][0],
-    #                             loc[idx][1], loc[idx][2], single_pred_dict['rotation_y'][idx],
-    #                             single_pred_dict['score'][idx]), file=f)
-    #         return annos
+        # Output the num of all classes in database
+        for k, v in all_db_infos.items():
+            print('Database %s: %d' % (k, len(v)))
+
+        with open(db_info_save_path, 'wb') as f:
+            pickle.dump(all_db_infos, f)
+
+    @staticmethod
+    def generate_prediction_dicts(batch_dict, pred_dicts, class_names, output_path=None):
+        """
+        Args:
+            batch_dict:
+                frame_id:
+            pred_dicts: list of pred_dicts
+                pred_boxes: (N,7), Tensor
+                pred_scores: (N), Tensor
+                pred_lables: (N), Tensor
+            class_names:
+            output_path:
+
+        Returns:
+
+        """
+        def get_template_prediction(num_smaples):
+            ret_dict = {
+                'name': np.zeros(num_smaples), 'alpha' : np.zeros(num_smaples),
+                'dimensions': np.zeros([num_smaples, 3]), 'location': np.zeros([num_smaples, 3]),
+                'rotation_y': np.zero(num_smaples), 'score': np.zeros(num_smaples),
+                'boxes_lidar': np.zeros([num_smaples, 7])
+            }
+            return ret_dict
+
+        def generate_single_sample_dict(batch_index, box_dict):
+            pred_scores = box_dict['pred_scores'].cpu().numpy()
+            pred_boxes = box_dict['pred_boxes'].cpu().numpy()
+            pred_labels = box_dict['pred_labels'].cpu().numpy()
+            pred_dict = get_template_prediction(pred_scores.shape[0])
+            if pred_scores.shape[0] == 0:
+                return pred_dict
+
+            pred_dict['name'] = np.array(class_names)[pred_labels - 1]
+            pred_dict['alpha'] = -np.arctan2(-pred_boxes[:, 1], pred_boxes[:, 0]) + pred_boxes_camera[:, 6]
+            # pred_dict['dimensions'] = pred_boxes_camera[:, 3:6]
+            # pred_dict['location'] = pred_boxes_camera[:, 0:3]
+            # pred_dict['rotation_y'] = pred_boxes_camera[:, 6]
+            pred_dict['score'] = pred_scores
+            pred_dict['boxes_lidar'] = pred_boxes
+
+            return pred_dict
+
+        annos = []
+        for index, box_dict in enumerate(pred_dicts):
+            frame_id = batch_dict['frame_id'][index]
+
+            single_pred_dict = generate_single_sample_dict(index, box_dict)
+            single_pred_dict['frame_id'] = frame_id
+            annos.append(single_pred_dict)
+
+            if output_path is not None:
+                cur_det_file = output_path / ('%s.txt' % frame_id)
+                with open(cur_det_file, 'w') as f:
+                    bbox = single_pred_dict['bbox']
+                    loc = single_pred_dict['location']
+                    dims = single_pred_dict['dimensions']  # lhw -> hwl
+
+                    for idx in range(len(bbox)):
+                        print('%s -1 -1 %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f'
+                            % (single_pred_dict['name'][idx], single_pred_dict['alpha'][idx],
+                                bbox[idx][0], bbox[idx][1], bbox[idx][2], bbox[idx][3],
+                                dims[idx][1], dims[idx][2], dims[idx][0], loc[idx][0],
+                                loc[idx][1], loc[idx][2], single_pred_dict['rotation_y'][idx],
+                                single_pred_dict['score'][idx]), file=f)
+            return annos
 
 
     def __len__(self):
@@ -280,15 +359,6 @@ class CustomDataset(DatasetTemplate):
 
         sample_idx = info['point_cloud']['lidar_idx']
         get_item_list = self.dataset_cfg.get('GET_ITEM_LIST', ['points'])
-        
-        # lidar_file = os.path.join(self.root_split_path,
-        #                        'velodyne', (self.sample_id_list[index]+self.ext))
-        # if self.ext == '.bin':
-        #     points = np.fromfile(lidar_file, dtype=np.float32).reshape(-1, 4)
-        # elif self.ext == '.npy':
-        #     points = np.load(lidar_file)
-        # else:
-        #     raise NotImplementedError
 
         input_dict = {
             'frame_id': self.sample_id_list[index],
@@ -305,7 +375,7 @@ class CustomDataset(DatasetTemplate):
             gt_boxes_lidar = annos['gt_boxes_lidar']
         
         if 'points' in get_item_list:
-            points = self.get_lidar(sample_idx)
+            points = self.get_lidar(sample_idx, True)
             # import time
             # print(points.shape)
             # if points.shape[0] == 0:
@@ -314,7 +384,7 @@ class CustomDataset(DatasetTemplate):
             #     time.sleep(999999)
             #     print("**********************************")
             input_dict['points'] = points
-        # 000099, 000009
+            # 000099, 000009
             input_dict.update({
                 'gt_names': gt_names,
                 'gt_boxes': gt_boxes_lidar
@@ -349,6 +419,8 @@ def create_custom_infos(dataset_cfg, class_names, data_path, save_path, workers=
 
     print('------------------------Start create groundtruth database for data augmentation------------------------')
     dataset.set_split(train_split)
+    # Input the 'custom_train_info.pkl' to generate gt_database
+    dataset.create_groundtruth_database(train_filename, split=train_split)
     print('------------------------Data preparation done------------------------')
 
 if __name__=='__main__':

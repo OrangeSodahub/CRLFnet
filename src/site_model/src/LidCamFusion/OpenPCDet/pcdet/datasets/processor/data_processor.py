@@ -166,6 +166,7 @@ class DataProcessor(object):
         data_dict['voxel_coords'] = coordinates
         data_dict['voxel_num_points'] = num_points
 
+        # Test
         # print("*******************************************************************")
         # print("grid_size: ", self.grid_size)
         # print("voxels: ", voxels)
