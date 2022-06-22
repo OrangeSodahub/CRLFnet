@@ -78,17 +78,18 @@ tools/cfgs/dataset_configs/custom_dataset.yaml：Dataset configs
 ## Run
 ### Create dataset infos
 File **custom_infos_train.pkl** and **custom_infos_test.pkl** will be saved to data/custom.
-```python
+```bash
 python -m pcdet.datasets.custom.custom_dataset create_custom_infos tools/cfgs/dataset_configs/custom_dataset.yaml
 ```
 ### Train
-```python
+```bash
+cd tools/
 python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 1 --workers 1 --epochs 10
 ```
 Two models **PV-RCNN**, **PointRCNN** are supported now.
 
 ### Predict
-
+python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_10.pth --data_path ../data/custom/testing/velodyne/
 
 # Issues
 - Confused: set the batch_size=1 and still out of memory: https://github.com/open-mmlab/OpenPCDet/issues/140

@@ -1,3 +1,8 @@
+#----------------------------------------------------------------------
+#                       Data preprocess                               |
+#   Two classes: VoxelGeneratorWrapper, Dataprocessor                 |
+#----------------------------------------------------------------------
+
 from functools import partial
 
 import numpy as np
@@ -12,6 +17,7 @@ except:
     pass
 
 
+# Generate voxels using spconv
 class VoxelGeneratorWrapper():
     def __init__(self, vsize_xyz, coors_range_xyz, num_point_features, max_num_points_per_voxel, max_num_voxels):
         try:
@@ -36,7 +42,7 @@ class VoxelGeneratorWrapper():
             self._voxel_generator = VoxelGenerator(
                 vsize_xyz=vsize_xyz,
                 coors_range_xyz=coors_range_xyz,
-                num_point_features=num_point_features,
+                num_point_features=num_point_features, # spconv2.x
                 max_num_points_per_voxel=max_num_points_per_voxel,
                 max_num_voxels=max_num_voxels
             )
@@ -49,6 +55,7 @@ class VoxelGeneratorWrapper():
                     voxel_output['voxels'], voxel_output['coordinates'], voxel_output['num_points_per_voxel']
             else:
                 voxels, coordinates, num_points = voxel_output
+        # spconv2.x:
         else:
             assert tv is not None, f"Unexpected error, library: 'cumm' wasn't imported properly."
             voxel_output = self._voxel_generator.point_to_voxel(tv.from_numpy(points))
@@ -113,7 +120,17 @@ class DataProcessor(object):
         return data_dict
         
     def transform_points_to_voxels(self, data_dict=None, config=None):
+        """
+            Transform the point cloud to pillars using 'VoxelGeneratorv2' of spconv.
+            Set a unique height of all voxels if using PointPillars.
+        """
         if data_dict is None:
+            """2022.06.22
+            caculate the grid_size:
+                point_cloud_range -> [x1, y1, z1, x2, y2, z2] -> custom_dataset.yaml
+                voxel_size(xyz) -> [a, b, c] -> custom_dataset.yaml
+                grid_size = [(x2-x1)/a, (y2-y1)/b, (z2-z1)/c]
+            """
             grid_size = (self.point_cloud_range[3:6] - self.point_cloud_range[0:3]) / np.array(config.VOXEL_SIZE)
             self.grid_size = np.round(grid_size).astype(np.int64)
             self.voxel_size = config.VOXEL_SIZE
@@ -125,14 +142,22 @@ class DataProcessor(object):
             self.voxel_generator = VoxelGeneratorWrapper(
                 vsize_xyz=config.VOXEL_SIZE,
                 coors_range_xyz=self.point_cloud_range,
-                num_point_features=self.num_point_features,
+                num_point_features=self.num_point_features, # x,y,z,I
+                # The max number of points per voxel -> custom_dataset.yaml
                 max_num_points_per_voxel=config.MAX_POINTS_PER_VOXEL,
+                # The max numbere of voxels -> custom_dataset.yaml
                 max_num_voxels=config.MAX_NUMBER_OF_VOXELS[self.mode],
             )
 
         points = data_dict['points']
+        # Output voxels through 'VoxelGeneratorWrapper' (Pillars if using PointPillar as the algorithm)
         voxel_output = self.voxel_generator.generate(points)
         voxels, coordinates, num_points = voxel_output
+        """
+            voxels: [M, MAX_POINTS_PER_VOXEL, num_point_features]
+            coordinates: [M, 3] with z=0
+            num_points: [m,]
+        """
 
         if not data_dict['use_lead_xyz']:
             voxels = voxels[..., 3:]  # remove xyz in voxels(N, 3)
@@ -140,6 +165,14 @@ class DataProcessor(object):
         data_dict['voxels'] = voxels
         data_dict['voxel_coords'] = coordinates
         data_dict['voxel_num_points'] = num_points
+
+        # print("*******************************************************************")
+        # print("grid_size: ", self.grid_size)
+        # print("voxels: ", voxels)
+        # print("voixel_coords: ", coordinates)
+        # print("voxel_num_points: ", num_points)
+        # print("*******************************************************************")
+
         return data_dict
 
     def sample_points(self, data_dict=None, config=None):

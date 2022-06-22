@@ -306,8 +306,15 @@ class CustomDataset(DatasetTemplate):
         
         if 'points' in get_item_list:
             points = self.get_lidar(sample_idx)
+            # import time
+            # print(points.shape)
+            # if points.shape[0] == 0:
+            #     print("**********************************")
+            #     print("sample_idx: ", sample_idx)
+            #     time.sleep(999999)
+            #     print("**********************************")
             input_dict['points'] = points
-            
+        # 000099, 000009
             input_dict.update({
                 'gt_names': gt_names,
                 'gt_boxes': gt_boxes_lidar
