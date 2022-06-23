@@ -1,7 +1,9 @@
 DATASET: 'CustomDataset'
 DATA_PATH: '../data/custom'
 
-POINT_CLOUD_RANGE: [-70.4, -40, -3, 70.4, 40, 1]
+# If this config file is modified then pcdet/models/detectors/detector3d_template.py:
+# Detector3DTemplate::build_networks:model_info_dict needs to be modified.
+POINT_CLOUD_RANGE: [-70.4, -40, -3, 70.4, 40, 1] # x=[-70.4, 70.4], y=[-40,40], z=[-3,1]
 
 DATA_SPLIT: {
     'train': train,

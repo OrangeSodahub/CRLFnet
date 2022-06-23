@@ -54,58 +54,6 @@ class CustomDataset(DatasetTemplate):
             self.logger.info('Total samples for CUSTOM dataset: %d' % (len(custom_infos)))
     
 
-    # def create_groundtruth_database(self, info_path=None, used_classes=None, split='train'):
-    #         import torch
-
-    #         database_save_path = Path(self.root_path) / ('gt_database' if split == 'train' else ('gt_database_%s' % split))
-    #         db_info_save_path = Path(self.root_path) / ('kitti_dbinfos_%s.pkl' % split)
-
-    #         database_save_path.mkdir(parents=True, exist_ok=True)
-    #         all_db_infos = {}
-
-    #         with open(info_path, 'rb') as f:
-    #             infos = pickle.load(f)
-
-    #         for k in range(len(infos)):
-    #             print('gt_database sample: %d/%d' % (k + 1, len(infos)))
-    #             info = infos[k]
-    #             sample_idx = info['point_cloud']['lidar_idx']
-    #             points = self.get_lidar(sample_idx)
-    #             annos = info['annos']
-    #             names = annos['name']
-    #             difficulty = annos['difficulty']
-    #             bbox = annos['bbox']
-    #             gt_boxes = annos['gt_boxes_lidar']
-
-    #             num_obj = gt_boxes.shape[0]
-    #             point_indices = roiaware_pool3d_utils.points_in_boxes_cpu(
-    #                 torch.from_numpy(points[:, 0:3]), torch.from_numpy(gt_boxes)
-    #             ).numpy()  # (nboxes, npoints)
-
-    #             for i in range(num_obj):
-    #                 filename = '%s_%s_%d.bin' % (sample_idx, names[i], i)
-    #                 filepath = database_save_path / filename
-    #                 gt_points = points[point_indices[i] > 0]
-
-    #                 gt_points[:, :3] -= gt_boxes[i, :3]
-    #                 with open(filepath, 'w') as f:
-    #                     gt_points.tofile(f)
-
-    #                 if (used_classes is None) or names[i] in used_classes:
-    #                     db_path = str(filepath.relative_to(self.root_path))  # gt_database/xxxxx.bin
-    #                     db_info = {'name': names[i], 'path': db_path, 'image_idx': sample_idx, 'gt_idx': i,
-    #                             'box3d_lidar': gt_boxes[i], 'num_points_in_gt': gt_points.shape[0],
-    #                             'difficulty': difficulty[i], 'bbox': bbox[i], 'score': annos['score'][i]}
-    #                     if names[i] in all_db_infos:
-    #                         all_db_infos[names[i]].append(db_info)
-    #                     else:
-    #                         all_db_infos[names[i]] = [db_info]
-    #         for k, v in all_db_infos.items():
-    #             print('Database %s: %d' % (k, len(v)))
-
-    #         with open(db_info_save_path, 'wb') as f:
-    #             pickle.dump(all_db_infos, f)
-
     def get_infos(self, num_workers=16, has_label=True, count_inside_pts=True, sample_id_list=None):
         import concurrent.futures as futures
 

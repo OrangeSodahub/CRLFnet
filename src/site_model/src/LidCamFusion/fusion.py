@@ -13,24 +13,30 @@ from termcolor import colored
 import message_filters
 # pointcloud type
 from sensor_msgs.msg import PointCloud2
+from ros_numpy.point_cloud2 import pointcloud2_to_array
 # Image type
 from msgs.msg._MsgCamera import * # camera msgs class
 # Object Detection tool
-import OpenPCDet.tools
+from OpenPCDet.tools.pred import *
 # fusion message type
-from msgs.msg._MsgLidCam import *
+# from msgs.msg._MsgLidCam import *
 
 def fusion(pointcloud, image):
+    assert isinstance(pointcloud, PointCloud2)
+    assert isinstance(image, MsgCamera)
     # image roi
 
     # pointcloud roi
-    
-    msglidcam = MsgLidCam()
-    msglidcam.header.stamp = rospy.Time.now()
+    points = pointcloud2_to_array(pointcloud)
+    get_pred_dicts(points)
+
+    # fusion
+    # msglidcam = MsgLidCam()
+    # msglidcam.header.stamp = rospy.Time.now()
 
     # publish result
-    pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
-    pub.publish(msglidcam)
+    # pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
+    # pub.publish(msglidcam)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -45,6 +51,8 @@ if __name__ == '__main__':
             exit(1)
 
     rospy.init_node('lidar_camera_fusion', anonymous=True)
+    # Create an example of pointcloud detector
+    pointcloud_detector = RT_Pred()
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)

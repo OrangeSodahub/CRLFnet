@@ -90,7 +90,7 @@ Two models **PV-RCNN**, **PointRCNN** are supported now.
 
 ### Predict
 ```bash
-python demo.py --cfg_file path/to/config/file/ --ckpt path/to/checkpoint/ --data_path path/to/dataset/
+python pred.py --cfg_file path/to/config/file/ --ckpt path/to/checkpoint/ --data_path path/to/dataset/
 ```
 For example:
 ```bash

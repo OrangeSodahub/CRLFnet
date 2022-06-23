@@ -1,4 +1,5 @@
 import os
+import numpy as np
 
 import torch
 import torch.nn as nn
@@ -12,7 +13,7 @@ from ..model_utils import model_nms_utils
 
 
 class Detector3DTemplate(nn.Module):
-    def __init__(self, model_cfg, num_class, dataset):
+    def __init__(self, model_cfg, num_class, dataset=None):
         super().__init__()
         self.model_cfg = model_cfg
         self.num_class = num_class
@@ -33,15 +34,28 @@ class Detector3DTemplate(nn.Module):
         self.global_step += 1
 
     def build_networks(self):
-        model_info_dict = {
-            'module_list': [],
-            'num_rawpoint_features': self.dataset.point_feature_encoder.num_point_features,
-            'num_point_features': self.dataset.point_feature_encoder.num_point_features,
-            'grid_size': self.dataset.grid_size,
-            'point_cloud_range': self.dataset.point_cloud_range,
-            'voxel_size': self.dataset.voxel_size,
-            'depth_downsample_factor': self.dataset.depth_downsample_factor
-        }
+        # modified 2022.06.23
+        if self.dataset is not None:
+            model_info_dict = {
+                'module_list': [],
+                'num_rawpoint_features': self.dataset.point_feature_encoder.num_point_features,
+                'num_point_features': self.dataset.point_feature_encoder.num_point_features,
+                'grid_size': self.dataset.grid_size,
+                'point_cloud_range': self.dataset.point_cloud_range,
+                'voxel_size': self.dataset.voxel_size,
+                'depth_downsample_factor': self.dataset.depth_downsample_factor
+            }
+        # This is defined for IPP assignment: custom_dataset.yaml
+        else:
+            model_info_dict = {
+                'module_list': [],
+                'num_rawpoint_features': 4,
+                'num_point_features': 4,
+                'grid_size': np.array([2816, 1600, 40]),
+                'point_cloud_range': np.array([-70.4, -40, -3, 70.4, 40, 1]),
+                'voxel_size': [0.05, 0.05, 1],
+                'depth_downsample_factor': None
+            }
         for module_name in self.module_topology:
             module, model_info_dict = getattr(self, 'build_%s' % module_name)(
                 model_info_dict=model_info_dict
@@ -358,26 +372,29 @@ class Detector3DTemplate(nn.Module):
             self.load_state_dict(state_dict)
         return state_dict, update_model_state
 
-    def load_params_from_file(self, filename, logger, to_cpu=False):
+    def load_params_from_file(self, filename, logger=None, to_cpu=False):
         if not os.path.isfile(filename):
             raise FileNotFoundError
 
-        logger.info('==> Loading parameters from checkpoint %s to %s' % (filename, 'CPU' if to_cpu else 'GPU'))
+        if logger != None:
+            logger.info('==> Loading parameters from checkpoint %s to %s' % (filename, 'CPU' if to_cpu else 'GPU'))
         loc_type = torch.device('cpu') if to_cpu else None
+        # Load checkpoint file (2022.06.23)
         checkpoint = torch.load(filename, map_location=loc_type)
         model_state_disk = checkpoint['model_state']
 
-        version = checkpoint.get("version", None)
-        if version is not None:
-            logger.info('==> Checkpoint trained from version: %s' % version)
+        if logger != None:
+            version = checkpoint.get("version", None)
+            if version is not None:
+                logger.info('==> Checkpoint trained from version: %s' % version)
 
-        state_dict, update_model_state = self._load_state_dict(model_state_disk, strict=False)
+            state_dict, update_model_state = self._load_state_dict(model_state_disk, strict=False)
 
-        for key in state_dict:
-            if key not in update_model_state:
-                logger.info('Not updated weight %s: %s' % (key, str(state_dict[key].shape)))
+            for key in state_dict:
+                if key not in update_model_state:
+                    logger.info('Not updated weight %s: %s' % (key, str(state_dict[key].shape)))
 
-        logger.info('==> Done (loaded %d/%d)' % (len(update_model_state), len(state_dict)))
+            logger.info('==> Done (loaded %d/%d)' % (len(update_model_state), len(state_dict)))
 
     def load_params_with_optimizer(self, filename, to_cpu=False, optimizer=None, logger=None):
         if not os.path.isfile(filename):
