@@ -1,7 +1,7 @@
 import copy
 import pickle
 import os
-from cv2 import split
+from cv2 import preCornerDetect, split
 
 import numpy as np
 from skimage import io
@@ -168,6 +168,7 @@ class CustomDataset(DatasetTemplate):
 
     def get_calib(self, loc):
         """
+        This calibration is different from the kitti dataset.
         The transform formual of labelCloud: ROOT/labelCloud/io/labels/kitti.py: import labels
             if self.transformed:
                 centroid = centroid[2], -centroid[0], centroid[1] - 2.3
@@ -214,12 +215,13 @@ class CustomDataset(DatasetTemplate):
         self.sample_id_list = [x.strip() for x in open(split_dir).readlines()] if split_dir.exists() else None
 
 
-    # ????????????????????????????????
+    # Create gt database for data augmentation
     def create_groundtruth_database(self, info_path=None, used_classes=None, split='train'):
         import torch
 
+        # Specify the direction
         database_save_path = Path(self.root_path) / ('gt_database' if split == 'train' else ('gt_database_%s' % split))
-        db_info_save_path = Path(self.root_path) / ('kitti_dbinfos_%s.pkl' % split)
+        db_info_save_path = Path(self.root_path) / ('custom_dbinfos_%s.pkl' % split)
 
         database_save_path.mkdir(parents=True, exist_ok=True)
         all_db_infos = {}
@@ -299,15 +301,22 @@ class CustomDataset(DatasetTemplate):
             pred_scores = box_dict['pred_scores'].cpu().numpy()
             pred_boxes = box_dict['pred_boxes'].cpu().numpy()
             pred_labels = box_dict['pred_labels'].cpu().numpy()
+
+            # Define an empty template dict to store the prediction information, 'pred_scores.shape[0]' means 'num_samples'
             pred_dict = get_template_prediction(pred_scores.shape[0])
+            # If num_samples equals zero then return the empty dict
             if pred_scores.shape[0] == 0:
                 return pred_dict
 
+            # No calibration files
+
+            pred_boxes_camera = box_utils.boxes3d_lidar_to_kitti_camera[pred_boxes]
+
             pred_dict['name'] = np.array(class_names)[pred_labels - 1]
             pred_dict['alpha'] = -np.arctan2(-pred_boxes[:, 1], pred_boxes[:, 0]) + pred_boxes_camera[:, 6]
-            # pred_dict['dimensions'] = pred_boxes_camera[:, 3:6]
-            # pred_dict['location'] = pred_boxes_camera[:, 0:3]
-            # pred_dict['rotation_y'] = pred_boxes_camera[:, 6]
+            pred_dict['dimensions'] = pred_boxes_camera[:, 3:6]
+            pred_dict['location'] = pred_boxes_camera[:, 0:3]
+            pred_dict['rotation_y'] = pred_boxes_camera[:, 6]
             pred_dict['score'] = pred_scores
             pred_dict['boxes_lidar'] = pred_boxes
 
@@ -326,7 +335,7 @@ class CustomDataset(DatasetTemplate):
                 with open(cur_det_file, 'w') as f:
                     bbox = single_pred_dict['bbox']
                     loc = single_pred_dict['location']
-                    dims = single_pred_dict['dimensions']  # lhw -> hwl
+                    dims = single_pred_dict['dimensions']  # lhw -> hwl: lidar -> camera
 
                     for idx in range(len(bbox)):
                         print('%s -1 -1 %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f'

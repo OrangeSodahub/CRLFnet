@@ -279,6 +279,7 @@ class Detector3DTemplate(nn.Module):
                 'pred_scores': final_scores,
                 'pred_labels': final_labels
             }
+            print("record_dict: ", record_dict, '\n')
             pred_dicts.append(record_dict)
 
         return pred_dicts, recall_dict

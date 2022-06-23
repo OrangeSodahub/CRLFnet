@@ -89,7 +89,9 @@ python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 1 --work
 Two models **PV-RCNN**, **PointRCNN** are supported now.
 
 ### Predict
-python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_10.pth --data_path ../data/custom/testing/velodyne/
+```bash
+python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_20.pth --data_path ../data/custom/testing/velodyne/
+```
 
 # Issues
 - Confused: set the batch_size=1 and still out of memory: https://github.com/open-mmlab/OpenPCDet/issues/140
