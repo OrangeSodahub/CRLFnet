@@ -330,6 +330,7 @@ class CustomDataset(DatasetTemplate):
             single_pred_dict['frame_id'] = frame_id
             annos.append(single_pred_dict)
 
+            # Output pred results to Output-path in .txt file 
             if output_path is not None:
                 cur_det_file = output_path / ('%s.txt' % frame_id)
                 with open(cur_det_file, 'w') as f:
