@@ -393,8 +393,8 @@ class CustomDataset(DatasetTemplate):
             #     print("sample_idx: ", sample_idx)
             #     time.sleep(999999)
             #     print("**********************************")
-            input_dict['points'] = points
             # 000099, 000009
+            input_dict['points'] = points
             input_dict.update({
                 'gt_names': gt_names,
                 'gt_boxes': gt_boxes_lidar
@@ -408,6 +408,7 @@ def create_custom_infos(dataset_cfg, class_names, data_path, save_path, workers=
     dataset = CustomDataset(dataset_cfg=dataset_cfg, class_names=class_names, root_path=data_path, training=False)
     train_split, val_split = 'train', 'val'
 
+    # No evaluation
     train_filename = save_path / ('custom_infos_%s.pkl' % train_split)
     val_filenmae = save_path / ('custom_infos%s.pkl' % val_split)
     trainval_filename = save_path / 'custom_infos_trainval.pkl'

@@ -13,7 +13,7 @@ void cloudCB1(const sensor_msgs::PointCloud2 &input)
     std::string num = std::to_string(i);
     pcl::PointCloud<pcl::PointXYZI> cloud; // 点云数据格式为PointXYZ
     pcl::fromROSMsg(input, cloud);
-    if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/1/point_cloud1_"+num+".pcd", cloud)>=0)
+    if(pcl::io::savePCDFileASCII ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/1/point_cloud1_"+num+".pcd", cloud)>=0)
     {std::cerr << "Saved point_cloud1.pcd_" << num << " " << cloud.points.size() << "points have been written" << std::endl;}
 }
 
@@ -22,7 +22,7 @@ void cloudCB2(const sensor_msgs::PointCloud2 &input)
     std::string num = std::to_string(i);
     pcl::PointCloud<pcl::PointXYZI> cloud;
     pcl::fromROSMsg(input, cloud);
-    if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/2/point_cloud2_"+num+".pcd", cloud)>=0)
+    if(pcl::io::savePCDFileASCII ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/2/point_cloud2_"+num+".pcd", cloud)>=0)
     {std::cerr << "Saved point_cloud2.pcd_" << num << " " << cloud.points.size() << "points have been written" << std::endl;}
 }
 
@@ -31,7 +31,7 @@ void cloudCB3(const sensor_msgs::PointCloud2 &input)
     std::string num = std::to_string(i);
     pcl::PointCloud<pcl::PointXYZI> cloud;
     pcl::fromROSMsg(input, cloud);
-    if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/3/point_cloud3_"+num+".pcd", cloud)>=0)
+    if(pcl::io::savePCDFileASCII ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/3/point_cloud3_"+num+".pcd", cloud)>=0)
     {std::cerr << "Saved point_cloud3.pcd_" << num << " " << cloud.points.size() << "points have been written" << std::endl;}
 
     i ++;

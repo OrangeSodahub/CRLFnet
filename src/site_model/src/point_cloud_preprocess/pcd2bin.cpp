@@ -34,7 +34,7 @@ int main (int argc, char **argv)
     ros::NodeHandle nh;
 
     int i = 0;
-    for(;i<1700;i++)
+    for(;i<30;i++)
     {
       std::string num,
                   zero = to_string(0);
@@ -43,8 +43,8 @@ int main (int argc, char **argv)
       if(i>=100 && i<1000) num = zero + zero + zero + to_string(+i);
       if(i>=1000 && i<10000) num = zero + zero + std::to_string(+i);
 
-      string in_file = "/home/zonlin//IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/filtered/"+num+".pcd";
-      string out_file = "/home/zonlin//IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/bin/"+num+".bin";
+      string in_file = "/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/filtered/for_test/point_cloud_data_"+to_string(i+1)+".pcd";
+      string out_file = "/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/bin/for_test/point_cloud_data_"+to_string(i+1)+".bin";
 
       pcd2bin(in_file, out_file);
       cout << num + ".pcd converted successfully." << endl;

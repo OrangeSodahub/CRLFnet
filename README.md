@@ -84,14 +84,21 @@ python -m pcdet.datasets.custom.custom_dataset create_custom_infos tools/cfgs/da
 ### Train
 ```bash
 cd tools/
-python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 1 --workers 1 --epochs 10
+python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 2 --workers 4 --epochs 20
 ```
 Two models **PV-RCNN**, **PointRCNN** are supported now.
 
 ### Predict
+```bash
+python demo.py --cfg_file path/to/config/file/ --ckpt path/to/checkpoint/ --data_path path/to/dataset/
+```
+For example:
 ```bash
 python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_20.pth --data_path ../data/custom/testing/velodyne/
 ```
 
 # Issues
 - Confused: set the batch_size=1 and still out of memory: https://github.com/open-mmlab/OpenPCDet/issues/140
+- 段错误(核心已转储) when run dem.py: https://github.com/open-mmlab/OpenPCDet/issues/846
+- N > 0 assert faild. CUDA kernel launch blocks must be positive, but got N= 0 when training: https://github.com/open-mmlab/OpenPCDet/issues/945
+- raise NotImplementedError, NaN or Inf found in input tensor when training: https://github.com/open-mmlab/OpenPCDet/issues/280

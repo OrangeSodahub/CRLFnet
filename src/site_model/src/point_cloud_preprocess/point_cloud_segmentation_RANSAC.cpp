@@ -24,11 +24,11 @@ int main(int argc, char **argv)
     pcl::PointCloud<pcl::PointXYZI> cloud_segmented; // 点云分割后数据
 
     int i = 1;
-    for(;i<1701;i++)
+    for(;i<31;i++)
     {
         std::string num = std::to_string(i);
 
-        pcl::io::loadPCDFile ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/combined/point_cloud_"+num+".pcd", cloud);
+        pcl::io::loadPCDFile ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/combined/for_test/point_cloud_"+num+".pcd", cloud);
 
         //剔除离群值
         pcl::StatisticalOutlierRemoval<pcl::PointXYZI> statFilter;
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
         extract.filter(cloud_segmented);
 
         //保存点云文件
-        if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/filtered/point_cloud_data_"+num+".pcd", cloud_segmented)>=0)
+        if(pcl::io::savePCDFileASCII ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/filtered/for_test/point_cloud_data_"+num+".pcd", cloud_segmented)>=0)
         {std::cerr << "Saved point_cloud_filtered_"+num+".pcd" << " " << cloud_segmented.points.size() << "points have been written." << std::endl;}
     }
  

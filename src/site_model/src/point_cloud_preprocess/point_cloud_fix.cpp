@@ -29,10 +29,10 @@ int main()
 	PointCloudT::Ptr cloud(new PointCloudT);
 	int i = 1;
     // 11
-	for(;i<1712;i++)
+	for(;i<31;i++)
 	{
 		std::string num = std::to_string(i);
-		pcl::io::loadPCDFile("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/1/point_cloud1_"+num+".pcd", *cloud);
+		pcl::io::loadPCDFile("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/1/point_cloud1_"+num+".pcd", *cloud);
 
         for(int j=0;j<cloud->points.size();j++)
         {
@@ -41,14 +41,14 @@ int main()
             cloud->points[j].z += lidar11_z;
         }
 
-		if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/1_fixed/point_cloud1_"+num+".pcd", *cloud)>=0)
+		if(pcl::io::savePCDFileASCII ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/1_fixed/point_cloud1_"+num+".pcd", *cloud)>=0)
 		{std::cerr << "Saved point_cloud1_"+num+".pcd" << " " << cloud->points.size() << "points have been fixed." << std::endl;}
 	}
     // 12
-	for(i=1;i<1712;i++)
+	for(i=1;i<31;i++)
 	{
 		std::string num = std::to_string(i);
-		pcl::io::loadPCDFile("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/2/point_cloud2_"+num+".pcd", *cloud);
+		pcl::io::loadPCDFile("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/2/point_cloud2_"+num+".pcd", *cloud);
 
         for(int j=0;j<cloud->points.size();j++)
         {
@@ -57,14 +57,14 @@ int main()
             cloud->points[j].z += lidar12_z;
         }
 
-		if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/2_fixed/point_cloud2_"+num+".pcd", *cloud)>=0)
+		if(pcl::io::savePCDFileASCII ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/2_fixed/point_cloud2_"+num+".pcd", *cloud)>=0)
 		{std::cerr << "Saved point_cloud2_"+num+".pcd" << " " << cloud->points.size() << "points have been fixed." << std::endl;}
 	}
     // 2
-	for(i=1;i<1712;i++)
+	for(i=1;i<31;i++)
 	{
 		std::string num = std::to_string(i);
-		pcl::io::loadPCDFile("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/3/point_cloud3_"+num+".pcd", *cloud);
+		pcl::io::loadPCDFile("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/3/point_cloud3_"+num+".pcd", *cloud);
 
         for(int j=0;j<cloud->points.size();j++)
         {
@@ -73,7 +73,7 @@ int main()
             cloud->points[j].z += lidar2_z;
         }
 
-		if(pcl::io::savePCDFileASCII ("/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/3_fixed/point_cloud3_"+num+".pcd", *cloud)>=0)
+		if(pcl::io::savePCDFileASCII ("/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/point_cloud_data/pcd/initial/for_test/3_fixed/point_cloud3_"+num+".pcd", *cloud)>=0)
 		{std::cerr << "Saved point_cloud3_"+num+".pcd" << " " << cloud->points.size() << "points have been fixed." << std::endl;}
 	}
 	std::cerr << "Done." << std::endl;
