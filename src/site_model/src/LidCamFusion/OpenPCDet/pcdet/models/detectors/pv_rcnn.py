@@ -10,6 +10,7 @@ class PVRCNN(Detector3DTemplate):
         for cur_module in self.module_list:
             batch_dict = cur_module(batch_dict)
 
+        # Train
         if self.training:
             loss, tb_dict, disp_dict = self.get_training_loss()
 
@@ -18,7 +19,9 @@ class PVRCNN(Detector3DTemplate):
             }
             return ret_dict, tb_dict, disp_dict
         else:
+        # Inference
             pred_dicts, recall_dicts = self.post_processing(batch_dict)
+            print("num_cars: ", len(pred_dicts[0]['pred_boxes']))
             return pred_dicts, recall_dicts
 
     def get_training_loss(self):

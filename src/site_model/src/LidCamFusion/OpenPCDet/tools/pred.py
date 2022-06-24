@@ -1,5 +1,6 @@
 import argparse
 import glob
+import time
 from pathlib import Path
 
 # No visualization
@@ -76,8 +77,6 @@ class RT_Dataset(DatasetTemplate):
         return 
     
 
-
-
 def parse_config():
     parser = argparse.ArgumentParser(description='arg parser')
     parser.add_argument('--cfg_file', type=str, default='cfgs/kitti_models/second.yaml',
@@ -97,7 +96,6 @@ def parse_config():
 # python pred.py --ckpt --data
 def main():
     args, cfg = parse_config()
-    # print("args: ", args, "cfg: ", cfg)
     logger = common_utils.create_logger()
     logger.info('----------------- Start Predict -------------------------')
     dataset = Dataset(
@@ -114,7 +112,6 @@ def main():
         for idx, data_dict in enumerate(dataset):
             logger.info(f'Visualized sample index: \t{idx + 1}')
             data_dict = dataset.collate_batch([data_dict])
-            print("data_dict: ", data_dict)
             load_data_to_gpu(data_dict)
             pred_dicts, _ = model.forward(data_dict)
             print("idx: ", idx+1, "pred: ", pred_dicts)
@@ -139,40 +136,48 @@ class RT_Pred():
         # basic info
         self.cfg_file = 'cfgs/custom_models/pv_rcnn.yaml'
         self.ckpt_file = '../output/custom_models/pv_rcnn/03/ckpt/checkpoint_epoch_50.pth'
+        self.points_file = '../data/custom/for_test/point_cloud_data_1.bin'
 
-        # Create cfg
+        # create cfg
         self.cfg = self.create_cfg()
+
+        # create logger
+        logger = common_utils.create_logger()
 
         # build_network
         self.model = build_network(model_cfg=self.cfg.MODEL, num_class=len(self.cfg.CLASS_NAMES), dataset=None)
-        self.model.load_params_from_file(filename=self.ckpt_file, logger=None, to_cpu=True)
+        self.model.load_params_from_file(filename=self.ckpt_file, logger=logger, to_cpu=True)
         self.model.cuda()
         self.model.eval()
 
+        # create dataset
+        self.dataset = DatasetTemplate(
+            dataset_cfg=self.cfg.DATA_CONFIG, class_names=self.cfg.CLASS_NAMES, training=False,
+            root_path=None, logger=None
+        )
 
     # Input data and return pred results
-    def get_pred_dicts(self, points):
+    def get_pred_dicts(self):
         """
            points: array(:,4) -> x,y,z,I 
         """
-        self.dataset = Dataset(
-            dataset_cfg=self.cfg.DATA_CONFIG, class_names=self.cfg.CLASS_NAMES, training=False,
-            root_path=None
-        )
+        # Receive points data
+        points = np.fromfile(self.points_file, dtype=np.float32).reshape(-1, 4)
+        
 
         input_dict = {
             'points': points,
             'frame_id': 1,
         }
 
-        data_dict = self.pre
+        data_dict = self.dataset.prepare_data(data_dict=input_dict)
 
         with torch.no_grad():
-            for idx, data_dict in enumerate(self.dataset):
-                data_dict = self.dataset.collate_batch([data_dict])
-                load_data_to_gpu(data_dict)
-                pred_dicts, _ = self.model.forward(data_dict)
-                print("idx: ", idx+1, "pred: ", pred_dicts)
+            data_dict = self.dataset.collate_batch([data_dict])
+            # print("data_dict: ", data_dict)
+            load_data_to_gpu(data_dict)
+            pred_dicts, _ = self.model.forward(data_dict)
+            print("pred: ", pred_dicts)
 
 
     # create cfg
@@ -181,5 +186,47 @@ class RT_Pred():
         return cfg
 
 
+def main_2():
+    args, cfg = parse_config()
+    logger = common_utils.create_logger()
+
+    model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=None)
+    model.load_params_from_file(filename=args.ckpt, logger=logger, to_cpu=True)
+    model.cuda()
+    model.eval()
+
+    points_file = '../data/custom/for_test/point_cloud_data_1.bin'
+    points = np.fromfile(points_file, dtype=np.float32).reshape(-1, 4)
+    input_dict = {
+            'points': points,
+            'frame_id': 1,
+        }
+    dataset = DatasetTemplate(
+        dataset_cfg=cfg.DATA_CONFIG, class_names=cfg.CLASS_NAMES, training=False,
+        root_path=None, logger=None
+    )
+    data_dict = dataset.prepare_data(data_dict=input_dict)
+
+    with torch.no_grad():
+        data_dict = dataset.collate_batch([data_dict])
+        load_data_to_gpu(data_dict)
+        pred_dicts, _ = model.forward(data_dict)
+        print("pred: ", pred_dicts)
+
+
 if __name__ == '__main__':
+    # Python demo.py
     main()
+
+    # Test for real-time detection
+    # main_2()
+
+    # Test for real-time detection
+    # time1 = time.time()
+    # pointcloud_detector = RT_Pred()
+    # time2 = time.time()
+    # print("建立网络用时：", (time2-time1)*1000)
+    # time1 = time.time()
+    # pointcloud_detector.get_pred_dicts()
+    # time2 = time.time()
+    # print("检测用时：", (time2-time1)*1000)

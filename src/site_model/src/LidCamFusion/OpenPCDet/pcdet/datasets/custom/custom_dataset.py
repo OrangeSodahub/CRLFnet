@@ -79,7 +79,7 @@ class CustomDataset(DatasetTemplate):
                 annotations['name'] = np.array([obj.cls_type for obj in obj_list]) # 1-dimension
                 # hwl(camera) format 2-dimension: The kitti-labels are in camera-coord
                 # h,w,l -> 0.21,0.22,0.33 (see object3d_custom.py h=label[8], w=label[9], l=label[10])
-                annotations['dimensions'] = np.array([[obj.l, obj.h, obj.w] for obj in obj_list])
+                annotations['dimensions'] = np.array([[obj.l, obj.h, obj.w] for obj in obj_list])             
                 annotations['location'] = np.concatenate([obj.loc.reshape(1,3) for obj in obj_list])
                 annotations['rotation_y'] = np.array([obj.ry for obj in obj_list]) # 1-dimension
 
@@ -198,7 +198,6 @@ class CustomDataset(DatasetTemplate):
                 filename = '%s_%s_%d.bin' % (sample_idx, names[i], i)
                 filepath = database_save_path / filename
                 gt_points = points[point_indices[i] > 0]
-                # print(sample_idx, len(gt_points))
 
                 gt_points[:, :3] -= gt_boxes[i, :3]
                 with open(filepath, 'w') as f:

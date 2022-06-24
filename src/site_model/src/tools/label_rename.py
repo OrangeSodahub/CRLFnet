@@ -17,7 +17,7 @@ def main(filename):
 if __name__=='__main__':
     root_path = '/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/labels_temporary/'
 
-    for num in range(1275,1376):
+    for num in range(850,1275):
         if num < 10:
             num_str = '0'+'0'+'0'+'0'+'0'+str(num) 
         if num >= 10 and num < 100:

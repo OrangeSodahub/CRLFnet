@@ -13,12 +13,13 @@ from ..model_utils import model_nms_utils
 
 
 class Detector3DTemplate(nn.Module):
+    # Modified: dataset=None
     def __init__(self, model_cfg, num_class, dataset=None):
         super().__init__()
         self.model_cfg = model_cfg
         self.num_class = num_class
         self.dataset = dataset
-        self.class_names = dataset.class_names
+        self.class_names = dataset.class_names if self.dataset is not None else None
         self.register_buffer('global_step', torch.LongTensor(1).zero_())
 
         self.module_topology = [
