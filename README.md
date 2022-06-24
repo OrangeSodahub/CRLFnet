@@ -97,6 +97,21 @@ For example:
 python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_20.pth --data_path ../data/custom/testing/velodyne/
 ```
 
+# Run the whole model
+```bash
+
+cd /to/ROOT/DIR/; roslaunch site_model spawn.launch # start roscore and build the solid model
+rosrun site_model get_cam_info # get relevant parameters of cameras
+python src/site_model/src/tools/RadCamFusion/generate_calib.py # generate calibration formula according to parameters of cameras
+python src/site_model/src/tools/radar_listener.py # radars start working
+python src/site_model/src/tools/RadCamFusion/fusion.py --draw_output True/False # start camera-radar fusion
+python src/site_model/src/LidCamFusion/camera_listener.py # cameras around lidars start working
+python src/site_model/src/LidCamFusion/pointcloud_listener.py # lidars start working
+rosrun site_model pointcloud_combiner # combine all the point clouds and fix their coords
+cd src/site_model/src/LidCamFusion/; python fusion.py # start camera-lidar fusion
+cd ../agent/; python agent1.py # agent1 start working
+```
+
 # Issues
 - Confused: set the batch_size=1 and still out of memory: https://github.com/open-mmlab/OpenPCDet/issues/140
 - 段错误(核心已转储) when run dem.py: https://github.com/open-mmlab/OpenPCDet/issues/846
