@@ -13,6 +13,7 @@ from termcolor import colored
 import message_filters
 # pointcloud type
 from sensor_msgs.msg import PointCloud2
+import ros_numpy
 from ros_numpy.point_cloud2 import pointcloud2_to_array
 # Image type
 from msgs.msg._MsgCamera import * # camera msgs class
@@ -27,8 +28,12 @@ def fusion(pointcloud, image):
     # image roi
 
     # pointcloud roi
-    points = pointcloud2_to_array(pointcloud)
-    get_pred_dicts(points)
+    pc = ros_numpy.numpify(pointcloud)
+    points = np.zeros((pc.shape[0],4))
+    points[:,0] = pc['x']
+    points[:,1] = pc['y']
+    points[:,2] = pc['z']
+    pointcloud_detector.get_pred_dicts(points)
 
     # fusion
     # msglidcam = MsgLidCam()

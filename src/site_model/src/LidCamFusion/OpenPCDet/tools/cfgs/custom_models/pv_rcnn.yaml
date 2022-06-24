@@ -2,6 +2,7 @@ CLASS_NAMES: ['Car'] # ['Car', 'Pedestrian', 'Cyclist']
 
 DATA_CONFIG:
     _BASE_CONFIG_: cfgs/dataset_configs/custom_dataset.yaml
+    _BASE_CONFIG_RT_: OpenPCDet/tools/cfgs/dataset_configs/custom_dataset.yaml
     DATA_AUGMENTOR:
         DISABLE_AUG_LIST: ['placeholder']
         AUG_CONFIG_LIST:

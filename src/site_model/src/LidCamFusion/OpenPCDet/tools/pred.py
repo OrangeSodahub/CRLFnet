@@ -48,6 +48,7 @@ class Dataset(DatasetTemplate):
     def __getitem__(self, index):
         if self.ext == '.bin':
             points = np.fromfile(self.sample_file_list[index], dtype=np.float32).reshape(-1, 4)
+            print(points)
         elif self.ext == '.npy':
             points = np.load(self.sample_file_list[index])
         else:
@@ -88,7 +89,7 @@ def parse_config():
 
     args = parser.parse_args()
 
-    cfg_from_yaml_file(args.cfg_file, cfg)
+    cfg_from_yaml_file(args.cfg_file, cfg, RT_detect=False)
 
     return args, cfg
 
@@ -134,9 +135,9 @@ class RT_Pred():
     # Pre-load network
     def __init__(self):
         # basic info
-        self.cfg_file = 'cfgs/custom_models/pv_rcnn.yaml'
-        self.ckpt_file = '../output/custom_models/pv_rcnn/03/ckpt/checkpoint_epoch_50.pth'
-        self.points_file = '../data/custom/for_test/point_cloud_data_1.bin'
+        self.cfg_file = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml'
+        self.ckpt_file = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/OpenPCDet//output/custom_models/pv_rcnn/03/ckpt/checkpoint_epoch_50.pth'
+        # self.points_file = '../data/custom/for_test/point_cloud_data_1.bin'
 
         # create cfg
         self.cfg = self.create_cfg()
@@ -157,19 +158,17 @@ class RT_Pred():
         )
 
     # Input data and return pred results
-    def get_pred_dicts(self):
+    def get_pred_dicts(self, points):
         """
            points: array(:,4) -> x,y,z,I 
         """
         # Receive points data
-        points = np.fromfile(self.points_file, dtype=np.float32).reshape(-1, 4)
-        
+        # points = np.fromfile(self.points_file, dtype=np.float32).reshape(-1, 4)
 
         input_dict = {
             'points': points,
             'frame_id': 1,
         }
-
         data_dict = self.dataset.prepare_data(data_dict=input_dict)
 
         with torch.no_grad():
@@ -179,10 +178,9 @@ class RT_Pred():
             pred_dicts, _ = self.model.forward(data_dict)
             print("pred: ", pred_dicts)
 
-
     # create cfg
     def create_cfg(self):
-        cfg_from_yaml_file(self.cfg_file, cfg)
+        cfg_from_yaml_file(self.cfg_file, cfg, RT_detect=True)
         return cfg
 
 
