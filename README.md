@@ -98,6 +98,7 @@ python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custo
 ```
 
 # Run the whole model
+The whole project contains several different parts which need to be start up through commands. Following commands show how to start. Their order is immutable.
 ```bash
 
 cd /to/ROOT/DIR/; roslaunch site_model spawn.launch # start roscore and build the solid model
@@ -113,6 +114,7 @@ cd ../agent/; python agent1.py # agent1 start working
 ```
 
 # Issues
+Some problems may occurred during debugging.
 - Confused: set the batch_size=1 and still out of memory: https://github.com/open-mmlab/OpenPCDet/issues/140
 - 段错误(核心已转储) when run dem.py: https://github.com/open-mmlab/OpenPCDet/issues/846
 - N > 0 assert faild. CUDA kernel launch blocks must be positive, but got N= 0 when training: https://github.com/open-mmlab/OpenPCDet/issues/945
