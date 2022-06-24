@@ -109,13 +109,31 @@ def main():
     model.load_params_from_file(filename=args.ckpt, logger=logger, to_cpu=True)
     model.cuda()
     model.eval()
+
+    # transform dict
+    num2class = {
+        1: 'Car',
+        2: 'Pedstrain',
+        3: 'Bicycle'
+    }
     with torch.no_grad():
         for idx, data_dict in enumerate(dataset):
             logger.info(f'Visualized sample index: \t{idx + 1}')
             data_dict = dataset.collate_batch([data_dict])
             load_data_to_gpu(data_dict)
             pred_dicts, _ = model.forward(data_dict)
-            print("idx: ", idx+1, "pred: ", pred_dicts)
+
+            # Print the resualt to screen
+            print("+-------------------------------------------------------------------------------------------------+")
+            print("num: ", len(pred_dicts[0]['pred_boxes']), "  class: ", num2class[int(pred_dicts[0]['pred_labels'][0].cpu().numpy())])
+            idx = 1
+            for pred_boxes in pred_dicts[0]['pred_boxes']:
+                print('\n', idx, " ==> ", "loc: ", pred_boxes[0:3].cpu().numpy(), 
+                                " size: ", pred_boxes[3:6].cpu().numpy(), '\n'
+                                "        rotation: ", pred_boxes[6].cpu().numpy(),
+                                "        score: ", pred_dicts[0]['pred_scores'][idx-1].cpu().numpy())
+                idx += 1
+            print("+-------------------------------------------------------------------------------------------------+\n")
 
             # Remove visualiazaiton step
 
@@ -137,7 +155,6 @@ class RT_Pred():
         # basic info
         self.cfg_file = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml'
         self.ckpt_file = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/OpenPCDet//output/custom_models/pv_rcnn/03/ckpt/checkpoint_epoch_50.pth'
-        # self.points_file = '../data/custom/for_test/point_cloud_data_1.bin'
 
         # create cfg
         self.cfg = self.create_cfg()
@@ -157,13 +174,18 @@ class RT_Pred():
             root_path=None, logger=None
         )
 
+        # transform dict
+        self.num2class = {
+            1: 'Car',
+            2: 'Pedstrain',
+            3: 'Bicycle'
+        }
+
     # Input data and return pred results
     def get_pred_dicts(self, points):
         """
            points: array(:,4) -> x,y,z,I 
         """
-        # Receive points data
-        # points = np.fromfile(self.points_file, dtype=np.float32).reshape(-1, 4)
 
         input_dict = {
             'points': points,
@@ -173,10 +195,20 @@ class RT_Pred():
 
         with torch.no_grad():
             data_dict = self.dataset.collate_batch([data_dict])
-            # print("data_dict: ", data_dict)
             load_data_to_gpu(data_dict)
             pred_dicts, _ = self.model.forward(data_dict)
-            print("pred: ", pred_dicts)
+
+            # Print the resualt to screen
+            print("+-------------------------------------------------------------------------------------------------+")
+            print("num: ", len(pred_dicts[0]['pred_boxes']), "  class: ", self.num2class[int(pred_dicts[0]['pred_labels'][0].cpu().numpy())])
+            idx = 1
+            for pred_boxes in pred_dicts[0]['pred_boxes']:
+                print('\n', idx, " ==> ", "loc: ", pred_boxes[0:3].cpu().numpy(), 
+                                " size: ", pred_boxes[3:6].cpu().numpy(), '\n'
+                                "        rotation: ", pred_boxes[6].cpu().numpy(),
+                                "        score: ", pred_dicts[0]['pred_scores'][idx-1].cpu().numpy())
+                idx += 1
+            print("+-------------------------------------------------------------------------------------------------+\n")
 
     # create cfg
     def create_cfg(self):
@@ -205,19 +237,37 @@ def main_2():
     )
     data_dict = dataset.prepare_data(data_dict=input_dict)
 
+    # transform dict
+    num2class = {
+        1: 'Car',
+        2: 'Pedstrain',
+        3: 'Bicycle'
+    }
+
     with torch.no_grad():
         data_dict = dataset.collate_batch([data_dict])
         load_data_to_gpu(data_dict)
         pred_dicts, _ = model.forward(data_dict)
-        print("pred: ", pred_dicts)
+
+        # Print the resualt to screen
+        print("+-------------------------------------------------------------------------------------------------+")
+        print("num: ", len(pred_dicts[0]['pred_boxes']), "  class: ", num2class[int(pred_dicts[0]['pred_labels'][0].cpu().numpy())])
+        idx = 1
+        for pred_boxes in pred_dicts[0]['pred_boxes']:
+            print('\n', idx, " ==> ", "loc: ", pred_boxes[0:3].cpu().numpy(), 
+                            " size: ", pred_boxes[3:6].cpu().numpy(), '\n'
+                            "        rotation: ", pred_boxes[6].cpu().numpy(),
+                            "        score: ", pred_dicts[0]['pred_scores'][idx-1].cpu().numpy())
+            idx += 1
+        print("+-------------------------------------------------------------------------------------------------+\n")
 
 
 if __name__ == '__main__':
     # Python demo.py
-    main()
+    # main()
 
     # Test for real-time detection
-    # main_2()
+    main_2()
 
     # Test for real-time detection
     # time1 = time.time()

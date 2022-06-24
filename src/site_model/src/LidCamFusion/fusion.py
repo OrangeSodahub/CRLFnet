@@ -14,7 +14,6 @@ import message_filters
 # pointcloud type
 from sensor_msgs.msg import PointCloud2
 import ros_numpy
-from ros_numpy.point_cloud2 import pointcloud2_to_array
 # Image type
 from msgs.msg._MsgCamera import * # camera msgs class
 # Object Detection tool
@@ -58,6 +57,7 @@ if __name__ == '__main__':
     rospy.init_node('lidar_camera_fusion', anonymous=True)
     # Create an example of pointcloud detector
     pointcloud_detector = RT_Pred()
+    # Create YOLO detector
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)

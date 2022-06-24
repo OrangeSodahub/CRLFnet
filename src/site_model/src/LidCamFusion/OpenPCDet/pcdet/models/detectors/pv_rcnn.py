@@ -21,7 +21,6 @@ class PVRCNN(Detector3DTemplate):
         else:
         # Inference
             pred_dicts, recall_dicts = self.post_processing(batch_dict)
-            print("num_cars: ", len(pred_dicts[0]['pred_boxes']))
             return pred_dicts, recall_dicts
 
     def get_training_loss(self):
