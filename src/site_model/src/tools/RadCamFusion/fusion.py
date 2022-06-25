@@ -139,7 +139,7 @@ if __name__ == '__main__':
     sub_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     sub_image_3 = message_filters.Subscriber('/image_raw_3', Image)
 
-    yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
+    # yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
  
     sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 1, 1) # syncronize time stamps
     sync.registerCallback(fusion)

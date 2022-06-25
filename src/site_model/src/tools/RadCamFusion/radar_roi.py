@@ -7,9 +7,11 @@
 
 import os
 import numpy as np
+import sys
 # radar message type
 from msgs.msg._MsgRadar import *
 # transform coordinates tool
+sys.path.append("../../")
 from utils import transform
 
 def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, height3: int, width3: int):
@@ -30,19 +32,10 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         # get pixel points
         x_pose = radar_msgs.ObjectList_left[i].obj_vcs_posex
         y_pose = radar_msgs.ObjectList_left[i].obj_vcs_posey
-        # world_pose = [[x_pose],[y_pose],[0.46],[1]] # 0.46 is preset
-        # world_pose_1 = [[x_pose-0.11],[y_pose],[0.46],[1]] # 0.11 is preset
-        # world_pose_2 = [[x_pose+0.11],[y_pose],[0.46],[1]]
         world_pose = [[[x_pose],[y_pose],[0.46],[1]],
                         [[x_pose-0.11],[y_pose],[0.46],[1]],
                         [[x_pose+0.11],[y_pose],[0.46],[1]]]
-        
         pixel_pose, pixel_pose_1, pixel_pose_2 = transform.radar2pixel(calib, "camera2", world_pose)
-        # pixel_pose = transform.world2pixel(calib,"camera2",world_pose)
-        # pixel_pose_1 = transform.world2pixel(calib,"camera2",world_pose_1)
-        # pixel_pose_2 = transform.world2pixel(calib,"camera2",world_pose_2)
-        # print("pixel_pose_left:")
-        # print(pixel_pose)
 
         # location of detection on the image unit pixel
         cur_x_pixels_left = boundary_detection(pixel_pose[0][0],0,width3)
@@ -63,14 +56,10 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         # get pixel points
         x_pose = radar_msgs.ObjectList_right[i].obj_vcs_posex
         y_pose = radar_msgs.ObjectList_right[i].obj_vcs_posey
-        world_pose = [[x_pose],[y_pose],[0.46],[1]]
-        world_pose_1 = [[x_pose-0.11],[y_pose],[0.46],[1]]
-        world_pose_2 = [[x_pose+0.11],[y_pose],[0.46],[1]]
-        pixel_pose = transform.world2pixel(calib,"camera3",world_pose)
-        pixel_pose_1 = transform.world2pixel(calib,"camera3",world_pose_1)
-        pixel_pose_2 = transform.world2pixel(calib,"camera3",world_pose_2)
-        # print("pixel_pose_right:")
-        # print(pixel_pose)
+        world_pose = [[[x_pose],[y_pose],[0.46],[1]],
+                [[x_pose-0.11],[y_pose],[0.46],[1]],
+                [[x_pose+0.11],[y_pose],[0.46],[1]]]
+        pixel_pose, pixel_pose_1, pixel_pose_2 = transform.radar2pixel(calib, "camera2", world_pose)
 
         # location of detection on the image unit pixel
         cur_x_pixels_right = boundary_detection(pixel_pose[0][0],0,width3)

@@ -38,6 +38,7 @@ def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     return pixel_pose
 
 
+# three points
 def radar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     pixel_pose = world2pixel(calib, camera_name, world_pose[0])
     pixel_pose_1 = world2pixel(calib, camera_name, world_pose[1])
@@ -46,5 +47,7 @@ def radar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     return pixel_pose, pixel_pose_1, pixel_pose_2
 
 
+# eight points
 def lidar2pixel():
+    
     pass
