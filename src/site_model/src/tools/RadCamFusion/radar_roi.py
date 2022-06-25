@@ -9,6 +9,8 @@ import os
 import numpy as np
 # radar message type
 from msgs.msg._MsgRadar import *
+# transform coordinates tool
+from utils import transform
 
 def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, height3: int, width3: int):
     # get calib parameters
@@ -28,12 +30,17 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         # get pixel points
         x_pose = radar_msgs.ObjectList_left[i].obj_vcs_posex
         y_pose = radar_msgs.ObjectList_left[i].obj_vcs_posey
-        world_pose = [[x_pose],[y_pose],[0.46],[1]] # 0.46 is preset
-        world_pose_1 = [[x_pose-0.11],[y_pose],[0.46],[1]] # 0.11 is preset
-        world_pose_2 = [[x_pose+0.11],[y_pose],[0.46],[1]]
-        pixel_pose = get_pixel_pose(calib,"camera2",world_pose)
-        pixel_pose_1 = get_pixel_pose(calib,"camera2",world_pose_1)
-        pixel_pose_2 = get_pixel_pose(calib,"camera2",world_pose_2)
+        # world_pose = [[x_pose],[y_pose],[0.46],[1]] # 0.46 is preset
+        # world_pose_1 = [[x_pose-0.11],[y_pose],[0.46],[1]] # 0.11 is preset
+        # world_pose_2 = [[x_pose+0.11],[y_pose],[0.46],[1]]
+        world_pose = [[[x_pose],[y_pose],[0.46],[1]],
+                        [[x_pose-0.11],[y_pose],[0.46],[1]],
+                        [[x_pose+0.11],[y_pose],[0.46],[1]]]
+        
+        pixel_pose, pixel_pose_1, pixel_pose_2 = transform.radar2pixel(calib, "camera2", world_pose)
+        # pixel_pose = transform.world2pixel(calib,"camera2",world_pose)
+        # pixel_pose_1 = transform.world2pixel(calib,"camera2",world_pose_1)
+        # pixel_pose_2 = transform.world2pixel(calib,"camera2",world_pose_2)
         # print("pixel_pose_left:")
         # print(pixel_pose)
 
@@ -59,9 +66,9 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
         world_pose = [[x_pose],[y_pose],[0.46],[1]]
         world_pose_1 = [[x_pose-0.11],[y_pose],[0.46],[1]]
         world_pose_2 = [[x_pose+0.11],[y_pose],[0.46],[1]]
-        pixel_pose = get_pixel_pose(calib,"camera3",world_pose)
-        pixel_pose_1 = get_pixel_pose(calib,"camera3",world_pose_1)
-        pixel_pose_2 = get_pixel_pose(calib,"camera3",world_pose_2)
+        pixel_pose = transform.world2pixel(calib,"camera3",world_pose)
+        pixel_pose_1 = transform.world2pixel(calib,"camera3",world_pose_1)
+        pixel_pose_2 = transform.world2pixel(calib,"camera3",world_pose_2)
         # print("pixel_pose_right:")
         # print(pixel_pose)
 
@@ -78,34 +85,6 @@ def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, hei
     return (x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right,
             x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2)
 
-def get_pixel_pose(calib: np.array, camera_name: str, world_pose: np.array):
-    """
-        world_pose -> camera_pose : external parameter of camera
-        camera_pose -> pixel_pose : internal parameter of camera
-        tips: shift is need between external and internal parameter
-    """
-    # transform from camera name to camera number
-    transform = {'camera2': 4,
-                 'camera3': 5
-                }
-    # get external and internal parameter of camera
-    world_to_camera = calib[transform[camera_name]][1:17].reshape(4,4)
-    camera_to_pixel = calib[transform[camera_name]][17:30].reshape(3,4)
-
-    # coordinates in camera coordinates
-    camera_pose = np.matmul(world_to_camera, world_pose)
-    instance = camera_pose[0]
-    
-    # shift the coordinates
-    camera_pose_shift = [camera_pose[1],
-                        camera_pose[2],
-                       -camera_pose[0],
-                       -instance] / (-instance)
-
-    # coordinates in pixel coordinates
-    pixel_pose = np.matmul(camera_to_pixel, camera_pose_shift)
-
-    return pixel_pose
 
 def boundary_detection(obj:int, low: int, upper: int):
     if obj < low:

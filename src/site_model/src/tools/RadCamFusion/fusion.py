@@ -9,12 +9,9 @@ import argparse
 import numpy as np
 import parser
 import yaml
-import os
 import rospy
-import cv2
 import message_filters
 from termcolor import colored
-from cv_bridge import CvBridge
 # camera message type
 from sensor_msgs.msg import Image
 # radar message type
@@ -27,9 +24,9 @@ import image_roi
 from yolo.yolo import YOLO
 # fusion message type
 from msgs.msg._MsgRadCam import *
+# visualization
+from utils import visualization
 
-global counter
-counter = 0
 def fusion(radar: MsgRadar, image2: Image, image3: Image):
     global yolo
 
@@ -112,46 +109,15 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam)
     pub.publish(msgradcam)
     
-    # draw
-    if params.draw_output == True:
+    # draw radar points on photos
+    if params.draw_output:
+        output_dir = config['output']['RadCamFusion_dir']
         if msgradcam.match_left+msgradcam.camera_left+msgradcam.radar_left!=0:
             # draw on image2
-            draw_output(match_left, radar_left_single, image_left_single, image2, 'radar2/')
+            visualization.radar2visual(match_left, radar_left_single, image_left_single, image2, 'radar2/', output_dir)
         if msgradcam.match_right+msgradcam.camera_right+msgradcam.radar_right!=0:
             # draw on image3
-            draw_output(match_right, radar_right_single, image_right_single, image3, 'radar3/')
-
-
-def draw_output(match: np.array(np.array(int)), radar: np.array(np.array(int)), camera: np.array(np.array(int)), image: Image, radar_name: str):
-    output_dir = config['output']['RadCamFusion_dir']
-    os.makedirs(output_dir, exist_ok=True)
-    img = CvBridge().imgmsg_to_cv2(image, 'bgr8')
-    # draw match
-    if len(match[0])!=0: # empty match has a size of 1
-        for obj_match in match:
-            pt1 = (obj_match[0],obj_match[1])
-            pt2 = (obj_match[2],obj_match[3])
-            score = obj_match[4]
-            cv2.rectangle(img, pt1, pt2, (0,255,0), 3)
-            font = cv2.FONT_HERSHEY_SIMPLEX
-            img = cv2.putText(img, '{} {:.3f}'.format(score), (100,100), font, 0.5, (0,255,255), 2)
-    # draw radar
-    if len(radar[0])!=0:
-        num = len(radar[0])
-        for i in range(num):
-            pt1 = (radar[0][i],0)
-            pt2 = (radar[1][i],image.height-1)
-            cv2.rectangle(img, pt1, pt2, (255,0,0), 3)
-    # draw camera
-    if len(camera[0])!=0:
-        for obj_img in camera:
-            pt1 = (obj_img[0],obj_match[1])
-            pt2 = (obj_img[2],obj_match[3])
-            cv2.rectangle(img, pt1, pt2, (0,0,255), 3)
-
-    global counter
-    cv2.imwrite(output_dir+radar_name+'image_'+str(counter)+'.jpg', img)
-    counter += 1
+            visualization.radar2visual(match_right, radar_right_single, image_right_single, image3, 'radar3/', output_dir)
 
 
 if __name__ == '__main__':
@@ -173,7 +139,7 @@ if __name__ == '__main__':
     sub_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     sub_image_3 = message_filters.Subscriber('/image_raw_3', Image)
 
-    #yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
+    yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
  
     sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 1, 1) # syncronize time stamps
     sync.registerCallback(fusion)
