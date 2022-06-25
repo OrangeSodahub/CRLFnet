@@ -51,3 +51,91 @@ def radar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
 def lidar2pixel():
     
     pass
+
+def which_cameras(pred_boxes: np.array(np.array)):
+    """
+        The location of cameras:
+        +-------------------------------+
+        |\         /|\                 /| 
+        | \  (1)  / |  \     (3)     /  |
+        |  \     /  |    \         /    |
+        |   \   /   |      \     /      |
+        | (5)\ /(6) |  (5)   \ /   (6)  |
+        intersection|       circle      |
+        |    / \    |        / \        |
+        |   /   \   |      /     \      |
+        |  /     \  |    /         \    |
+        | /  (2)  \ |  /     (4)     \  |
+        |/         \|/                 \|
+        +-------------------------------+
+    """
+    # defined information
+    slope_intersection = 2.92 / 1.92
+    slope_circle = 4.92 / 1.92
+    intersection = [-1.92, 2.92, 1.92, 0, 0, 0.7] # [x1,y1, x2,yx, cx,cy]
+    circle = [-1.92, 0, 1.92, -4.92, 0, -0.95] # [x1,y1, x2,yx, cx,cy]
+
+    cameras = []
+
+    # deal with sinle vehicle
+    def process_single_vehicle(loc, dim, ry):
+        """
+            loc: [x, y, z]
+            dim: [x, y, z]
+            ry: int
+        """
+        camera = []
+        # 1
+        if loc[0] > 0 and loc[1] > 0:
+            if loc[1] <= loc[0]*slope_intersection+intersection[5] and loc[1] >= loc[0]*(-slope_intersection)+intersection[5]:
+                camera.append(2) # camera12
+            # 5
+            elif loc[1] > loc[0]*slope_intersection:
+                camera.append(3) # camera13
+                camera.append(7) # camera43
+            # 6
+            elif loc[1] < loc[0]*(-slope_intersection):
+                camera.append(1) # camera11
+                camera.append(5) # camera41
+        # 3
+        elif loc[0] > 0 and loc[1] < 0:
+            if loc[1] <= loc[0]*slope_circle+circle[5] and loc[1] >= loc[0]*(-slope_circle)+circle[5]:
+                camera.append(6) # camera42
+            elif loc[1] > loc[0]*slope_circle+circle[5]:
+                camera.append(3) # camera13
+                camera.append(7) # camera43
+            elif loc[1] < loc[0]*(-slope_circle)+circle[5]:
+                camera.append(1) # camera11
+                camera.append(5) # camera41
+        # 2
+        elif loc[0] < 0 and loc[1] > 0:
+            if loc[1] <= loc[0]*(-slope_intersection)+intersection[5] and loc[1] >= loc[0]*slope_intersection+intersection[5]:
+                camera.append(4) # camera14
+            # 5
+            elif loc[1] > loc[0]*(-slope_intersection):
+                camera.append(3) # camera13
+                camera.append(7) # camera43
+            # 6
+            elif loc[1] < loc[0]*slope_intersection:
+                camera.append(1) # camera11
+                camera.append(5) # camera41
+        # 4
+        elif loc[0] < 0 and loc[1] < 0:
+            if loc[1] <= loc[0]*(-slope_circle)+circle[5] and loc[1] >= loc[0]*slope_circle+circle[5]:
+                camera.append(8) # camera44
+            # 5
+            elif loc[1] > loc[0]*(-slope_circle)+circle[5]:
+                camera.append(3) # camera13
+                camera.append(7) # camera43
+            # 6
+            elif loc[1] < loc[0]*slope_circle+circle[5]:
+                camera.append(1) # camera11
+                camera.append(5) # camera41
+        
+        return camera
+
+    for pred_box in pred_boxes:
+        camera = process_single_vehicle(pred_box[0:3], pred_box[3:6], pred_box[6])
+        cameras.append(camera)
+    
+    return cameras

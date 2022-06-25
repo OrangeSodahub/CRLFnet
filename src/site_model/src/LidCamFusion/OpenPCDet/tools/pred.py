@@ -182,7 +182,7 @@ class RT_Pred():
         }
 
     # Input data and return pred results
-    def get_pred_dicts(self, points):
+    def get_pred_dicts(self, points, print2screen):
         """
            points: array(:,4) -> x,y,z,I 
         """
@@ -198,17 +198,25 @@ class RT_Pred():
             load_data_to_gpu(data_dict)
             pred_dicts, _ = self.model.forward(data_dict)
 
-            # Print the resualt to screen
-            print("+-------------------------------------------------------------------------------------------------+")
-            print("num: ", len(pred_dicts[0]['pred_boxes']), "  class: ", self.num2class[int(pred_dicts[0]['pred_labels'][0].cpu().numpy())])
-            idx = 1
-            for pred_boxes in pred_dicts[0]['pred_boxes']:
-                print('\n', idx, " ==> ", "loc: ", pred_boxes[0:3].cpu().numpy(), 
-                                " size: ", pred_boxes[3:6].cpu().numpy(), '\n'
-                                "        rotation: ", pred_boxes[6].cpu().numpy(),
-                                "        score: ", pred_dicts[0]['pred_scores'][idx-1].cpu().numpy())
-                idx += 1
-            print("+-------------------------------------------------------------------------------------------------+\n")
+            if print2screen:
+                # Print the resualt to screen
+                print("+-------------------------------------------------------------------------------------------------+")
+                print("num: ", len(pred_dicts[0]['pred_boxes']), "  class: ", self.num2class[int(pred_dicts[0]['pred_labels'][0].cpu().numpy())])
+                idx = 1
+                for pred_boxes in pred_dicts[0]['pred_boxes']:
+                    print('\n', idx, " ==> ", "loc: ", pred_boxes[0:3].cpu().numpy(), 
+                                    " size: ", pred_boxes[3:6].cpu().numpy(), '\n'
+                                    "        rotation: ", pred_boxes[6].cpu().numpy(),
+                                    "        score: ", pred_dicts[0]['pred_scores'][idx-1].cpu().numpy())
+                    idx += 1
+                print("+-------------------------------------------------------------------------------------------------+\n")
+
+        # store the results
+        pred_boxes = pred_dicts[0]['pred_boxes'].cpu().numpy()
+        pred_labels = pred_dicts[0]['pred_labels'].cpu().numpy()
+        pred_scores = pred_dicts[0]['pred_scores'].cpu().numpy()
+
+        return pred_boxes, pred_labels, pred_scores
 
     # create cfg
     def create_cfg(self):

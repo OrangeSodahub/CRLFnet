@@ -20,6 +20,10 @@ from msgs.msg._MsgCamera import * # camera msgs class
 from OpenPCDet.tools.pred import *
 # fusion message type
 # from msgs.msg._MsgLidCam import *
+# visualization
+import sys
+sys.path.append("../")
+from utils import visualization, transform
 
 def fusion(pointcloud, image):
     assert isinstance(pointcloud, PointCloud2)
@@ -32,7 +36,29 @@ def fusion(pointcloud, image):
     points[:,0] = pc['x']
     points[:,1] = pc['y']
     points[:,2] = pc['z']
-    pointcloud_detector.get_pred_dicts(points)
+    pred_boxes, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
+
+    label2class = {
+        1: 'Car',
+        2: 'Pedstrain',
+        3: 'Bicycle'
+    }
+
+    if len(pred_boxes) != 0:
+        # match the lidar detection and camera
+        cameras = transform.which_cameras(pred_boxes)
+
+        print("+-------------------------------------------------------------------------------------------+")
+        print("num_car: ", len(pred_boxes))
+        for i in range(len(pred_boxes)):
+            print(i, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i], "  cameras: ", cameras)
+            print("  ", pred_boxes[i][0:3], " ", pred_boxes[i][3:6], " ", pred_boxes[i][6])
+        print("+-------------------------------------------------------------------------------------------+\n")
+
+    
+        # visualize lidar detection boxes to pixel
+        if params.draw_output:
+            visualization.lidar2visual()
 
     # fusion
     # msglidcam = MsgLidCam()
@@ -44,6 +70,7 @@ def fusion(pointcloud, image):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("--draw_output", help="wehter to draw rois and output", default='False', action='store_true', required=False)
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/CRLFnet/src/site_model/config/config.yaml")
     params = parser.parse_args()
 
