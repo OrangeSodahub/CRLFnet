@@ -14,9 +14,9 @@ from msgs.msg._MsgRadar import *
 sys.path.append("../../")
 from utils import transform
 
-def radar_roi(config: dict, radar_msgs: MsgRadar, height2: int, width2: int, height3: int, width3: int):
+def radar_roi(ROOT_DIR: str, config: dict, radar_msgs: MsgRadar, height2: int, width2: int, height3: int, width3: int):
     # get calib parameters
-    calib_dir = config['calib']['calib_dir']
+    calib_dir = ROOT_DIR + config['calib']['calib_dir']
     calib = np.loadtxt(os.path.join(calib_dir, 'calib.txt'))
 
     # get radar pts

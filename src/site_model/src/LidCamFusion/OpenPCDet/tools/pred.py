@@ -137,10 +137,10 @@ def main():
 # pointcloud detector
 class RT_Pred():
     # Pre-load network
-    def __init__(self, config):
+    def __init__(self, ROOT_DIR, config):
         # basic info
-        self.cfg_file = config['lidar_detection']['cfg_file']
-        self.ckpt_file = config['lidar_detection']['ckpt_file']
+        self.cfg_file = ROOT_DIR + config['lidar_detection']['cfg_file']
+        self.ckpt_file = ROOT_DIR + config['lidar_detection']['ckpt_file']
 
         # create cfg
         self.cfg = self.create_cfg()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-path = "/home/zonlin/IPP_WorkSpace/ROS_WS/site_ws/src/site_model/dataset/point_cloud_data/rename/"
+path = "/home/zonlin/CRLFnet/src/site_model/dataset/point_cloud_data/rename/"
 
 # 获取该目录下所有文件，存入列表中
 f = os.listdir(path)

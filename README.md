@@ -26,14 +26,11 @@ The source code of the CRLFnet.
 
 ### #1 Absolute Paths
 Notice that absolute paths may conflict with yours. Some of the absolute paths are listed as follows.
- | file path                        | Line(s)     |
- |----------------------------------|-------------|
- | tools/RadCamFusion/fusion.py     | 153         |
- | LidCamFusion/fusion.py           | 25          |
- | agent/agent1.py                  | 18          |
- | tools/RadCamFusion/yolo/yolo.py  | 28, 29, 34  |
- | tools/rename.py                  | 5           |
- | config.yaml                      |             |
+ | file path                        | Line(s)                               |
+ |----------------------------------|---------------------------------------|
+ | src/camera_info/get_cam_info.cpp | 26,64,102,140,170,216,254,292,330,368,|
+ | tools/RadCamFusion/yolo/yolo.py  | 28, 29, 34                            |
+ | tools/rename.py                  | 5                                     |
 
 ### #2 GPU Usage
 If you are using GPU, you should set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo.py**". Also, if the program crashes due to GPU settings, try to set `cuda` to `False`.

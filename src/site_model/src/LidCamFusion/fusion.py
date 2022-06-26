@@ -66,9 +66,13 @@ def fusion(pointcloud, image):
     # pub.publish(msglidcam)
 
 if __name__ == '__main__':
+    # get root path
+    from pathlib import Path
+    ROOT_DIR = str((Path(__file__).resolve().parent / '../../').resolve())
+    
     parser = argparse.ArgumentParser()
     parser.add_argument("--draw_output", help="wehter to draw rois and output", default='False', action='store_true', required=False)
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/CRLFnet/src/site_model/config/config.yaml")
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + 'config/config.yaml')
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:
@@ -80,7 +84,7 @@ if __name__ == '__main__':
 
     rospy.init_node('lidar_camera_fusion', anonymous=True)
     # Create an example of pointcloud detector
-    pointcloud_detector = RT_Pred(config)
+    pointcloud_detector = RT_Pred(ROOT_DIR, config)
     # Create YOLO detector
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)

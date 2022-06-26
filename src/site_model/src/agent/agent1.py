@@ -18,8 +18,12 @@ def main(msgradcam: MsgRadCam, msglidcam: MsgLidCam):
     print("Agent One Set.")
 
 if __name__ == '__main__':
+    # get root path
+    from pathlib import Path
+    ROOT_DIR = (Path(__file__).resolve().parent / '../../').resolve()
+    
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/CRLFnet/src/site_model/config/config.yaml")
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR) + '/config/config.yaml')
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:

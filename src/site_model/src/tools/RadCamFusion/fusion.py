@@ -34,7 +34,7 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
 
     # radar_roi
     (x_pixels_left, y_pixels_left, x_pixels_right, y_pixels_right,
-    x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2) = radar_roi.radar_roi(config, radar, image2.height, image2.width,
+    x_pixels_left_1, x_pixels_left_2, x_pixels_right_1, x_pixels_right_2) = radar_roi.radar_roi(ROOT_DIR, config, radar, image2.height, image2.width,
                                                                                                                image3.height, image3.width)
     # image_roi
     print("  Image 2: ", end='')
@@ -111,7 +111,7 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     
     # draw radar points on photos
     if params.draw_output:
-        output_dir = config['output']['RadCamFusion_dir']
+        output_dir = ROOT_DIR + config['output']['RadCamFusion_dir']
         if msgradcam.match_left+msgradcam.camera_left+msgradcam.radar_left!=0:
             # draw on image2
             visualization.radar2visual(match_left, radar_left_single, image_left_single, image2, 'radar2/', output_dir)
@@ -121,8 +121,12 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
 
 
 if __name__ == '__main__':
+    # get root path
+    from pathlib import Path
+    ROOT_DIR = str((Path(__file__).resolve().parent / '../../../').resolve())
+    
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/CRLFnet/src/site_model/config/config.yaml")
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
     parser.add_argument("--draw_output", help="wehter to draw rois and output", default='False', action='store_true', required=False)
     params = parser.parse_args()
 

@@ -14,7 +14,7 @@ import os
 import numpy as np
 from tomlkit import string
 
-def main(config: dict):
+def main(ROOT_DIR: str, config: dict):
     """
         generate the calib matrix
     """
@@ -43,23 +43,23 @@ def main(config: dict):
             }
 
     # Generate 'calib' array
-    world_to_camera_, camera_to_pixel_ = world_to_pixel(config, pole_name[0], camera_name[0])
+    world_to_camera_, camera_to_pixel_ = world_to_pixel(ROOT_DIR, config, pole_name[0], camera_name[0])
     camera_cur = np.append(world_to_camera_.flatten(),camera_to_pixel_.flatten(),axis=0)
     calib = [np.append([camera_name[0]],camera_cur,axis=0)]
     for i in range(1,10):
-        world_to_camera_, camera_to_pixel_ = world_to_pixel(config, pole_name[i], camera_name[i])
+        world_to_camera_, camera_to_pixel_ = world_to_pixel(ROOT_DIR, config, pole_name[i], camera_name[i])
         camera_cur = np.append(world_to_camera_.flatten(),camera_to_pixel_.flatten(),axis=0)
         camera_cur = np.append([camera_name[i]],camera_cur,axis=0)
         calib = np.append(calib,[camera_cur],axis=0)
 
     # Save the file
-    calib_dir = config['calib']['calib_dir']
+    calib_dir = ROOT_DIR + config['calib']['calib_dir']
     os.makedirs(calib_dir,exist_ok=True)
     np.savetxt(calib_dir+'calib.txt', calib)
 
 
 # transform matrix
-def world_to_pixel(config: dict, pole_name: string, camera_name: string):
+def world_to_pixel(ROOT_DIR: str, config: dict, pole_name: string, camera_name: string):
     """
         input: world_pose
         output: pixel_pose
@@ -67,18 +67,18 @@ def world_to_pixel(config: dict, pole_name: string, camera_name: string):
         tips: camera_pose->pixel_pose
               need to shift the camera_coordinates
     """
-    world_to_camera_ = world_to_camera(config,pole_name,camera_name)
-    camera_to_pixel_ = camera_to_pixel(config,camera_name)
+    world_to_camera_ = world_to_camera(ROOT_DIR, config, pole_name, camera_name)
+    camera_to_pixel_ = camera_to_pixel(ROOT_DIR, config, camera_name)
 
     # caculate the transfrom matrix
-    world_to_pixel_ = np.matmul(camera_to_pixel_,world_to_camera_)
+    world_to_pixel_ = np.matmul(camera_to_pixel_, world_to_camera_)
     # print("world_to_pixel:")
     # print(world_to_pixel_)
 
     return world_to_camera_, camera_to_pixel_
 
 # camera external parameter matrix
-def world_to_camera(config: dict, pole_name: string, camera_name: string):
+def world_to_camera(ROOT_DIR: str, config: dict, pole_name: string, camera_name: string):
     """
         world_to_camera = pose_to_camera * world_to_camera
     """
@@ -144,11 +144,11 @@ def RTmatrix(pose):
 
     return result
 
-def camera_to_pixel(config: dict, camera_name: string):
+def camera_to_pixel(ROOT_DIR: str, config: dict, camera_name: string):
     """
         get the internal parameter matrix of camera (fixed)
     """
-    camera_info_dir = config['calib']['camera_info_dir']
+    camera_info_dir = ROOT_DIR + config['calib']['camera_info_dir']
     K = np.loadtxt(camera_info_dir+'camera_info.txt')[4][28:40]
     K = K.reshape(3,4)
     # print("camera_to_pixel:")
@@ -158,9 +158,12 @@ def camera_to_pixel(config: dict, camera_name: string):
 
 
 if __name__=='__main__':
+    # get root path
+    from pathlib import Path
+    ROOT_DIR = str((Path(__file__).resolve().parent / '../../../').resolve())
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default="/home/zonlin/CRLFnet/src/site_model/config/config.yaml")
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
     args = parser.parse_args()
 
     params = parser.parse_args()
@@ -173,5 +176,5 @@ if __name__=='__main__':
             print(colored('Config file could not be read','red'))
             exit(1)
         
-        main(config)
+        main(ROOT_DIR, config)
         print(colored('Calib parameter generated.', 'green'))
