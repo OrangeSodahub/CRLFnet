@@ -48,7 +48,6 @@ class Dataset(DatasetTemplate):
     def __getitem__(self, index):
         if self.ext == '.bin':
             points = np.fromfile(self.sample_file_list[index], dtype=np.float32).reshape(-1, 4)
-            print(points)
         elif self.ext == '.npy':
             points = np.load(self.sample_file_list[index])
         else:
@@ -63,19 +62,6 @@ class Dataset(DatasetTemplate):
         data_dict = self.prepare_data(data_dict=input_dict)
 
         return data_dict
-
-
-class RT_Dataset(DatasetTemplate):
-    def __init__(self, dataset_cfg=None, class_names=None, training=True, root_path=None, logger=None):
-        super().__init__(dataset_cfg, class_names, training, root_path, logger)
-
-    def __len__(self):
-        pass
-
-    def __getitem__(self):
-        # points = 
-        
-        return 
     
 
 def parse_config():
@@ -151,10 +137,10 @@ def main():
 # pointcloud detector
 class RT_Pred():
     # Pre-load network
-    def __init__(self):
+    def __init__(self, config):
         # basic info
-        self.cfg_file = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml'
-        self.ckpt_file = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/OpenPCDet//output/custom_models/pv_rcnn/03/ckpt/checkpoint_epoch_50.pth'
+        self.cfg_file = config['lidar_detection']['cfg_file']
+        self.ckpt_file = config['lidar_detection']['ckpt_file']
 
         # create cfg
         self.cfg = self.create_cfg()

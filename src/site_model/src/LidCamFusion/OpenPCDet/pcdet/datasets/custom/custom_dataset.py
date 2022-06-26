@@ -1,7 +1,6 @@
 import copy
 import pickle
 import os
-from cv2 import preCornerDetect, split
 
 import numpy as np
 from skimage import io

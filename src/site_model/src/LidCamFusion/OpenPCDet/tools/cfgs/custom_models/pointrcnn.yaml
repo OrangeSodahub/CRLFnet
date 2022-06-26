@@ -1,4 +1,5 @@
-CLASS_NAMES: ['Car', 'Pedestrian', 'Cyclist']
+CLASS_NAMES: ['Car']
+# CLASS_NAMES: ['Car', 'Pedestrian', 'Cyclist']
 
 DATA_CONFIG:
     _BASE_CONFIG_: cfgs/dataset_configs/custom_dataset.yaml

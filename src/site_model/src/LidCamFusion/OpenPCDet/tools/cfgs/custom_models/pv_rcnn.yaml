@@ -7,6 +7,7 @@ DATA_CONFIG:
         DISABLE_AUG_LIST: ['placeholder']
         AUG_CONFIG_LIST:
             - NAME: gt_sampling
+              # Notic that 'USE_ROAD_PLANE'
               USE_ROAD_PLANE: False
               DB_INFO_PATH:
                   - custom_dbinfos_train.pkl # pcdet/datasets/augmentor/database_ampler.py:line 26

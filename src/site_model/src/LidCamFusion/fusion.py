@@ -45,13 +45,10 @@ def fusion(pointcloud, image):
     }
 
     if len(pred_boxes) != 0:
-        # match the lidar detection and camera
-        cameras = transform.which_cameras(pred_boxes)
-
         print("+-------------------------------------------------------------------------------------------+")
         print("num_car: ", len(pred_boxes))
         for i in range(len(pred_boxes)):
-            print(i, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i], "  cameras: ", cameras)
+            print(i+1, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i])
             print("  ", pred_boxes[i][0:3], " ", pred_boxes[i][3:6], " ", pred_boxes[i][6])
         print("+-------------------------------------------------------------------------------------------+\n")
 
@@ -83,7 +80,7 @@ if __name__ == '__main__':
 
     rospy.init_node('lidar_camera_fusion', anonymous=True)
     # Create an example of pointcloud detector
-    pointcloud_detector = RT_Pred()
+    pointcloud_detector = RT_Pred(config)
     # Create YOLO detector
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)

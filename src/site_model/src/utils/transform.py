@@ -7,6 +7,7 @@
 #############################################################
 
 import numpy as np
+import torch
 
 def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     """
@@ -48,8 +49,12 @@ def radar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
 
 
 # eight points
-def lidar2pixel():
+def lidar2pixel(pred_boxes: np.array):
+    # locate the cameras according to the pred results
+    cameras = which_cameras(pred_boxes)
     
+    # get the coords of pred_boxes
+    coords = box_to_corner_3d(pred_boxes)
     pass
 
 def which_cameras(pred_boxes: np.array(np.array)):
@@ -78,10 +83,10 @@ def which_cameras(pred_boxes: np.array(np.array)):
     cameras = []
 
     # deal with sinle vehicle
-    def process_single_vehicle(loc, dim, ry):
+    def process_single_vehicle(loc):
         """
             loc: [x, y, z]
-            dim: [x, y, z]
+            dim: [dx, dy, dz]
             ry: int
         """
         camera = []
@@ -135,7 +140,65 @@ def which_cameras(pred_boxes: np.array(np.array)):
         return camera
 
     for pred_box in pred_boxes:
-        camera = process_single_vehicle(pred_box[0:3], pred_box[3:6], pred_box[6])
+        camera = process_single_vehicle(pred_box[0:3])
         cameras.append(camera)
     
     return cameras
+
+
+# caculate the 8 points coordinates of pred_boxes: all vehicles
+def box_to_corner_3d(boxes3d):
+    """
+    The label of each corner: 
+           5--------------6
+          /|             /|
+         / |            / |
+        1--------------2  |
+        |  |           |  |
+        |  7-----------|--8
+        | /            | /
+        |/             |/
+        3--------------4
+    """
+
+    boxes3d, is_numpy = check_numpy_to_torch(boxes3d)
+    template = boxes3d.new_tensor((
+        [1, 1, -1], [1, -1, -1], [-1, -1, -1], [-1, 1, -1],
+        [1, 1, 1], [1, -1, 1], [-1, -1, 1], [-1, 1, 1],
+    )) / 2
+
+    corners3d = boxes3d[:, None, 3:6].repeat(1, 8, 1) * template[None, :, :]
+    corners3d = rotate_points_along_z(corners3d.view(-1, 8, 3), boxes3d[:, 6]).view(-1, 8, 3)
+    corners3d += boxes3d[:, None, 0:3]
+
+    return corners3d.numpy() if is_numpy else corners3d
+
+
+def check_numpy_to_torch(x):
+    if isinstance(x, np.ndarray):
+        return torch.from_numpy(x).float(), True
+    return x, False
+
+def rotate_points_along_z(points, angle):
+    """
+    Args:
+        points: (B, N, 3 + C)
+        angle: (B), angle along z-axis, angle increases x ==> y
+    Returns:
+
+    """
+    points, is_numpy = check_numpy_to_torch(points)
+    angle, _ = check_numpy_to_torch(angle)
+
+    cosa = torch.cos(angle)
+    sina = torch.sin(angle)
+    zeros = angle.new_zeros(points.shape[0])
+    ones = angle.new_ones(points.shape[0])
+    rot_matrix = torch.stack((
+        cosa,  sina, zeros,
+        -sina, cosa, zeros,
+        zeros, zeros, ones
+    ), dim=1).view(-1, 3, 3).float()
+    points_rot = torch.matmul(points[:, :, 0:3], rot_matrix)
+    points_rot = torch.cat((points_rot, points[:, :, 3:]), dim=-1)
+    return points_rot.numpy() if is_numpy else points_rot
