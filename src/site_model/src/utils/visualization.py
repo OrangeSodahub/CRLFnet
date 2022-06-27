@@ -27,14 +27,15 @@ def radar2visual(match: np.array(np.array(int)), radar: np.array(np.array(int)),
             pt2 = (radar[1][i],image.height-1)
             cv2.rectangle(img, pt1, pt2, (255,0,0), 3)
     # draw camera
-    if len(camera[0])!=0:
+    if len(camera[0])!=1:
         for obj_img in camera:
-            pt1 = (obj_img[0],obj_match[1])
-            pt2 = (obj_img[2],obj_match[3])
+            pt1 = (obj_img[0],obj_img[1])
+            pt2 = (obj_img[2],obj_img[3])
             cv2.rectangle(img, pt1, pt2, (0,0,255), 3)
 
     # save images
     img_file = output_dir + radar_name + ('image_%s.jpg' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))
+    print(img_file, "saved.")
     cv2.imwrite(img_file, img)
 
 def lidar2visual():

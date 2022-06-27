@@ -38,11 +38,11 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
                                                                                                                image3.height, image3.width)
     # image_roi
     print("  Image 2: ", end='')
-    labels_left = [[]]
-    image_roi.image_roi(image2, yolo=yolo)
+    labels_left = []
+    labels_left.append(image_roi.image_roi(image2, yolo=yolo))
     print("  Image 3: ", end='')
-    labels_right = [[]]
-    image_roi.image_roi(image3, yolo=yolo)
+    labels_right = []
+    labels_right.append(image_roi.image_roi(image3, yolo=yolo))
 
     # fusion
     match_left = [[]]
@@ -121,6 +121,10 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
             # draw on image3
             visualization.radar2visual(match_right, radar_right_single, image_right_single, image3, 'radar3/', output_dir)
 
+    # if len(np.array(labels_left)[0]) != 1:
+    #     output_dir = ROOT_DIR + config['output']['RadCamFusion_dir']
+    #     visualization.radar2visual([[]], [x_pixels_left_1, x_pixels_left_2], np.array(labels_left), image2, 'radar2/', output_dir)
+
 
 if __name__ == '__main__':
     # get root path
@@ -129,7 +133,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
-    parser.add_argument("--draw_output", help="wehter to draw rois and output", default='False', action='store_true', required=False)
+    parser.add_argument("--draw_output", help="wehter to draw rois and output", default=False, action='store_true', required=False)
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:
@@ -146,6 +150,7 @@ if __name__ == '__main__':
     sub_image_3 = message_filters.Subscriber('/image_raw_3', Image)
 
     yolo = YOLO()   # initialize yolo here, ONLY ONCE!!!
+    print("YOLO created.")
  
     sync = message_filters.ApproximateTimeSynchronizer([sub_radar, sub_image_2, sub_image_3], 1, 1) # syncronize time stamps
     sync.registerCallback(fusion)

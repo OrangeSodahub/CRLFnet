@@ -26,8 +26,8 @@ class YOLO(object):
         #   如果出现shape不匹配，同时要注意训练时的model_path和classes_path参数的修改
         #--------------------------------------------------------------------------#
         # absolute path
-        "model_path"        : "/home/zzy/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/yolo_weights.pth",
-        "classes_path"      : "/home/zzy/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/voc_classes.txt",
+        "model_path"        : "/home/zonlin/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/yolo_weights.pth",
+        "classes_path"      : "/home/zonlin/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/voc_classes.txt",
 
 
         # relative path
@@ -37,7 +37,7 @@ class YOLO(object):
         #   anchors_path代表先验框对应的txt文件，一般不修改。
         #   anchors_mask用于帮助代码找到对应的先验框，一般不修改。
         #---------------------------------------------------------------------#
-        "anchors_path"      : '/home/zzy/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/yolo_anchors.txt',
+        "anchors_path"      : '/home/zonlin/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/yolo_anchors.txt',
         # relative path
         # "anchors_path"      : 'model_data/yolo_anchors.txt',
         "anchors_mask"      : [[6, 7, 8], [3, 4, 5], [0, 1, 2]],
@@ -496,7 +496,6 @@ class YOLO(object):
         #---------------------------------------------------------#
         #   output
         #---------------------------------------------------------#
-        l = []
         for i, c in list(enumerate(top_label)):
             predicted_class = self.class_names[int(c)]
             box             = top_boxes[i]
@@ -509,8 +508,6 @@ class YOLO(object):
             bottom  = min(image.size[1], np.floor(bottom).astype('int32'))
             right   = min(image.size[0], np.floor(right).astype('int32'))
 
-            print(predicted_class, score, top, left, bottom, right)
-            
-            l.append((left, top, right, bottom))
+            # print(predicted_class, score, top, left, bottom, right)
 
-        return tuple(l)
+        return np.array([left, top, right, bottom])
