@@ -1,5 +1,5 @@
 
-# CRLFnet
+## CRLFnet
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 [![CodeQL](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/codeql.yml/badge.svg)](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/codeql.yml)
 [![pages-build-deployment](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment)
@@ -13,101 +13,146 @@
 
 The source code of the CRLFnet.
 
-## INSTALL & BUILD
+### INSTALL & BUILD
 
 **Env:** Ubuntu20.04 + ROS(Noetic) + Python3.x
 
-**Notice:** 
 - If using Google-colab, there is a recommanded environment: **CUDA10.2+PyTorch1.6**. It is proved that **CUDA11.3+PyTorch1.11** is incorrect.
-- Build the `pcdet` using correct version of CUDA, when a build process occurred errors , before change the version of CUDA and the next build **Delete** the entire `build` folder.
+- Please refer to [INSTALL.md](docs/INSTALL.md) for the installation of `OpenPCDet`. Using correct version of CUDA, when a build process occurred errors , before change the version of CUDA and the next build **Delete** the entire `build` folder.
+- Install `ros_numpy` package mannually. Source code:    https://github.com/eric-wieser/ros_numpy. How to install: https://blog.csdn.net/mywxm/article/details/121945880
 
-# Rad-Cam Fusion
-## Preparation:
-
-### #1 Absolute Paths
-Notice that absolute paths may conflict with yours. Some of the absolute paths are listed as follows.
+Absolute paths may need your mind:
  | file path                        | Line(s)                               |
  |----------------------------------|---------------------------------------|
  | src/camera_info/get_cam_info.cpp | 26,64,102,140,170,216,254,292,330,368,|
  | tools/RadCamFusion/yolo/yolo.py  | 28, 29, 34                            |
  | tools/rename.py                  | 5                                     |
 
-### #2 GPU Usage
-If you are using GPU, you should set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo.py**". Also, if the program crashes due to GPU settings, try to set `cuda` to `False`.
+## Rad-Cam Fusion
 
-### #3 "ros_numpy" Package
-Please download and install "ros_numpy". This package is used to convert image format.
+### GPU Usage
+If using GPU, set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo.py**".
 
-Source code:    https://github.com/eric-wieser/ros_numpy
+### Pre-trained Model
+For vision detection (based on YOLOv3), using our pre-trained model based on self-product dataset to get startted:
 
-How to install: https://blog.csdn.net/mywxm/article/details/121945880
+URL: https://drive.google.com/file/d/1-cMNDnujVCtvtDKlq9kGuJAk0jpeXUb4/view?usp=sharing
 
-### #4 Weights
-New trained Custom Model: https://drive.google.com/file/d/1-cMNDnujVCtvtDKlq9kGuJAk0jpeXUb4/view?usp=sharing
-
-### #5: Model Data
+### Model Data
 If yolo can't find "coco_classes.txt", "yolo_weights.pth" or other similar files, please check whether the folder "tools/RadCamFusion/yolo/model_data" exists. If it doesn't exist, please download it from https://github.com/bubbliiiing/yolo3-pytorch
 
-## Run:
-Run the following instructions in **ROOT_PATH** in order. 
-###
+### Rad-Cam Fusion
+Follow these steps for only radar-camera fusion. For the last command, set `--draw_output` to `True` if need to save the results of fusion in the form of `.jpg`.
+```bash
+    cd to/ROOT_DIR/
+
     source ./devel/setup.bash
     
-    roslaunch site_model spawn.launch
+    roslaunch site_model spawn.launch # start the solid model
 
-    rosrun site_model src/tools/radar_listener.py
+    # (generate camera calibrations if needed)
 
-    rosrun site_model src/tools/RadCamFusion/fusion.py
+    rosrun site_model src/tools/radar_listener.py # radar msgs preprocess
+    
+    cd src/tools/RadCamFusion
+
+    python fusion.py --draw_output True/False # radar-camera fusion start working
+```
 
 If you run the code for the first time, maybe you have to use the command to enable the system to run certain files like "radar_listener.py".
-###
-    chmod +x {file name}.py
-
-# Lid-Cam Fusion
-Config files:
-
-tools/cfgs/custom_models/pv_rcnn.yaml：Model configs
-
-tools/cfgs/dataset_configs/custom_dataset.yaml：Dataset configs
-
-## Datasets
-
-## Run
-### Create dataset infos
-File **custom_infos_train.pkl** and **custom_infos_test.pkl** will be saved to data/custom.
 ```bash
+    chmod +x {file name}.py
+```
+### Camera Calibration
+Two commands are needed for camera calibration after `spawn.launch` is launched. Relative files are already exist in the repository. If the poses of components of models in `.urdf` files haven't been modified, skip this step.
+```bash
+rosrun site_model get_cam_info # get relevant parameters of cameras from gazebo
+
+python src/site_model/src/tools/RadCamFusion/generate_calib.py # generate calibration formula according to parameters of cameras
+```
+
+## Lid-Cam Fusion
+### Config Files
+Configurations for model and dataset need to be specified:
+- **Model Configs** `tools/cfgs/custom_models/XXX.yaml`
+- **Dataset Configs** `tools/cfgs/dataset_configs/custom_dataset.yaml`
+
+Now `pointrcnn.yaml` and `pv_rcnn.yaml` are supported.
+
+### Datasets
+Create dataset infos before training:
+```bash
+cd OpenPCDet/
 python -m pcdet.datasets.custom.custom_dataset create_custom_infos tools/cfgs/dataset_configs/custom_dataset.yaml
 ```
+File `custom_infos_train.pkl`, `custom_dbinfos_train.pkl` and `custom_infos_test.pkl` will be saved to `data/custom`.
+
 ### Train
+Specify the model using YAML files defined above.
 ```bash
 cd tools/
-python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 2 --workers 4 --epochs 20
+python train.py --cfg_file path/to/config/file/
 ```
-Two models **PV-RCNN**, **PointRCNN** are supported now.
+For example, if using PV_RCNN for training:
+```bash
+cd tools/
+python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 2 --workers 4 --epochs 80
+```
 
-### Predict
+### Predict (Local)
+Prediction on local dataset help to check the result of training.
 ```bash
 python pred.py --cfg_file path/to/config/file/ --ckpt path/to/checkpoint/ --data_path path/to/dataset/
 ```
 For example:
 ```bash
-python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_20.pth --data_path ../data/custom/testing/velodyne/
+python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_80.pth --data_path ../data/custom/testing/velodyne/
 ```
 
-# Run the whole model
-The whole project contains several different parts which need to be start up through commands. Following commands show how to start. Their order is immutable.
+### Lid-Cam Fusion
+Follow these steps for only lidar-camera fusion. Some of them need different bash terminals.
 ```bash
+    cd to/ROOT_DIR/
 
-cd /to/ROOT/DIR/; roslaunch site_model spawn.launch # start roscore and build the solid model
-rosrun site_model get_cam_info # get relevant parameters of cameras
-python src/site_model/src/tools/RadCamFusion/generate_calib.py # generate calibration formula according to parameters of cameras
-python src/site_model/src/tools/radar_listener.py # radars start working
-python src/site_model/src/tools/RadCamFusion/fusion.py --draw_output True/False # start camera-radar fusion
-python src/site_model/src/LidCamFusion/camera_listener.py # cameras around lidars start working
-python src/site_model/src/LidCamFusion/pointcloud_listener.py # lidars start working
-rosrun site_model pointcloud_combiner # combine all the point clouds and fix their coords
-cd src/site_model/src/LidCamFusion/; python fusion.py # start camera-lidar fusion
-cd ../agent/; python agent1.py # agent1 start working
+    roslaunch site_model spawn.launch # start the solid model
+
+    # (generate camera calibrations if needed)
+
+    python src/site_model/src/LidCamFusion/camera_listener.py # cameras around lidars start working
+
+    python src/site_model/src/LidCamFusion/pointcloud_listener.py # lidars start working
+
+    rosrun site_model pointcloud_combiner # combine all the point clouds and fix their coords
+
+    cd src/site_model/src/LidCamFusion/;
+    python fusion.py # start camera-lidar fusion
+```
+
+## Run the whole model
+The whole project contains several different parts which need to be start up through commands. Following commands show how to start.
+```bash
+    cd to/ROOT_DIR/
+
+    source ./devel/setup.bash
+    
+    roslaunch site_model spawn.launch
+
+    # (generate camera calibrations if needed)
+
+    rosrun site_model src/tools/radar_listener.py
+    
+    cd src/tools/RadCamFusion
+    python fusion.py --draw_output True/False
+
+
+    python src/site_model/src/LidCamFusion/camera_listener.py
+
+    python src/site_model/src/LidCamFusion/pointcloud_listener.py
+
+    rosrun site_model pointcloud_combiner
+
+    cd src/site_model/src/LidCamFusion/;
+    python fusion.py
 ```
 
 # Issues
