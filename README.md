@@ -1,5 +1,4 @@
-
-## CRLFnet
+# CRLFnet
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 [![CodeQL](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/codeql.yml/badge.svg)](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/codeql.yml)
 [![pages-build-deployment](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/OrangeSodahub/CRLFnet/actions/workflows/pages/pages-build-deployment)
@@ -13,7 +12,7 @@
 
 The source code of the CRLFnet.
 
-### INSTALL & BUILD
+## INSTALL & BUILD
 
 **Env:** Ubuntu20.04 + ROS(Noetic) + Python3.x
 
@@ -33,20 +32,16 @@ Absolute paths may need your mind:
 ### GPU Usage
 If using GPU, set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo.py**".
 
-### Pre-trained Model
-For vision detection (based on YOLOv3), using our pre-trained model based on self-product dataset to get startted:
-
-URL: https://drive.google.com/file/d/1-cMNDnujVCtvtDKlq9kGuJAk0jpeXUb4/view?usp=sharing
-
 ### Model Data
-If yolo can't find "coco_classes.txt", "yolo_weights.pth" or other similar files, please check whether the folder "tools/RadCamFusion/yolo/model_data" exists. If it doesn't exist, please download it from https://github.com/bubbliiiing/yolo3-pytorch
+Please download "yolo_weights.pth" from `jbox`, and put it in the folder "src/site_model/src/tools/RadCamFusion/yolo/model_data".
 
 ### Rad-Cam Fusion
 Follow these steps for only radar-camera fusion. For the last command, set `--draw_output` to `True` if need to save the results of fusion in the form of `.jpg`.
+
 ```bash
     cd to/ROOT_DIR/
 
-    source ./devel/setup.bash
+    source devel/setup.bash
     
     roslaunch site_model spawn.launch # start the solid model
 
@@ -54,17 +49,19 @@ Follow these steps for only radar-camera fusion. For the last command, set `--dr
 
     rosrun site_model src/tools/radar_listener.py # radar msgs preprocess
     
-    cd src/tools/RadCamFusion
+    cd src/site_model/src/tools/RadCamFusion
 
     python fusion.py --draw_output True/False # radar-camera fusion start working
 ```
 
 If you run the code for the first time, maybe you have to use the command to enable the system to run certain files like "radar_listener.py".
+
 ```bash
     chmod +x {file name}.py
 ```
 ### Camera Calibration
 Two commands are needed for camera calibration after `spawn.launch` is launched. Relative files are already exist in the repository. If the poses of components of models in `.urdf` files haven't been modified, skip this step.
+
 ```bash
 rosrun site_model get_cam_info # get relevant parameters of cameras from gazebo
 

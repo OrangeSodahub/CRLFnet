@@ -27,7 +27,7 @@ class YOLO(object):
         #--------------------------------------------------------------------------#
         # absolute path
         "model_path"        : "/home/zzy/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/yolo_weights.pth",
-        "classes_path"      : "/home/zzy/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/coco_classes.txt",
+        "classes_path"      : "/home/zzy/CRLFnet/src/site_model/src/tools/RadCamFusion/yolo/model_data/voc_classes.txt",
 
 
         # relative path
