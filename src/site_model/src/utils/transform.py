@@ -81,10 +81,10 @@ def which_cameras(pred_boxes: np.array(np.array)):
         +-------------------------------+
     """
     # defined information
-    slope_intersection = 2.92 / 1.92
-    slope_circle = 4.92 / 1.92
     intersection = [-1.92, 2.92, 1.92, 0, 0, 0.7] # [x1,y1, x2,yx, cx,cy]
     circle = [-1.92, 0, 1.92, -2.5, 0, -0.95] # [x1,y1, x2,yx, cx,cy]
+    slope_intersection = np.abs(intersection[1]) / np.abs(intersection[0])
+    slope_circle = np.abs(circle[3]) / np.abs(circle[2])
 
     cameras = []
 
