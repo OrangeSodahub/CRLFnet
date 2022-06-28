@@ -167,6 +167,12 @@ class RT_Pred():
             3: 'Bicycle'
         }
 
+    # create cfg
+    def create_cfg(self):
+        cfg_from_yaml_file(self.cfg_file, cfg, RT_detect=True)
+        return cfg
+
+    
     # Input data and return pred results
     def get_pred_dicts(self, points, print2screen):
         """
@@ -203,11 +209,6 @@ class RT_Pred():
         pred_scores = pred_dicts[0]['pred_scores'].cpu().numpy()
 
         return pred_boxes, pred_labels, pred_scores
-
-    # create cfg
-    def create_cfg(self):
-        cfg_from_yaml_file(self.cfg_file, cfg, RT_detect=True)
-        return cfg
 
 
 def main_2():
@@ -254,6 +255,17 @@ def main_2():
                             "        score: ", pred_dicts[0]['pred_scores'][idx-1].cpu().numpy())
             idx += 1
         print("+-------------------------------------------------------------------------------------------------+\n")
+
+        # store the results
+        pred_boxes = pred_dicts[0]['pred_boxes'].cpu().numpy()
+        pred_labels = pred_dicts[0]['pred_labels'].cpu().numpy()
+        pred_scores = pred_dicts[0]['pred_scores'].cpu().numpy()
+
+        # For test
+        # import sys
+        # sys.path.append('/home/zonlin/CRLFnet/src/site_model/src/utils/')
+        # import visualization
+        # visualization.lidar2visual(pred_boxes)
 
 
 if __name__ == '__main__':

@@ -24,10 +24,15 @@ from OpenPCDet.tools.pred import *
 import sys
 sys.path.append("../")
 from utils import visualization, transform
+import pointcloud_roi
 
-def fusion(pointcloud, image):
+def fusion(pointcloud, msgcamera):
+    """
+        pointcloud: [N,4]
+        msgcamera: [1,8] -> eight Images
+    """
     assert isinstance(pointcloud, PointCloud2)
-    assert isinstance(image, MsgCamera)
+    assert isinstance(msgcamera, MsgCamera)
     # image roi
 
     # pointcloud roi
@@ -38,6 +43,7 @@ def fusion(pointcloud, image):
     points[:,2] = pc['z']
     pred_boxes, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
 
+    # label2calss
     label2class = {
         1: 'Car',
         2: 'Pedstrain',
@@ -52,10 +58,14 @@ def fusion(pointcloud, image):
             print("  ", pred_boxes[i][0:3], " ", pred_boxes[i][3:6], " ", pred_boxes[i][6])
         print("+-------------------------------------------------------------------------------------------+\n")
 
-    
+        # get cameras and pixel_poses of all vehicles
+        cameras, pixel_pose = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes)
+        print("cameras: ", cameras)
+        print("pixel_pose: ", pixel_pose)
+
         # visualize lidar detection boxes to pixel
         if params.draw_output:
-            visualization.lidar2visual()
+            visualization.lidar2visual(pred_boxes, msgcamera)
 
     # fusion
     # msglidcam = MsgLidCam()
@@ -71,8 +81,8 @@ if __name__ == '__main__':
     ROOT_DIR = str((Path(__file__).resolve().parent / '../../').resolve())
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--draw_output", help="wehter to draw rois and output", default='False', action='store_true', required=False)
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + 'config/config.yaml')
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
+    parser.add_argument("--draw_output", help="wehter to draw rois and output", action='store_true', required=False)
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:

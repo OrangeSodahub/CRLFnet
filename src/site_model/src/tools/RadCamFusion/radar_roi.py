@@ -59,7 +59,7 @@ def radar_roi(ROOT_DIR: str, config: dict, radar_msgs: MsgRadar, height2: int, w
         world_pose = [[[x_pose],[y_pose],[0.46],[1]],
                 [[x_pose-0.11],[y_pose],[0.46],[1]],
                 [[x_pose+0.11],[y_pose],[0.46],[1]]]
-        pixel_pose, pixel_pose_1, pixel_pose_2 = transform.radar2pixel(calib, "camera2", world_pose)
+        pixel_pose, pixel_pose_1, pixel_pose_2 = transform.radar2pixel(calib, "camera3", world_pose)
 
         # location of detection on the image unit pixel
         cur_x_pixels_right = boundary_detection(pixel_pose[0][0],0,width3)

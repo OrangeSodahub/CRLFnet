@@ -16,9 +16,10 @@ def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
         tips: shift is need between external and internal parameter
     """
     # transform from camera name to camera number
-    transform = {'camera2': 4,
-                 'camera3': 5
-                }
+    transform = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
+                 'camera2': 4, 'camera3': 5,
+                 'camera41': 6, 'camera42': 7, 'camera43': 8, 'camera44': 9}
+
     # get external and internal parameter of camera
     world_to_camera = calib[transform[camera_name]][1:17].reshape(4,4)
     camera_to_pixel = calib[transform[camera_name]][17:30].reshape(3,4)
@@ -49,14 +50,19 @@ def radar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
 
 
 # eight points
-def lidar2pixel(pred_boxes: np.array):
-    # locate the cameras according to the pred results
-    cameras = which_cameras(pred_boxes)
-    
-    # get the coords of pred_boxes
-    coords = box_to_corner_3d(pred_boxes)
-    pass
+def lidar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
+    """
+        wold_pose: [[],[],[],[],[],[],[],[]] []->[x,y,z]
+        pixel_pose: [[],[],[],[],[],[],[],[]] []->[left, top, right, down]
+    """
+    pixel_pose = []
+    for i in range(len(world_pose)):
+        world_pose_point = np.append(world_pose[i], 1) # expand size from 3 to 4
+        pixel_pose.append(world2pixel(calib, camera_name, world_pose_point))
+    return pixel_pose
 
+
+# For each time -> all vehicles
 def which_cameras(pred_boxes: np.array(np.array)):
     """
         The location of cameras:
@@ -201,4 +207,5 @@ def rotate_points_along_z(points, angle):
     ), dim=1).view(-1, 3, 3).float()
     points_rot = torch.matmul(points[:, :, 0:3], rot_matrix)
     points_rot = torch.cat((points_rot, points[:, :, 3:]), dim=-1)
+
     return points_rot.numpy() if is_numpy else points_rot
