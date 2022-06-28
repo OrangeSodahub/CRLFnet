@@ -156,15 +156,15 @@ def which_cameras(pred_boxes: np.array(np.array)):
 def box_to_corner_3d(boxes3d):
     """
     The label of each corner: 
-           5--------------6
+           4--------------3
           /|             /|
          / |            / |
         1--------------2  |
         |  |           |  |
-        |  7-----------|--8
+        |  8-----------|--7
         | /            | /
         |/             |/
-        3--------------4
+        5--------------6
     """
 
     boxes3d, is_numpy = check_numpy_to_torch(boxes3d)

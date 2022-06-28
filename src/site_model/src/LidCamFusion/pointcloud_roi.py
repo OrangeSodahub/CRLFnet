@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #############################################################
-#   This py file generate the roi of radar detection.       #
+#   This py file generate the roi of lidar detection.       #
 #   Author: Yangxiuyu                                       #
 #############################################################
 
