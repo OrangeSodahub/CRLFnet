@@ -18,13 +18,17 @@ import ros_numpy
 from msgs.msg._MsgCamera import * # camera msgs class
 # Object Detection tool
 from OpenPCDet.tools.pred import *
+# pointcloud detection
+import pointcloud_roi
+# vision detection
+import sys
+sys.path.append("../")
+from tools.RadCamFusion.yolo.yolo import YOLO
+from tools.RadCamFusion import image_roi
 # fusion message type
 # from msgs.msg._MsgLidCam import *
 # visualization
-import sys
-sys.path.append("../")
-from utils import visualization, transform
-import pointcloud_roi
+from utils import visualization
 
 def fusion(pointcloud, msgcamera):
     """
@@ -33,7 +37,11 @@ def fusion(pointcloud, msgcamera):
     """
     assert isinstance(pointcloud, PointCloud2)
     assert isinstance(msgcamera, MsgCamera)
+
     # image roi
+    pred_boxes2d = []
+    for img in msgcamera.camera:
+        pred_boxes2d.append(image_roi.image_roi(img, yolo))
 
     # pointcloud roi
     pc = ros_numpy.numpify(pointcloud)
@@ -41,7 +49,7 @@ def fusion(pointcloud, msgcamera):
     points[:,0] = pc['x']
     points[:,1] = pc['y']
     points[:,2] = pc['z']
-    pred_boxes, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
+    pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
 
     # label2calss
     label2class = {
@@ -50,16 +58,17 @@ def fusion(pointcloud, msgcamera):
         3: 'Bicycle'
     }
 
-    if len(pred_boxes) != 0:
-        print("+-------------------------------------------------------------------------------------------+")
-        print("num_car: ", len(pred_boxes))
-        for i in range(len(pred_boxes)):
-            print(i+1, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i])
-            print("  ", pred_boxes[i][0:3], " ", pred_boxes[i][3:6], " ", pred_boxes[i][6])
-        print("+-------------------------------------------------------------------------------------------+\n")
+    if len(pred_boxes3d) != 0:
+        if params.print2screen:
+            print("+-------------------------------------------------------------------------------------------+")
+            print("num_car: ", len(pred_boxes3d))
+            for i in range(len(pred_boxes3d)):
+                print(i+1, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i])
+                print("  ", pred_boxes3d[i][0:3], " ", pred_boxes3d[i][3:6], " ", pred_boxes3d[i][6])
+            print("+-------------------------------------------------------------------------------------------+\n")
 
         # get cameras and pixel_poses of all vehicles
-        cameras, pixel_poses = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes)
+        cameras, pixel_poses = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes3d)
 
         # visualize lidar detection boxes to pixel
         if params.draw_output:
@@ -67,12 +76,12 @@ def fusion(pointcloud, msgcamera):
             visualization.lidar2visual(cameras, pixel_poses, msgcamera, output_dir)
 
     # fusion
-    # msglidcam = MsgLidCam()
-    # msglidcam.header.stamp = rospy.Time.now()
+    msglidcam = MsgLidCam()
+    msglidcam.header.stamp = rospy.Time.now()
 
-    # publish result
-    # pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
-    # pub.publish(msglidcam)
+    publish result
+    pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
+    pub.publish(msglidcam)
 
 if __name__ == '__main__':
     # get root path
@@ -82,6 +91,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
     parser.add_argument("--draw_output", help="wehter to draw rois and output", action='store_true', required=False)
+    parser.add_argument("--print2screen", help="wehter to print to screen", action='store_true', required=False)
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:
@@ -92,9 +102,11 @@ if __name__ == '__main__':
             exit(1)
 
     rospy.init_node('lidar_camera_fusion', anonymous=True)
+
     # Create an example of pointcloud detector
     pointcloud_detector = RT_Pred(ROOT_DIR, config)
     # Create YOLO detector
+    yolo = YOLO()
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
