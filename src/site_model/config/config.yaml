@@ -3,13 +3,14 @@
 #################################################################################
 vehicle:
   size:
-    width: 0.2
-    height: 0.2
+    width: 0.21
+    height: 0.22
 data: 
   cam_dir: /dataset/camera_data/
   rad_dir: /dataset/radar_data/
 output:
   RadCamFusion_dir: /output/RadCamFusion/
+  LidCamFusion_dir: /output/LidCamFusion/
 topic:
   radar_2: /ARS_408_21_2_Topic
   radar_3: /ARS_408_21_3_Topic

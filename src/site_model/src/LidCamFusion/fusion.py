@@ -59,13 +59,12 @@ def fusion(pointcloud, msgcamera):
         print("+-------------------------------------------------------------------------------------------+\n")
 
         # get cameras and pixel_poses of all vehicles
-        cameras, pixel_pose = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes)
-        print("cameras: ", cameras)
-        print("pixel_pose: ", pixel_pose)
+        cameras, pixel_poses = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes)
 
         # visualize lidar detection boxes to pixel
         if params.draw_output:
-            visualization.lidar2visual(pred_boxes, msgcamera)
+            output_dir = ROOT_DIR + config['output']['LidCamFusion_dir']
+            visualization.lidar2visual(cameras, pixel_poses, msgcamera, output_dir)
 
     # fusion
     # msglidcam = MsgLidCam()
