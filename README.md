@@ -33,10 +33,10 @@ Absolute paths may need your mind:
 If using GPU, set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo.py**".
 
 ### Model Data
-Please download "yolo_weights.pth" from `jbox`, and put it in the folder "src/site_model/src/tools/RadCamFusion/yolo/model_data".
+Please download `yolo_weights.pth` from jbox, and put it in the folder `src/site_model/src/tools/RadCamFusion/yolo/model_data`.
 
 ### Rad-Cam Fusion
-Follow these steps for only radar-camera fusion. For the last command, set `--draw_output` to `True` if need to save the results of fusion in the form of `.jpg`.
+Follow these steps for only radar-camera fusion. For the last command, additional parameter `--draw_output` is required if need to save the results of fusion in the form of `.jpg`.
 
 ```bash
     cd to/ROOT_DIR/
@@ -47,11 +47,11 @@ Follow these steps for only radar-camera fusion. For the last command, set `--dr
 
     # (generate camera calibrations if needed)
 
-    rosrun site_model src/tools/radar_listener.py # radar msgs preprocess
+    python src/site_modelsrc/tools/radar_listener.py # radar msgs preprocess
     
     cd src/site_model/src/tools/RadCamFusion
 
-    python fusion.py --draw_output True/False # radar-camera fusion start working
+    python fusion.py (--draw_output) # radar-camera fusion start working
 ```
 
 If you run the code for the first time, maybe you have to use the command to enable the system to run certain files like "radar_listener.py".
@@ -121,7 +121,7 @@ Follow these steps for only lidar-camera fusion. Some of them need different bas
 
     rosrun site_model pointcloud_combiner # combine all the point clouds and fix their coords
 
-    cd src/site_model/src/LidCamFusion/;
+    cd src/site_model/src/LidCamFusion/
     python fusion.py # start camera-lidar fusion
 ```
 

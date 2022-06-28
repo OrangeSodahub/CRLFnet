@@ -40,19 +40,21 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     print("  Image 2: ", end='')
     labels_left = []
     labels_left.append(image_roi.image_roi(image2, yolo=yolo))
+    labels_left = np.array(labels_left) # convert to numpy array
     print("  Image 3: ", end='')
     labels_right = []
     labels_right.append(image_roi.image_roi(image3, yolo=yolo))
+    labels_right = np.array(labels_right)
 
     # fusion
-    match_left = [[]]
+    match_left = []
     radar_left_single = [[]]
     image_left_single = [[]]
-    match_right = [[]]
+    match_right = []
     radar_right_single = [[]]
     image_right_single = [[]]
     ## left
-    if radar.total_vehicles_left!=0 and len(labels_left[0])!=0: # empty 2-dimention array has a size of 1
+    if radar.total_vehicles_left!=0 and len(labels_left[0])!=1: # empty 2-dimention array has a size of 1
         print("labels_left:"+str(len(labels_left)))
         for radar_left1, radar_left2 in zip(x_pixels_left_1, x_pixels_left_2):
             for image_left in labels_left:
@@ -65,7 +67,7 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
                 score = iou_left / area_left
                 if(score<0.7): # match failed
                     continue
-                match_obj = [match_left1, match_left2, image_left[2], image_left[3], score] # match succeeded
+                match_obj = np.array([match_left1, match_left2, image_left[2], image_left[3], score]) # match succeeded
                 match_left.append(match_obj)
                 x_pixels_left_1.remove(radar_left1)
                 x_pixels_left_2.remove(radar_left2)
@@ -74,9 +76,12 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
         image_left_single = labels_left
     if radar.total_vehicles_left != 0 and len(labels_left[0]) == 0:
         radar_left_single = [x_pixels_left_1, x_pixels_left_2]
+    match_left = np.array(match_left)
+    image_left_single = np.array(image_left_single)
+    radar_left_single = np.array(radar_left_single)
     
     ## right
-    if radar.total_vehicles_right!=0 and len(labels_right[0])!=0:
+    if radar.total_vehicles_right!=0 and len(labels_right[0])!=1:
         for radar_right1, radar_right2 in zip(x_pixels_right_1, x_pixels_right_2):
             for image_right in labels_right:
                 match_right1 = max(radar_right1,image_right[0])
@@ -97,13 +102,16 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
         image_right_single = labels_right
     if radar.total_vehicles_right!=0 and len(labels_right[0])==0:
         radar_right_single = [x_pixels_right_1, x_pixels_right_2]
+    match_right = np.array(match_right)
+    image_right_single = np.array(image_right_single)
+    radar_right_single = np.array(radar_right_single)
 
     # publish the results
     msgradcam = MsgRadCam()
-    msgradcam.match_left = len(match_left[0])
+    msgradcam.match_left = len(match_left[0]) if len(match_left)!=0 else 0
     msgradcam.radar_left = len(radar_left_single[0])
     msgradcam.camera_left = len(image_left_single[0])
-    msgradcam.match_right = len(match_right[0])
+    msgradcam.match_right = len(match_right[0]) if len(match_left)!=0 else 0
     msgradcam.radar_right = len(radar_right_single[0])
     msgradcam.camera_right = len(image_right_single[0])
     msgradcam.header.stamp = rospy.Time.now()
@@ -112,7 +120,7 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     pub.publish(msgradcam)
     
     # draw radar points on photos
-    if params.draw_output:
+    if params.draw_output == True:
         output_dir = ROOT_DIR + config['output']['RadCamFusion_dir']
         if msgradcam.match_left+msgradcam.camera_left+msgradcam.radar_left!=0:
             # draw on image2
@@ -121,9 +129,10 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
             # draw on image3
             visualization.radar2visual(match_right, radar_right_single, image_right_single, image3, 'radar3/', output_dir)
 
-    # if len(np.array(labels_left)[0]) != 1:
+    # For test
+    # if len(labels_left[0]) != 1:
     #     output_dir = ROOT_DIR + config['output']['RadCamFusion_dir']
-    #     visualization.radar2visual([[]], [x_pixels_left_1, x_pixels_left_2], np.array(labels_left), image2, 'radar2/', output_dir)
+    #     visualization.radar2visual([[]], [x_pixels_left_1, x_pixels_left_2], labels_left, image2, 'radar2/', output_dir)
 
 
 if __name__ == '__main__':
@@ -133,7 +142,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
-    parser.add_argument("--draw_output", help="wehter to draw rois and output", default=False, action='store_true', required=False)
+    parser.add_argument("--draw_output", help="wehter to draw rois and output", action='store_true', required=False)
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:

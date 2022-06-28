@@ -11,7 +11,7 @@ def radar2visual(match: np.array(np.array(int)), radar: np.array(np.array(int)),
     img = CvBridge().imgmsg_to_cv2(image, 'bgr8')
 
     # draw match
-    if len(match[0])!=0: # empty match has a size of 1
+    if len(match)!=0:
         for obj_match in match:
             pt1 = (obj_match[0],obj_match[1])
             pt2 = (obj_match[2],obj_match[3])
@@ -20,7 +20,7 @@ def radar2visual(match: np.array(np.array(int)), radar: np.array(np.array(int)),
             font = cv2.FONT_HERSHEY_SIMPLEX
             img = cv2.putText(img, '{} {:.3f}'.format(score), (100,100), font, 0.5, (0,255,255), 2)
     # draw radar
-    if len(radar[0])!=0:
+    if len(radar[0])!=1: # empty match has a size of 1
         num = len(radar[0])
         for i in range(num):
             pt1 = (radar[0][i],0)
