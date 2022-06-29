@@ -86,7 +86,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     start_time = cur_time
     counter += 1
     fps = (counter-1) / time_span
-    print('FPS: ', fps)
+    print('FPS: ', fps, 'cnt: ', counter)
     
 
 def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):

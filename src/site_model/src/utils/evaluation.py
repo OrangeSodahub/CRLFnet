@@ -34,15 +34,15 @@ def eval3d(odom: Odometry, pred_boxes3d: np.array, logger, counter: int, alpha_d
 
     # iou3d and iou_bev
     boxes3d = np.concatenate((pose_ground_truth, np.array([0.33, 0.22, 0.21]), np.array([(y if y>=0 else (np.pi-y))])), axis=0)
-    # load to gpu: double->float32
+    # load to gpu: double->float64 float->float32
     boxes3d_gpu = torch.tensor(np.array([boxes3d]), dtype=torch.float32).cuda() # for one car!!!
     pred_boxes3d_gpu = torch.tensor(pred_boxes3d, dtype=torch.float32).cuda() # GPU accelerate
     iou3d = boxes_iou3d_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
     iou_bev = boxes_iou_bev_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
-    logger.log_value('iou3d', iou3d[0].cpu().numpy(), counter) # here [0] is for one car!!!
-    logger.log_value('iou_bev', iou_bev[0].cpu().numpy(), counter)
-
-    print(iou3d, iou_bev)
+    iou3d_cpu = iou3d.cpu().numpy() # convert tensor to numpy
+    iou_bev_cpu = iou_bev.cpu().numpy()
+    logger.log_value('iou3d', iou3d_cpu[0][0], counter) # here [0][0] is for one car!!!
+    logger.log_value('iou_bev', iou_bev_cpu[0][0], counter)
 
     return alpha_diff, pose_diff
 
