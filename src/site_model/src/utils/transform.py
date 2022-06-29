@@ -8,6 +8,8 @@
 
 import numpy as np
 import torch
+from . import common_utils
+
 
 def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     """
@@ -167,7 +169,7 @@ def box_to_corner_3d(boxes3d):
         5--------------6
     """
 
-    boxes3d, is_numpy = check_numpy_to_torch(boxes3d)
+    boxes3d, is_numpy = common_utils.check_numpy_to_torch(boxes3d)
     template = boxes3d.new_tensor((
         [1, 1, -1], [1, -1, -1], [-1, -1, -1], [-1, 1, -1],
         [1, 1, 1], [1, -1, 1], [-1, -1, 1], [-1, 1, 1],
@@ -180,11 +182,6 @@ def box_to_corner_3d(boxes3d):
     return corners3d.numpy() if is_numpy else corners3d
 
 
-def check_numpy_to_torch(x):
-    if isinstance(x, np.ndarray):
-        return torch.from_numpy(x).float(), True
-    return x, False
-
 def rotate_points_along_z(points, angle):
     """
     Args:
@@ -193,8 +190,8 @@ def rotate_points_along_z(points, angle):
     Returns:
 
     """
-    points, is_numpy = check_numpy_to_torch(points)
-    angle, _ = check_numpy_to_torch(angle)
+    points, is_numpy = common_utils.check_numpy_to_torch(points)
+    angle, _ = common_utils.check_numpy_to_torch(angle)
 
     cosa = torch.cos(angle)
     sina = torch.sin(angle)
