@@ -11,7 +11,6 @@ import yaml
 import rospy
 from termcolor import colored
 import message_filters
-import tensorboard
 # pointcloud type
 from sensor_msgs.msg import PointCloud2
 import ros_numpy
@@ -26,12 +25,12 @@ import pointcloud_roi
 # vision detection
 import sys
 sys.path.append("../")
-from tools.RadCamFusion.yolo.yolo import YOLO
-from tools.RadCamFusion import image_roi
+# from tools.RadCamFusion.yolo.yolo import YOLO
+# from tools.RadCamFusion import image_roi
 # fusion message type
 # from msgs.msg._MsgLidCam import *
 # visualization
-from utils import visualization
+from utils import visualization, evaluation
 
 
 def fusion(pointcloud, msgcamera, odom=None):
@@ -41,37 +40,29 @@ def fusion(pointcloud, msgcamera, odom=None):
     """
     assert isinstance(pointcloud, PointCloud2)
     assert isinstance(msgcamera, MsgCamera)
+    global time_span, counter, start_time
 
     # image roi
-    pred_boxes2d = []
-    for img in msgcamera.camera:
-        pred_boxes2d.append(image_roi.image_roi(img, yolo))
+    # pred_boxes2d = []
+    # for img in msgcamera.camera:
+    #     pred_boxes2d.append(image_roi.image_roi(img, yolo))
 
     # pointcloud roi
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
 
-    # label2calss
-    label2class = {
-        1: 'Car',
-        2: 'Pedstrain',
-        3: 'Bicycle'
-    }
 
-    # post process the predict results
+    # post-process the predict results
     if len(pred_boxes3d) != 0:
 
-        # pred results eval
+        # pred results eval: BEV (for one car)
+        if odom is not None:
+            global alpha_diff, pose_diff
+            alpha_diff, pose_diff = evaluation.eval3d(odom, pred_boxes3d, logger, counter, alpha_diff, pose_diff)
         
-
-        
+        # print pred results to screen
         if params.print2screen:
-            print("+-------------------------------------------------------------------------------------------+")
-            print("num_car: ", len(pred_boxes3d))
-            for i in range(len(pred_boxes3d)):
-                print(i+1, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i])
-                print("  ", pred_boxes3d[i][0:3], " ", pred_boxes3d[i][3:6], " ", pred_boxes3d[i][6])
-            print("+-------------------------------------------------------------------------------------------+\n")
+            print2screen(pred_boxes3d, pred_labels, pred_scores)
 
         # get cameras and pixel_poses of all vehicles
         cameras, pixel_poses = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes3d)
@@ -90,12 +81,12 @@ def fusion(pointcloud, msgcamera, odom=None):
     # pub.publish(msglidcam)
 
     # fps evalution (without results evalution and visualization)
-    global time_span, counter
     cur_time = time.time()
     time_span += cur_time - start_time
     start_time = cur_time
     counter += 1
-    fps = counter / (time_span*1e6)
+    fps = (counter-1) / time_span
+    print('FPS: ', fps)
     
 
 def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):
@@ -106,6 +97,16 @@ def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):
     points[:,2] = pc['z']
 
     return points
+
+
+def print2screen(pred_boxes3d, pred_labels, pred_scores):
+    label2class = {1: 'Car', 2: 'Pedstrain', 3: 'Bicycle' }
+    print("+-------------------------------------------------------------------------------------------+")
+    print("num_car: ", len(pred_boxes3d))
+    for i in range(len(pred_boxes3d)):
+        print(i+1, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i])
+        print("  ", pred_boxes3d[i][0:3], " ", pred_boxes3d[i][3:6], " ", pred_boxes3d[i][6])
+    print("+-------------------------------------------------------------------------------------------+\n")
 
 
 if __name__ == '__main__':
@@ -130,20 +131,31 @@ if __name__ == '__main__':
     rospy.init_node('lidar_camera_fusion', anonymous=True)
 
     # fps evaluation
-    counter = 0
+    counter = 1
     time_span = 0
     fps = 0
 
     # Create an example of pointcloud detector
     pointcloud_detector = RT_Pred(ROOT_DIR, config)
     # Create YOLO detector
-    yolo = YOLO()
+    # yolo = YOLO()
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
 
     if params.eval:
-        sub_odom = message_filters.SimpleFilter('//base_pose_ground_truth', )
+        # logger
+        from tensorboard_logger import Logger
+        import datetime
+        import os
+        log_dir = ROOT_DIR+'/src/LidCamFusion/eval/%s/' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        os.makedirs(log_dir, exist_ok=True)
+        logger = Logger(logdir=log_dir, flush_secs=10)
+        # pointcloud pred results evaluation
+        alpha_diff = 0
+        pose_diff = 0
+        
+        sub_odom = message_filters.Subscriber('//base_pose_ground_truth', Odometry)
         sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera, sub_odom], 1, 1) # syncronize time stamps
         sync.registerCallback(fusion)
         print("Lidar Camera Fusion (with eval) Begin.")
