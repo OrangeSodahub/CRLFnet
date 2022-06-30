@@ -73,12 +73,14 @@ def world_to_camera(config: dict, pole_name: str, camera_name: str):
     return world_to_camera_
 
 
-def camera_to_pixel(ROOT_DIR: str, config: dict, camera_name: str):
+def camera_to_pixel(ROOT_DIR: str, config: dict, camera_name: int):
     """
         get the internal parameter matrix of camera (fixed)
     """
+    transform = {11: 0, 12: 1, 13: 2, 14: 3, 2: 4,
+                3: 5, 41: 6, 42: 7, 43: 8, 44: 9}
     camera_info_dir = ROOT_DIR + config['calib']['camera_info_dir']
-    K = np.loadtxt(camera_info_dir+'camera_info.txt')[4][28:40]
+    K = np.loadtxt(camera_info_dir+'camera_info.txt')[transform[camera_name]][28:40] # fuck! [4] is a bug!
     K = K.reshape(3,4)
 
     return K
