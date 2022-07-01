@@ -48,10 +48,11 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     image_rois_left  = image_roi(image2, yolo=yolo)
     image_rois_right = image_roi(image3, yolo=yolo)
     # print POIs and ROIs
-    print("Left POIs: \t", radar_pois_left)
-    print("Right POIS:\t", radar_pois_right)
-    print("Left ROIs: \t", image_rois_left)
-    print("Right ROIs:\t", image_rois_right)
+    print("\033[1;36mDetailed POI / ROI Information:\033[0m")
+    print("Left Radar POIs: \t", radar_pois_left)
+    print("Right Radar POIS:\t", radar_pois_right)
+    print("Left Image ROIs: \t", image_rois_left)
+    print("Right Image ROIs:\t", image_rois_right)
 
     # fusion (The output of radar_poi and image_roi are not standard!!!)
     # detection flags
@@ -66,12 +67,12 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
         for iroi in image_rois_left:
             if(iroi[0] <= rpoi[0][0] <= iroi[2] and iroi[1] <= rpoi[1][0] <= iroi[3]):
                 match_left += 1
-    # right
     for rpoi in radar_pois_right:
         for iroi in image_rois_right:
             if(iroi[0] <= rpoi[0][0] <= iroi[2] and iroi[1] <= rpoi[1][0] <= iroi[3]):
                 match_right += 1
     # print detection results
+    print("\033[1;36mDetection Statistics:\033[0m")
     print("Radar Left: {},\tRadar Right: {}".format(radar_left, radar_right))
     print("Image Left: {},\tImage Right: {}".format(image_left, image_right))
     print("Match Left: {},\tMatch Right: {}".format(match_left, match_right))
@@ -87,17 +88,15 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     msg_rad_cam.header.stamp = rospy.Time.now()
     pub.publish(msg_rad_cam)
 
-    # DO NOT use radar2visual!!!
-    """
-    # visualized output
+    # output visualized results
     if params.save_result:
-        # draw on image2
-        if match_left != 0:
-            radar2visual(match_left, radar_left_single, image_left_single, image2, 'radar2/', str(OUTPUT_DIR))
-        # draw on image3
-        if match_right != 0:
-            radar2visual(match_right, radar_right_single, image_right_single, image3, 'radar3/', str(OUTPUT_DIR))
-    """
+        if radar_left != 0 and image_left != 0:
+            radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, draw_radar=True, draw_image=True, appendix='L')
+        if radar_right != 0 and image_right != 0:
+            radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, draw_radar=True, draw_image=True, appendix='R')
+
+    # print an empty line as sepration
+    print()
 
 
 if __name__ == '__main__':

@@ -41,7 +41,7 @@ def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     # coordinates in pixel coordinates
     pixel_pose = np.matmul(camera_to_pixel, camera_pose_shift)
 
-    return pixel_pose
+    return pixel_pose.astype(int)
 
 
 # eight points

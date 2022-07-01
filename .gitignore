@@ -7,9 +7,10 @@
 /build
 /devel
 
-# PyCarm
+# PyCharm
 *idea/
 .idea/
+__pycache__/
 
 # Virtual Env
 crlfnet_env/
