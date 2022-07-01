@@ -41,7 +41,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     """
     assert isinstance(pointcloud, PointCloud2)
     assert isinstance(msgcamera, MsgCamera)
-    global time_span, counter, start_time
+    global time_span, counter, start_time, pred_counter
 
     # image roi
     # pred_boxes2d = []
@@ -52,21 +52,23 @@ def fusion(pointcloud, msgcamera, odom=None):
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
 
-
+    # pred results eval: BEV (for one car)
+    if odom is not None:
+        # 3d-detection only: use 'pred_boxes3d' to eval
+        global alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
+        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = evaluation.eval3d(odom, pred_boxes3d, logger, pred_counter,
+                                                                                alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
+        if counter % 1000 == 0:
+            np.savetxt(ROOT_DIR+'/src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter, tp_fp_fn)
+        
     # post-process the predict results
     if len(pred_boxes3d) != 0:
-
-        # pred results eval: BEV (for one car)
-        if odom is not None:
-            global alpha_diff, pose_diff
-            alpha_diff, pose_diff = evaluation.eval3d(odom, pred_boxes3d, logger, counter, alpha_diff, pose_diff)
+        # get cameras and pixel_poses of all vehicles
+        cameras, pixel_poses = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes3d)
         
         # print pred results to screen
         if params.print2screen:
             print2screen(pred_boxes3d, pred_labels, pred_scores)
-
-        # get cameras and pixel_poses of all vehicles
-        cameras, pixel_poses = pointcloud_roi.pointcloud_roi(ROOT_DIR, config, pred_boxes3d)
 
         # visualize lidar detection boxes to pixel
         if params.draw_output:
@@ -152,8 +154,14 @@ if __name__ == '__main__':
         os.makedirs(log_dir, exist_ok=True)
         logger = Logger(logdir=log_dir, flush_secs=10)
         # pointcloud pred results evaluation
+        pred_counter = 1
         alpha_diff = 0
         pose_diff = 0
+        iou3d = 0
+        iou_bev = 0
+        # caculate tp, fp, fn
+        N_SAMPLE_PTS = 41
+        tp_fp_fn = np.array([np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS)])
         
         sub_odom = message_filters.Subscriber('//base_pose_ground_truth', Odometry)
         sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera, sub_odom], 1, 1) # syncronize time stamps

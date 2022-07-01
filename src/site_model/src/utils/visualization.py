@@ -32,6 +32,13 @@ def radar2visual(output_dir: Path, raw_image: Image, radar_pois=None, image_rois
 
 
 def lidar2visual(cameras: np.array, pixel_poses, msgcamera: MsgCamera, output_dir: str):
+    """
+        cameras: [[camera1, camera2, ...],[camera1, camera2, ...], ...] -> each [camera1, camera2,...] represents a vehicle
+        pixel_poses: [[vehicle1], [vehicle2], ...]
+            vehicle: [camera1, camera2, ...]
+            camera:  [[x1 x2 y1 y2], [x1 x2 y1 y2], [], ...]
+                     -> each [x1 x2 y1 y2] reprensents 4 coordinates of a point and  there are 8 points
+    """
     os.makedirs(output_dir, exist_ok=True)
 
     # label2camera
@@ -41,7 +48,7 @@ def lidar2visual(cameras: np.array, pixel_poses, msgcamera: MsgCamera, output_di
     }
 
     for camera, pixel_pose in zip(cameras, pixel_poses):
-    # process single image
+        # process single image
         for camera_label, pixel_pose_cur_camera in zip(camera, pixel_pose):
             img = msgcamera.camera[camera_label-1]
             img = CvBridge().imgmsg_to_cv2(img, 'bgr8')
@@ -56,20 +63,20 @@ def lidar2visual(cameras: np.array, pixel_poses, msgcamera: MsgCamera, output_di
             pts8 = (round(pixel_pose_cur_camera[7][0]), round(pixel_pose_cur_camera[7][1]))
 
             # draw 12 lines
-            cv2.line(img, pts1, pts2, (0,255,0), 1)
-            cv2.line(img, pts2, pts3, (0,255,0), 1)
-            cv2.line(img, pts3, pts4, (0,255,0), 1)
-            cv2.line(img, pts4, pts1, (0,255,0), 1)
+            cv2.line(img, pts1, pts2, (0,255,0), 2)
+            cv2.line(img, pts2, pts3, (0,255,0), 2)
+            cv2.line(img, pts3, pts4, (0,255,0), 2)
+            cv2.line(img, pts4, pts1, (0,255,0), 2)
 
-            cv2.line(img, pts5, pts6, (0,255,0), 1)
-            cv2.line(img, pts6, pts7, (0,255,0), 1)
-            cv2.line(img, pts7, pts8, (0,255,0), 1)
-            cv2.line(img, pts8, pts5, (0,255,0), 1)
+            cv2.line(img, pts5, pts6, (0,255,0), 2)
+            cv2.line(img, pts6, pts7, (0,255,0), 2)
+            cv2.line(img, pts7, pts8, (0,255,0), 2)
+            cv2.line(img, pts8, pts5, (0,255,0), 2)
 
-            cv2.line(img, pts1, pts5, (0,255,0), 1)
-            cv2.line(img, pts2, pts6, (0,255,0), 1)
-            cv2.line(img, pts3, pts7, (0,255,0), 1)
-            cv2.line(img, pts4, pts8, (0,255,0), 1)
+            cv2.line(img, pts1, pts5, (0,255,0), 2)
+            cv2.line(img, pts2, pts6, (0,255,0), 2)
+            cv2.line(img, pts3, pts7, (0,255,0), 2)
+            cv2.line(img, pts4, pts8, (0,255,0), 2)
 
             # save images
             camera_name = label2camera[camera_label]
