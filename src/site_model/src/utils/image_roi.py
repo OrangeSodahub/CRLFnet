@@ -8,7 +8,7 @@ Convert raw images to regions of interest (ROIs).
 from PIL import Image
 import ros_numpy
 
-from yolo.yolo import YOLO
+from .yolo.yolo import YOLO
 
 
 def image_roi(image, yolo=None):

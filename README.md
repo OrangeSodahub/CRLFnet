@@ -24,6 +24,8 @@ Absolute paths may need your mind:
  | file path                        | Line(s)                               |
  |----------------------------------|---------------------------------------|
  | src/camera_info/get_cam_info.cpp | 26,64,102,140,170,216,254,292,330,368,|
+ | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pointrcnn.yaml|5     |
+ | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml|5       |
 
 ## Rad-Cam Fusion
 ### Necessary Configurations on GPU and model data
@@ -50,8 +52,8 @@ For the last command, an optional parameter `--save_result` is available if you 
     python3 src/site_model/src/tools/radar_listener.py
     
     # run the rad-cam fusion program
-    cd src/site_model/src/tools/RadCamFusion
-    python3 fusion.py [--save_result]
+    cd src/site_model
+    python -m src.RadCamFusion.fusion [--save_result]
 ```
 
 ### Camera Calibration
@@ -59,7 +61,6 @@ Two commands are needed for camera calibration after `spawn.launch` is launched.
 
 ```bash
 rosrun site_model get_cam_info # get relevant parameters of cameras from gazebo
-
 python src/site_model/src/tools/RadCamFusion/generate_calib.py # generate calibration formula according to parameters of cameras
 ```
 
@@ -98,7 +99,7 @@ python pred.py --cfg_file path/to/config/file/ --ckpt path/to/checkpoint/ --data
 ```
 For example:
 ```bash
-python demo.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_80.pth --data_path ../data/custom/testing/velodyne/
+python pred.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_80.pth --data_path ../data/custom/testing/velodyne/
 ```
 
 ### Lid-Cam Fusion
@@ -116,8 +117,8 @@ Follow these steps for only lidar-camera fusion. Some of them need different bas
 
     rosrun site_model pointcloud_combiner # combine all the point clouds and fix their coords
 
-    cd src/site_model/src/LidCamFusion/
-    python fusion.py (--draw_output) # start camera-lidar fusion
+    cd src/site_model/
+    python -m src.LidCamFusion.fusion (--draw_output) # start camera-lidar fusion
 ```
 
 ## Run the whole model
@@ -133,8 +134,8 @@ The whole project contains several different parts which need to be start up thr
 
     rosrun site_model src/tools/radar_listener.py
     
-    cd src/tools/RadCamFusion
-    python fusion.py --draw_output True/False
+    cd src/site_model
+    python -m src.RadCamFusion.fusion [--save_result]
 
 
     python src/site_model/src/LidCamFusion/camera_listener.py
@@ -144,7 +145,7 @@ The whole project contains several different parts which need to be start up thr
     rosrun site_model pointcloud_combiner
 
     cd src/site_model/src/LidCamFusion/;
-    python fusion.py
+    python -m src.LidCamFusion.fusion (--draw_output)
 ```
 
 # Issues

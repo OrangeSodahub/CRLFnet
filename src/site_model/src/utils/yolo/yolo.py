@@ -1,24 +1,25 @@
 import colorsys
 import os
 import time
+from pathlib import Path
 
 import numpy as np
+from pyrsistent import s
 import torch
 import torch.nn as nn
 from PIL import ImageDraw, ImageFont
 
-from yolo.nets.yolo import YoloBody
-from yolo.utils.utils import (cvtColor, get_anchors, get_classes, preprocess_input,
-                              resize_image)
-from yolo.utils.utils_bbox import DecodeBox
+from .nets.yolo import YoloBody
+from .utils.utils import (cvtColor, get_anchors, get_classes, preprocess_input, resize_image)
+from .utils.utils_bbox import DecodeBox
 
 
 class YOLO(object):
     _defaults = {
-        "model_path"        : "yolo/model_data/yolo_weights.pth",   # 权值文件
-        "classes_path"      : "yolo/model_data/voc_classes.txt",    # 
+        "model_path"        : "src/utils/yolo/model_data/yolo_weights.pth",   # 权值文件
+        "classes_path"      : "src/utils/yolo/model_data/voc_classes.txt",    # 
 
-        "anchors_path"      : 'yolo/model_data/yolo_anchors.txt',   # 先验框对应的txt文件，一般不修改
+        "anchors_path"      : 'src/utils/yolo/model_data/yolo_anchors.txt',   # 先验框对应的txt文件，一般不修改
         "anchors_mask"      : [[6, 7, 8], [3, 4, 5], [0, 1, 2]],    # 帮助代码找到对应的先验框，一般不修改
 
         "input_shape"       : [416, 416],   # 输入图片的大小，必须为32的倍数
@@ -38,10 +39,11 @@ class YOLO(object):
     #---------------------------------------------------#
     #   初始化YOLO
     #---------------------------------------------------#
-    def __init__(self, **kwargs):
+    def __init__(self, root_dir: Path):
         self.__dict__.update(self._defaults)
-        for name, value in kwargs.items():
-            setattr(self, name, value)
+        self.model_path = root_dir.joinpath(self.model_path)
+        self.classes_path = root_dir.joinpath(self.classes_path)
+        self.anchors_path = root_dir.joinpath(self.anchors_path)
             
         #---------------------------------------------------#
         #   获得种类和先验框的数量

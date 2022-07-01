@@ -10,9 +10,7 @@ import numpy as np
 from msgs.msg._MsgRadar import MsgRadar
 from msgs.msg._MsgRadarObject import MsgRadarObject
 
-import sys
-sys.path.append('../')
-from utils.transform import world2pixel
+from ..utils.transform import world2pixel
 
 
 def w2p(obj: MsgRadarObject, camera: str, calib: np.array):

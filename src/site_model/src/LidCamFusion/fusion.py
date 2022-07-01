@@ -20,18 +20,17 @@ from msgs.msg._MsgCamera import * # camera msgs class
 # odometry type
 from nav_msgs.msg import Odometry
 # Object Detection tool
-from OpenPCDet.tools.pred import *
+from .OpenPCDet.tools.pred import *
 # pointcloud detection
-import pointcloud_roi
+from . import pointcloud_roi
 # vision detection
-import sys
-sys.path.append("../")
-# from tools.RadCamFusion.yolo.yolo import YOLO
-# from tools.RadCamFusion import image_roi
+from ..utils.yolo.yolo import YOLO
+from ..utils.image_roi import image_roi
 # fusion message type
 # from msgs.msg._MsgLidCam import *
 # visualization
-from utils import visualization, evaluation
+from ..utils.visualization import lidar2visual
+from ..utils.evaluation import eval3d
 
 
 def fusion(pointcloud, msgcamera, odom=None):
@@ -56,7 +55,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     if odom is not None:
         # 3d-detection only: use 'pred_boxes3d' to eval
         global alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
-        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = evaluation.eval3d(odom, pred_boxes3d, logger, pred_counter,
+        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, pred_boxes3d, logger, pred_counter,
                                                                                 alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
         if counter % 1000 == 0:
             np.savetxt(ROOT_DIR+'/src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter, tp_fp_fn)
@@ -73,7 +72,7 @@ def fusion(pointcloud, msgcamera, odom=None):
         # visualize lidar detection boxes to pixel
         if params.draw_output:
             output_dir = ROOT_DIR + config['output']['LidCamFusion_dir']
-            visualization.lidar2visual(cameras, pixel_poses, msgcamera, output_dir)
+            lidar2visual(cameras, pixel_poses, msgcamera, output_dir)
 
     # # fusion
     # msglidcam = MsgLidCam()
@@ -117,7 +116,7 @@ if __name__ == '__main__':
     ROOT_DIR = Path(__file__).resolve().parents[2]
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/config.yaml'))
     parser.add_argument("--draw_output", help="wehter to draw rois and output", action='store_true', required=False)
     parser.add_argument("--print2screen", help="wehter to print to screen", action='store_true', required=False)
     parser.add_argument("--eval", help="wehter to eval", action='store_true', required=False)
@@ -138,7 +137,7 @@ if __name__ == '__main__':
     fps = 0
 
     # Create an example of pointcloud detector
-    pointcloud_detector = RT_Pred(ROOT_DIR, config)
+    pointcloud_detector = RT_Pred(str(ROOT_DIR), config)
     # Create YOLO detector
     # yolo = YOLO()
 
