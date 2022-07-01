@@ -6,9 +6,11 @@
 #                                                           #
 #############################################################
 
+
 import numpy as np
 import torch
 from . import common_utils
+
 
 
 def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
@@ -40,15 +42,6 @@ def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     pixel_pose = np.matmul(camera_to_pixel, camera_pose_shift)
 
     return pixel_pose
-
-
-# three points
-def radar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
-    pixel_pose = world2pixel(calib, camera_name, world_pose[0])
-    pixel_pose_1 = world2pixel(calib, camera_name, world_pose[1])
-    pixel_pose_2 = world2pixel(calib, camera_name, world_pose[2])
-    
-    return pixel_pose, pixel_pose_1, pixel_pose_2
 
 
 # eight points

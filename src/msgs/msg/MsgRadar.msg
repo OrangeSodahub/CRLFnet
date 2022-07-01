@@ -1,5 +1,5 @@
 Header header
-float32 total_vehicles_left
-float32 total_vehicles_right
-MsgRadarObject[] ObjectList_left
-MsgRadarObject[] ObjectList_right
+uint8 num_left
+uint8 num_right
+MsgRadarObject[] objects_left
+MsgRadarObject[] objects_right

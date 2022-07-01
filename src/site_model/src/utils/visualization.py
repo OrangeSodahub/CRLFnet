@@ -1,5 +1,5 @@
+from pathlib import Path
 import numpy as np
-import os
 import datetime
 # camera message type
 from sensor_msgs.msg import Image
@@ -9,7 +9,7 @@ from cv_bridge import CvBridge
 import cv2
 from . import transform
 
-def radar2visual(match: np.array(np.array(int)), radar: np.array(np.array(int)), camera: np.array(np.array(int)), image: Image, radar_name: str, output_dir: str):
+def radar2visual(radar: np.array(np.array(int)), camera: np.array(np.array(int)), image: Image, radar_name: str, output_dir: str):
     os.makedirs(output_dir, exist_ok=True)
     img = CvBridge().imgmsg_to_cv2(image, 'bgr8')
 

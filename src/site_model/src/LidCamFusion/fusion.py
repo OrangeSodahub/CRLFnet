@@ -5,8 +5,9 @@
 #   onize) and make fusion.                                 #
 #############################################################
 
+
+from pathlib import Path
 import argparse
-import parser
 import yaml
 import rospy
 from termcolor import colored
@@ -110,9 +111,8 @@ def print2screen(pred_boxes3d, pred_labels, pred_scores):
 
 
 if __name__ == '__main__':
-    # get root path
-    from pathlib import Path
-    ROOT_DIR = str((Path(__file__).resolve().parent / '../../').resolve())
+    # get ROOT DIR
+    ROOT_DIR = Path(__file__).resolve().parents[2]
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')

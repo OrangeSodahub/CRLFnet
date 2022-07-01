@@ -1,7 +1,7 @@
 Header header
-float32 range  # meters
-float32 range_rate # velocity
+float32 distance        # range
+float32 velocity        # range rate
 float32 angle_centroid
-float32 obj_vcs_posex
-float32 obj_vcs_posey
+float32 pos_x           # obj_vcs_posx
+float32 pos_y           # obj_vcs_posy
 uint8 track_id

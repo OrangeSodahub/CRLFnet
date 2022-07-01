@@ -1,7 +1,7 @@
 Header header
-float32 match_left
-float32 radar_left
-float32 camera_left
-float32 match_right
-float32 radar_right
-float32 camera_right
+uint8 match_left
+uint8 radar_left
+uint8 camera_left
+uint8 match_right
+uint8 radar_right
+uint8 camera_right
