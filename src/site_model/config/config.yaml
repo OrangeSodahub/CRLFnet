@@ -16,7 +16,7 @@ topic:
   radar_3: /ARS_408_21_3_Topic
 calib:
   camera_info_dir: src/camera_info/
-  calib_dir: src/tools/calib/
+  calib_dir: src/utils/calib/
   pole_pose:
     pole1: [-0.415985705489921, 1.11290021179622, 0.481, 1.5707963267949, 0, 0.785398163397456]
     pole2: [-1.59824637808195, -0.790114867663065, 0.461, 1.5707963267949, 0, 0]
