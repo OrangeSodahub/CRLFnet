@@ -9,42 +9,64 @@ from tf.transformations import euler_from_quaternion
 from .iou3d import iou3d_nms_cuda
 from . import common_utils
 
+# 41 points
+thresholds = np.linspace(0.0, 1.0, num=41, endpoint=True)
 
-def eval3d(odom: Odometry, pred_boxes3d: np.array, logger, counter: int, alpha_diff, pose_diff):
-    pose = odom.pose # position
-    twist = odom.twist  # velocity
-    pose_ground_truth = np.array([pose.pose.position.x, pose.pose.position.y, 0.33/2])
-    r, p, y = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y,
-                                                pose.pose.orientation.z, pose.pose.orientation.w])
-    # rotation
-    alpha_cur_diff = np.abs(pred_boxes3d[0][6]-(y if y>=0 else (np.pi-y))) # pred_boxes3d[0] -> for one car
-    alpha_diff += alpha_cur_diff
-    alpha_cur_precision = 1 - (alpha_cur_diff / counter) / (2*np.pi)
-    alpha_precision = 1 - (alpha_diff / counter) / (2*np.pi)
-    logger.log_value('alpha_precision', alpha_precision, counter)
-    logger.log_value('alpha_cur_precision', alpha_cur_precision, counter)
-    # pose_x_y
-    x_cur_diff = np.abs(pose_ground_truth[0]-pred_boxes3d[0][0])
-    y_cur_diff = np.abs(pose_ground_truth[1]-pred_boxes3d[0][1])
-    pose_cur_diff = np.sqrt(np.square(x_cur_diff)+np.square(y_cur_diff))
-    pose_diff += pose_cur_diff
-    pose_mean_diff = pose_diff / counter
-    logger.log_value('pose_diff', pose_mean_diff, counter)
-    logger.log_value('pose_cur_diff', pose_cur_diff, counter)
+def eval3d(odom: Odometry, pred_boxes3d: np.array, logger, pred_counter: int, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn: np.array):
+    """
+        alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn: global variance
+    """
+    if len(pred_boxes3d) != 0:
+        pred_counter += 1
+        
+        pose = odom.pose # position
+        twist = odom.twist  # velocity
+        pose_ground_truth = np.array([pose.pose.position.x, pose.pose.position.y, 0.1140]) # 0.1140 is pre-set
+        r, p, y = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y,
+                                                    pose.pose.orientation.z, pose.pose.orientation.w])
+        # rotation
+        alpha_cur_diff = np.abs(pred_boxes3d[0][6]-(y if y>=0 else (np.pi-y))) # pred_boxes3d[0] -> for one car
+        alpha_diff += alpha_cur_diff
+        alpha_cur_precision = 1 - (alpha_cur_diff / pred_counter) / (2*np.pi)
+        alpha_precision = 1 - (alpha_diff / pred_counter) / (2*np.pi)
+        logger.log_value('alpha_precision', alpha_precision, pred_counter)
+        logger.log_value('alpha_cur_precision', alpha_cur_precision, pred_counter)
+        # pose_x_y
+        x_cur_diff = np.abs(pose_ground_truth[0]-pred_boxes3d[0][0])
+        y_cur_diff = np.abs(pose_ground_truth[1]-pred_boxes3d[0][1])
+        pose_cur_diff = np.sqrt(np.square(x_cur_diff)+np.square(y_cur_diff))
+        pose_diff += pose_cur_diff
+        pose_mean_diff = pose_diff / pred_counter
+        logger.log_value('pose_diff', pose_mean_diff, pred_counter)
+        logger.log_value('pose_cur_diff', pose_cur_diff, pred_counter)
 
-    # iou3d and iou_bev
-    boxes3d = np.concatenate((pose_ground_truth, np.array([0.33, 0.22, 0.21]), np.array([(y if y>=0 else (np.pi-y))])), axis=0)
-    # load to gpu: double->float64 float->float32
-    boxes3d_gpu = torch.tensor(np.array([boxes3d]), dtype=torch.float32).cuda() # for one car!!!
-    pred_boxes3d_gpu = torch.tensor(pred_boxes3d, dtype=torch.float32).cuda() # GPU accelerate
-    iou3d = boxes_iou3d_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
-    iou_bev = boxes_iou_bev_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
-    iou3d_cpu = iou3d.cpu().numpy() # convert tensor to numpy
-    iou_bev_cpu = iou_bev.cpu().numpy()
-    logger.log_value('iou3d', iou3d_cpu[0][0], counter) # here [0][0] is for one car!!!
-    logger.log_value('iou_bev', iou_bev_cpu[0][0], counter)
+        # iou3d and iou_bev
+        boxes3d = np.concatenate((pose_ground_truth, np.array([0.33, 0.22, 0.21]), np.array([(y if y>=0 else (np.pi-y))])), axis=0)
+        # load to gpu: double->float64 float->float32
+        boxes3d_gpu = torch.tensor(np.array([boxes3d]), dtype=torch.float32).cuda() # for one car!!!
+        pred_boxes3d_gpu = torch.tensor(pred_boxes3d, dtype=torch.float32).cuda() # GPU accelerate
+        iou3d_cur = boxes_iou3d_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
+        iou_bev_cur = boxes_iou_bev_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
+        iou3d_cur_cpu = iou3d_cur.cpu().numpy() # convert tensor to numpy
+        iou_bev_cur_cpu = iou_bev_cur.cpu().numpy()
+        logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], pred_counter) # here [0][0] is for one car!!!
+        logger.log_value('iou_bev_cur', iou_bev_cur_cpu[0][0], pred_counter)
+        iou3d += iou3d_cur_cpu[0][0]
+        iou_bev += iou_bev_cur_cpu[0][0]
+        iou3d_mean = iou3d / pred_counter
+        iou_bev_mean = iou_bev / pred_counter
+        logger.log_value('iou3d_mean', iou3d_mean, pred_counter)
+        logger.log_value('iou_bev_mean', iou_bev_mean, pred_counter)
 
-    return alpha_diff, pose_diff
+        # caculate tp_fp_fn
+        true_or_false = iou_bev_cur_cpu[0][0] > thresholds
+        tp_fp_fn[0] += true_or_false # tp
+        tp_fp_fn[2] += np.logical_not(true_or_false) # fn
+
+    else:
+        tp_fp_fn[2] += 1
+
+    return pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
 
 
 def boxes_iou_bev_cpu(boxes_a, boxes_b):
@@ -117,3 +139,45 @@ def boxes_iou3d_gpu(boxes_a, boxes_b):
     iou3d = overlaps_3d / torch.clamp(vol_a + vol_b - overlaps_3d, min=1e-6)
 
     return iou3d
+
+
+def bbox_iou(boxes3d: np.array, boxes2d: np.array, critierion=-1):
+    # N = boxes.shape[0]
+    # K = query_boxes.shape[0]
+    # overlaps = np.zeros((N, K), dtype=boxes.dtype)
+    # for k in range(K):
+    #     qbox_area = ((query_boxes[k, 2] - query_boxes[k, 0]) *
+    #                  (query_boxes[k, 3] - query_boxes[k, 1]))
+    #     for n in range(N):
+    #         iw = (min(boxes[n, 2], query_boxes[k, 2]) -
+    #               max(boxes[n, 0], query_boxes[k, 0]))
+    #         if iw > 0:
+    #             ih = (min(boxes[n, 3], query_boxes[k, 3]) -
+    #                   max(boxes[n, 1], query_boxes[k, 1]))
+    #             if ih > 0:
+    #                 if criterion == -1:
+    #                     ua = (
+    #                         (boxes[n, 2] - boxes[n, 0]) *
+    #                         (boxes[n, 3] - boxes[n, 1]) + qbox_area - iw * ih)
+    #                 elif criterion == 0:
+    #                     ua = ((boxes[n, 2] - boxes[n, 0]) *
+    #                           (boxes[n, 3] - boxes[n, 1]))
+    #                 elif criterion == 1:
+    #                     ua = qbox_area
+    #                 else:
+    #                     ua = 1.0
+    #                 overlaps[n, k] = iw * ih / ua
+    # return overlaps
+    pass
+
+def draw_pr_line():
+    import matplotlib.pyplot as plt
+    txt_dir = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/eval/3d_detection_only_1000.txt'
+    tp_fp_fn = np.loadtxt(txt_dir)
+    precision = tp_fp_fn[0] / (tp_fp_fn[0] + tp_fp_fn[1])
+    recall = tp_fp_fn[0] / (tp_fp_fn[0] + tp_fp_fn[2])
+
+    thresholds = np.linspace(0.0, 1.0, num=41, endpoint=True)
+
+    plt.plot(thresholds, recall)
+    plt.show()
