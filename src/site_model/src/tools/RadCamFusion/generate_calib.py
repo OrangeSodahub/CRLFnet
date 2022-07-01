@@ -8,6 +8,7 @@
 
 import math
 from termcolor import colored
+from pathlib import Path
 import argparse
 import yaml
 import os
@@ -124,12 +125,16 @@ def RTmatrix(pose):
 
 
 if __name__=='__main__':
-    # get root path
-    from pathlib import Path
-    ROOT_DIR = str((Path(__file__).resolve().parent / '../../../').resolve())
+    # get ROOT DIR
+    ROOT_DIR = Path(__file__).resolve().parents[3]
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= ROOT_DIR + '/config/config.yaml')
+    parser.add_argument("--config",
+                        help="path to config file",
+                        metavar="FILE",
+                        required=False,
+                        default= str(ROOT_DIR.joinpath('config/config.yaml'))
+                        )
     args = parser.parse_args()
 
     params = parser.parse_args()
