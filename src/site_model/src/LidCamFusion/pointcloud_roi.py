@@ -6,15 +6,14 @@
 #############################################################
 
 import os
+from pathlib import Path
 import numpy as np
-import sys
 # radar message type
 from msgs.msg._MsgRadar import *
 # transform coordinates tool
-sys.path.append("../")
-from utils import transform
+from ..utils.transform import which_cameras, box_to_corner_3d, lidar2pixel
 
-def pointcloud_roi(ROOT_DIR: str, config: dict, boxes_3d: np.array(np.array)):
+def pointcloud_roi(ROOT_DIR: Path, config: dict, boxes_3d: np.array(np.array)):
     """
     boxes_3d: [[],[],[],...]
     cameras: [[],[],[],...]
@@ -28,12 +27,12 @@ def pointcloud_roi(ROOT_DIR: str, config: dict, boxes_3d: np.array(np.array)):
     """
 
     # get calib parameters
-    calib_dir = ROOT_DIR + config['calib']['calib_dir']
+    calib_dir = str(ROOT_DIR.joinpath(config['calib']['calib_dir']))
     calib = np.loadtxt(os.path.join(calib_dir, 'calib.txt'))
     
     # For all vehicles: get corresponding cameras and 8-point coords in world coord
-    cameras = transform.which_cameras(boxes_3d)
-    corners3d = transform.box_to_corner_3d(boxes_3d)
+    cameras = which_cameras(boxes_3d)
+    corners3d = box_to_corner_3d(boxes_3d)
 
     # label2camera
     label2camera = {
@@ -50,7 +49,7 @@ def pointcloud_roi(ROOT_DIR: str, config: dict, boxes_3d: np.array(np.array)):
         vehicle_num += 1
         for camera_label in camera:
             camera_name = label2camera[camera_label]
-            pixel_pose_single_img = transform.lidar2pixel(calib, camera_name, world_pose)
+            pixel_pose_single_img = lidar2pixel(calib, camera_name, world_pose)
             pixel_pose[vehicle_num].append(pixel_pose_single_img)
 
     return cameras, pixel_pose

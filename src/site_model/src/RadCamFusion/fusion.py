@@ -17,11 +17,11 @@ from sensor_msgs.msg import Image               # Camera message
 from msgs.msg._MsgRadar import MsgRadar         # Radar message
 from msgs.msg._MsgRadCam import MsgRadCam       # fusion message
 
-from radar_poi import radar_poi
-from image_roi import image_roi
-from yolo.yolo import YOLO
+from .radar_poi import radar_poi
+from ..utils.image_roi import image_roi
+from ..utils.yolo.yolo import YOLO
 
-from utils.visualization import radar2visual    # visualized output
+from ..utils.visualization import radar2visual    # visualized output
 
 
 def single_fusion(radar_pois: list, image_rois: list):
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     calib = np.loadtxt(CALIB_DIR)
 
     # initialize YOLO
-    yolo = YOLO()
+    yolo = YOLO(ROOT_DIR)
 
     # initialize publisher
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam, queue_size=10)
