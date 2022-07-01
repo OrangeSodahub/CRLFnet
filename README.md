@@ -24,41 +24,36 @@ Absolute paths may need your mind:
  | file path                        | Line(s)                               |
  |----------------------------------|---------------------------------------|
  | src/camera_info/get_cam_info.cpp | 26,64,102,140,170,216,254,292,330,368,|
- | tools/RadCamFusion/yolo/yolo.py  | 28, 29, 34                            |
- | tools/rename.py                  | 5                                     |
 
 ## Rad-Cam Fusion
+### Necessary Configurations on GPU and model data
 
-### GPU Usage
-If using GPU, set the `cuda` to `True` in **tools/RadCamFusion/yolo/yolo.py**".
+- If GPU and cuda is available on your device, you can set the parameter `cuda` to `True` in `src/site_model/src/RadCamFusion/yolo/yolo.py`.
 
-### Model Data
-Please download `yolo_weights.pth` from jbox, and put it in the folder `src/site_model/src/tools/RadCamFusion/yolo/model_data`.
+- Please download `yolo_weights.pth` from jbox, and move it to `src/site_model/src/RadCamFusion/yolo/model_data`.
 
-### Rad-Cam Fusion
-Follow these steps for only radar-camera fusion. For the last command, additional parameter `--draw_output` is required if need to save the results of fusion in the form of image.
+### Run The Rad-Cam Fusion Model
+
+The steps to run the radar-camera fusion is listed as follows.
+
+For the last command, an optional parameter `--save_result` is available if you need to save visualized fusion result. The program draws and saves the POIs or ROIs of detection when either the radar or YOLO detects something.
 
 ```bash
-    cd to/ROOT_DIR/
+    cd /ROOT_DIR/
 
-    source devel/setup.bash
+    # load the simulation scene
+    roslaunch site_model spawn.launch   # load the site
+    roslaunch pkg racecar.launch        # load the vehicle
+    rosrun pkg keyboard_teleop.py       # use WASD to control the vehicle
+
+    # run the radar message filter
+    python3 src/site_model/src/tools/radar_listener.py
     
-    roslaunch site_model spawn.launch # start the solid model
-
-    # (generate camera calibrations if needed)
-
-    python src/site_modelsrc/tools/radar_listener.py # radar msgs preprocess
-    
+    # run the rad-cam fusion program
     cd src/site_model/src/tools/RadCamFusion
-
-    python fusion.py (--draw_output) # radar-camera fusion start working
+    python3 fusion.py [--save_result]
 ```
 
-If you run the code for the first time, maybe you have to use the command to enable the system to run certain files like "radar_listener.py".
-
-```bash
-    chmod +x {file name}.py
-```
 ### Camera Calibration
 Two commands are needed for camera calibration after `spawn.launch` is launched. Relative files are already exist in the repository. If the poses of components of models in `.urdf` files haven't been modified, skip this step.
 
