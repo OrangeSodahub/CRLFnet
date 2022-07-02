@@ -14,7 +14,7 @@ import yaml
 import os
 import numpy as np
 
-def main(ROOT_DIR: str, config: dict):
+def main(ROOT_DIR: Path, config: dict):
     """
         generate the calib matrix
     """
@@ -36,9 +36,9 @@ def main(ROOT_DIR: str, config: dict):
         calib = np.append(calib,[camera_cur],axis=0)
 
     # Save the file
-    calib_dir = ROOT_DIR + config['calib']['calib_dir']
+    calib_dir = ROOT_DIR / config['calib']['calib_dir']
     os.makedirs(calib_dir,exist_ok=True)
-    np.savetxt(calib_dir+'calib.txt', calib)
+    np.savetxt(str(calib_dir / 'calib.txt'), calib)
 
 
 # transform matrix
@@ -80,8 +80,8 @@ def camera_to_pixel(ROOT_DIR: str, config: dict, camera_name: int):
     """
     transform = {11: 0, 12: 1, 13: 2, 14: 3, 2: 4,
                 3: 5, 41: 6, 42: 7, 43: 8, 44: 9}
-    camera_info_dir = ROOT_DIR + config['calib']['camera_info_dir']
-    K = np.loadtxt(camera_info_dir+'camera_info.txt')[transform[camera_name]][28:40] # fuck! [4] is a bug!
+    camera_info_dir = ROOT_DIR / config['calib']['camera_info_dir']
+    K = np.loadtxt(str(camera_info_dir / 'camera_info.txt'))[transform[camera_name]][28:40] # fuck! [4] is a bug!
     K = K.reshape(3,4)
 
     return K
@@ -126,7 +126,7 @@ def RTmatrix(pose):
 
 if __name__=='__main__':
     # get ROOT DIR
-    ROOT_DIR = Path(__file__).resolve().parents[3]
+    ROOT_DIR = Path(__file__).resolve().parents[2]
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--config",
