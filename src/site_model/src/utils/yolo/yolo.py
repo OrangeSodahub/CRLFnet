@@ -22,7 +22,7 @@ class YOLO(object):
         "confidence"        : 0.5,          # 只有得分大于置信度的预测框会被保留下来
         "nms_iou"           : 0.3,          # 非极大抑制所用到的nms_iou大小
         "letterbox_image"   : False,        # 控制是否使用letterbox_image对输入图像进行不失真的resize
-        "cuda"              : True,        # 是否使用Cuda
+        "cuda"              : False,        # 是否使用Cuda
     }
 
     @classmethod
@@ -64,8 +64,8 @@ class YOLO(object):
     def detect_image(self, image, count = False):
         """
         The output is a 2-D numpy array. The numbers are integers.
-        The structure of the output is [[left, top, right, bottom, score], [...], ...],
-        where 0 <= score <= 1000.
+        The structure of the output is [[left, top, right, bottom, score, type], [...], ...],
+        where 0 <= score <= 100.
         """
 
         image_shape = np.array(np.shape(image)[0:2])
@@ -90,6 +90,7 @@ class YOLO(object):
             if results[0] is None: 
                 return np.array([])
             else:
+                # permutation
                 p = np.array([  [0, 1, 0, 0, 0, 0, 0],
                                 [1, 0, 0, 0, 0, 0, 0],
                                 [0, 0, 0, 1, 0, 0, 0],
@@ -98,4 +99,6 @@ class YOLO(object):
                                 [0, 0, 0, 0, 0, 1000, 0],
                                 [0, 0, 0, 0, 0, 0, 1]
                             ])
-                return np.matmul(results[0], p).astype(int)
+                r1 = np.matmul(results[0], p).astype(int)
+                # calculate score
+                return np.hstack((r1[:, :4], r1[:, 4:5] * r1[:, 5:6] // 10000, r1[:, 6:7]))
