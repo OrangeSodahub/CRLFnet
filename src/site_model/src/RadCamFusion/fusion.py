@@ -56,10 +56,10 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
             print("\t({},\t{})".format(p[0][0], p[1][0]))
         print("Left Image ROIs:")
         for p in image_rois_left:
-            print("\t({:.0f},\t{:.0f},\t{:.0f},\t{:.0f}),\t{:.2f}".format(p[0], p[1], p[2], p[3], p[4]*p[5]))
+            print("\t({},\t{},\t{},\t{}),\t{}".format(p[0], p[1], p[2], p[3], p[4]))
         print("Right Image ROIs:")
         for p in image_rois_right:
-            print("\t({:.0f},\t{:.0f},\t{:.0f},\t{:.0f}),\t{:.2f}".format(p[0], p[1], p[2], p[3], p[4]*p[5]))
+            print("\t({},\t{},\t{},\t{}),\t{}".format(p[0], p[1], p[2], p[3], p[4]))
 
     # fusion (The output of radar_poi and image_roi are not standard!!!)
     # detection flags

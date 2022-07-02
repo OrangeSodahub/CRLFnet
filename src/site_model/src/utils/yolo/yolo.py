@@ -63,9 +63,9 @@ class YOLO(object):
 
     def detect_image(self, image, count = False):
         """
-        The output is a 2-D numpy array. The numbers are not integers!
-        The structure of the output is [[left, top, right, bottom, arg4, arg5, type], [...], ...],
-        where score = arg4 * arg5.
+        The output is a 2-D numpy array. The numbers are integers.
+        The structure of the output is [[left, top, right, bottom, score], [...], ...],
+        where 0 <= score <= 1000.
         """
 
         image_shape = np.array(np.shape(image)[0:2])
@@ -90,4 +90,12 @@ class YOLO(object):
             if results[0] is None: 
                 return np.array([])
             else:
-                return results[0]
+                p = np.array([  [0, 1, 0, 0, 0, 0, 0],
+                                [1, 0, 0, 0, 0, 0, 0],
+                                [0, 0, 0, 1, 0, 0, 0],
+                                [0, 0, 1, 0, 0, 0, 0],
+                                [0, 0, 0, 0, 1000, 0, 0],
+                                [0, 0, 0, 0, 0, 1000, 0],
+                                [0, 0, 0, 0, 0, 0, 1]
+                            ])
+                return np.matmul(results[0], p).astype(int)
