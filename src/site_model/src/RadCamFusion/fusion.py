@@ -24,22 +24,18 @@ from ..utils.yolo.yolo import YOLO
 from ..utils.visualization import radar2visual    # visualized output
 
 
-def single_fusion(radar_pois: list, image_rois: list):
-    pass
-
-
 def fusion(radar: MsgRadar, image2: Image, image3: Image):
     # DO NOT initialize YOLO repeatedly!
     global OUTPUT_DIR
     global calib
     global yolo
     global pub
-    global loop_counter
+    global my_timer
+    global args
 
     # counter for debugging
-    print("\033[1;36mLoop Counter:\033[0m", loop_counter)
-    loop_counter += 1
-    print("Process Time:", process_time())
+    print("\033[1;36mFPS:\033[0m {:.2f}".format(1.0 / (process_time() - my_timer)))
+    my_timer = process_time()
 
     # Convert messages to POIs and ROIs
     # get Radar POIs
@@ -88,12 +84,36 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     msg_rad_cam.header.stamp = rospy.Time.now()
     pub.publish(msg_rad_cam)
 
-    # output visualized results
-    if params.save_result:
-        if radar_left != 0 and image_left != 0:
-            radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, draw_radar=True, draw_image=True, appendix='L')
-        if radar_right != 0 and image_right != 0:
-            radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, draw_radar=True, draw_image=True, appendix='R')
+    # save images
+    if args.save:
+        if args.trigger == 'match':
+            if match_left != 0:
+                radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, appendix='L')
+            if match_right != 0:
+                radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, appendix='R')
+        elif args.trigger == 'both':
+            if radar_left != 0 and image_left != 0:
+                radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, appendix='L')
+            if radar_right != 0 and image_right != 0:
+                radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, appendix='R')
+        elif args.trigger == 'either':
+            if radar_left != 0 or image_left != 0:
+                radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, appendix='L')
+            if radar_right != 0 or image_right != 0:
+                radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, appendix='R')
+        elif args.trigger == 'radar':
+            if radar_left != 0:
+                radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, appendix='L')
+            if radar_right != 0:
+                radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right,appendix='R')
+        elif args.trigger == 'image':
+            if image_left != 0:
+                radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, appendix='L')
+            if image_right != 0:
+                radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, appendix='R')
+        else:
+            radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, appendix='L')
+            radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, appendix='R')
 
     # print an empty line as sepration
     print()
@@ -101,17 +121,24 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
 
 if __name__ == '__main__':
     # counter for debugging
-    loop_counter = 0
+    my_timer = 0
 
     # set command arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--save_result",
-                        action = 'store_true',
-                        default = False,
-                        help = "Output visualized POIs and ROIs",
-                        required = False
-                        )
-    params = parser.parse_args()
+    parser.add_argument("-s", "--save",
+                        action      = 'store_true',
+                        default     = False,
+                        required    = False,
+                        help        = "Save visualized POIs and ROIs as images."
+    )
+    parser.add_argument("-t", "--trigger",
+                        choices     = ['match', 'both', 'either', 'radar', 'image', 'anyway'],
+                        type        = str,
+                        default     = 'match',
+                        required    = False,
+                        help        = "When to save images."
+    )
+    args = parser.parse_args()
 
     # get root path
     ROOT_DIR = Path(__file__).resolve().parents[2]

@@ -38,7 +38,7 @@ Absolute paths may need your mind:
 
 The steps to run the radar-camera fusion is listed as follows.
 
-For the last command, an optional parameter `--save_result` is available if you need to save visualized fusion result. The program draws and saves the POIs or ROIs of detection when either the radar or YOLO detects something.
+For the last command, an optional parameter `--save` or `-s` is available if you need to save the POIs and ROIs as images. The other optional parameter `--trigger` or `-t` controls under what situation to save images.
 
 ```bash
     cd /ROOT_DIR/
@@ -49,11 +49,11 @@ For the last command, an optional parameter `--save_result` is available if you 
     rosrun pkg keyboard_teleop.py       # use WASD to control the vehicle
 
     # run the radar message filter
-    python3 src/site_model/src/tools/radar_listener.py
+    python src/site_model/src/tools/radar_listener.py
     
     # run the rad-cam fusion program
     cd src/site_model
-    python -m src.RadCamFusion.fusion [--save_result]
+    python -m src.RadCamFusion.fusion [-s] [-t MODE]
 ```
 
 ### Camera Calibration

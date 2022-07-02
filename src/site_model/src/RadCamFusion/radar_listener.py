@@ -26,8 +26,6 @@ def radar_listener(radar2: SensorMsgsRadar, radar3: SensorMsgsRadar):
     # use the publisher in the main function
     global pub
 
-    print(radar2.front_left_esr_tracklist, radar3.front_right_esr_tracklist)
-
     msg_radar = MsgRadar()
     # left
     msg_radar.num_left = int(radar2.total_front_left_esr_tracks)

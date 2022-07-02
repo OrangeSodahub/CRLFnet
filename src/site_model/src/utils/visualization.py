@@ -1,6 +1,6 @@
 from pathlib import Path
-import numpy as np
 from datetime import datetime
+import numpy as np
 
 from sensor_msgs.msg import Image
 from msgs.msg._MsgCamera import MsgCamera
@@ -9,7 +9,7 @@ from cv_bridge import CvBridge
 import cv2
 
 
-def radar2visual(output_dir: Path, raw_image: Image, radar_pois=None, image_rois=None, draw_radar=False, draw_image=False, appendix="0"):
+def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), image_rois=(), draw_radar=True, draw_image=True, appendix="Unknown"):
     # make output dir
     output_dir.mkdir(exist_ok=True)
 
@@ -25,7 +25,7 @@ def radar2visual(output_dir: Path, raw_image: Image, radar_pois=None, image_rois
             cv2.rectangle(result_image, (iroi[0], iroi[1]), (iroi[2], iroi[3]), (255, 0, 0), 3)
 
     # save visualized result
-    file_name = "RadCamFusion_{}_{}.jpg".format(appendix, datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
+    file_name = "RCF_{}_{}.jpg".format(appendix, datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
     output_path = output_dir.joinpath(file_name)
     cv2.imwrite(str(output_path), result_image)
     print("\033[0;32mSaved the visualized result \033[1;32m\"{}\"\033[0;32m sucessfully.\033[0m".format(file_name))
