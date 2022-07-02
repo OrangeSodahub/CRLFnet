@@ -18,4 +18,4 @@ def image_roi(image, yolo=None):
     image = ros_numpy.numpify(image)
     image = Image.fromarray(image)
     # detect image
-    return yolo.detect_img(image)
+    return yolo.detect_image(image)
