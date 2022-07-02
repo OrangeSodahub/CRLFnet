@@ -42,7 +42,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     """
     assert isinstance(pointcloud, PointCloud2)
     assert isinstance(msgcamera, MsgCamera)
-    global time_span, counter, start_time, pred_counter
+    global counter, start_time, pred_counter
 
     # pointcloud roi
     points = convert_ros_pointcloud_to_numpy(pointcloud)
@@ -73,22 +73,26 @@ def fusion(pointcloud, msgcamera, odom=None):
 
         # image roi: use only one image
         pred_boxes2d = []
-        for vehicle in cameras:
-            if len(vehicle) != 0: # camera exist
-                camera = vehicle[0] # use only one image
-                img = msgcamera.camera[camera-1]
-                pred_box2d = np.array(image_roi(img, yolo))
-                if len(pred_box2d) != 0:
-                    pred_boxes2d.append(pred_box2d[0])
-                else:
-                    pred_boxes2d.append(pred_box2d)
+        for camera_label, img in enumerate(msgcamera.camera):
+            pred_box2d = image_roi(img, yolo)
+            pred_boxes2d.append(pred_box2d)
+        print(np.array(pred_boxes2d))
+        # for vehicle in cameras:
+        #     if len(vehicle) != 0: # camera exist
+        #         camera = vehicle[0] # use only one image
+        #         img = msgcamera.camera[camera-1]
+        #         pred_box2d = np.array(image_roi(img, yolo))
+        #         if len(pred_box2d) != 0:
+        #             pred_boxes2d.append(pred_box2d[0])
+        #         else:
+        #             pred_boxes2d.append(pred_box2d)
 
     # fusion
-    if len(pred_boxes3d) != 0 and len(pred_boxes2d) != 0:
-        # visualize lidar and vision detection boxes to pixel
-        if params.save_results:
-            output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
-            lidar_camera2visual(cameras, pred_boxes2d, pixel_poses, msgcamera, output_dir)
+    # if len(pred_boxes3d) != 0 and len(pred_boxes2d) != 0:
+    #     # visualize lidar and vision detection boxes to pixel
+    #     if params.save_results:
+    #         output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
+    #         lidar_camera2visual(cameras, pred_boxes2d, pixel_poses, msgcamera, output_dir)
         # get_fusion(cameras, msgcamera, pixel_poses, pred_boxes2d)
     # msglidcam = MsgLidCam()
     # msglidcam.header.stamp = rospy.Time.now()
@@ -99,7 +103,7 @@ def fusion(pointcloud, msgcamera, odom=None):
 
     # fps evalution (without results evalution and visualization)
     cur_time = time.time()
-    time_span += cur_time - start_time
+    time_span = cur_time - start_time
     start_time = cur_time
     counter += 1
     # fps = (counter-1) / time_span
@@ -156,7 +160,6 @@ if __name__ == '__main__':
 
     # fps evaluation
     counter = 1
-    time_span = 0
     fps = 0
 
     # Create an example of pointcloud detector
