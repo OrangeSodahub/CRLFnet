@@ -30,15 +30,15 @@ Absolute paths may need your mind:
 ## Rad-Cam Fusion
 ### Necessary Configurations on GPU and model data
 
-- If GPU and cuda is available on your device, you can set the parameter `cuda` to `True` in `src/site_model/src/RadCamFusion/yolo/yolo.py`.
+- If GPU and cuda is available on your device, you can set the parameter `cuda` to `True` in `src/site_model/src/utils/yolo/yolo.py`.
 
-- Please download `yolo_weights.pth` from jbox, and move it to `src/site_model/src/RadCamFusion/yolo/model_data`.
+- Please download `yolo_weights.pth` from jbox, and move it to `src/site_model/src/utils/yolo/model_data`.
 
 ### Run The Rad-Cam Fusion Model
 
 The steps to run the radar-camera fusion is listed as follows.
 
-For the last command, an optional parameter `--save` or `-s` is available if you need to save the POIs and ROIs as images. The other optional parameter `--trigger` or `-t` controls under what situation to save images.
+For the last command, an optional parameter `--save` or `-s` is available if you need to save the POIs and ROIs as images. The `--trigger` or `-t` parameter controls under what situation to save images. The `--information` or `-i` parameter enables the program to print detailed POI and ROI information while running.
 
 ```bash
     cd /ROOT_DIR/
@@ -53,7 +53,7 @@ For the last command, an optional parameter `--save` or `-s` is available if you
     
     # run the rad-cam fusion program
     cd src/site_model
-    python -m src.RadCamFusion.fusion [-s] [-t MODE]
+    python -m src.RadCamFusion.fusion [-i] [-s] [-t MODE]
 ```
 
 ### Camera Calibration
