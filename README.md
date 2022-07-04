@@ -145,7 +145,7 @@ The whole project contains several different parts which need to be start up thr
     rosrun site_model pointcloud_combiner
 
     cd src/site_model/src/LidCamFusion/;
-    python -m src.LidCamFusion.fusion (--draw_output)
+    python -m src.LidCamFusion.fusion [--save_result]
 ```
 
 # Issues

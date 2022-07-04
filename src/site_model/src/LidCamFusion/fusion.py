@@ -8,25 +8,20 @@
 
 from pathlib import Path
 import argparse
-from numpy import float64
 import yaml
 import rospy
 from termcolor import colored
 import message_filters
-# pointcloud type
-from sensor_msgs.msg import PointCloud2
 import ros_numpy
-# Image type
-from msgs.msg._MsgCamera import * # camera msgs class
-# odometry type
-from nav_msgs.msg import Odometry
-# Object Detection tool
-from .OpenPCDet.tools.pred import *
-# pointcloud detection
-from .pointcloud_roi import pointcloud_roi
-# vision detection
-from ..utils.yolo.yolo import YOLO
+
+from sensor_msgs.msg import PointCloud2         # pointcloud type
+from msgs.msg._MsgCamera import *               # Image type: camera msgs class
+from nav_msgs.msg import Odometry               # odometry type
+from .OpenPCDet.tools.pred import *             # 3d Detection tool
+from .pointcloud_roi import pointcloud_roi      # pointcloud detection
+from ..utils.yolo.yolo import YOLO              # vision detection
 from ..utils.image_roi import image_roi
+
 # fusion message type
 # from msgs.msg._MsgLidCam import *
 # visualization
@@ -67,25 +62,19 @@ def fusion(pointcloud, msgcamera, odom=None):
             print2screen(pred_boxes3d, pred_labels, pred_scores)
 
         # visualize lidar and vision detection boxes to pixel
-        # if params.draw_output:
+        # if params.save_result:
         #     output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
         #     lidar2visual(cameras, pixel_poses, msgcamera, output_dir)
 
-        # image roi: use only one image
+        # image roi
         pred_boxes2d = []
         for camera_label, img in enumerate(msgcamera.camera):
             pred_box2d = image_roi(img, yolo)
             pred_boxes2d.append(pred_box2d)
-        print(np.array(pred_boxes2d))
-        # for vehicle in cameras:
-        #     if len(vehicle) != 0: # camera exist
-        #         camera = vehicle[0] # use only one image
-        #         img = msgcamera.camera[camera-1]
-        #         pred_box2d = np.array(image_roi(img, yolo))
-        #         if len(pred_box2d) != 0:
-        #             pred_boxes2d.append(pred_box2d[0])
-        #         else:
-        #             pred_boxes2d.append(pred_box2d)
+        
+        # object match
+        iou_thresh = config['lid_cam_fusion']['iou_thresh']
+        get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
 
     # fusion
     # if len(pred_boxes3d) != 0 and len(pred_boxes2d) != 0:
@@ -110,6 +99,81 @@ def fusion(pointcloud, msgcamera, odom=None):
     fps = 1 / time_span
     print('FPS: ', fps, 'cnt: ', counter)
     
+
+def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
+    """
+        cameras: (N,M)
+        pixel_poses: (N,1) -> N: num of vehicles
+        cameras, pixel_poses -> pred_boxes3d
+        boxes2d: (8,N,6) -> 8 cameras, num of vehicles, [left top right bottom score calss]
+        For each vehicle detected by lidar, match the only one camera
+    """
+    match = []
+    vehicles = []
+    idxes = []
+    # add labels for boxes2d: 0->mismatched, 1->matched
+    for camera in range(len(boxes2d)):
+        labels = [0] * len(boxes2d[camera]) # if len=0 then labels is []
+        idxes.append(labels)
+    print(idxes)
+
+    for vehicle, pixel_pose in enumerate(pixel_poses):              # for each vehicle detected by lidar
+        # get camera
+        camera = cameras[vehicle][0]
+        # get all boxes2d of this camera
+        box2d = boxes2d[camera-1]
+        # get labels of all boxes2d
+        labels = idxes[camera-1]
+        bbox = get_bbox_from_box3d(pixel_pose[0])           
+        if len(box2d) != 0:
+            iou2ds = get_iou2d(bbox, box2d, labels, iou_thresh)     # ious of 1-lidar detected and N-camera detected
+            if len(np.where(iou2ds != -1)) != 0:                    # matched box exist
+                idx = np.where(iou2ds==np.max(iou2ds))              # idx: index of maximum iou2d: 2-d
+                idxes[camera-1][idx[0][0]] = 1                            # label matched
+                vehicles.append(vehicle)
+                cur_match = [cameras[vehicle][0], vehicle, box2d[idx]]
+                match.append(cur_match)
+            
+    print(match, vehicles, idxes, '\n')
+
+def get_bbox_from_box3d(pixel_pose):
+    xaxis = np.array(pixel_pose)[:,0]
+    yaxis = np.array(pixel_pose)[:,1]
+    x_max = np.max(xaxis)
+    x_min = np.min(xaxis)
+    y_max = np.max(yaxis)
+    y_min = np.min(yaxis)
+    return np.array([x_min, y_min, x_max, y_max])
+    
+
+def get_iou2d(boxa, boxesb, labels, iou_thresh):
+    """
+        boxa: (1,) -> lidar
+        boxesb: (N,) -> camera
+    """
+    def get_single_iou2d(boxa, boxb):                       # for each vehicle detected by camera
+        x1 = max(boxa[0], boxb[0])
+        y1 = max(boxa[1], boxb[1])
+        x2 = min(boxa[2], boxb[2])
+        y2 = min(boxa[3], boxb[3])
+        areaa = (boxa[2] - boxa[0]) * (boxa[3] - boxa[1])
+        areab = (boxb[2] - boxb[0]) * (boxb[3] - boxb[1])
+        overlap = (x2 - x1) * (y2 - y1)
+        iou2d = overlap / (areaa + areab - overlap)
+        return iou2d
+
+    iou2ds = []
+    for boxb, label in zip(boxesb, labels):
+        if not label:
+            iou2d = get_single_iou2d(boxa, boxb)
+            if iou2d < iou_thresh:                          # if iou is too small, mismatch
+                iou2d = -1
+        else:                                               # if box2d is matched before, mismatch
+            iou2d = -1
+        iou2ds.append(iou2d)
+
+    return np.array(iou2ds)
+
 
 def get_fusion(cameras: np.array, msgcamera: MsgCamera, pixel_poses, pred_boxes2d):
     for camera, vehicle_lidar, vehicle_camera in zip(cameras, pixel_poses, pred_boxes2d):
@@ -144,7 +208,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/config.yaml'))
-    parser.add_argument("--save_results", help="wehter to draw rois and output", action='store_true', required=False)
+    parser.add_argument("--save_result", help="wehter to draw rois and output", action='store_true', required=False)
     parser.add_argument("--print2screen", help="wehter to print to screen", action='store_true', required=False)
     parser.add_argument("--eval", help="wehter to eval", action='store_true', required=False)
     params = parser.parse_args()
