@@ -20,7 +20,7 @@ def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), image_rois=(
     # draw radar POIs
     if draw_radar:
         for rpoi in radar_pois:
-            cv2.circle(result_image, (rpoi[0][0], rpoi[1][0]), 5, (0, 0, 255), -1)
+            cv2.circle(result_image, (rpoi[0], rpoi[1]), 5, (0, 0, 255), -1)
     # draw image ROIs
     if draw_image:
         for iroi in image_rois:

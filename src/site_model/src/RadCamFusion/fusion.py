@@ -5,11 +5,14 @@ Get the radar and camera messages and do Radar-camera fusion.
 """
 
 
-from time import process_time
+from time import perf_counter, sleep
 from pathlib import Path
 import argparse
 import yaml
 import numpy as np
+
+import cv2
+from cv_bridge import CvBridge
 
 import rospy
 import message_filters
@@ -21,27 +24,42 @@ from .radar_poi import radar_poi
 from ..utils.image_roi import image_roi
 from ..utils.yolo.yolo import YOLO
 
-from ..utils.visualization import radar2visual    # visualized output
+from ..utils.visualization import radar2visual  # visualized output
 
 
 def fusion(radar: MsgRadar, image2: Image, image3: Image):
-    # DO NOT initialize YOLO repeatedly!
     global OUTPUT_DIR
+    global args
+    global my_timer
+    global frame_counter
+
     global calib
     global yolo
     global pub
-    global my_timer
-    global args
-
-    # counter for debugging
+    
+    # fps
     if args.information:
+        my_current = perf_counter()
+        print("\033[1;36mFPS:\033[0m {:.2f},\t\033[1;36mFrame:\033[0m{}".format(1.0 / (my_current - my_timer), frame_counter))
         print("\033[1;36m--------------------------------\033[0m")
-        print("\033[1;36mFPS:\033[0m {:.2f}".format(1.0 / (process_time() - my_timer)))
-        my_timer = process_time()
+        my_timer = my_current
 
     # Convert messages to POIs and ROIs
     # get Radar POIs
     radar_pois_left, radar_pois_right = radar_poi(radar, calib, image2.width, image2.height, image3.width, image3.height)
+    # off-YOLO mode
+    if args.off_yolo:
+        np.savetxt(str(OUTPUT_DIR.joinpath("L{:04d}.txt".format(frame_counter))), radar_pois_left)
+        np.savetxt(str(OUTPUT_DIR.joinpath("R{:04d}.txt".format(frame_counter))), radar_pois_right)
+        # convert image format to opencv
+        left_image = CvBridge().imgmsg_to_cv2(image2, 'bgr8')
+        cv2.imwrite(str(OUTPUT_DIR.joinpath("L{:04d}.jpg".format(frame_counter))), left_image)
+        right_image = CvBridge().imgmsg_to_cv2(image3, 'bgr8')
+        cv2.imwrite(str(OUTPUT_DIR.joinpath("R{:04d}.jpg".format(frame_counter))), right_image)
+        print("\033[0;32mSaved radar POIs and images of frame {}.\033[0;32m sucessfully.\033[0m".format(frame_counter))
+        sleep(1 / args.fps)
+        frame_counter += 1
+        return 
     # get Image ROIs
     image_rois_left  = image_roi(image2, yolo=yolo)
     image_rois_right = image_roi(image3, yolo=yolo)
@@ -50,10 +68,10 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
         print("\033[1;36mDetailed POI / ROI Information:\033[0m")
         print("Left Radar POIs:")
         for p in radar_pois_left:
-            print("\t({},\t{})".format(p[0][0], p[1][0]))
+            print("\t({},\t{})".format(p[0], p[1]))
         print("Right Radar POIS:")
         for p in radar_pois_right:
-            print("\t({},\t{})".format(p[0][0], p[1][0]))
+            print("\t({},\t{})".format(p[0], p[1]))
         print("Left Image ROIs:")
         for p in image_rois_left:
             print("\t({},\t{},\t{},\t{}),\t{}".format(p[0], p[1], p[2], p[3], p[4]))
@@ -61,7 +79,7 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
         for p in image_rois_right:
             print("\t({},\t{},\t{},\t{}),\t{}".format(p[0], p[1], p[2], p[3], p[4]))
 
-    # fusion (The output of radar_poi and image_roi are not standard!!!)
+    # fusion
     # detection flags
     radar_left  = len(radar_pois_left)
     image_left  = len(image_rois_left)
@@ -72,11 +90,11 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     # left
     for rpoi in radar_pois_left:
         for iroi in image_rois_left:
-            if(iroi[0] <= rpoi[0][0] <= iroi[2] and iroi[1] <= rpoi[1][0] <= iroi[3]):
+            if(iroi[0] <= rpoi[0] <= iroi[2] and iroi[1] <= rpoi[1] <= iroi[3]):
                 match_left += 1
     for rpoi in radar_pois_right:
         for iroi in image_rois_right:
-            if(iroi[0] <= rpoi[0][0] <= iroi[2] and iroi[1] <= rpoi[1][0] <= iroi[3]):
+            if(iroi[0] <= rpoi[0] <= iroi[2] and iroi[1] <= rpoi[1] <= iroi[3]):
                 match_right += 1
     # print detection results
     if args.information:
@@ -126,20 +144,35 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
         else:
             radar2visual(OUTPUT_DIR, image2, radar_pois_left, image_rois_left, appendix='L')
             radar2visual(OUTPUT_DIR, image3, radar_pois_right, image_rois_right, appendix='R')
+    
+    frame_counter += 1
 
 
 if __name__ == '__main__':
     # counter for debugging
     my_timer = 0
+    frame_counter = 0
 
     # set command arguments
     parser = argparse.ArgumentParser()
+    parser.add_argument("--off-yolo",
+                        action      = 'store_true',
+                        default     = False,
+                        required    = False,
+                        help        = "Disable yolo, save radar POIs and images per frame instead."
+    )
+    parser.add_argument("--fps",
+                        type        = float,
+                        default     = 2,
+                        required    = False,
+                        help        = "Approximate virtual fps."
+                        )
     parser.add_argument("-i", "--information",
                         action      = 'store_true',
                         default     = False,
                         required    = False,
                         help        = "Print POIs, ROIs and statistics."
-                        )
+    )
     parser.add_argument("-s", "--save",
                         action      = 'store_true',
                         default     = False,
@@ -171,8 +204,15 @@ if __name__ == '__main__':
     calib = np.loadtxt(CALIB_DIR)
 
     # initialize YOLO
-    yolo = YOLO(ROOT_DIR)
-
+    if not args.off_yolo:
+        yolo = YOLO(ROOT_DIR)
+        print("\033[0;32mYOLO initialized successfully.\033[0m")
+    else:
+        yolo = None
+        print("\033[0;33mRunning in off-YOLO mode.\033[0m")
+        OUTPUT_DIR = OUTPUT_DIR.joinpath("off_yolo")
+        OUTPUT_DIR.mkdir(exist_ok=True)
+    
     # initialize publisher
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam, queue_size=10)
     # initialize ROS node
