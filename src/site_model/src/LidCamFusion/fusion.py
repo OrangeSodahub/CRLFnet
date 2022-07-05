@@ -74,7 +74,7 @@ def fusion(pointcloud, msgcamera, odom=None):
         
         # object match
         iou_thresh = config['lid_cam_fusion']['iou_thresh']
-        get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
+        match, image, lidar = get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
 
     # fusion
     # if len(pred_boxes3d) != 0 and len(pred_boxes2d) != 0:
@@ -104,22 +104,27 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
     """
         cameras: (N,M)
         pixel_poses: (N,1) -> N: num of vehicles
-        cameras, pixel_poses -> pred_boxes3d
+        cameras, pixel_poses => pred_boxes3d
         boxes2d: (8,N,6) -> 8 cameras, num of vehicles, [left top right bottom score calss]
         For each vehicle detected by lidar, match the only one camera
     """
+    # match
     match = []
     vehicles = []
     idxes = []
+    # image
+    image = []
+    # lidar
+    lidar = []
+
     # add labels for boxes2d: 0->mismatched, 1->matched
     for camera in range(len(boxes2d)):
         labels = [0] * len(boxes2d[camera]) # if len=0 then labels is []
         idxes.append(labels)
-    print(idxes)
 
     for vehicle, pixel_pose in enumerate(pixel_poses):              # for each vehicle detected by lidar
         # get camera
-        camera = cameras[vehicle][0]
+        camera = cameras[vehicle][0]                                # consider the first camera, other camera(s) will not be considered
         # get all boxes2d of this camera
         box2d = boxes2d[camera-1]
         # get labels of all boxes2d
@@ -129,12 +134,26 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
             iou2ds = get_iou2d(bbox, box2d, labels, iou_thresh)     # ious of 1-lidar detected and N-camera detected
             if len(np.where(iou2ds != -1)) != 0:                    # matched box exist
                 idx = np.where(iou2ds==np.max(iou2ds))              # idx: index of maximum iou2d: 2-d
-                idxes[camera-1][idx[0][0]] = 1                            # label matched
+                idxes[camera-1][idx[0][0]] = 1                      # label matched
                 vehicles.append(vehicle)
-                cur_match = [cameras[vehicle][0], vehicle, box2d[idx]]
+                cur_match = [camera, vehicle, idx[0][0]]            # [camera num, vehcile num(lidar), box2d num(camera)]
                 match.append(cur_match)
-            
-    print(match, vehicles, idxes, '\n')
+    
+    # image only: add remaining detecteion results (midmatched) to the list according to idxes
+    for camera in range(len(boxes2d)):
+        cur_image = [camera+1]
+        for box2d, label in zip(boxes2d[camera], idxes[camera]):
+            if not label:
+                cur_image.append(box2d)
+        image.append(cur_image)
+    # lidar only: add remaining detection results (mismatched) to the list according to vehicels
+    for vehicle in range(len(pixel_poses)):
+        if vehicle not in vehicles:
+            lidar.append(vehicle)
+
+    # print(match, vehicles, idxes)
+    # print(image, lidar, '\n')
+    return match, image, lidar
 
 def get_bbox_from_box3d(pixel_pose):
     xaxis = np.array(pixel_pose)[:,0]
