@@ -35,11 +35,13 @@ def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), image_rois=(
 
 def lidar2visual(cameras: np.array, pixel_poses, msgcamera: MsgCamera, output_dir: str):
     """
-        cameras: [[camera1, camera2, ...],[camera1, camera2, ...], ...] -> each [camera1, camera2,...] represents a vehicle
+        cameras: [[camera1, camera2, ...],[camera1, camera2, ...], ...]
+            vehicle: [camera1, camera2, ...]
+            camera: int
         pixel_poses: [[vehicle1], [vehicle2], ...]
             vehicle: [camera1, camera2, ...]
-            camera:  [[x1 x2 y1 y2], [x1 x2 y1 y2], [], ...]
-                     -> each [x1 x2 y1 y2] reprensents 4 coordinates of a point and  there are 8 points
+            camera:  [[x y 1], [x y 1], [], ...]
+                     -> each [x y 1] reprensents 2-d coordinates of a point and there are 8 points
     """
     os.makedirs(output_dir, exist_ok=True)
 

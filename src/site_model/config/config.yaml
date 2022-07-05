@@ -36,3 +36,6 @@ calib:
 lidar_detection:
     cfg_file: /src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml
     ckpt_file: /src/LidCamFusion/OpenPCDet//output/custom_models/pv_rcnn/04/ckpt/checkpoint_epoch_80.pth
+
+lid_cam_fusion:
+  iou_thresh: 0.4

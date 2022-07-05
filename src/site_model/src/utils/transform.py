@@ -92,7 +92,7 @@ def which_cameras(pred_boxes: np.array(np.array)):
         """
         camera = []
         # 1
-        if loc[0] > 0 and loc[1] > 0:
+        if loc[0] >= 0 and loc[1] >= 0:
             if loc[1] <= loc[0]*slope_intersection+intersection[5] and loc[1] >= loc[0]*(-slope_intersection)+intersection[5]:
                 camera.append(4) # camera14
             # 5
@@ -104,7 +104,7 @@ def which_cameras(pred_boxes: np.array(np.array)):
                 camera.append(3) # camera13
                 camera.append(7) # camera43
         # 3
-        elif loc[0] > 0 and loc[1] < 0:
+        elif loc[0] >= 0 and loc[1] <= 0:
             if loc[1] <= loc[0]*slope_circle+circle[5] and loc[1] >= loc[0]*(-slope_circle)+circle[5]:
                 camera.append(6) # camera42
             elif loc[1] > loc[0]*slope_circle+circle[5]:
@@ -114,7 +114,7 @@ def which_cameras(pred_boxes: np.array(np.array)):
                 camera.append(5) # camera41
                 camera.append(3) # camera13
         # 2
-        elif loc[0] < 0 and loc[1] > 0:
+        elif loc[0] <= 0 and loc[1] >= 0:
             if loc[1] <= loc[0]*(-slope_intersection)+intersection[5] and loc[1] >= loc[0]*slope_intersection+intersection[5]:
                 camera.append(2) # camera12
             # 5
@@ -126,7 +126,7 @@ def which_cameras(pred_boxes: np.array(np.array)):
                 camera.append(3) # camera13
                 camera.append(7) # camera43
         # 4
-        elif loc[0] < 0 and loc[1] < 0:
+        elif loc[0] <= 0 and loc[1] <= 0:
             if loc[1] <= loc[0]*(-slope_circle)+circle[5] and loc[1] >= loc[0]*slope_circle+circle[5]:
                 camera.append(8) # camera44
             # 5
