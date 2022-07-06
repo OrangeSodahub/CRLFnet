@@ -14,6 +14,7 @@ from termcolor import colored
 import message_filters
 import ros_numpy
 
+from sensor_msgs.msg import Image               # image  type
 from sensor_msgs.msg import PointCloud2         # pointcloud type
 from msgs.msg._MsgCamera import *               # Image type: camera msgs class
 from nav_msgs.msg import Odometry               # odometry type
@@ -25,8 +26,7 @@ from ..utils.image_roi import image_roi
 # fusion message type
 # from msgs.msg._MsgLidCam import *
 # visualization
-from ..utils.visualization import lidar2visual
-from ..utils.visualization import lidar_camera2visual
+from ..utils.visualization import lidar_camera_match2visual
 from ..utils.evaluation import eval3d
 
 
@@ -42,6 +42,12 @@ def fusion(pointcloud, msgcamera, odom=None):
     # pointcloud roi
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
+
+    # image roi
+    pred_boxes2d = []
+    for camera_num, img in enumerate(msgcamera.camera):
+        pred_box2d = image_roi(img, yolo)
+        pred_boxes2d.append(pred_box2d)
 
     # pred results eval: BEV (for one car)
     if odom is not None:
@@ -61,28 +67,25 @@ def fusion(pointcloud, msgcamera, odom=None):
         if params.print2screen:
             print2screen(pred_boxes3d, pred_labels, pred_scores)
 
-        # visualize lidar and vision detection boxes to pixel
+        # visualize lidar detection boxes to pixel
         # if params.save_result:
         #     output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
         #     lidar2visual(cameras, pixel_poses, msgcamera, output_dir)
 
-        # image roi
-        pred_boxes2d = []
-        for camera_label, img in enumerate(msgcamera.camera):
-            pred_box2d = image_roi(img, yolo)
-            pred_boxes2d.append(pred_box2d)
-        
         # object match
         iou_thresh = config['lid_cam_fusion']['iou_thresh']
         match, image, lidar = get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
+        print(match, image, lidar)
+
+        # visualize match result
+        if params.save_match_result:
+            output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
+            lidar_camera_match2visual(match, image, lidar, pred_boxes2d, pixel_poses, msgcamera, output_dir)
 
     # fusion
     # if len(pred_boxes3d) != 0 and len(pred_boxes2d) != 0:
-    #     # visualize lidar and vision detection boxes to pixel
-    #     if params.save_results:
-    #         output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
-    #         lidar_camera2visual(cameras, pred_boxes2d, pixel_poses, msgcamera, output_dir)
         # get_fusion(cameras, msgcamera, pixel_poses, pred_boxes2d)
+
     # msglidcam = MsgLidCam()
     # msglidcam.header.stamp = rospy.Time.now()
 
@@ -149,7 +152,7 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
     # lidar only: add remaining detection results (mismatched) to the list according to vehicels
     for vehicle in range(len(pixel_poses)):
         if vehicle not in vehicles:
-            lidar.append(vehicle)
+            lidar.append([cameras[vehicle][0], vehicle])
 
     # print(match, vehicles, idxes)
     # print(image, lidar, '\n')
@@ -227,7 +230,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/config.yaml'))
-    parser.add_argument("--save_result", help="wehter to draw rois and output", action='store_true', required=False)
+    parser.add_argument("--save_match_result", help="wehter to save match result", action='store_true', required=False)
     parser.add_argument("--print2screen", help="wehter to print to screen", action='store_true', required=False)
     parser.add_argument("--eval", help="wehter to eval", action='store_true', required=False)
     params = parser.parse_args()
