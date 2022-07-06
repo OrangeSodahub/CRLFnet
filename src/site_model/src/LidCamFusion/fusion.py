@@ -42,10 +42,13 @@ def fusion(pointcloud, msgcamera, odom=None):
     # pointcloud roi
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
+    cameras, pixel_poses = pointcloud_roi(ROOT_DIR, config, pred_boxes3d)           # get cameras and pixel_poses of all vehicles
+    if params.print2screen_lidar:                                                   # print pred results to screen
+        print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
 
     # image roi
     pred_boxes2d = []
-    for camera_num, img in enumerate(msgcamera.camera):
+    for img in msgcamera.camera:
         pred_box2d = image_roi(img, yolo)
         pred_boxes2d.append(pred_box2d)
 
@@ -58,38 +61,21 @@ def fusion(pointcloud, msgcamera, odom=None):
         if counter % 1000 == 0:
             np.savetxt(str(ROOT_DIR / 'src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter), tp_fp_fn)
         
-    # post-process the predict results
-    if len(pred_boxes3d) != 0:
-        # get cameras and pixel_poses of all vehicles
-        cameras, pixel_poses = pointcloud_roi(ROOT_DIR, config, pred_boxes3d)
-        
-        # print pred results to screen
-        if params.print2screen:
-            print2screen(pred_boxes3d, pred_labels, pred_scores)
+    # object match
+    iou_thresh = config['lid_cam_fusion']['iou_thresh']
+    match, image, lidar = get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
+    if params.print2screen_match:
+        print2screen_match(match, image, lidar)
+    if params.save_match_result:                                                    # visualize match result
+        output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
+        lidar_camera_match2visual(match, image, lidar, pred_boxes2d, pixel_poses, msgcamera, output_dir)
 
-        # visualize lidar detection boxes to pixel
-        # if params.save_result:
-        #     output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
-        #     lidar2visual(cameras, pixel_poses, msgcamera, output_dir)
+    # object fusion
+    get_fusion(match, pred_boxes2d, pred_boxes3d, pixel_poses)
 
-        # object match
-        iou_thresh = config['lid_cam_fusion']['iou_thresh']
-        match, image, lidar = get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
-        print(match, image, lidar)
-
-        # visualize match result
-        if params.save_match_result:
-            output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
-            lidar_camera_match2visual(match, image, lidar, pred_boxes2d, pixel_poses, msgcamera, output_dir)
-
-    # fusion
-    # if len(pred_boxes3d) != 0 and len(pred_boxes2d) != 0:
-        # get_fusion(cameras, msgcamera, pixel_poses, pred_boxes2d)
-
+    # publish result
     # msglidcam = MsgLidCam()
     # msglidcam.header.stamp = rospy.Time.now()
-
-    # # publish result
     # pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
     # pub.publish(msglidcam)
 
@@ -110,6 +96,8 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
         cameras, pixel_poses => pred_boxes3d
         boxes2d: (8,N,6) -> 8 cameras, num of vehicles, [left top right bottom score calss]
         For each vehicle detected by lidar, match the only one camera
+
+        cameras, pixel_poses, boxes2d may be empty: []
     """
     # match
     match = []
@@ -197,11 +185,16 @@ def get_iou2d(boxa, boxesb, labels, iou_thresh):
     return np.array(iou2ds)
 
 
-def get_fusion(cameras: np.array, msgcamera: MsgCamera, pixel_poses, pred_boxes2d):
-    for camera, vehicle_lidar, vehicle_camera in zip(cameras, pixel_poses, pred_boxes2d):
-        img = msgcamera.camera[camera-1]
-        print("vehicle_lidar: ", np.array(vehicle_lidar))
-        print("vehicle_camera: ", vehicle_camera, '\n')
+def get_fusion(match, boxes2d, boxes3d, pixels_poses):
+    """
+        match: [camera num, vehcile num(lidar), box2d num(camera)]
+    """
+    for obj in match:
+        print(obj)
+        camera_num, vehicle_num, box2d_num = obj[0], obj[1], obj[2]
+        box2d = boxes2d[camera_num-1][box2d_num]
+        box3d, pixel_pose = boxes3d[vehicle_num], pixels_poses[vehicle_num]
+
 
 
 def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):
@@ -214,13 +207,26 @@ def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):
     return points
 
 
-def print2screen(pred_boxes3d, pred_labels, pred_scores):
+def print2screen_lidar(pred_boxes3d, pred_labels, pred_scores):
     label2class = {1: 'Car', 2: 'Pedstrain', 3: 'Bicycle' }
     print("+-------------------------------------------------------------------------------------------+")
     print("num_car: ", len(pred_boxes3d))
     for i in range(len(pred_boxes3d)):
         print(i+1, " ==> ", label2class[int(pred_labels[i])], "  score: ", pred_scores[i])
         print("  ", pred_boxes3d[i][0:3], " ", pred_boxes3d[i][3:6], " ", pred_boxes3d[i][6])
+    print("+-------------------------------------------------------------------------------------------+\n")
+
+
+def print2screen_match(match, image, lidar):
+    """
+        match: [camera num, vehcile num(lidar), box2d num(camera)]
+        image: [[1,],[2,],...,[8,]]
+        lidar: [[camera num, vehicle num]]
+    """
+    print("+-------------------------------------------------------------------------------------------+")
+    print("match: ", match)
+    print("image: ", image)
+    print("lidar: ", lidar)
     print("+-------------------------------------------------------------------------------------------+\n")
 
 
@@ -231,7 +237,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/config.yaml'))
     parser.add_argument("--save_match_result", help="wehter to save match result", action='store_true', required=False)
-    parser.add_argument("--print2screen", help="wehter to print to screen", action='store_true', required=False)
+    parser.add_argument("--print2screen_lidar", help="wehter to print to screen", action='store_true', required=False)
+    parser.add_argument("--print2screen_match", help="wehter to print to screen", action='store_true', required=False)
     parser.add_argument("--eval", help="wehter to eval", action='store_true', required=False)
     params = parser.parse_args()
 

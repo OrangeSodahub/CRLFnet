@@ -60,6 +60,7 @@ def lidar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
 # For each time -> all vehicles
 def which_cameras(pred_boxes: np.array(np.array)):
     """
+        Function to sectorize the lidarData to represent sectors where an object is detected
         The location of cameras:
         +-------------------------------+
         |\         /|\                 /| 
