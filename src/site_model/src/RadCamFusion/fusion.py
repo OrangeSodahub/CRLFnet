@@ -23,8 +23,11 @@ from msgs.msg._MsgRadCam import MsgRadCam       # fusion message
 from .radar_poi import radar_poi
 from ..utils.image_roi import image_roi
 from ..utils.yolo.yolo import YOLO
-
 from ..utils.visualization import radar2visual  # visualized output
+
+
+def pure_fusion(radar_pois, image_rois):
+    pass
 
 
 def fusion(radar: MsgRadar, image2: Image, image3: Image):
@@ -40,18 +43,20 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     # fps
     if args.information:
         my_current = perf_counter()
-        print("\033[1;36mFPS:\033[0m {:.2f},\t\033[1;36mFrame:\033[0m{}".format(1.0 / (my_current - my_timer), frame_counter))
         print("\033[1;36m--------------------------------\033[0m")
+        print("\033[1;36mFPS:\033[0m {:.2f},\t\033[1;36mFrame:\033[0m{}".format(1.0 / (my_current - my_timer), frame_counter))
         my_timer = my_current
 
     # Convert messages to POIs and ROIs
     # get Radar POIs
-    radar_pois_left, radar_pois_right = radar_poi(radar, calib, image2.width, image2.height, image3.width, image3.height)
+    radar_pois_left = radar_poi(radar.objects_left, calib, "camera2", image2.width, image2.height)
+    radar_pois_right = radar_poi(radar.objects_right, calib, "camera3", image3.width, image3.height)
     # off-YOLO mode
     if args.off_yolo:
-        np.savetxt(str(OUTPUT_DIR.joinpath("L{:04d}.txt".format(frame_counter))), radar_pois_left)
-        np.savetxt(str(OUTPUT_DIR.joinpath("R{:04d}.txt".format(frame_counter))), radar_pois_right)
-        # convert image format to opencv
+        # save radar
+        np.savetxt(str(OUTPUT_DIR.joinpath("L{:04d}.txt".format(frame_counter))), radar_pois_left, fmt='%d')
+        np.savetxt(str(OUTPUT_DIR.joinpath("R{:04d}.txt".format(frame_counter))), radar_pois_right, fmt='%d')
+        # save image
         left_image = CvBridge().imgmsg_to_cv2(image2, 'bgr8')
         cv2.imwrite(str(OUTPUT_DIR.joinpath("L{:04d}.jpg".format(frame_counter))), left_image)
         right_image = CvBridge().imgmsg_to_cv2(image3, 'bgr8')

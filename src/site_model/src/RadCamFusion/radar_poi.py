@@ -19,12 +19,7 @@ def w2p(obj: MsgRadarObject, camera: str, calib: np.array):
     return pixel_pos.flatten()
 
 
-def radar_poi(radar_msgs: MsgRadar, calib: np.array, width2: int, height2: int, width3: int, height3: int):
-    # left
-    pl0 = map(lambda x: w2p(x, "camera2", calib), radar_msgs.objects_left)
-    pl1 = tuple(filter(lambda pos: 0 <= pos[0] <= width2 and 0<= pos[1] <= height2, pl0))
-    # right
-    pr0 = map(lambda x: w2p(x, "camera3", calib), radar_msgs.objects_right)
-    pr1 = tuple(filter(lambda pos: 0 <= pos[0] <= width3 and 0<= pos[1] <= height3, pr0))
-
-    return pl1, pr1
+def radar_poi(radar_objs: MsgRadarObject, calib: np.array, camera: str, width: int, height: int):
+    p0 = map(lambda x: w2p(x, camera, calib), radar_objs)
+    p1 = tuple(filter(lambda pos: 0 <= pos[0] <= width and 0<= pos[1] <= height, p0))
+    return p1

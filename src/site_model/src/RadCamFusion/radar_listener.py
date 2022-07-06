@@ -19,6 +19,7 @@ def append_obj(t: GeometryMsgsRadarObject, l: list):
     obj.velocity = t.range_rate
     obj.pos_x    = t.obj_vcs_posex
     obj.pos_y    = t.obj_vcs_posey
+    obj.track_id = t.track_id
     l.append(obj)
 
 
