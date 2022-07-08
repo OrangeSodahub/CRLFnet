@@ -9,23 +9,31 @@
 
 import numpy as np
 import torch
-from . import common_utils
+from .common_utils import check_numpy_to_torch
 
 
 def w2p(pos: np.ndarray, w2c: np.ndarray, c2p: np.ndarray):
+    '''
+    Input the position of a point in the world coordinate, the w2c and c2p matrices.
+    Output the position of the point in the pixel coordinate and the distance between the point and the camera.
+    '''
     pos_cam = np.matmul(w2c, pos)
     pos_pix = np.matmul(c2p, pos_cam) / pos_cam[2]
-    return pos_pix.astype(int)
+    return pos_pix.astype(int), pos_cam[2]
 
 
 def p2w(pos: np.ndarray, zw: float, w2c: np.ndarray, c2p: np.ndarray):
+    '''
+    Input the position of a point in the pixel coordinate, the height of the radar, the w2c and c2p matrices.
+    Output the position of the point in the world coordinate and the distance between the point and the camera.
+    '''
     m1 = c2p[:,0:3]
     m1i = np.linalg.inv(m1)
     m2i = np.linalg.inv(w2c)
     pos_cam_like = np.matmul(m1i, pos)
     zc = (zw - m2i[2, 3]) / np.dot(m2i[2, 0:3], pos_cam_like)
     pos_wld = np.matmul(m2i, np.concatenate((zc * pos_cam_like, [1])))
-    return pos_wld
+    return pos_wld, zc
 
 
 def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
@@ -181,7 +189,7 @@ def box_to_corner_3d(boxes3d):
         5--------------6
     """
 
-    boxes3d, is_numpy = common_utils.check_numpy_to_torch(boxes3d)
+    boxes3d, is_numpy = check_numpy_to_torch(boxes3d)
     template = boxes3d.new_tensor((
         [1, 1, -1], [1, -1, -1], [-1, -1, -1], [-1, 1, -1],
         [1, 1, 1], [1, -1, 1], [-1, -1, 1], [-1, 1, 1],
@@ -202,8 +210,8 @@ def rotate_points_along_z(points, angle):
     Returns:
 
     """
-    points, is_numpy = common_utils.check_numpy_to_torch(points)
-    angle, _ = common_utils.check_numpy_to_torch(angle)
+    points, is_numpy = check_numpy_to_torch(points)
+    angle, _ = check_numpy_to_torch(angle)
 
     cosa = torch.cos(angle)
     sina = torch.sin(angle)
