@@ -20,23 +20,59 @@ from sensor_msgs.msg import Image               # Camera message
 from msgs.msg._MsgRadar import MsgRadar         # Radar message
 from msgs.msg._MsgRadCam import MsgRadCam       # fusion message
 
-from .radar_poi import radar_poi
-from ..utils.image_roi import image_roi
+from ..utils.poi_and_roi import radar_poi, image_roi, expand_poi, get_iou
 from ..utils.yolo.yolo import YOLO
 from ..utils.visualization import radar2visual  # visualized output
 
 
-def pure_fusion(radar_pois, image_rois):
+def iou_matching(radar_rois: np.ndarray, image_rois: np.ndarray):
     pass
 
 
-def fusion(radar: MsgRadar, image2: Image, image3: Image):
+def gnn(radar, image):
+    pass
+
+
+def kf(possible_objects, prevoius_results):
+    pass
+
+
+def pair_fusion(radar: MsgRadar, image: Image, camera_name='camera2'):
+    # ONLY FUSE THE LEFT PAIR!!!
+    global yolo
+    global results
+    global w2cs, c2ps
+
+    # Separate Decection
+    # acquire radar POIs (pixel coordinate) and distance
+    radar_pois = radar_poi(radar.objects_left, w2cs[camera_name], c2ps[camera_name], image.width, image.height)
+    radar_distances = [x.distance for x in radar.objects_left]
+    # acquire image ROIs (pixel coordinate)
+    image_rois = image_roi(image, yolo)
+
+    # Fusion
+    # convert the radar POIs to approximate ROIs (world coordinate -> pixel coordinate)
+    radar_expanded_rois = np.array([expand_poi(p, d, image.width, image.height) for p, d in zip(radar_pois, radar_distances)], dtype=int)
+    # IOU matching of radar and image ROIs
+    couples_iou, unmatched_radar, unmatched_image = iou_matching(radar_expanded_rois, image_rois)
+    # apply GNN to unmatched objects
+    couples_gnn, residual_radar, residual_image = gnn(unmatched_radar, unmatched_image)
+    # possible objects are matched objects in IOU matching and GNN and residual ones
+    possible_objects = np.concatenate(couples_iou, couples_gnn, residual_radar, residual_image)
+    # use Extended Kalman Filter to predict and check objects
+    results = kf(possible_objects, results)
+
+    # Publish
+    print(results)
+
+
+def old_fusion(radar: MsgRadar, image2: Image, image3: Image):
     global OUTPUT_DIR
     global args
     global my_timer
     global frame_counter
 
-    global calib
+    global w2cs, c2ps
     global yolo
     global pub
     
@@ -49,8 +85,8 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
 
     # Convert messages to POIs and ROIs
     # get Radar POIs
-    radar_pois_left = radar_poi(radar.objects_left, calib, "camera2", image2.width, image2.height)
-    radar_pois_right = radar_poi(radar.objects_right, calib, "camera3", image3.width, image3.height)
+    radar_pois_left = radar_poi(radar.objects_left, w2cs['camera2'], c2ps['camera2'], image2.width, image2.height)
+    radar_pois_right = radar_poi(radar.objects_right, w2cs['camera3'], c2ps['camera3'], image3.width, image3.height)
     # off-YOLO mode
     if args.off_yolo:
         # save radar
@@ -204,9 +240,17 @@ if __name__ == '__main__':
             print("\033[1;31mFailed to load config file.\033[0m")
             exit(1)
     OUTPUT_DIR = ROOT_DIR.joinpath(config['output']['RadCamFusion_dir'])
-    CALIB_DIR = ROOT_DIR.joinpath(config['calib']['calib_dir'], 'calib.txt')
-    # load calib file
-    calib = np.loadtxt(CALIB_DIR)
+    MEASUREMENT_DIR = ROOT_DIR.joinpath(config['measurement']['measurement_dir'], 'measurement.txt')
+    # load measurement file
+    camera_index = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
+                    'camera2' : 4, 'camera3' : 5,
+                    'camera41': 6, 'camera42': 7, 'camera43': 8, 'camera44': 9}
+    measurement = np.loadtxt(MEASUREMENT_DIR)
+    w2cs, c2ps = {}, {}
+    for c in camera_index.keys():
+        w2cs[c] = measurement[camera_index[c]][0:16].reshape(4, 4)
+        c2ps[c] = measurement[camera_index[c]][16:28].reshape(3, 4)
+    del measurement
 
     # initialize YOLO
     if not args.off_yolo:
@@ -229,7 +273,7 @@ if __name__ == '__main__':
     # syncronize time stamps
     sync = message_filters.ApproximateTimeSynchronizer([msg_radar, msg_image_2, msg_image_3], 1, 1)
 
-    sync.registerCallback(fusion)
+    sync.registerCallback(old_fusion)
 
     print("\033[0;32mRadar-camera Fusion Initialized Sucessfully.\033[0m")
 

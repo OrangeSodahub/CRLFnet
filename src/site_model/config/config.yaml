@@ -14,6 +14,8 @@ output:
 topic:
   radar_2: /ARS_408_21_2_Topic
   radar_3: /ARS_408_21_3_Topic
+measurement:
+  measurement_dir: src/utils/calib/
 calib:
   camera_info_dir: src/camera_info/
   calib_dir: src/utils/calib/
