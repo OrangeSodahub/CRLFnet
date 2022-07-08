@@ -99,7 +99,7 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
     for vehicle in lidar:
         camera = vehicle[0]
         vehicle_num = vehicle[1]
-        for i, camera_num in camera:
+        for i, camera_num in enumerate(camera):
             box3d = boxes3d[vehicle_num][i]
             msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], box3d, (255,0,0))
 

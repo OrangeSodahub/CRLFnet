@@ -25,7 +25,7 @@ def eval3d(odom: Odometry, pred_boxes3d: np.array, logger, pred_counter: int, al
         r, p, y = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y,
                                                     pose.pose.orientation.z, pose.pose.orientation.w])
         # rotation
-        alpha_cur_diff = np.abs(pred_boxes3d[0][6]-(y if y>=0 else (np.pi-y))) # pred_boxes3d[0] -> for one car
+        alpha_cur_diff = np.abs(((pred_boxes3d[0][6] - np.pi) if pred_boxes3d[0][6] >= 0 else (np.pi + pred_boxes3d[0][6])) - y) # pred_boxes3d[0] -> for one car
         alpha_diff += alpha_cur_diff
         alpha_cur_precision = 1 - (alpha_cur_diff / pred_counter) / (2*np.pi)
         alpha_precision = 1 - (alpha_diff / pred_counter) / (2*np.pi)

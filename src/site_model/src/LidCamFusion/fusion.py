@@ -23,8 +23,8 @@ from .pointcloud_roi import pointcloud_roi      # pointcloud detection
 from ..utils.yolo.yolo import YOLO              # vision detection
 from ..utils.image_roi import image_roi
 
-# fusion message type
-# from msgs.msg._MsgLidCam import *
+from msgs.msg._MsgLidCam import *               # fusion message type
+from msgs.msg._MsgLidCamObject import *
 # visualization
 from ..utils.visualization import lidar_camera_match2visual
 from ..utils.evaluation import eval3d
@@ -42,7 +42,6 @@ def fusion(pointcloud, msgcamera, odom=None):
     # pointcloud roi
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
-    print(pred_scores)
     cameras, pixel_poses = pointcloud_roi(ROOT_DIR, config, pred_boxes3d)           # get cameras and pixel_poses of all vehicles
     if params.print2screen_lidar:                                                   # print pred results to screen
         print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
@@ -57,10 +56,11 @@ def fusion(pointcloud, msgcamera, odom=None):
     if odom is not None:
         # 3d-detection only: use 'pred_boxes3d' to eval
         global alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
-        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, pred_boxes3d, logger, pred_counter,
-                                                                                alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
+        if counter >= 50:
+            pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, pred_boxes3d, logger, pred_counter,
+                                                                                    alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
         if counter % 1000 == 0:
-            np.savetxt(str(ROOT_DIR / 'src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter), tp_fp_fn)
+            np.savetxt(str(ROOT_DIR / ('src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter)), tp_fp_fn)
         
     # object match
     iou_thresh = config['lid_cam_fusion']['iou_thresh']
@@ -72,13 +72,11 @@ def fusion(pointcloud, msgcamera, odom=None):
         lidar_camera_match2visual(match, image, lidar, pred_boxes2d, pixel_poses, msgcamera, output_dir)
 
     # object fusion
-    get_fusion(match, pred_boxes2d, pred_boxes3d, pixel_poses)
-
+    msglidcam = get_fusion(match, pred_boxes2d, pred_boxes3d, pixel_poses)
     # publish result
-    # msglidcam = MsgLidCam()
-    # msglidcam.header.stamp = rospy.Time.now()
-    # pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
-    # pub.publish(msglidcam)
+    msglidcam.header.stamp = rospy.Time.now()
+    pub = rospy.Publisher("/lidcams", MsgLidCam)
+    pub.publish(msglidcam)
 
     # fps evalution (without results evalution and visualization)
     cur_time = time.time()
@@ -87,7 +85,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     counter += 1
     # fps = (counter-1) / time_span
     fps = 1 / time_span
-    print('FPS: ', fps, 'cnt: ', counter)
+    # print('FPS: ', fps, 'cnt: ', counter)
     
 
 def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
@@ -190,14 +188,27 @@ def get_iou2d(boxa, boxesb, labels, iou_thresh):
 
 def get_fusion(match, boxes2d, boxes3d, pixels_poses):
     """
-        match: [camera num, vehcile num(lidar), box2d num(camera)]
+        match: [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera)]
     """
+    msglidcam = MsgLidCam()
     for obj in match:
-        print(obj)
-        camera_num, vehicle_num, box2d_num = obj[0], obj[1], obj[2]
-        box2d = boxes2d[camera_num-1][box2d_num]
-        box3d, pixel_pose = boxes3d[vehicle_num], pixels_poses[vehicle_num]
+        # add matched vehicle to msg
+        msglidcamobject = MsgLidCamObject()
+        msglidcamobject.pos_x = boxes3d[obj[1]][0]
+        msglidcamobject.pos_y = boxes3d[obj[1]][1]
+        msglidcamobject.alpha = boxes3d[obj[1]][6]
+        if msglidcamobject.pos_y >= 0:
+            msglidcam.objects_intersection.append(msglidcamobject)
+            msglidcam.num_intersection += 1
+        else:
+            msglidcam.objects_circle.append(msglidcamobject)
+            msglidcam.num_circle += 1
 
+        # print(obj)
+        # camera_num, vehicle_num, camera_num_vehicle, box2d_num = obj[0], obj[1], obj[2], obj[3]
+        # box2d = boxes2d[camera_num-1][box2d_num]
+        # box3d, pixel_pose = boxes3d[vehicle_num], pixels_poses[vehicle_num]
+    return msglidcam
 
 
 def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):
@@ -271,7 +282,7 @@ if __name__ == '__main__':
         from tensorboard_logger import Logger
         import datetime
         import os
-        log_dir = ROOT_DIR+'/src/LidCamFusion/eval/%s/' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        log_dir = str(ROOT_DIR)+'/src/LidCamFusion/eval/%s/' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         os.makedirs(log_dir, exist_ok=True)
         logger = Logger(logdir=log_dir, flush_secs=10)
         # pointcloud pred results evaluation
@@ -284,7 +295,7 @@ if __name__ == '__main__':
         N_SAMPLE_PTS = 41
         tp_fp_fn = np.array([np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS)])
         
-        sub_odom = message_filters.Subscriber('//base_pose_ground_truth', Odometry)
+        sub_odom = message_filters.Subscriber('/base_pose_ground_truth', Odometry)
         sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera, sub_odom], 1, 1) # syncronize time stamps
         sync.registerCallback(fusion)
         print("Lidar Camera Fusion (with eval) Begin.")
