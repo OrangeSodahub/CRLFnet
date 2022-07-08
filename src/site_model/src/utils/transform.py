@@ -75,6 +75,7 @@ def lidar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
 # For each time -> all vehicles
 def which_cameras(pred_boxes: np.array(np.array)):
     """
+        Function to sectorize the lidarData to represent sectors where an object is detected
         The location of cameras:
         +-------------------------------+
         |\         /|\                 /| 
@@ -91,8 +92,8 @@ def which_cameras(pred_boxes: np.array(np.array)):
         +-------------------------------+
     """
     # defined information
-    intersection = [-1.92, 2.92, 1.92, 0, 0, 0.7] # [x1,y1, x2,yx, cx,cy]
-    circle = [-1.92, 0, 1.92, -2.5, 0, -0.95] # [x1,y1, x2,yx, cx,cy]
+    intersection = [-1.92, 2.92, 1.92, 0, 0, 0.7] # [x1,y1, x2,y2, cx,cy]
+    circle = [-1.92, 0, 1.92, -2.5, 0, -0.95] # [x1,y1, x2,y2, cx,cy]
     slope_intersection = np.abs(intersection[1]) / np.abs(intersection[0])
     slope_circle = np.abs(circle[3]) / np.abs(circle[2])
 
@@ -110,46 +111,50 @@ def which_cameras(pred_boxes: np.array(np.array)):
         if loc[0] >= 0 and loc[1] >= 0:
             if loc[1] <= loc[0]*slope_intersection+intersection[5] and loc[1] >= loc[0]*(-slope_intersection)+intersection[5]:
                 camera.append(4) # camera14
+                camera.append(7) # camera43
             # 5
-            elif loc[1] > loc[0]*slope_intersection:
+            elif loc[1] >= loc[0]*slope_intersection+intersection[5]:
                 camera.append(1) # camera11
                 camera.append(7) # camera43
             # 6
-            elif loc[1] < loc[0]*(-slope_intersection):
+            elif loc[1] <= loc[0]*(-slope_intersection)+intersection[5]:
                 camera.append(3) # camera13
                 camera.append(7) # camera43
         # 3
         elif loc[0] >= 0 and loc[1] <= 0:
             if loc[1] <= loc[0]*slope_circle+circle[5] and loc[1] >= loc[0]*(-slope_circle)+circle[5]:
                 camera.append(6) # camera42
-            elif loc[1] > loc[0]*slope_circle+circle[5]:
+                camera.append(3) # camera13
+            elif loc[1] >= loc[0]*slope_circle+circle[5]:
                 camera.append(7) # camera43
                 camera.append(3) # camera13
-            elif loc[1] < loc[0]*(-slope_circle)+circle[5]:
+            elif loc[1] <= loc[0]*(-slope_circle)+circle[5]:
                 camera.append(5) # camera41
                 camera.append(3) # camera13
         # 2
         elif loc[0] <= 0 and loc[1] >= 0:
             if loc[1] <= loc[0]*(-slope_intersection)+intersection[5] and loc[1] >= loc[0]*slope_intersection+intersection[5]:
                 camera.append(2) # camera12
+                camera.append(7) # camera43
             # 5
-            elif loc[1] > loc[0]*(-slope_intersection):
+            elif loc[1] >= loc[0]*(-slope_intersection)+intersection[5]:
                 camera.append(1) # camera11
                 camera.append(7) # camera43
             # 6
-            elif loc[1] < loc[0]*slope_intersection:
+            elif loc[1] <= loc[0]*slope_intersection+intersection[5]:
                 camera.append(3) # camera13
                 camera.append(7) # camera43
         # 4
         elif loc[0] <= 0 and loc[1] <= 0:
             if loc[1] <= loc[0]*(-slope_circle)+circle[5] and loc[1] >= loc[0]*slope_circle+circle[5]:
                 camera.append(8) # camera44
+                camera.append(3) # camera13
             # 5
-            elif loc[1] > loc[0]*(-slope_circle)+circle[5]:
+            elif loc[1] >= loc[0]*(-slope_circle)+circle[5]:
                 camera.append(7) # camera43
                 camera.append(3) # camera13
             # 6
-            elif loc[1] < loc[0]*slope_circle+circle[5]:
+            elif loc[1] <= loc[0]*slope_circle+circle[5]:
                 camera.append(5) # camera41
                 camera.append(3) # camera13
         
@@ -158,7 +163,6 @@ def which_cameras(pred_boxes: np.array(np.array)):
     for pred_box in pred_boxes:
         camera = process_single_vehicle(pred_box[0:3])
         cameras.append(camera)
-    
     return cameras
 
 

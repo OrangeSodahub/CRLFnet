@@ -36,8 +36,8 @@ calib:
     43: [-0.000844845936131017, -0.145715673177097, 1.05677694623637, -1.570796326794895, 1.570796326794895, 0]
     44: [-0.0949049522641072, -0.145715673177097, 1.1505782477145, -1.570796326794895, 3.14159265358979, 0]
 lidar_detection:
-    cfg_file: /src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml
-    ckpt_file: /src/LidCamFusion/OpenPCDet//output/custom_models/pv_rcnn/04/ckpt/checkpoint_epoch_80.pth
+    cfg_file: /src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pointrcnn.yaml
+    ckpt_file: /src/LidCamFusion/OpenPCDet//output/custom_models/pointrcnn/01/ckpt/checkpoint_epoch_192.pth
 
 lid_cam_fusion:
   iou_thresh: 0.4
