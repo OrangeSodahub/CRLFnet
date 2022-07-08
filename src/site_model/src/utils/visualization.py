@@ -87,9 +87,9 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
     """
     # match
     for vehicle in match:
-        camera_num, vehicle_num, box2d_num = vehicle[0], vehicle[1], vehicle[2]
+        camera_num, vehicle_num, camera_num_vehicle, box2d_num = vehicle[0], vehicle[1], vehicle[2], vehicle[3]
         box2d = boxes2d[camera_num-1][box2d_num]
-        box3d = boxes3d[vehicle_num][0]
+        box3d = boxes3d[vehicle_num][camera_num_vehicle]
         # lidar
         msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], box3d, (0,255,0))
         # camera
@@ -97,10 +97,11 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
 
     # lidar only
     for vehicle in lidar:
-        camera_num = vehicle[0]
+        camera = vehicle[0]
         vehicle_num = vehicle[1]
-        box3d = boxes3d[vehicle_num][0]
-        msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], box3d, (255,0,0))
+        for i, camera_num in camera:
+            box3d = boxes3d[vehicle_num][i]
+            msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], box3d, (255,0,0))
 
     # image only
     for camera in image:
@@ -118,5 +119,5 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
         if not isinstance(img, Image):
             camera_name = num2camera[num+1]
             img_file = output_dir + ('/image_%s_' % datetime.now().strftime('%Y%m%d-%H%M%S') + camera_name + '.jpg')
-            print(img_file, "saved.")
+            # print(img_file, "saved.")
             cv2.imwrite(img_file, img)

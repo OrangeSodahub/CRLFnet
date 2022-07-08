@@ -42,6 +42,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     # pointcloud roi
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
+    print(pred_scores)
     cameras, pixel_poses = pointcloud_roi(ROOT_DIR, config, pred_boxes3d)           # get cameras and pixel_poses of all vehicles
     if params.print2screen_lidar:                                                   # print pred results to screen
         print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
@@ -113,22 +114,26 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
         labels = [0] * len(boxes2d[camera]) # if len=0 then labels is []
         idxes.append(labels)
 
+    # match lidar and camera
+    # if 1st camera not matched, try other cameras
+    # note the sequence of cameras in `cameras`
     for vehicle, pixel_pose in enumerate(pixel_poses):              # for each vehicle detected by lidar
         # get camera
-        camera = cameras[vehicle][0]                                # consider the first camera, other camera(s) will not be considered
-        # get all boxes2d of this camera
-        box2d = boxes2d[camera-1]
-        # get labels of all boxes2d
-        labels = idxes[camera-1]
-        bbox = get_bbox_from_box3d(pixel_pose[0])           
-        if len(box2d) != 0:
-            iou2ds = get_iou2d(bbox, box2d, labels, iou_thresh)     # ious of 1-lidar detected and N-camera detected
-            if len(np.where(iou2ds != -1)) != 0:                    # matched box exist
-                idx = np.where(iou2ds==np.max(iou2ds))              # idx: index of maximum iou2d: 2-d
-                idxes[camera-1][idx[0][0]] = 1                      # label matched
-                vehicles.append(vehicle)
-                cur_match = [camera, vehicle, idx[0][0]]            # [camera num, vehcile num(lidar), box2d num(camera)]
-                match.append(cur_match)
+        for i, camera in enumerate(cameras[vehicle]):               # consider the first camera, other camera(s) will be considered if 1st not matched
+            # get all boxes2d of this camera
+            box2d = boxes2d[camera-1]
+            # get labels of all boxes2d
+            labels = idxes[camera-1]
+            bbox = get_bbox_from_box3d(pixel_pose[i])           
+            if len(box2d) != 0:
+                iou2ds = get_iou2d(bbox, box2d, labels, iou_thresh)     # ious of 1-lidar detected and N-camera detected
+                if len(np.where(iou2ds != -1)) != 0:                    # matched box exist
+                    idx = np.where(iou2ds==np.max(iou2ds))              # idx: index of maximum iou2d: 2-d
+                    idxes[camera-1][idx[0][0]] = 1                      # label matched box2d and remove box2d if this vehicle already matched
+                    if vehicle not in vehicles:                         # current vehicle not matched
+                        vehicles.append(vehicle)                        # label matched vehicle
+                        cur_match = [camera, vehicle, i, idx[0][0]]     # [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera)]
+                        match.append(cur_match)
     
     # image only: add remaining detecteion results (midmatched) to the list according to idxes
     for camera in range(len(boxes2d)):
@@ -140,10 +145,8 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
     # lidar only: add remaining detection results (mismatched) to the list according to vehicels
     for vehicle in range(len(pixel_poses)):
         if vehicle not in vehicles:
-            lidar.append([cameras[vehicle][0], vehicle])
+            lidar.append([cameras[vehicle], vehicle])
 
-    # print(match, vehicles, idxes)
-    # print(image, lidar, '\n')
     return match, image, lidar
 
 def get_bbox_from_box3d(pixel_pose):
@@ -162,10 +165,10 @@ def get_iou2d(boxa, boxesb, labels, iou_thresh):
         boxesb: (N,) -> camera
     """
     def get_single_iou2d(boxa, boxb):                       # for each vehicle detected by camera
-        x1 = max(boxa[0], boxb[0])
-        y1 = max(boxa[1], boxb[1])
-        x2 = min(boxa[2], boxb[2])
-        y2 = min(boxa[3], boxb[3])
+        x1 = max(boxa[0], boxb[0], 0)                       # note the boundary of image: (640,480)
+        y1 = max(boxa[1], boxb[1], 0)
+        x2 = min(boxa[2], boxb[2], 640)
+        y2 = min(boxa[3], boxb[3], 480)
         areaa = (boxa[2] - boxa[0]) * (boxa[3] - boxa[1])
         areab = (boxb[2] - boxb[0]) * (boxb[3] - boxb[1])
         overlap = (x2 - x1) * (y2 - y1)
