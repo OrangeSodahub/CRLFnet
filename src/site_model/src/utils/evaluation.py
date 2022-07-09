@@ -21,9 +21,9 @@ def eval3d(odom: Odometry, pred_boxes3d: np.array, logger, pred_counter: int, al
         
         pose = odom.pose # position
         twist = odom.twist  # velocity
-        pose_ground_truth = np.array([pose.pose.position.x, pose.pose.position.y, 0.1140]) # 0.1140 is pre-set
+        pose_ground_truth = np.array([pose.pose.position.x, pose.pose.position.y, 0.1120]) # 0.1140 is pre-set
         r, p, y = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y,
-                                                    pose.pose.orientation.z, pose.pose.orientation.w])
+                                        pose.pose.orientation.z, pose.pose.orientation.w])
         # rotation
         alpha_cur_diff = np.abs(((pred_boxes3d[0][6] - np.pi) if pred_boxes3d[0][6] >= 0 else (np.pi + pred_boxes3d[0][6])) - y) # pred_boxes3d[0] -> for one car
         alpha_diff += alpha_cur_diff
@@ -181,3 +181,13 @@ def draw_pr_line():
 
     plt.plot(thresholds, recall)
     plt.show()
+
+
+def get_gt_box(odom: Odometry):
+    """
+        output boxes3d according to odom meessage (just for one car)
+    """
+    r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
+                                    odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
+    gt_box = np.array([[odom.pose.pose.position.x, odom.pose.pose.position.y, 0.1120, 0.33, 0.22, 0.21, y]])
+    return gt_box

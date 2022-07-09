@@ -5,3 +5,12 @@ def check_numpy_to_torch(x):
     if isinstance(x, np.ndarray):
         return torch.from_numpy(x).float(), True
     return x, False
+
+
+def get_dpm(corner3d):
+    """
+        Dots per m
+    """
+    # vertical
+    
+    # horizontal
