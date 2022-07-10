@@ -20,50 +20,71 @@ from sensor_msgs.msg import Image               # Camera message
 from msgs.msg._MsgRadar import MsgRadar         # Radar message
 from msgs.msg._MsgRadCam import MsgRadCam       # fusion message
 
-from ..utils.poi_and_roi import radar_poi, image_roi, expand_poi, get_iou
+from ..utils.poi_and_roi import radar_poi, image_roi, expand_poi, optimize_iou
 from ..utils.yolo.yolo import YOLO
 from ..utils.visualization import radar2visual  # visualized output
 
 
-def iou_matching(radar_rois: np.ndarray, image_rois: np.ndarray):
+def possible_object_generator(radar_index: int, image_index: int):
     pass
 
 
-def gnn(radar, image):
-    pass
+def gnn(ui):
+    ri = np.concatenate((np.expand_dims(ui[0], 1), np.full((ui[0].size, 1), -1)), axis=1)
+    ii = np.concatenate((np.full((ui[1].size, 1), -1), np.expand_dims(ui[1], 1)), axis=1)
+    return ri, ii
 
 
 def kf(possible_objects, prevoius_results):
     pass
 
 
-def pair_fusion(radar: MsgRadar, image: Image, camera_name='camera2'):
+def pair_fusion(radar: MsgRadar, image: Image, not_used_image: Image, camera_name='camera2'):
     # ONLY FUSE THE LEFT PAIR!!!
     global yolo
     global results
     global w2cs, c2ps
 
     # Separate Decection
-    # acquire radar POIs (pixel coordinate) and distance
-    radar_pois = radar_poi(radar.objects_left, w2cs[camera_name], c2ps[camera_name], image.width, image.height)
-    radar_distances = [x.distance for x in radar.objects_left]
+    print("+------------------+")
+    print("\033[1;36mSeparate Detection\033[0m")
+    # acquire radar POIs (pixel coordinate) and distance (meter)
+    radar_pois, radar_distances = radar_poi(radar.objects_left, w2cs[camera_name], c2ps[camera_name], image.width, image.height)
+    radar_obj_num = len(radar.objects_left)
     # acquire image ROIs (pixel coordinate)
     image_rois = image_roi(image, yolo)
+    image_obj_num = len(image_rois)
+    # print results
+    print("radar POIs:", radar_pois)
+    print("radar distances:", radar_distances)
+    print("image ROIs:", image_rois)
 
     # Fusion
+    print("\033[1;36mFusion\033[0m")
     # convert the radar POIs to approximate ROIs (world coordinate -> pixel coordinate)
     radar_expanded_rois = np.array([expand_poi(p, d, image.width, image.height) for p, d in zip(radar_pois, radar_distances)], dtype=int)
+    print("radar expanded ROIs:", radar_expanded_rois)
     # IOU matching of radar and image ROIs
-    couples_iou, unmatched_radar, unmatched_image = iou_matching(radar_expanded_rois, image_rois)
+    matched_indices = optimize_iou(radar_expanded_rois, image_rois)
+    print("matched indices:", matched_indices)
     # apply GNN to unmatched objects
-    couples_gnn, residual_radar, residual_image = gnn(unmatched_radar, unmatched_image)
+    unmatched_indices = (np.setdiff1d(np.arange(radar_obj_num), matched_indices[:,0]), np.setdiff1d(np.arange(image_obj_num), matched_indices[:,1]))
+    residual_indices = gnn(unmatched_indices)
+    print("unmatched indices:", unmatched_indices)
+    print("residual indices:", residual_indices)
     # possible objects are matched objects in IOU matching and GNN and residual ones
-    possible_objects = np.concatenate(couples_iou, couples_gnn, residual_radar, residual_image)
+    """
+    possible_objects = []
+    for i in matched_indices.T:
+        possible_objects.append(possible_object_generator(i[0], i[1]))
+    for i in residual_indices.T:
+        possible_objects.append(possible_object_generator(i[0], i[1]))
     # use Extended Kalman Filter to predict and check objects
     results = kf(possible_objects, results)
 
     # Publish
     print(results)
+    """
 
 
 def old_fusion(radar: MsgRadar, image2: Image, image3: Image):
@@ -85,8 +106,8 @@ def old_fusion(radar: MsgRadar, image2: Image, image3: Image):
 
     # Convert messages to POIs and ROIs
     # get Radar POIs
-    radar_pois_left = radar_poi(radar.objects_left, w2cs['camera2'], c2ps['camera2'], image2.width, image2.height)
-    radar_pois_right = radar_poi(radar.objects_right, w2cs['camera3'], c2ps['camera3'], image3.width, image3.height)
+    radar_pois_left, radar_distance_left = radar_poi(radar.objects_left, w2cs['camera2'], c2ps['camera2'], image2.width, image2.height)
+    radar_pois_right, radar_distance_right = radar_poi(radar.objects_right, w2cs['camera3'], c2ps['camera3'], image3.width, image3.height)
     # off-YOLO mode
     if args.off_yolo:
         # save radar
@@ -108,11 +129,11 @@ def old_fusion(radar: MsgRadar, image2: Image, image3: Image):
     if args.information:
         print("\033[1;36mDetailed POI / ROI Information:\033[0m")
         print("Left Radar POIs:")
-        for p in radar_pois_left:
-            print("\t({},\t{})".format(p[0], p[1]))
+        for p, d in zip(radar_pois_left, radar_distance_left):
+            print("\t({},\t{}),\t{}".format(p[0], p[1], d))
         print("Right Radar POIS:")
-        for p in radar_pois_right:
-            print("\t({},\t{})".format(p[0], p[1]))
+        for p, d in zip(radar_pois_right, radar_distance_right):
+            print("\t({},\t{}),\t{}".format(p[0], p[1], d))
         print("Left Image ROIs:")
         for p in image_rois_left:
             print("\t({},\t{},\t{},\t{}),\t{}".format(p[0], p[1], p[2], p[3], p[4]))
@@ -273,7 +294,7 @@ if __name__ == '__main__':
     # syncronize time stamps
     sync = message_filters.ApproximateTimeSynchronizer([msg_radar, msg_image_2, msg_image_3], 1, 1)
 
-    sync.registerCallback(old_fusion)
+    sync.registerCallback(pair_fusion)
 
     print("\033[0;32mRadar-camera Fusion Initialized Sucessfully.\033[0m")
 
