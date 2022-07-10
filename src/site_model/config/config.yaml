@@ -5,6 +5,9 @@ vehicle:
   size:
     width: 0.21
     height: 0.22
+camera:
+  width: 640
+  height: 480
 data: 
   cam_dir: /dataset/camera_data/
   rad_dir: /dataset/radar_data/
