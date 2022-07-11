@@ -154,3 +154,5 @@ Some problems may occurred during debugging.
 - 段错误(核心已转储) when run dem.py: https://github.com/open-mmlab/OpenPCDet/issues/846
 - N > 0 assert faild. CUDA kernel launch blocks must be positive, but got N= 0 when training: https://github.com/open-mmlab/OpenPCDet/issues/945
 - raise NotImplementedError, NaN or Inf found in input tensor when training: https://github.com/open-mmlab/OpenPCDet/issues/280
+
+[![wakatime](https://wakatime.com/badge/user/55e306c3-cea9-4c2e-9056-61b183dcb26a/project/8aa7cd6e-46d5-4132-baf0-12c0930aa059.svg)](https://wakatime.com/badge/user/55e306c3-cea9-4c2e-9056-61b183dcb26a/project/8aa7cd6e-46d5-4132-baf0-12c0930aa059)
