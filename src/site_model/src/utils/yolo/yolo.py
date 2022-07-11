@@ -19,7 +19,7 @@ class YOLO(object):
         "anchors_mask"      : [[6, 7, 8], [3, 4, 5], [0, 1, 2]],    # 帮助代码找到对应的先验框，一般不修改
 
         "input_shape"       : [416, 416],   # 输入图片的大小，必须为32的倍数
-        "confidence"        : 0.5,          # 只有得分大于置信度的预测框会被保留下来
+        "confidence"        : 0.3,          # 只有得分大于置信度的预测框会被保留下来
         "nms_iou"           : 0.3,          # 非极大抑制所用到的nms_iou大小
         "letterbox_image"   : False,        # 控制是否使用letterbox_image对输入图像进行不失真的resize
         "cuda"              : True,        # 是否使用Cuda

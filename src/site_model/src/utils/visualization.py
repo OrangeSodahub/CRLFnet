@@ -1,6 +1,4 @@
 from pathlib import Path
-import os
-import numpy as np
 from datetime import datetime
 import numpy as np
 
@@ -11,7 +9,7 @@ from cv_bridge import CvBridge
 import cv2
 
 
-def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), image_rois=(), draw_radar=True, draw_image=True, appendix="Unknown"):
+def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), radar_rois=(), image_rois=(), draw_radar=True, draw_image=True, appendix="Unknown"):
     # make output dir
     output_dir.mkdir(exist_ok=True)
 
@@ -25,6 +23,10 @@ def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), image_rois=(
     if draw_image:
         for iroi in image_rois:
             cv2.rectangle(result_image, (iroi[0], iroi[1]), (iroi[2], iroi[3]), (255, 0, 0), 3)
+    # draw radar expanded ROIs
+    if draw_radar:
+        for rroi in radar_rois:
+            cv2.rectangle(result_image, (rroi[0], rroi[1]), (rroi[2], rroi[3]), (0, 255, 0), 3)
 
     # save visualized result
     file_name = "RCF_{}_{}.jpg".format(appendix, datetime.now().strftime("%Y%m%d_%H%M%S_%f"))

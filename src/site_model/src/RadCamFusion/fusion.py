@@ -21,12 +21,9 @@ from msgs.msg._MsgRadar import MsgRadar         # Radar message
 from msgs.msg._MsgRadCam import MsgRadCam       # fusion message
 
 from ..utils.poi_and_roi import radar_poi, image_roi, expand_poi, optimize_iou
+from ..utils.kalman import *
 from ..utils.yolo.yolo import YOLO
 from ..utils.visualization import radar2visual  # visualized output
-
-
-def possible_object_generator(radar_index: int, image_index: int):
-    pass
 
 
 def gnn(ui):
@@ -35,7 +32,7 @@ def gnn(ui):
     return ri, ii
 
 
-def kf(possible_objects, prevoius_results):
+def kf(fused_objs, radar_objs, image_objs, prev_objs):
     pass
 
 
@@ -64,6 +61,8 @@ def pair_fusion(radar: MsgRadar, image: Image, not_used_image: Image, camera_nam
     # convert the radar POIs to approximate ROIs (world coordinate -> pixel coordinate)
     radar_expanded_rois = np.array([expand_poi(p, d, image.width, image.height) for p, d in zip(radar_pois, radar_distances)], dtype=int)
     print("radar expanded ROIs:", radar_expanded_rois)
+    if radar_expanded_rois.size !=0 and image_rois.size != 0:
+        radar2visual(OUTPUT_DIR, image, radar_rois=radar_expanded_rois, image_rois=image_rois, appendix='Test')
     # IOU matching of radar and image ROIs
     matched_indices = optimize_iou(radar_expanded_rois, image_rois)
     print("matched indices:", matched_indices)
@@ -73,18 +72,18 @@ def pair_fusion(radar: MsgRadar, image: Image, not_used_image: Image, camera_nam
     print("unmatched indices:", unmatched_indices)
     print("residual indices:", residual_indices)
     # possible objects are matched objects in IOU matching and GNN and residual ones
-    """
+    '''
     possible_objects = []
     for i in matched_indices.T:
-        possible_objects.append(possible_object_generator(i[0], i[1]))
+        possible_objects.append(KalObj(i[0], i[1]))
     for i in residual_indices.T:
-        possible_objects.append(possible_object_generator(i[0], i[1]))
+        possible_objects.append(KalObj(i[0], i[1]))
     # use Extended Kalman Filter to predict and check objects
     results = kf(possible_objects, results)
 
     # Publish
     print(results)
-    """
+    '''
 
 
 def old_fusion(radar: MsgRadar, image2: Image, image3: Image):
