@@ -52,4 +52,4 @@ def pointcloud_roi(ROOT_DIR: Path, config: dict, boxes_3d: np.array(np.array)):
             pixel_pose_single_img = lidar2pixel(calib, camera_name, world_pose)
             pixel_pose[vehicle_num].append(pixel_pose_single_img)
 
-    return cameras, pixel_pose
+    return cameras, corners3d, pixel_pose

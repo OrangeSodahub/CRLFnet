@@ -74,7 +74,7 @@ def camera2visual(img, box2d, color):
     return img
 
 
-def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: MsgCamera, output_dir: str):
+def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: MsgCamera, output_dir: str, gt_cameras, gt_boxes3d):
     """
         cameras: [[camera1, camera2, ...],[camera1, camera2, ...], ...]
             vehicle: [camera1, camera2, ...]
@@ -99,7 +99,7 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
     for vehicle in lidar:
         camera = vehicle[0]
         vehicle_num = vehicle[1]
-        for i, camera_num in camera:
+        for i, camera_num in enumerate(camera):
             box3d = boxes3d[vehicle_num][i]
             msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], box3d, (255,0,0))
 
@@ -110,6 +110,12 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
             box2d = camera[1]
             msgcamera.camera[camera_num-1] = camera2visual(msgcamera.camera[camera_num-1], box2d, (0,0,255))
 
+    # gt_box (for one car)
+    if gt_cameras is not None and gt_boxes3d is not None:
+        for cameras_vehicle, gt_boxes3d_vehicle in zip(gt_cameras, gt_boxes3d):
+            for camera_num, gt_box3d in zip(cameras_vehicle, gt_boxes3d_vehicle):
+                msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], gt_box3d, (0,255,255))
+        
     # save images
     num2camera = {
         1: 'camera11', 2: 'camera12', 3: 'camera13', 4: 'camera14',

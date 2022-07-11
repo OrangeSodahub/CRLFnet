@@ -5,6 +5,9 @@ vehicle:
   size:
     width: 0.21
     height: 0.22
+camera:
+  width: 640
+  height: 480
 data: 
   cam_dir: /dataset/camera_data/
   rad_dir: /dataset/radar_data/
@@ -37,7 +40,9 @@ calib:
     44: [-0.0949049522641072, -0.145715673177097, 1.1505782477145, -1.570796326794895, 3.14159265358979, 0]
 lidar_detection:
     cfg_file: /src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pointrcnn.yaml
-    ckpt_file: /src/LidCamFusion/OpenPCDet//output/custom_models/pointrcnn/01/ckpt/checkpoint_epoch_192.pth
+    ckpt_file: /src/LidCamFusion/OpenPCDet/output/custom_models/pointrcnn/01/ckpt/checkpoint_epoch_192.pth
 
 lid_cam_fusion:
   iou_thresh: 0.4
+  camera_weight: 0.8
+  lidar_weight: 0.2

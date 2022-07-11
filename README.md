@@ -118,7 +118,7 @@ Follow these steps for only lidar-camera fusion. Some of them need different bas
     rosrun site_model pointcloud_combiner # combine all the point clouds and fix their coords
 
     cd src/site_model/
-    python -m src.LidCamFusion.fusion (--draw_output) # start camera-lidar fusion
+    python -m src.LidCamFusion.fusion [--save_result] # start camera-lidar fusion
 ```
 
 ## Run the whole model
@@ -144,7 +144,7 @@ The whole project contains several different parts which need to be start up thr
 
     rosrun site_model pointcloud_combiner
 
-    cd src/site_model/src/LidCamFusion/;
+    cd src/site_model/src/LidCamFusion/
     python -m src.LidCamFusion.fusion [--save_result]
 ```
 
