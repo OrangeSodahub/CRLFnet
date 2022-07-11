@@ -13,6 +13,7 @@ import rospy
 from termcolor import colored
 import message_filters
 import ros_numpy
+import os
 
 from sensor_msgs.msg import Image               # image  type
 from sensor_msgs.msg import PointCloud2         # pointcloud type
@@ -78,7 +79,7 @@ def fusion(pointcloud, msgcamera, odom=None):
         lidar_camera_match2visual(match, image, lidar, pred_boxes2d, pixel_poses, msgcamera, output_dir, gt_cameras, gt_pixel_poses)
 
     # object fusion
-    if len(pred_boxes3d) != 0:
+    if odom is not None and len(pred_boxes3d) != 0:
         diff_x_1 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_1 = odom.pose.pose.position.y - pred_boxes3d[0][1]
     msglidcam, fix_pred_boxes3d, fix_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, corners3d, pixel_poses)
@@ -87,7 +88,7 @@ def fusion(pointcloud, msgcamera, odom=None):
         if counter >= 50:
             pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, fix_pred_boxes3d, logger, pred_counter,
                                                                                     alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
-    if len(pred_boxes3d) != 0:
+    if odom is not None and len(pred_boxes3d) != 0:
         diff_x_2 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_2 = odom.pose.pose.position.y - pred_boxes3d[0][1]
         if diff_x_1 != diff_x_2 or diff_y_1 != diff_y_2:
