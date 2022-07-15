@@ -60,8 +60,8 @@ For the last command, an optional parameter `--save` or `-s` is available if you
 Two commands are needed for camera calibration after `spawn.launch` is launched. Relative files are already exist in the repository. If the poses of components of models in `.urdf` files haven't been modified, skip this step.
 
 ```bash
-rosrun site_model get_cam_info # get relevant parameters of cameras from gazebo
-python src/site_model/src/tools/RadCamFusion/generate_calib.py # generate calibration formula according to parameters of cameras
+    rosrun site_model get_cam_info # get relevant parameters of cameras from gazebo
+    python src/site_model/src/tools/RadCamFusion/generate_calib.py # generate calibration formula according to parameters of cameras
 ```
 
 ## Lid-Cam Fusion
@@ -75,22 +75,28 @@ Now `pointrcnn.yaml` and `pv_rcnn.yaml` are supported.
 ### Datasets
 Create dataset infos before training:
 ```bash
-cd OpenPCDet/
-python -m pcdet.datasets.custom.custom_dataset create_custom_infos tools/cfgs/dataset_configs/custom_dataset.yaml
+    cd OpenPCDet/
+    python -m pcdet.datasets.custom.custom_dataset create_custom_infos tools/cfgs/dataset_configs/custom_dataset.yaml
 ```
 File `custom_infos_train.pkl`, `custom_dbinfos_train.pkl` and `custom_infos_test.pkl` will be saved to `data/custom`.
 
 ### Train
 Specify the model using YAML files defined above.
 ```bash
-cd tools/
-python train.py --cfg_file path/to/config/file/
+    cd tools/
+    python train.py --cfg_file path/to/config/file/
 ```
 For example, if using PV_RCNN for training:
 ```bash
-cd tools/
-python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 2 --workers 4 --epochs 80
+    cd tools/
+    python train.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --batch_size 2 --workers 4 --epochs 80
 ```
+### Pretrained Model
+Download pretrained model through these links:
+|model         |time cost       |URL                                                                               |
+|--------------|----------------|----------------------------------------------------------------------------------|
+|PointRCNN     |~3h             |https://drive.google.com/file/d/11gTjqraBqWP3-ocsRMxfXu2R7HsM0-qm/view?usp=sharing|
+|PV_RCNN       |~6h             |https://drive.google.com/file/d/11gTjqraBqWP3-ocsRMxfXu2R7HsM0-qm/view?usp=sharing|
 
 ### Predict (Local)
 Prediction on local dataset help to check the result of training.
@@ -103,7 +109,7 @@ python pred.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custo
 ```
 
 ### Lid-Cam Fusion
-Follow these steps for only lidar-camera fusion. Some of them need different bash terminals.  For the last command, additional parameter `--draw_output` is required if need to save the results of fusion in the form of image.
+Follow these steps for only lidar-camera fusion. Some of them need different bash terminals.  For the last command, additional parameter `--save_result` is required if need to save the results of fusion in the form of image.
 ```bash
     cd to/ROOT_DIR/
 

@@ -26,8 +26,8 @@ from ..utils.image_roi import image_roi
 
 from msgs.msg._MsgLidCam import *               # fusion message type
 from msgs.msg._MsgLidCamObject import *
-# visualization
 from ..utils.visualization import lidar_camera_match2visual
+
 from ..utils.evaluation import eval3d, get_gt_box
 from ..utils.common_utils import get_dpm
 from ..utils.transform import lidar2pixel
@@ -96,7 +96,7 @@ def fusion(pointcloud, msgcamera, odom=None):
             print(diff_x_2, diff_y_2, '\n')
     # publish result
     msglidcam.header.stamp = rospy.Time.now()
-    pub = rospy.Publisher("/lidcams", MsgLidCam)
+    pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
     pub.publish(msglidcam)
 
     # fps evalution (without results evalution and visualization)

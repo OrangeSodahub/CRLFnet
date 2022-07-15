@@ -1,7 +1,6 @@
 #############################################################
-#   This py file acts as agent representing the overhead.   #
+#   This py file acts as agent representing the overpass.   #
 #############################################################
-
 
 from pathlib import Path
 import argparse
@@ -15,7 +14,13 @@ from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
 
 
 def main(msgradcam: MsgRadCam, msglidcam: MsgLidCam):
-    print("Agent One Set.")
+    AREA_CIRCLE = 1.92 * 2 * 2.92
+    AREA_INTERSECTION = 1.92 * 2 * 2.5
+    AREA_OVERPASS = 0
+    # caculate the density of vehicles
+    density_overpass = None / AREA_OVERPASS
+    density_circle = msglidcam.num_circle / AREA_CIRCLE
+    density_intersection = msglidcam.num_intersection / AREA_INTERSECTION
 
 
 if __name__ == '__main__':
