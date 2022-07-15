@@ -2,5 +2,10 @@
 <launch>
 	<node pkg="rosbag" type="record" name="bag_record" args="/point_cloud_combined
                                                             /camera_msgs_combined
-                                                            /base_pose_ground_truth -o /home/zonlin/CRLFnet/src/site_model/docs/rosbag/lidcam.bag" />
+                                                            /base_pose_ground_truth
+                                                            /radar_msgs_combined
+                                                            /image_raw_2
+                                                            /image_raw_3
+                                                            /image_raw_5
+                                                            /image_raw_6 -o /home/zonlin/CRLFnet/src/site_model/docs/rosbag/lidcam.bag" />
 </launch>
