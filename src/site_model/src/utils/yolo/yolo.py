@@ -22,7 +22,7 @@ class YOLO(object):
         "confidence"        : 0.3,          # 只有得分大于置信度的预测框会被保留下来
         "nms_iou"           : 0.3,          # 非极大抑制所用到的nms_iou大小
         "letterbox_image"   : False,        # 控制是否使用letterbox_image对输入图像进行不失真的resize
-        "cuda"              : True,        # 是否使用Cuda
+        "cuda"              : False,        # 是否使用Cuda
     }
 
     @classmethod
@@ -32,11 +32,12 @@ class YOLO(object):
         else:
             return "Unrecognized attribute name '" + n + "'"
 
-    def __init__(self, root_dir: Path):
+    def __init__(self, root_dir: Path, cuda=True):
         self.__dict__.update(self._defaults)
         self.model_path = root_dir.joinpath(self.model_path)
         self.classes_path = root_dir.joinpath(self.classes_path)
         self.anchors_path = root_dir.joinpath(self.anchors_path)
+        self.cuda = cuda
         
         # 获得种类和先验框的数量
         self.class_names, self.num_classes  = get_classes(self.classes_path)
@@ -88,7 +89,7 @@ class YOLO(object):
             
             # output
             if results[0] is None: 
-                return np.array([])
+                return np.empty(shape=(0, 6))
             else:
                 # permutation
                 p = np.array([  [0, 1, 0, 0, 0, 0, 0],
