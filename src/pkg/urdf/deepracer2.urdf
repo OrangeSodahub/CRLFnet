@@ -776,7 +776,7 @@
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
     <legacyModeNS>true</legacyModeNS>
     <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-    <robotNamespace>/deepracer</robotNamespace>
+    <robotNamespace>/deepracer2</robotNamespace>
     </plugin>
   </gazebo>
   
@@ -802,7 +802,7 @@
         <alwaysOn>true</alwaysOn>
         <!-- Turn down if virtual machine-->
         <updateRate>30</updateRate>
-        <cameraName>deepracer/camera/zed_left</cameraName>
+        <cameraName>deepracer2/camera/zed_left</cameraName>
         <imageTopicName>image_rect_color_left</imageTopicName>
         <cameraInfoTopicName>camera_info_left</cameraInfoTopicName>
         <frameName>camera_link_left</frameName>
@@ -837,7 +837,7 @@
         <alwaysOn>true</alwaysOn>
         <!-- Turn down if virtual machine-->
         <updateRate>30</updateRate>
-        <cameraName>deepracer/camera/zed_right</cameraName>
+        <cameraName>deepracer2/camera/zed_right</cameraName>
         <imageTopicName>image_rect_color_right</imageTopicName>
         <cameraInfoTopicName>camera_info_right</cameraInfoTopicName>
         <frameName>camera_link_right</frameName>

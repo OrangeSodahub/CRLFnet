@@ -6,10 +6,6 @@
     <arg name="gui" default="true"/>
     <arg name="headless" default="false"/>
     <arg name="debug" default="false"/>
-    <!--模型车的起点放置位置-->
-    <arg name="x_pos" default="0.0"/>
-    <arg name="y_pos" default="-4"/>
-    <arg name="z_pos" default="0.0"/>
 
 	<!--运行gazebo仿真环境-->
 	<include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -22,34 +18,42 @@
                <!-- .world文件的地址-->
     	</include>
 
-	<!-- 加载机器人模型描述参数 -->
-	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer.urdf"/>
-	
-	<!-- <node name="track_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
-        args="-file $(find pkg)/urdf/track42.urdf -urdf -model track -x 0 -y 0 -z 0"  /> -->
+	<!-- 从yaml文件加载联合控制器的参数 -->
+	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
 
+	<!-- 加载机器人模型描述参数 -->
+	<group ns="deepracer1">
+	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer1.urdf"/>
 	<!--运行joint_state_publisher节点，发布机器人关节状态-->
-	<!--<node name = "robot_state_publisher" pkg = "robot_state_publisher" type = "state_publisher">-->
 	<node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher">
 		<param name="publish_frequency" type="double" value="20.0" />
-		<remap from="/joint_states" to="/deepracer/joint_states"/>
 	</node>
-	    <!-- 在gazebo中加载机器人模型-->
+	<!-- 在gazebo中加载机器人模型-->
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer -param robot_description -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos)"/> 
-
-
-	 <!-- 从yaml文件加载联合控制器的参数 -->
-	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
-	
+          args="-urdf -model deepracer1 -param robot_description -x 0 -y -1 -z 0.04"/> 
 	<!-- 加载控制器 spawner -->
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
-	      respawn="false" output="screen" ns="/deepracer" 
+	      respawn="true" output="screen" ns="/deepracer1" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
 	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
 	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
 	            joint_state_controller"/>
+	</group>
 
+	<group ns="deepracer2">
+	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer2.urdf"/>
+	<node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher">
+		<param name="publish_frequency" type="double" value="20.0" />
+	</node>
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-urdf -model deepracer2 -param robot_description -x 1.5 -y -4 -z 0.04"/> 
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="true" output="screen" ns="/deepracer2" 
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+	</group>
 
 <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen">
 </node>
