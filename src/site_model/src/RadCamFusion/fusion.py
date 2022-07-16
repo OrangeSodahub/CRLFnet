@@ -48,7 +48,10 @@ def pair_fusion(radar: MsgRadar, image: Image, camera_name: str):
     radar_obj_num = len(radar_pois)
     # acquire image ROIs in pixel coordinate and the observation vectors
     # roi = (left, top, right, bottom, score, class), dtype=int;  z = (u, v)
-    image_rois, image_zs = image_roi(image, yolo)
+    image_rois= image_roi(image, yolo)
+    image_zs = np.concatenate(((image_rois[:, 0:1] + image_rois[:, 2:3]) // 2,
+                               (image_rois[:, 1:2] + 3 * image_rois[:, 3:4]) // 4),
+                                axis=1)
     image_obj_num = len(image_rois)
     # print results
     print("Radar POIs (pixel):\t", radar_pois)

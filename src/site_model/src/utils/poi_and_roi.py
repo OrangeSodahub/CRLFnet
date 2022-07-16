@@ -28,9 +28,8 @@ def image_roi(image, yolo: YOLO):
     image = ros_numpy.numpify(image)
     image = Image.fromarray(image)
     # detect image
-    rs = yolo.detect_image(image)
-    zs = np.concatenate(((rs[:, 0:1] + rs[:, 2:3]) // 2, (rs[:, 1:2] + 3 * rs[:, 3:4]) // 4), axis=1)
-    return rs, zs
+    return yolo.detect_image(image)
+
 
 def radar_poi(radar_objs: MsgRadarObject, w2c: np.ndarray, c2p: np.ndarray, image_width: int, image_height: int):
     '''

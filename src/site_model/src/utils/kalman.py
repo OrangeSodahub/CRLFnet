@@ -19,6 +19,14 @@ _THRESHOLD_RADAR = 0.1
 _THRESHOLD_IMAGE = 1 - 0.6
 
 
+def get_H_radar(pred_xpt: np.ndarray):
+    pass
+
+
+def get_H_image(pred_xpt: np.ndarray, w2c, c2p):
+    pass
+
+
 def _single_predict(prev_xpt: np.ndarray, prev_cov: np.ndarray, A=_A_DEFAULT, Q=_Q_DEFAULT):
     xpt = np.matmul(A, prev_xpt)
     cov = np.matmul(A, np.matmul(prev_cov, A.T)) + Q
