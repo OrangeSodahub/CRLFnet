@@ -35,11 +35,17 @@ def image_roi(image, yolo: YOLO):
 
 def radar_poi(radar_objs: MsgRadarObject, w2c: np.ndarray, c2p: np.ndarray, image_width: int, image_height: int):
     '''
-    The output is tranformed into pixel coordinate.
+    The output is the position of objects in world coordinate, camera coordinate,
+    the distance from object to camera, and the range rate (velocity) of objects.
     '''
-    p0 = map(lambda obj: w2p(np.array([obj.pos_x, obj.pos_y, 0.46, 1]), w2c, c2p), radar_objs)
-    p1 = list(filter(lambda pos: 0 <= pos[0][0] <= image_width and 0 <= pos[0][1] <= image_height, p0))
-    return [a for a, _ in p1], [d for _, d in p1]
+    ps = np.empty(shape=(0, 3), dtype=int)   # (u, v)
+    zs = np.empty(shape=(0, 3))              # (distance, angle, velocity)
+    for obj in radar_objs:
+        pos_image = w2p(np.array([obj.pos_x, obj.pos_y, 0.46, 1]), w2c, c2p)
+        if 0 <= pos_image[0][0] <= image_width and 0 <= pos_image[0][1] <= image_height:
+            ps = np.concatenate((ps, np.expand_dims(pos_image[0], axis=0))) 
+            zs = np.concatenate((zs, [[pos_image[1], obj.angle_centroid, obj.velocity]]))
+    return ps, zs
 
 
 def expand_poi(poi: np.ndarray, distance: float, image_width: int, image_height: int):
@@ -51,6 +57,16 @@ def expand_poi(poi: np.ndarray, distance: float, image_width: int, image_height:
     r0 = np.array((poi[0] - rw, poi[1] - 3 * rh, poi[0] + rw, poi[1] + rh))
     r1 = np.where((r0[0] > 0, r0[1] > 0, r0[2] < image_width, r0[3] < image_height), r0, (0, 0, image_width, image_height))
     return r1
+
+
+def simple_radar_roi(pos_world: np.ndarray, w2c: np.ndarray, c2p: np.ndarray):
+    '''
+    The function is used for Kalman filter comparison.
+    '''
+    pos_image, distance = w2p(np.append(pos_world, [0.46, 1]), w2c, c2p)
+    rw, rh = 64 / distance, 32 / distance
+    r0 = np.array((pos_image[0] - rw, pos_image[1] - 3 * rh, pos_image[0] + rw, pos_image[1] + rh))
+    return r0
 
 
 def get_iou(roi1: np.ndarray, roi2: np.ndarray):
