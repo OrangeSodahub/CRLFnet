@@ -38,17 +38,6 @@ def set_throttle_steer(key: AckermannDriveStamped, odom: Odometry):
     pub_pos_right_steering_hinge_1.publish(steer)
 
     # vehicle2
-    # increment = 0.1
-    # if abs(odom.pose.pose.position.x-1.7)<=increment and abs(odom.pose.pose.position.y-(-2.7)) >=increment:
-    #     steer = 1
-    # elif abs(odom.pose.pose.position.x-1.7)<=increment and abs(odom.pose.pose.position.y-(-4.7)) >=increment:
-    #     steer = -1
-    # elif abs(odom.pose.pose.position.x-(-1.7))<=increment and abs(odom.pose.pose.position.y-(-2.7)) >=increment:
-    #     steer = -1
-    # elif abs(odom.pose.pose.position.x-(-1.7))<=increment and abs(odom.pose.pose.position.y-(-4.7)) >=increment:
-    #     steer = 1
-    # else:
-    #     steer = 0
     pub_vel_left_rear_wheel_2.publish(throttle)
     pub_vel_right_rear_wheel_2.publish(throttle)
     pub_vel_left_front_wheel_2.publish(throttle)

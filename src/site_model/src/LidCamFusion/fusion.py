@@ -15,18 +15,19 @@ import message_filters
 import ros_numpy
 import os
 
-from sensor_msgs.msg import Image               # image  type
-from sensor_msgs.msg import PointCloud2         # pointcloud type
-from msgs.msg._MsgCamera import *               # Image type: camera msgs class
-from nav_msgs.msg import Odometry               # odometry type
-from .OpenPCDet.tools.pred import *             # 3d Detection tool
-from ..utils.poi_and_roi import pointcloud_roi  # pointcloud detection
-from ..utils.yolo.yolo import YOLO              # vision detection
-from ..utils.image_roi import image_roi
+from visualization_msgs.msg import MarkerArray
+from sensor_msgs.msg import Image                       # image type
+from sensor_msgs.msg import PointCloud2                 # pointcloud type
+from nav_msgs.msg import Odometry                       # odometry type
+from msgs.msg._MsgCamera import *                       # Image type: camera msgs class
+from .OpenPCDet.tools.pred import *                     # 3d Detection tool
+from ..utils.yolo.yolo import YOLO                      # vision detection
+from ..utils.poi_and_roi import pointcloud_roi          # pointcloud detection
+from ..utils.poi_and_roi import image_roi               # image detection
 
-from msgs.msg._MsgLidCam import *               # fusion message type
+from msgs.msg._MsgLidCam import *                       # fusion message type
 from msgs.msg._MsgLidCamObject import *
-from ..utils.visualization import lidar_camera_match2visual
+from ..utils.visualization import lidar_camera_match2visual, display_rviz
 
 from ..utils.evaluation import eval3d, get_gt_box
 from ..utils.common_utils import get_dpm
@@ -41,6 +42,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     assert isinstance(pointcloud, PointCloud2)
     assert isinstance(msgcamera, MsgCamera)
     global counter, start_time, pred_counter
+    global alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
 
     # pointcloud roi
     gt_cameras = gt_pixel_poses = None
@@ -59,15 +61,13 @@ def fusion(pointcloud, msgcamera, odom=None):
         pred_box2d = image_roi(img, yolo)
         pred_boxes2d.append(pred_box2d)
 
-    # pred results eval: BEV (for one car)
-    # if odom is not None and params.eval:
-    #     # 3d-detection only: use 'pred_boxes3d' to eval
-    #     global alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
-    #     if counter >= 50:
-    #         pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, pred_boxes3d, logger, pred_counter,
-    #                                                                                 alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
-    #     if counter % 1000 == 0:
-    #         np.savetxt(str(ROOT_DIR / ('src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter)), tp_fp_fn)
+    # pre_eval: BEV (for one car)
+    if odom is not None and params.pre_eval:
+        # 3d-detection only: use 'pred_boxes3d' to eval
+        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, pred_boxes3d, logger, pred_counter,
+                                                                                alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
+        if counter % 1000 == 0:
+            np.savetxt(str(ROOT_DIR / ('src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter)), tp_fp_fn)
         
     # object match
     iou_thresh = config['lid_cam_fusion']['iou_thresh']
@@ -83,21 +83,26 @@ def fusion(pointcloud, msgcamera, odom=None):
         diff_x_1 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_1 = odom.pose.pose.position.y - pred_boxes3d[0][1]
     msglidcam, fix_pred_boxes3d, fix_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, corners3d, pixel_poses)
-    if odom is not None and params.eval:
-        global alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
-        if counter >= 50:
-            pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, fix_pred_boxes3d, logger, pred_counter,
-                                                                                    alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
     if odom is not None and len(pred_boxes3d) != 0:
         diff_x_2 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_2 = odom.pose.pose.position.y - pred_boxes3d[0][1]
         if diff_x_1 != diff_x_2 or diff_y_1 != diff_y_2:
             print(diff_x_1, diff_y_1)
             print(diff_x_2, diff_y_2, '\n')
+
+    # display 3d boxes to rviz
+    marker_array = display_rviz(corners3d)
+    pub_marker = rospy.Publisher('/display_rviz', MarkerArray, queue_size=1)
+    pub_marker.publish(marker_array)
+
+    # post_eval
+    if odom is not None and params.post_eval:
+        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, fix_pred_boxes3d, logger, pred_counter,
+                                                                                alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
+
     # publish result
-    msglidcam.header.stamp = rospy.Time.now()
-    pub = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
-    pub.publish(msglidcam)
+    pub_lidcam = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
+    pub_lidcam.publish(msglidcam)
 
     # fps evalution (without results evalution and visualization)
     cur_time = time.time()
@@ -220,6 +225,7 @@ def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses):
         box2d: [left, top, right, down]
     """
     msglidcam = MsgLidCam()
+    msglidcam.header.stamp = rospy.Time.now()
     x_axis_camera = np.array([1, 3, 5, 7])
     y_axis_camera = np.array([2, 4, 6, 8])
     axis_orientation = np.array([1, -1, -1, 1])
@@ -364,7 +370,8 @@ if __name__ == '__main__':
     parser.add_argument("--save_match_result", help="wehter to save match result", action='store_true', required=False)
     parser.add_argument("--print2screen_lidar", help="wehter to print to screen", action='store_true', required=False)
     parser.add_argument("--print2screen_match", help="wehter to print to screen", action='store_true', required=False)
-    parser.add_argument("--eval", help="wehter to eval", action='store_true', required=False)
+    parser.add_argument("--pre_eval", help="wehter to eval", action='store_true', required=False)
+    parser.add_argument("--post_eval", help="wehter to eval", action='store_true', required=False)
     parser.add_argument("--gt_boxes", help="wehter to caculate gt_goxes", action='store_true', required=False)
     params = parser.parse_args()
 
@@ -389,8 +396,8 @@ if __name__ == '__main__':
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
 
-    if params.eval or params.gt_boxes:
-        if params.eval:
+    if params.pre_eval or params.post_eval or params.gt_boxes:
+        if params.pre_eval or params.post_eval:
             # create tensorboard logger
             from tensorboard_logger import Logger
             import datetime
