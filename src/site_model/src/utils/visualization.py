@@ -1,9 +1,12 @@
+import rospy
 from pathlib import Path
 from datetime import datetime
 import numpy as np
 
 from sensor_msgs.msg import Image
 from msgs.msg._MsgCamera import MsgCamera
+from geometry_msgs.msg import Point
+from visualization_msgs.msg import Marker, MarkerArray
 
 from cv_bridge import CvBridge
 import cv2
@@ -36,33 +39,23 @@ def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), radar_rois=(
 
 
 def lidar2visual(img, box3d, color):
+    """
+        box3d: 2-d coordinates
+    """
     if isinstance(img, Image):
         img = CvBridge().imgmsg_to_cv2(img, 'bgr8')
+
+    lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6],
+         [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
+
     # get 8 pts
-    pts1 = (round(box3d[0][0]), round(box3d[0][1]))
-    pts2 = (round(box3d[1][0]), round(box3d[1][1]))
-    pts3 = (round(box3d[2][0]), round(box3d[2][1]))
-    pts4 = (round(box3d[3][0]), round(box3d[3][1]))
-    pts5 = (round(box3d[4][0]), round(box3d[4][1]))
-    pts6 = (round(box3d[5][0]), round(box3d[5][1]))
-    pts7 = (round(box3d[6][0]), round(box3d[6][1]))
-    pts8 = (round(box3d[7][0]), round(box3d[7][1]))
+    pts = []
+    for i in range(8):
+        pts.append((round(box3d[i][0], round(box3d[i][1]))))
 
     # draw 12 lines
-    cv2.line(img, pts1, pts2, color, 1)
-    cv2.line(img, pts2, pts3, color, 1)
-    cv2.line(img, pts3, pts4, color, 1)
-    cv2.line(img, pts4, pts1, color, 1)
-
-    cv2.line(img, pts5, pts6, color, 1)
-    cv2.line(img, pts6, pts7, color, 1)
-    cv2.line(img, pts7, pts8, color, 1)
-    cv2.line(img, pts8, pts5, color, 1)
-
-    cv2.line(img, pts1, pts5, color, 1)
-    cv2.line(img, pts2, pts6, color, 1)
-    cv2.line(img, pts3, pts7, color, 1)
-    cv2.line(img, pts4, pts8, color, 1)
+    for line in lines:
+        cv2.line(img, pts[line[0]], pts[line[1]], color, 1)
 
     return img
 
@@ -129,3 +122,45 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
             img_file = output_dir + ('/image_%s_' % datetime.now().strftime('%Y%m%d-%H%M%S') + camera_name + '.jpg')
             # print(img_file, "saved.")
             cv2.imwrite(img_file, img)
+
+def display_rviz(boxes3d) -> MarkerArray:
+    """
+        boxes3d: 3-d coordinates
+    """
+    lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6],
+         [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
+
+    marker_array = MarkerArray()
+    marker_array.markers.clear()
+
+    for obid in range(len(boxes3d)):
+        box3d = boxes3d[obid]
+        points_set = []
+        for point in box3d:
+            points_set.append(Point(point[0], point[1], point[2]))
+
+        marker = Marker()
+        marker.header.frame_id = 'base_link'
+        marker.header.stamp = rospy.Time.now()
+
+        marker.id = obid
+        marker.action = Marker.ADD
+        marker.type = Marker.LINE_LIST
+
+        marker.lifetime = rospy.Duration(0)
+
+        marker.color.r = 1
+        marker.color.g = 1
+        marker.color.b = 1
+
+        marker.color.a = 1
+        marker.scale.x = 0.01 # width of lines
+        marker.points = []
+
+        for line in lines:
+            marker.points.append(points_set[line[0]])
+            marker.points.append(points_set[line[1]])
+
+        marker_array.markers.append(marker)
+
+    return marker_array

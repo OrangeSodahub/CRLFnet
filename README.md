@@ -65,6 +65,7 @@ Two commands are needed for camera calibration after `spawn.launch` is launched.
 ```
 
 ## Lid-Cam Fusion
+This part use `OpenPCDet` as the detection tool, refer to [CustomDataset.md](https://github.com/OrangeSodahub/OpenPCDet/blob/master/src/site_model/src/LidCamFusion/OpenPCDet/pcdet/datasets/custom/CustomDataset.md) to find how to train self-product dataset.
 ### Config Files
 Configurations for model and dataset need to be specified:
 - **Model Configs** `tools/cfgs/custom_models/XXX.yaml`
@@ -107,6 +108,8 @@ For example:
 ```bash
 python pred.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custom_models/pv_rcnn/default/ckpt/checkpoint_epoch_80.pth --data_path ../data/custom/testing/velodyne/
 ```
+Visualize the results in rviz like:
+![avatar](./src/site_model/docs/rviz2.png)
 
 ### Lid-Cam Fusion
 Follow these steps for only lidar-camera fusion. Some of them need different bash terminals.  For the last command, additional parameter `--save_result` is required if need to save the results of fusion in the form of image.
