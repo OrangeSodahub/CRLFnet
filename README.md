@@ -65,7 +65,7 @@ Two commands are needed for camera calibration after `spawn.launch` is launched.
 ```
 
 ## Lid-Cam Fusion
-This part use `OpenPCDet` as the detection tool, refer to [CustomDataset.md]([https://github.com/OrangeSodahub/OpenPCDet/blob/master/src/site_model/src/LidCamFusion/OpenPCDet/pcdet/datasets/custom/CustomDataset.md](https://github.com/OrangeSodahub/CRLFnet/blob/master/src/site_model/src/LidCamFusion/OpenPCDet/pcdet/datasets/custom/README.md)) to find how to train self-product dataset.
+This part use `OpenPCDet` as the detection tool, refer to [CustomDataset.md](https://github.com/OrangeSodahub/CRLFnet/blob/master/src/site_model/src/LidCamFusion/OpenPCDet/pcdet/datasets/custom/README.md) to find how to train self-product dataset.
 ### Config Files
 Configurations for model and dataset need to be specified:
 - **Model Configs** `tools/cfgs/custom_models/XXX.yaml`
