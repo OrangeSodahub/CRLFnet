@@ -20,7 +20,7 @@ from sensor_msgs.msg import PointCloud2         # pointcloud type
 from msgs.msg._MsgCamera import *               # Image type: camera msgs class
 from nav_msgs.msg import Odometry               # odometry type
 from .OpenPCDet.tools.pred import *             # 3d Detection tool
-from .pointcloud_roi import pointcloud_roi      # pointcloud detection
+from ..utils.poi_and_roi import pointcloud_roi  # pointcloud detection
 from ..utils.yolo.yolo import YOLO              # vision detection
 from ..utils.image_roi import image_roi
 
