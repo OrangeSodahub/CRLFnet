@@ -111,7 +111,7 @@ python pred.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custo
 Visualize the results in rviz like:
 
 <center class="half">
-    <img src=./src/site_model/docs/rviz2.png /><img src=./src/site_model/docs/3d_match.gif />
+    <img src=./src/site_model/docs/rviz2.png width=500/><img src=./src/site_model/docs/3d_match.gif width=500/>
 </center>
 
 ### Lid-Cam Fusion
