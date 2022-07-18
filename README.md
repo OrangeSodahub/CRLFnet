@@ -110,8 +110,9 @@ python pred.py --cfg_file cfgs/custom_models/pv_rcnn.yaml --ckpt ../output/custo
 ```
 Visualize the results in rviz like:
 
-![avatar](./src/site_model/docs/rviz2.png)
-![image](https://github.com/OrangeSodahub/CRLFnet/blob/master/src/site_model/docs/3d_match.gif)
+<left class="half">
+    <img src=./src/site_model/docs/rviz2.png width=80%>
+</left>
 
 ### Lid-Cam Fusion
 Follow these steps for only lidar-camera fusion. Some of them need different bash terminals.  For the last command, additional parameter `--save_result` is required if need to save the results of fusion in the form of image.
