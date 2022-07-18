@@ -123,7 +123,7 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
             # print(img_file, "saved.")
             cv2.imwrite(img_file, img)
 
-def display_rviz(boxes3d) -> MarkerArray:
+def display_rviz(boxes3d, vehicles) -> MarkerArray:
     """
         boxes3d: 3-d coordinates
     """
@@ -149,9 +149,10 @@ def display_rviz(boxes3d) -> MarkerArray:
 
         marker.lifetime = rospy.Duration(0)
 
-        marker.color.r = 1
-        marker.color.g = 1
-        marker.color.b = 1
+        if obid in vehicles: # matched vehicle
+            marker.color.r, marker.color.g, marker.color.b = 0, 1, 0
+        else:                # unmatched vehicle
+            marker.color.r, marker.color.g, marker.color.b = 1, 1, 1
 
         marker.color.a = 1
         marker.scale.x = 0.01 # width of lines
