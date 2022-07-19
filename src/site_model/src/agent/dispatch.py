@@ -1,13 +1,18 @@
 #!/usr/bin/python3
 import rospy
+import argparse
+import yaml
+from pathlib import Path
+from termcolor import colored
 from ackermann_msgs.msg import AckermannDriveStamped
+from .agent import Agent
 import sys, select, termios, tty
 
 keyBindings = {
     'x':(0,0)
 }
 
-def getKey():
+def get_key():
    tty.setraw(sys.stdin.fileno())
    select.select([sys.stdin], [], [], 0)
    key = sys.stdin.read(1)
@@ -17,22 +22,40 @@ def getKey():
 speed = 1.5
 turn = 0.6
 
+
 def vels(speed, turn):
-  return "currently:\tspeed %s\tturn %s " % (speed,turn)
+    return "currently:\tspeed %s\tturn %s " % (speed,turn)
+
 
 if __name__=="__main__":
+    # get ROOT DIR
+    ROOT_DIR = Path(__file__).resolve().parents[2]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR.joinpath("config/config.yaml")))
+    params = parser.parse_args()
+
+    with open(params.config, 'r') as f:
+        try:
+            config = yaml.load(f, Loader=yaml.FullLoader)
+        except:
+            print(colored('Config file could not be read.','red'))
+            exit(1)
 
     settings = termios.tcgetattr(sys.stdin)
     pub = rospy.Publisher("/ackermann_cmd_mux/output", AckermannDriveStamped, queue_size=1)
-    rospy.init_node('keyop')
+    rospy.init_node('/agent_dispatch')
 
     x = 0
     th = 0
     status = 0
 
+    # initialize the agent
+    agent = Agent(config)
+
     try:
         while True:
-            key = getKey()
+            key = get_key()
             if key in keyBindings.keys():
                 x = keyBindings[key][0]
                 th = keyBindings[key][1]
