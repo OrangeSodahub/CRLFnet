@@ -41,8 +41,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     """
     assert isinstance(pointcloud, PointCloud2)
     assert isinstance(msgcamera, MsgCamera)
-    global counter, start_time, pred_counter
-    global alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
+    global counter, start_time
 
     # pointcloud roi
     gt_cameras = gt_pixel_poses = None
@@ -64,10 +63,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     # pre_eval: BEV (for one car)
     if odom is not None and params.pre_eval:
         # 3d-detection only: use 'pred_boxes3d' to eval
-        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, pred_boxes3d, logger, pred_counter,
-                                                                                alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
-        if counter % 1000 == 0:
-            np.savetxt(str(ROOT_DIR / ('src/LidCamFusion/eval/3d_detection_only_%s.txt' % counter)), tp_fp_fn)
+        eval.eval(odom, pred_boxes3d)
         
     # object match
     iou_thresh = config['lid_cam_fusion']['iou_thresh']
@@ -97,8 +93,7 @@ def fusion(pointcloud, msgcamera, odom=None):
 
     # post_eval
     if odom is not None and params.post_eval:
-        pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn = eval3d(odom, fix_pred_boxes3d, logger, pred_counter,
-                                                                                alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn)
+        eval.eval(odom, fix_pred_boxes3d)
 
     # publish result
     pub_lidcam = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
@@ -398,24 +393,14 @@ if __name__ == '__main__':
 
     if params.pre_eval or params.post_eval or params.gt_boxes:
         if params.pre_eval or params.post_eval:
-            # create tensorboard logger
-            from tensorboard_logger import Logger
-            import datetime
             import os
+            import datetime
             log_dir = str(ROOT_DIR)+'/src/LidCamFusion/eval/%s/' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
             os.makedirs(log_dir, exist_ok=True)
-            logger = Logger(logdir=log_dir, flush_secs=10)
-            # pointcloud pred results evaluation
-            pred_counter = 1
-            alpha_diff = 0
-            pose_diff = 0
-            iou3d = 0
-            iou_bev = 0
-            # caculate tp, fp, fn
-            N_SAMPLE_PTS = 41
-            tp_fp_fn = np.array([np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS)])
+
+            eval = eval3d(log_dir)
         
-        sub_odom = message_filters.Subscriber('/base_pose_ground_truth', Odometry)
+        sub_odom = message_filters.Subscriber('/deepracer2/base_pose_ground_truth', Odometry)
         sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera, sub_odom], 1, 1) # syncronize time stamps
         sync.registerCallback(fusion)
         print("Lidar Camera Fusion (with eval) Begin.")

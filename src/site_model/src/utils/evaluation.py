@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+from tensorboard_logger import Logger
 # odometry type
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import PoseWithCovariance
@@ -9,64 +10,146 @@ from tf.transformations import euler_from_quaternion
 from .iou3d import iou3d_nms_cuda
 from . import common_utils
 
-# 41 points
-thresholds = np.linspace(0.0, 1.0, num=41, endpoint=True)
 
-def eval3d(odom: Odometry, pred_boxes3d: np.array, logger, pred_counter: int, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn: np.array):
-    """
-        alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn: global variance
-    """
-    if len(pred_boxes3d) != 0:
-        pred_counter += 1
-        
-        pose = odom.pose # position
-        twist = odom.twist  # velocity
-        pose_ground_truth = np.array([pose.pose.position.x, pose.pose.position.y, 0.1120]) # 0.1140 is pre-set
-        r, p, y = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y,
-                                        pose.pose.orientation.z, pose.pose.orientation.w])
-        # rotation
-        alpha_cur_diff = np.abs(((pred_boxes3d[0][6] - np.pi) if pred_boxes3d[0][6] >= 0 else (np.pi + pred_boxes3d[0][6])) - y) # pred_boxes3d[0] -> for one car
-        alpha_diff += alpha_cur_diff
-        alpha_cur_precision = 1 - (alpha_cur_diff / pred_counter) / (2*np.pi)
-        alpha_precision = 1 - (alpha_diff / pred_counter) / (2*np.pi)
-        logger.log_value('alpha_precision', alpha_precision, pred_counter)
-        logger.log_value('alpha_cur_precision', alpha_cur_precision, pred_counter)
+class eval3d():
+    def __init__(self, log_dir: str):
+        self.log_dir = log_dir
+        self.logger = Logger(logdir=log_dir, flush_secs=10)
+
+        self.counter = 1
+        self.alpha_diff = 0
+        self.pose_diff = 0
+        self.iou3d = 0
+        self.iou_bev = 0
+
+        N_SAMPLE_PTS = 41
+        self.thresholds = np.linspace(0.0, 1.0, num=N_SAMPLE_PTS, endpoint=True)
+        self.tp_fp_fn = np.array([np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS)])
+    
+
+    def eval(self, odom: Odometry, boxes3d: np.array):
+        if len(boxes3d) != 0:
+            self.counter += 1
+            print(self.counter)
+            
+            pose = odom.pose # position
+            twist = odom.twist  # velocity
+            pose_ground_truth = np.array([pose.pose.position.x, pose.pose.position.y, 0.1120]) # 0.1140 is pre-set
+            r, p, y = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y,
+                                            pose.pose.orientation.z, pose.pose.orientation.w])
+            
+            self.eval_rotation(y, boxes3d)                      # rotation
+            self.eval_pose(pose_ground_truth, boxes3d)          # pose
+            self.eval_iou(pose_ground_truth, y, boxes3d)        # iou and tp
+        else:
+            self.tp_fp_fn[2] += 1
+
+        if self.counter % 1000 == 0:
+            np.savetxt(self.log_dir + 'tp_fp_fn.txt', self.tp_fp_fn)
+            
+
+    def eval_rotation(self, y, boxes3d):
+        alpha_cur_diff = np.abs(((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6])) - y) # pred_boxes3d[0] -> for one car
+        self.alpha_diff += alpha_cur_diff
+        alpha_cur_precision = 1 - (alpha_cur_diff / self.counter) / (2*np.pi)
+        alpha_precision = 1 - (self.alpha_diff / self.counter) / (2*np.pi)
+        self.logger.log_value('alpha_precision', alpha_precision, self.counter)
+        self.logger.log_value('alpha_cur_precision', alpha_cur_precision, self.counter)
+
+
+    def eval_pose(self, pose_ground_truth, boxes3d):
         # pose_x_y
-        x_cur_diff = np.abs(pose_ground_truth[0]-pred_boxes3d[0][0])
-        y_cur_diff = np.abs(pose_ground_truth[1]-pred_boxes3d[0][1])
+        x_cur_diff = np.abs(pose_ground_truth[0]-boxes3d[0][0])
+        y_cur_diff = np.abs(pose_ground_truth[1]-boxes3d[0][1])
         pose_cur_diff = np.sqrt(np.square(x_cur_diff)+np.square(y_cur_diff))
-        pose_diff += pose_cur_diff
-        pose_mean_diff = pose_diff / pred_counter
-        logger.log_value('pose_diff', pose_mean_diff, pred_counter)
-        logger.log_value('pose_cur_diff', pose_cur_diff, pred_counter)
+        self.pose_diff += pose_cur_diff
+        pose_mean_diff = self.pose_diff / self.counter
+        self.logger.log_value('pose_diff', pose_mean_diff, self.counter)
+        self.logger.log_value('pose_cur_diff', pose_cur_diff, self.counter)
 
+
+    def eval_iou(self, pose_ground_truth, y, boxes3d):
         # iou3d and iou_bev
-        boxes3d = np.concatenate((pose_ground_truth, np.array([0.33, 0.22, 0.21]), np.array([(y if y>=0 else (np.pi-y))])), axis=0)
-        # load to gpu: double->float64 float->float32
-        boxes3d_gpu = torch.tensor(np.array([boxes3d]), dtype=torch.float32).cuda() # for one car!!!
-        pred_boxes3d_gpu = torch.tensor(pred_boxes3d, dtype=torch.float32).cuda() # GPU accelerate
-        iou3d_cur = boxes_iou3d_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
-        iou_bev_cur = boxes_iou_bev_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
-        iou3d_cur_cpu = iou3d_cur.cpu().numpy() # convert tensor to numpy
+        gt_boxes3d = np.concatenate((pose_ground_truth, np.array([0.33, 0.22, 0.21]), np.array([(y)])), axis=0)
+        gt_boxes3d_gpu = torch.tensor(np.array([gt_boxes3d]), dtype=torch.float32).cuda()               # load to gpu: double->float64 float->float32
+        boxes3d[0][6] = (boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6])      # for one car!!!
+        boxes3d_gpu = torch.tensor(boxes3d, dtype=torch.float32).cuda()                                 # load to gpu
+
+        iou3d_cur = boxes_iou3d_gpu(boxes_a=gt_boxes3d_gpu, boxes_b=boxes3d_gpu)
+        iou_bev_cur = boxes_iou_bev_gpu(boxes_a=gt_boxes3d_gpu, boxes_b=boxes3d_gpu)
+        iou3d_cur_cpu = iou3d_cur.cpu().numpy()                                                         # convert tensor to numpy
         iou_bev_cur_cpu = iou_bev_cur.cpu().numpy()
-        logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], pred_counter) # here [0][0] is for one car!!!
-        logger.log_value('iou_bev_cur', iou_bev_cur_cpu[0][0], pred_counter)
-        iou3d += iou3d_cur_cpu[0][0]
-        iou_bev += iou_bev_cur_cpu[0][0]
-        iou3d_mean = iou3d / pred_counter
-        iou_bev_mean = iou_bev / pred_counter
-        logger.log_value('iou3d_mean', iou3d_mean, pred_counter)
-        logger.log_value('iou_bev_mean', iou_bev_mean, pred_counter)
+        self.logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], self.counter)                           # here [0][0] is for one car!!!
+        self.logger.log_value('iou_bev_cur', iou_bev_cur_cpu[0][0], self.counter)
+
+        self.iou3d += iou3d_cur_cpu[0][0]
+        self.iou_bev += iou_bev_cur_cpu[0][0]
+        iou3d_mean = self.iou3d / self.counter
+        iou_bev_mean = self.iou_bev / self.counter
+        self.logger.log_value('iou3d_mean', iou3d_mean, self.counter)
+        self.logger.log_value('iou_bev_mean', iou_bev_mean, self.counter)
 
         # caculate tp_fp_fn
-        true_or_false = iou_bev_cur_cpu[0][0] > thresholds
-        tp_fp_fn[0] += true_or_false # tp
-        tp_fp_fn[2] += np.logical_not(true_or_false) # fn
+        true_or_false = iou_bev_cur_cpu[0][0] > self.thresholds
+        self.tp_fp_fn[0] += true_or_false                                                               # tp
+        self.tp_fp_fn[2] += np.logical_not(true_or_false)                                               # fn
 
-    else:
-        tp_fp_fn[2] += 1
+        
+# def eval3d(odom: Odometry, pred_boxes3d: np.array, logger, pred_counter: int, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn: np.array):
+#     """
+#         alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn: global variance
+#     """
+#     if len(pred_boxes3d) != 0:
+#         pred_counter += 1
+        
+#         pose = odom.pose # position
+#         twist = odom.twist  # velocity
+#         pose_ground_truth = np.array([pose.pose.position.x, pose.pose.position.y, 0.1120]) # 0.1140 is pre-set
+#         r, p, y = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y,
+#                                         pose.pose.orientation.z, pose.pose.orientation.w])
+#         # rotation
+#         alpha_cur_diff = np.abs(((pred_boxes3d[0][6] - np.pi) if pred_boxes3d[0][6] >= 0 else (np.pi + pred_boxes3d[0][6])) - y) # pred_boxes3d[0] -> for one car
+#         alpha_diff += alpha_cur_diff
+#         alpha_cur_precision = 1 - (alpha_cur_diff / pred_counter) / (2*np.pi)
+#         alpha_precision = 1 - (alpha_diff / pred_counter) / (2*np.pi)
+#         logger.log_value('alpha_precision', alpha_precision, pred_counter)
+#         logger.log_value('alpha_cur_precision', alpha_cur_precision, pred_counter)
+#         # pose_x_y
+#         x_cur_diff = np.abs(pose_ground_truth[0]-pred_boxes3d[0][0])
+#         y_cur_diff = np.abs(pose_ground_truth[1]-pred_boxes3d[0][1])
+#         pose_cur_diff = np.sqrt(np.square(x_cur_diff)+np.square(y_cur_diff))
+#         pose_diff += pose_cur_diff
+#         pose_mean_diff = pose_diff / pred_counter
+#         logger.log_value('pose_diff', pose_mean_diff, pred_counter)
+#         logger.log_value('pose_cur_diff', pose_cur_diff, pred_counter)
 
-    return pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
+#         # iou3d and iou_bev
+#         boxes3d = np.concatenate((pose_ground_truth, np.array([0.33, 0.22, 0.21]), np.array([(y if y>=0 else (np.pi-y))])), axis=0)
+#         # load to gpu: double->float64 float->float32
+#         boxes3d_gpu = torch.tensor(np.array([boxes3d]), dtype=torch.float32).cuda() # for one car!!!
+#         pred_boxes3d_gpu = torch.tensor(pred_boxes3d, dtype=torch.float32).cuda() # GPU accelerate
+#         iou3d_cur = boxes_iou3d_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
+#         iou_bev_cur = boxes_iou_bev_gpu(boxes_a=boxes3d_gpu, boxes_b=pred_boxes3d_gpu)
+#         iou3d_cur_cpu = iou3d_cur.cpu().numpy() # convert tensor to numpy
+#         iou_bev_cur_cpu = iou_bev_cur.cpu().numpy()
+#         logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], pred_counter) # here [0][0] is for one car!!!
+#         logger.log_value('iou_bev_cur', iou_bev_cur_cpu[0][0], pred_counter)
+#         iou3d += iou3d_cur_cpu[0][0]
+#         iou_bev += iou_bev_cur_cpu[0][0]
+#         iou3d_mean = iou3d / pred_counter
+#         iou_bev_mean = iou_bev / pred_counter
+#         logger.log_value('iou3d_mean', iou3d_mean, pred_counter)
+#         logger.log_value('iou_bev_mean', iou_bev_mean, pred_counter)
+
+#         # caculate tp_fp_fn
+#         true_or_false = iou_bev_cur_cpu[0][0] > thresholds
+#         tp_fp_fn[0] += true_or_false # tp
+#         tp_fp_fn[2] += np.logical_not(true_or_false) # fn
+
+#     else:
+#         tp_fp_fn[2] += 1
+
+#     return pred_counter, alpha_diff, pose_diff, iou3d, iou_bev, tp_fp_fn
 
 
 def boxes_iou_bev_cpu(boxes_a, boxes_b):
