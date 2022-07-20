@@ -32,19 +32,26 @@ def residual(uir, uii):
     return ri, ii
 
 
-def pair_fusion(radar: MsgRadar, image: Image, camera_name: str):
+def pair_fusion(radar: MsgRadar, image: Image, w2c: np.ndarray, c2p: np.ndarray, name: str):
     # ONLY FUSE THE LEFT PAIR!!!
     global yolo
     global state_xpt_pile, state_cov_pile
     global w2cs, c2ps
-    global frame_counter
+    global frame_counter, my_timer
+    global max_id
+
+    # Info
+    my_now = perf_counter()
+    del_time = my_now - my_timer
+    print("\033[1;36m\"{}\", FPS: {:.2f}, Frame {}\033[0m".format(name, 1.0 / del_time, frame_counter))
+    frame_counter += 1
+    my_timer = my_now
 
     # Separate Decection
-    print("\033[1;36mPair Fusion of \"{}\"\033[0m, frame {}".format(camera_name, frame_counter))
     print("\033[1;36mSeparate Detection\033[0m")
     # acquire radar POIs in pixel coordinate and the observation vectors
     # poi = (u, v, 1), dtype=int;  z = (distance, angle, velocity)
-    radar_pois, radar_zs = radar_poi(radar.objects_left, w2cs[camera_name], c2ps[camera_name], image.width, image.height)
+    radar_pois, radar_zs = radar_poi(radar.objects_left, w2c, c2p, image.width, image.height)
     radar_obj_num = len(radar_pois)
     # acquire image ROIs in pixel coordinate and the observation vectors
     # roi = (left, top, right, bottom, score, class), dtype=int;  z = (u, v)
@@ -61,22 +68,40 @@ def pair_fusion(radar: MsgRadar, image: Image, camera_name: str):
 
     # Fusion
     print("\033[1;36mFusion\033[0m")
+    # IOU matching of radar and image ROIs
     radar_expanded_rois = np.array(list(map(lambda p, d: expand_poi(p, d, image.width, image.height),
                                             radar_pois, radar_zs[:, 0])),
                                             dtype=int)
     print("Radar expanded ROIs:\t", radar_expanded_rois)
-    if args.save and radar_obj_num !=0 and image_obj_num != 0:
-        radar2visual(OUTPUT_DIR, image, radar_rois=radar_expanded_rois, image_rois=image_rois, appendix='Test')
-    # IOU matching of radar and image ROIs
     match_pairs = optimize_iou(radar_expanded_rois, image_rois)
     print("matched pairs:", match_pairs)
-    # apply GNN to unmatched objects
-    radar_indices, image_indices = (np.setdiff1d(np.arange(radar_obj_num), match_pairs[:, 0]),
-                                    np.setdiff1d(np.arange(image_obj_num), match_pairs[:, 1]))
+    # residual algorithm (NOT finished)
+    radar_indices, image_indices = (np.setdiff1d(np.arange(radar_obj_num), match_pairs[0]),
+                                    np.setdiff1d(np.arange(image_obj_num), match_pairs[1]))
     print("unmatched indices:", "radar:", radar_indices, "image:", image_indices)
+    """
     residual_pairs = residual(radar_indices, image_indices)
     print("residual pairs:", "radar:", residual_pairs[0], "image:", residual_pairs[1])
-    # possible objects are matched objects in IOU matching and GNN and residual ones
+    """
+    # generate possible object observation vectors
+    zms = np.concatenate((radar_zs[match_pairs[0], 0:3], image_zs[match_pairs[1], 0:2]), axis=1)
+    zrs = radar_zs[radar_indices, 0:3]
+    zis = image_zs[image_indices, 0:2]
+    # EKF
+    # state_xpt = (Xw, Yw, Vx, Vy, age, id)
+    A = np.array([[1, 0, del_time, 0], [0, 1, 0, del_time], [0, 0, 1, 0], [0, 0, 0, 1]])
+    pred_xpt_pile, pred_cov_pile = bulk_predict(state_xpt_pile, state_cov_pile, A)
+    exist_idx, lost_idx, new_idx = bulk_comparison(pred_xpt_pile, zms, zrs, zis, w2c, c2p)
+    print("Exist Indices:\t", exist_idx)
+    print("Lost Indices:\t", lost_idx)
+    print("New Indices:\t", new_idx)
+    bulk_update(exist_idx, pred_xpt_pile, pred_cov_pile, zms, zrs, zis, w2c, c2p)
+    bulk_lost(lost_idx, state_xpt_pile, state_cov_pile)
+    max_id = bulk_new(new_idx, state_xpt_pile, state_cov_pile, zms, zrs, zis, max_id)
+
+    # Save Images
+    if args.save and radar_obj_num !=0 and image_obj_num != 0:
+        radar2visual(OUTPUT_DIR, image, radar_pois=radar_pois, radar_rois=radar_expanded_rois, image_rois=image_rois, appendix='Test')
     
     # Publish
     print("states:", state_xpt_pile)
@@ -84,7 +109,7 @@ def pair_fusion(radar: MsgRadar, image: Image, camera_name: str):
 
 def fusion(radar: MsgRadar, image2: Image, image3: Image):
     print('+------------------------+')
-    pair_fusion(radar, image2, 'camera2')
+    pair_fusion(radar, image2, w2cs['camera2'], c2ps['camera2'], 'camera2')
     # pair_fusion(radar, image3, 'camera3')
 
 
@@ -94,8 +119,9 @@ if __name__ == '__main__':
     frame_counter = 0
 
     # storage of Kalman Filter
-    state_xpt_pile = np.empty(shape=(0, 6))     # (Xw, Yw, Vxw, Vyw, status, comparison_flag)
-    state_cov_pile = np.empty(shape=(0, 4, 4))  # covariance matrices
+    max_id = 0
+    state_xpt_pile = []     # (Xw, Yw, Vxw, Vyw, status, index)
+    state_cov_pile = []     # covariance matrices
 
     # set command arguments
     parser = argparse.ArgumentParser()

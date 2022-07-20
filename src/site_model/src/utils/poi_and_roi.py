@@ -41,10 +41,10 @@ def radar_poi(radar_objs: MsgRadarObject, w2c: np.ndarray, c2p: np.ndarray, imag
     ps = np.empty(shape=(0, 3), dtype=int)   # (u, v)
     zs = np.empty(shape=(0, 3))              # (distance, angle, velocity)
     for obj in radar_objs:
-        pos_image = w2p(np.array([obj.pos_x, obj.pos_y, 0.46, 1]), w2c, c2p)
-        if 0 <= pos_image[0][0] <= image_width and 0 <= pos_image[0][1] <= image_height:
-            ps = np.concatenate((ps, np.expand_dims(pos_image[0], axis=0))) 
-            zs = np.concatenate((zs, [[pos_image[1], obj.angle_centroid, obj.velocity]]))
+        pos_image, zc = w2p(np.array([obj.pos_x, obj.pos_y, 0.461, 1]), w2c, c2p)
+        if 0 <= pos_image[0] <= image_width and 0 <= pos_image[1] <= image_height:
+            ps = np.concatenate((ps, np.expand_dims(pos_image, axis=0))) 
+            zs = np.concatenate((zs, [[zc, obj.angle_centroid, obj.velocity]]))
     return ps, zs
 
 
@@ -53,20 +53,10 @@ def expand_poi(poi: np.ndarray, distance: float, image_width: int, image_height:
     The function is used to generate an approximate ROI based on the radar POI and distance.
     The POI should be given in pixel coordinate.
     '''
-    rw, rh = 64 / distance, 32 / distance   # region size (64*2, 32*4) = (128, 128)  TODO: NEED MORE TESTS.
+    rw, rh = 60 / distance, 30 / distance   # region size (64*2, 32*4) = (128, 128)  TODO: NEED MORE TESTS.
     r0 = np.array((poi[0] - rw, poi[1] - 3 * rh, poi[0] + rw, poi[1] + rh))
     r1 = np.where((r0[0] > 0, r0[1] > 0, r0[2] < image_width, r0[3] < image_height), r0, (0, 0, image_width, image_height))
     return r1
-
-
-def simple_radar_roi(pos_world: np.ndarray, w2c: np.ndarray, c2p: np.ndarray):
-    '''
-    The function is used for Kalman filter comparison.
-    '''
-    pos_image, distance = w2p(np.append(pos_world, [0.46, 1]), w2c, c2p)
-    rw, rh = 64 / distance, 32 / distance
-    r0 = np.array((pos_image[0] - rw, pos_image[1] - 3 * rh, pos_image[0] + rw, pos_image[1] + rh))
-    return r0
 
 
 def get_iou(roi1: np.ndarray, roi2: np.ndarray):
@@ -91,15 +81,15 @@ def optimize_iou(rois1: np.ndarray, rois2: np.ndarray, threshold=0.6):
     TODO: FIGURE OUT THE PROPER THRESHOLD.
     '''
     if rois1.size == 0 or rois2.size == 0:
-        return np.empty(shape=(0, 2))
+        return np.empty(shape=(2, 0), dtype=int)
     # calculate all IOUs and arrange them in a matrix
-    ious = np.array([get_iou(x, y[0:4]) for x in rois1 for y in rois2]).reshape((rois1.shape[0], rois2.shape[0]))
+    ious = np.array([get_iou(x[0:4], y[0:4]) for x in rois1 for y in rois2]).reshape((rois1.shape[0], rois2.shape[0]))
     # only keep the max number by rows and columns
     ious = np.where(np.expand_dims(ious.argmax(axis=1), axis=1) == np.expand_dims(np.arange(ious.shape[1]), axis=0), ious, 0.0)
     ious = np.where(np.expand_dims(ious.argmax(axis=0), axis=0) == np.expand_dims(np.arange(ious.shape[0]), axis=1), ious, 0.0)
     print("IOU matrix:", ious)
     # return indices of maximized IOUs of radar and image
-    return np.argwhere(ious > threshold)
+    return np.argwhere(ious > threshold).T
 
 
 def pointcloud_roi(ROOT_DIR: Path, config: dict, boxes_3d: np.array(np.array)):
