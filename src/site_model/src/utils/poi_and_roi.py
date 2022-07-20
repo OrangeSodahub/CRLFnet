@@ -17,6 +17,7 @@ from msgs.msg._MsgRadarObject import MsgRadarObject
 from .yolo.yolo import YOLO
 from .transform import w2p
 from .transform import which_cameras, box_to_corner_3d, lidar2pixel
+from .common_utils import label2camera
 
 
 get_area = lambda x: (x[2] - x[0]) * (x[3] - x[1])
@@ -92,7 +93,7 @@ def optimize_iou(rois1: np.ndarray, rois2: np.ndarray, threshold=0.6):
     return np.argwhere(ious > threshold).T
 
 
-def pointcloud_roi(ROOT_DIR: Path, config: dict, boxes_3d: np.array(np.array)):
+def pointcloud_roi(calib: np.array, boxes_3d: np.array(np.array)):
     """
     boxes_3d: [[],[],[],...]
     cameras: [[],[],[],...]
@@ -105,19 +106,9 @@ def pointcloud_roi(ROOT_DIR: Path, config: dict, boxes_3d: np.array(np.array)):
                 [[[],[],[],[],[],[],[],[]],]...]
     """
 
-    # get calib parameters
-    calib_dir = str(ROOT_DIR.joinpath(config['calib']['calib_dir']))
-    calib = np.loadtxt(os.path.join(calib_dir, 'calib.txt'))
-    
     # For all vehicles: get corresponding cameras and 8-point coords in world coord
     cameras = which_cameras(boxes_3d)
     corners3d = box_to_corner_3d(boxes_3d)
-
-    # label2camera
-    label2camera = {
-        1: 'camera11', 2: 'camera12', 3: 'camera13', 4: 'camera14',
-        5: 'camera41', 6: 'camera42', 7: 'camera43', 8: 'camera44'
-    }
 
     # For each vehicle: transform 3d-coord to 2d and save to .png
     pixel_pose = []

@@ -5,9 +5,18 @@ vehicle:
   size:
     width: 0.21
     height: 0.22
+  velocity: 0.0
 camera:
   width: 640
   height: 480
+ground:
+  width: 1.0
+  len_all: 0.0
+  len_circle: 0.0
+  len_overpass: 0.0
+  len_intersection: 0.0
+  area_parking: 0.0
+
 data: 
   cam_dir: /dataset/camera_data/
   rad_dir: /dataset/radar_data/
@@ -19,6 +28,7 @@ topic:
   radar_3: /ARS_408_21_3_Topic
 measurement:
   measurement_dir: src/utils/calib/
+
 calib:
   camera_info_dir: src/camera_info/
   calib_dir: src/utils/calib/
@@ -38,6 +48,7 @@ calib:
     42: [0.0929564555419943, -0.145715673177097, 1.15083705256435, -1.5707963267949, 0, 0]
     43: [-0.000844845936131017, -0.145715673177097, 1.05677694623637, -1.570796326794895, 1.570796326794895, 0]
     44: [-0.0949049522641072, -0.145715673177097, 1.1505782477145, -1.570796326794895, 3.14159265358979, 0]
+
 lidar_detection:
     cfg_file: /src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pointrcnn.yaml
     ckpt_file: /src/LidCamFusion/OpenPCDet/output/custom_models/pointrcnn/01/ckpt/checkpoint_epoch_192.pth
