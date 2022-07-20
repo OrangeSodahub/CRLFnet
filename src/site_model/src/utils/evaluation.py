@@ -63,7 +63,7 @@ class eval3d():
 
     def eval_iou(self, gt_boxes3d, boxes3d):
         # iou3d and iou_bev
-        gt_boxes3d_gpu = torch.tensor(np.array([gt_boxes3d]), dtype=torch.float32).cuda()               # load to gpu: double->float64 float->float32
+        gt_boxes3d_gpu = torch.tensor(gt_boxes3d, dtype=torch.float32).cuda()                           # load to gpu: double->float64 float->float32
         boxes3d_gpu = torch.tensor(boxes3d, dtype=torch.float32).cuda()                                 # load to gpu
 
         iou3d_cur = boxes_iou3d_gpu(boxes_a=gt_boxes3d_gpu, boxes_b=boxes3d_gpu)
