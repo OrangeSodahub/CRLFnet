@@ -20,17 +20,15 @@ from sensor_msgs.msg import Image                       # image type
 from sensor_msgs.msg import PointCloud2                 # pointcloud type
 from nav_msgs.msg import Odometry                       # odometry type
 from msgs.msg._MsgCamera import *                       # Image type: camera msgs class
+from msgs.msg._MsgLidCam import *                       # fusion message type
+from msgs.msg._MsgLidCamObject import *
 from .OpenPCDet.tools.pred import *                     # 3d Detection tool
 from ..utils.yolo.yolo import YOLO                      # vision detection
 from ..utils.poi_and_roi import pointcloud_roi          # pointcloud detection
 from ..utils.poi_and_roi import image_roi               # image detection
-
-from msgs.msg._MsgLidCam import *                       # fusion message type
-from msgs.msg._MsgLidCamObject import *
 from ..utils.visualization import lidar_camera_match2visual, display_rviz
-
-from ..utils.evaluation import eval3d, get_gt_box
-from ..utils.common_utils import get_dpm
+from ..utils.evaluation import eval3d
+from ..utils.common_utils import get_gt_boxes3d
 from ..utils.transform import lidar2pixel
 
 
@@ -44,15 +42,15 @@ def fusion(pointcloud, msgcamera, odom=None):
     global counter, start_time
 
     # pointcloud roi
-    gt_cameras = gt_pixel_poses = None
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
-    cameras, corners3d, pixel_poses = pointcloud_roi(ROOT_DIR, config, pred_boxes3d)            # get cameras and pixel_poses of all vehicles
-    if params.print2screen_lidar:                                                               # print pred results to screen
+    cameras, pred_corners3d, pixel_poses = pointcloud_roi(ROOT_DIR, config, pred_boxes3d)            # get cameras and pixel_poses of all vehicles
+    if params.print2screen_lidar:                                                                    # print pred results to screen
         print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
+    gt_cameras = gt_pixel_poses = None
     if odom is not None and params.gt_boxes:
-        gt_box3d = get_gt_box(odom)
-        gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(ROOT_DIR, config, gt_box3d)
+        gt_boxes3d = get_gt_boxes3d(odom)
+        gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(ROOT_DIR, config, gt_boxes3d)
 
     # image roi
     pred_boxes2d = []
@@ -78,7 +76,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     if odom is not None and len(pred_boxes3d) != 0:
         diff_x_1 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_1 = odom.pose.pose.position.y - pred_boxes3d[0][1]
-    msglidcam, fix_pred_boxes3d, fix_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, corners3d, pixel_poses)
+    msglidcam, fix_pred_boxes3d, fix_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, pred_corners3d, pixel_poses)
     if odom is not None and len(pred_boxes3d) != 0:
         diff_x_2 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_2 = odom.pose.pose.position.y - pred_boxes3d[0][1]
@@ -87,7 +85,7 @@ def fusion(pointcloud, msgcamera, odom=None):
             print(diff_x_2, diff_y_2, '\n')
 
     # display 3d boxes to rviz
-    marker_array = display_rviz(corners3d, vehicles)
+    marker_array = display_rviz(pred_corners3d, vehicles, gt_corners3d)
     pub_marker = rospy.Publisher('/display_rviz', MarkerArray, queue_size=1)
     pub_marker.publish(marker_array)
 

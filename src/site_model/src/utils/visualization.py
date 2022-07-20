@@ -123,18 +123,18 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
             # print(img_file, "saved.")
             cv2.imwrite(img_file, img)
 
-def display_rviz(boxes3d, vehicles) -> MarkerArray:
+def display_rviz(boxes3d, vehicles, gt_boxes3d) -> MarkerArray:
     """
         boxes3d: 3-d coordinates
     """
-    lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6],
-         [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
 
     marker_array = MarkerArray()
     marker_array.markers.clear()
 
-    for obid in range(len(boxes3d)):
-        box3d = boxes3d[obid]
+    def process_single_box3d(box3d, id, type):
+        lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6],
+                [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
+
         points_set = []
         for point in box3d:
             points_set.append(Point(point[0], point[1], point[2]))
@@ -143,25 +143,42 @@ def display_rviz(boxes3d, vehicles) -> MarkerArray:
         marker.header.frame_id = 'base_link'
         marker.header.stamp = rospy.Time.now()
 
-        marker.id = obid
+        marker.id = id
         marker.action = Marker.ADD
         marker.type = Marker.LINE_LIST
 
         marker.lifetime = rospy.Duration(0)
 
-        if obid in vehicles: # matched vehicle
+        if type == "matched":                                                   # matched vehicle
             marker.color.r, marker.color.g, marker.color.b = 0, 1, 0
-        else:                # unmatched vehicle
+        elif type == "unmatched":                                               # unmatched vehicle
             marker.color.r, marker.color.g, marker.color.b = 1, 1, 1
+        elif type == "gt":                                                      # ground truth
+            marker.color.r, marker.color.g, marker.color.b = 0, 1, 1
 
         marker.color.a = 1
-        marker.scale.x = 0.01 # width of lines
+        marker.scale.x = 0.01                                                   # width of lines
         marker.points = []
 
         for line in lines:
             marker.points.append(points_set[line[0]])
             marker.points.append(points_set[line[1]])
 
+        return marker
+
+    # Add pred_boxes3d
+    for id_pred in range(len(boxes3d)):
+        box3d = boxes3d[id_pred]
+        if id_pred in vehicles:
+            marker = process_single_box3d(box3d, id_pred, "matched")
+        else:
+            marker = process_single_box3d(box3d, id_pred, "unmatched")
+        marker_array.markers.append(marker)
+
+    # Add gt_boxes3d
+    for id_gt in range(len(gt_boxes3d)):
+        gt_box3d = gt_boxes3d[id_gt]
+        marker = process_single_box3d(gt_box3d, id_gt+len(boxes3d), "gt")
         marker_array.markers.append(marker)
 
     return marker_array
