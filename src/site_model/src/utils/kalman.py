@@ -11,24 +11,21 @@ from scipy.optimize import linear_sum_assignment
 from .transform import w2p
 
 
-_A_DEFAULT = np.array([[1, 0, 1, 0], [0, 1, 0, 1], [0, 0, 1, 0], [0, 0, 0, 1]])
-_H_DEFAULT = np.eye(4)
-_Q_DEFAULT = 1e-3 * np.eye(4)
-_R_DEFAULT = 0.1 * np.eye(4)
+_Q_DEFAULT = 1e-2 * np.eye(4)
 
-_THRESHOLD = 0.1
+_THRESHOLD = 1e4
 _WEIGHT_MATCH = 1
 _WEIGHT_RADAR = 1
 _WEIGHT_IMAGE = 1
 
-BIAS = np.array([-1.374, -1.176])
+OFFSET = np.array([-1.374, -1.176])
 HEIGHT = 0.461
 
 
-def get_H_radar(pred_xpt: np.ndarray, bias):
-    r = np.linalg.norm(pred_xpt[0:2] - bias[0:2])
-    c = (pred_xpt[1] - bias[1]) / r
-    s = (pred_xpt[0] - bias[0]) / r
+def get_H_radar(pred_xpt: np.ndarray, offset):
+    r = np.linalg.norm(pred_xpt[0:2] - offset[0:2])
+    c = (pred_xpt[1] - offset[1]) / r
+    s = (pred_xpt[0] - offset[0]) / r
     vn = pred_xpt[2] * c - pred_xpt[3] * s
     Hr = np.array([[-s, c, 0, 0],
                    [-c / r, -s / r, 0, 0],
@@ -44,16 +41,16 @@ def get_H_image(pred_xpt: np.ndarray, w2c, c2p):
     return Hi
 
 
-get_H_match = lambda pred_xpt, w2c, c2p: np.concatenate((get_H_radar(pred_xpt, BIAS), get_H_image(pred_xpt, w2c, c2p)))
+get_H_match = lambda pred_xpt, w2c, c2p: np.concatenate((get_H_radar(pred_xpt, OFFSET), get_H_image(pred_xpt, w2c, c2p)))
 
 
-def _single_predict(prev_xpt: np.ndarray, prev_cov: np.ndarray, A=_A_DEFAULT, Q=_Q_DEFAULT):
+def _single_predict(prev_xpt: np.ndarray, prev_cov: np.ndarray, A, Q=_Q_DEFAULT):
     xpt = np.matmul(A, prev_xpt[0:4])
     cov = np.matmul(A, np.matmul(prev_cov, A.T)) + Q
     return xpt, cov
 
 
-def _single_update(pred_xpt: np.ndarray, pred_cov: np.ndarray, z: np.ndarray, H=_H_DEFAULT, R=_R_DEFAULT):
+def _single_update(pred_xpt: np.ndarray, pred_cov: np.ndarray, z: np.ndarray, H, R):
     K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(np.matmul(H, np.matmul(pred_cov, H.T)) + R)))
     xpt = pred_xpt + np.matmul(K, (z - np.matmul(H, pred_xpt)))
     cov = pred_cov - np.matmul(np.matmul(K, H), pred_cov)
@@ -62,6 +59,7 @@ def _single_update(pred_xpt: np.ndarray, pred_cov: np.ndarray, z: np.ndarray, H=
 
 def _single_comparison(pred_xpt: np.ndarray, z: np.ndarray, H: np.ndarray):
     zp = np.matmul(H, pred_xpt)
+    print("\033[0;31mcmp\033[0m", z, zp)
     d = np.linalg.norm(z - zp)
     return d
 
@@ -71,7 +69,7 @@ def _get_comparison_matrix(xpts: np.ndarray, zs: np.ndarray, H_func):
     return np.array(cmp).reshape((len(xpts), len(zs)))
 
 
-def bulk_predict(prev_xpt_pile: list, prev_cov_pile: list, A=_A_DEFAULT, Q=_Q_DEFAULT):
+def bulk_predict(prev_xpt_pile: list, prev_cov_pile: list, A, Q=_Q_DEFAULT):
     p0 = list(map(lambda x, c: _single_predict(x, c, A, Q), prev_xpt_pile, prev_cov_pile))
     return [xpt for xpt, _ in p0], [cov for _, cov in p0]
 
@@ -81,9 +79,10 @@ def bulk_comparison(pred_xpt_pile, zms, zrs, zis, w2c, c2p):
     xpt_num = len(pred_xpt_pile)
     z_num = len(zms) + len(zrs) + len(zis)
     cmp_match = _get_comparison_matrix(pred_xpt_pile, zms, lambda x: get_H_match(x, w2c, c2p))
-    cmp_radar = _get_comparison_matrix(pred_xpt_pile, zrs, lambda x: get_H_radar(x, BIAS))
+    cmp_radar = _get_comparison_matrix(pred_xpt_pile, zrs, lambda x: get_H_radar(x, OFFSET))
     cmp_image = _get_comparison_matrix(pred_xpt_pile, zis, lambda x: get_H_image(x, w2c, c2p))
     cmp = np.concatenate((cmp_match, cmp_radar, cmp_image), axis=1)
+    print("Bulk Comparison:", cmp)
     row_idx, col_idx = linear_sum_assignment(cmp)
     # threshold filter
     fil = cmp[row_idx, col_idx] < _THRESHOLD
@@ -95,27 +94,31 @@ def bulk_comparison(pred_xpt_pile, zms, zrs, zis, w2c, c2p):
     return (row_idx, col_idx), lost_idx, new_idx
 
 
-def bulk_update(exist_idx, pred_xpt_pile, pred_cov_pile, zms, zrs, zis, w2c, c2p, R=_R_DEFAULT):
-    for z_idx, pred_idx in zip(exist_idx[0], exist_idx[1]):
+def bulk_update(exist_idx, state_xpt_pile, state_cov_pile, pred_xpt_pile, pred_cov_pile, zms, zrs, zis, w2c, c2p):
+    for pred_idx, z_idx in zip(exist_idx[0], exist_idx[1]):
         if z_idx < len(zms):
             # match
             H = get_H_match(pred_xpt_pile[pred_idx], w2c, c2p)
             z = zms[z_idx]
+            R = 0.1 * np.eye(5)
         elif z_idx < len(zms) + len(zrs):
             # radar
-            H = get_H_radar(pred_xpt_pile[pred_idx], BIAS)
+            H = get_H_radar(pred_xpt_pile[pred_idx], OFFSET)
             z = zrs[z_idx - len(zms)]
+            R = 0.1 * np.eye(3)
         else:
             # image
             H = get_H_image(pred_xpt_pile[pred_idx], w2c, c2p)
             z = zis[z_idx - len(zms) - len(zrs)]
+            R = 0.1 * np.eye(2)
         xpt, cov = _single_update(pred_xpt_pile[pred_idx], pred_cov_pile[pred_idx], z, H, R)
-        pred_xpt_pile[pred_idx] = xpt
-        pred_cov_pile[pred_idx] = cov
+        state_xpt_pile[pred_idx] = np.concatenate((xpt, [state_xpt_pile[pred_idx][4] + 1, state_xpt_pile[pred_idx][5]])) 
+        state_cov_pile[pred_idx] = cov
 
 
 def bulk_lost(lost_idx, state_xpt_pile, state_cov_pile):
-    state_xpt_pile[lost_idx][4] -= 1
+    for i in lost_idx:
+        state_xpt_pile[i][4] -= 1
     i, m = 0, len(state_xpt_pile)
     while(i < m):
         if state_xpt_pile[i][4] < 0:

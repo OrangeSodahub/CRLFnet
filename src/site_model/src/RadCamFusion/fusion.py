@@ -61,10 +61,10 @@ def pair_fusion(radar: MsgRadar, image: Image, w2c: np.ndarray, c2p: np.ndarray,
                                 axis=1)
     image_obj_num = len(image_rois)
     # print results
-    print("Radar POIs (pixel):\t", radar_pois)
-    print("Radar obs vectors:\t", radar_zs)
-    print("Image ROIs (pixel):\t", image_rois)
-    print("Image obs vectors:\t", image_zs)
+    print("Radar POIs (pixel): \t", radar_pois)
+    print("Radar obs vectors:  \t", radar_zs)
+    print("Image ROIs (pixel): \t", image_rois)
+    print("Image obs vectors:  \t", image_zs)
 
     # Fusion
     print("\033[1;36mFusion\033[0m")
@@ -74,11 +74,12 @@ def pair_fusion(radar: MsgRadar, image: Image, w2c: np.ndarray, c2p: np.ndarray,
                                             dtype=int)
     print("Radar expanded ROIs:\t", radar_expanded_rois)
     match_pairs = optimize_iou(radar_expanded_rois, image_rois)
-    print("matched pairs:", match_pairs)
+    print("Matched Idx (r/i):  \t", match_pairs)
     # residual algorithm (NOT finished)
     radar_indices, image_indices = (np.setdiff1d(np.arange(radar_obj_num), match_pairs[0]),
                                     np.setdiff1d(np.arange(image_obj_num), match_pairs[1]))
-    print("unmatched indices:", "radar:", radar_indices, "image:", image_indices)
+    print("Unmatched Radar Idx:\t", radar_indices)
+    print("Unmatched Image Idx:\t", image_indices)
     """
     residual_pairs = residual(radar_indices, image_indices)
     print("residual pairs:", "radar:", residual_pairs[0], "image:", residual_pairs[1])
@@ -91,11 +92,12 @@ def pair_fusion(radar: MsgRadar, image: Image, w2c: np.ndarray, c2p: np.ndarray,
     # state_xpt = (Xw, Yw, Vx, Vy, age, id)
     A = np.array([[1, 0, del_time, 0], [0, 1, 0, del_time], [0, 0, 1, 0], [0, 0, 0, 1]])
     pred_xpt_pile, pred_cov_pile = bulk_predict(state_xpt_pile, state_cov_pile, A)
+    print("Predicted States:   \t", pred_xpt_pile)
     exist_idx, lost_idx, new_idx = bulk_comparison(pred_xpt_pile, zms, zrs, zis, w2c, c2p)
-    print("Exist Indices:\t", exist_idx)
-    print("Lost Indices:\t", lost_idx)
-    print("New Indices:\t", new_idx)
-    bulk_update(exist_idx, pred_xpt_pile, pred_cov_pile, zms, zrs, zis, w2c, c2p)
+    print("Exist Idx (o/s):    \t", exist_idx)
+    print("Lost Idx  (s):      \t", lost_idx)
+    print("New Idx   (obs):    \t", new_idx)
+    bulk_update(exist_idx, state_xpt_pile, state_cov_pile, pred_xpt_pile, pred_cov_pile, zms, zrs, zis, w2c, c2p)
     bulk_lost(lost_idx, state_xpt_pile, state_cov_pile)
     max_id = bulk_new(new_idx, state_xpt_pile, state_cov_pile, zms, zrs, zis, max_id)
 
@@ -104,7 +106,7 @@ def pair_fusion(radar: MsgRadar, image: Image, w2c: np.ndarray, c2p: np.ndarray,
         radar2visual(OUTPUT_DIR, image, radar_pois=radar_pois, radar_rois=radar_expanded_rois, image_rois=image_rois, appendix='Test')
     
     # Publish
-    print("states:", state_xpt_pile)
+    print("Updated States     :\t", state_xpt_pile)
 
 
 def fusion(radar: MsgRadar, image2: Image, image3: Image):
