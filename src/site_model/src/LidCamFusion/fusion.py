@@ -28,7 +28,7 @@ from ..utils.poi_and_roi import pointcloud_roi          # pointcloud detection
 from ..utils.poi_and_roi import image_roi               # image detection
 from ..utils.visualization import lidar_camera_match2visual, display_rviz
 from ..utils.evaluation import eval3d
-from ..utils.common_utils import get_gt_boxes3d
+from ..utils.common_utils import get_gt_boxes3d, get_dpm, label2camera
 from ..utils.transform import lidar2pixel
 
 
@@ -44,13 +44,13 @@ def fusion(pointcloud, msgcamera, odom=None):
     # pointcloud roi
     points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
-    cameras, pred_corners3d, pixel_poses = pointcloud_roi(ROOT_DIR, config, pred_boxes3d)            # get cameras and pixel_poses of all vehicles
+    cameras, pred_corners3d, pixel_poses = pointcloud_roi(calib, pred_boxes3d)            # get cameras and pixel_poses of all vehicles
     if params.print2screen_lidar:                                                                    # print pred results to screen
         print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
     gt_cameras = gt_pixel_poses = None
     if odom is not None and params.gt_boxes:
         gt_boxes3d = get_gt_boxes3d(odom)
-        gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(ROOT_DIR, config, gt_boxes3d)
+        gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(calib, gt_boxes3d)
 
     # image roi
     pred_boxes2d = []
@@ -219,94 +219,123 @@ def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses):
     """
     msglidcam = MsgLidCam()
     msglidcam.header.stamp = rospy.Time.now()
-    x_axis_camera = np.array([1, 3, 5, 7])
-    y_axis_camera = np.array([2, 4, 6, 8])
-    axis_orientation = np.array([1, -1, -1, 1])
 
-    calib_dir = str(ROOT_DIR.joinpath(config['calib']['calib_dir']))
-    calib = np.loadtxt(os.path.join(calib_dir, 'calib.txt'))
-    label2camera = {
-        1: 'camera11', 2: 'camera12', 3: 'camera13', 4: 'camera14',
-        5: 'camera41', 6: 'camera42', 7: 'camera43', 8: 'camera44'
-    }
-    
+    CAMERA = config['lid_cam_fusion']['camera_weight']
+    LIDAR = config['lid_cam_fusion']['lidar_weight']
+
     for obj in match:
         camera_num, vehicle_num, camera_num_vehicle, box2d_num = obj[0], obj[1], obj[2], obj[3]
         box2d = boxes2d[camera_num-1][box2d_num]
-        box3d, pixel_pose = boxes3d[vehicle_num], pixels_poses[vehicle_num][camera_num_vehicle]
-        corner3d = corners3d[vehicle_num]
+        box3d, corner3d, pixel_pose = boxes3d[vehicle_num], corners3d[vehicle_num], pixels_poses[vehicle_num][camera_num_vehicle]
 
-        # truncated detect
-        if is_truncated(box2d, pixel_pose):
-            continue
-        
-        # position fix
-        CAMERA_WEIGHT = config['lid_cam_fusion']['camera_weight']
-        LIDAR_WEIGHT = config['lid_cam_fusion']['lidar_weight']
-        assert (CAMERA_WEIGHT+LIDAR_WEIGHT==1), 'The sum of weights should be 1.'
-        camera_increment = []                                                           # fix vector of camera
-        lidar_increment = np.array([0] * 7).astype(np.float64)                          # fix vector of lidar
+        # ground pose fix
+        estimate_xypose = ...
+        increment_xypose = (estimate_xypose - box3d[0:2]) * CAMERA
 
-        # vertical axis
-        VERTICAL_INCREMENT = 0.00005
+        # rotation fix
+        corner3d[:,0:2] += increment_xypose
+        pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
         bbox = get_bbox_from_box3d(pixel_pose)
-        if ((bbox[2]-bbox[0]) - (box2d[2]-box2d[0])) * ((bbox[3]-bbox[1]) - (box2d[3]-box2d[1])) > 0:               # horizontal and vertical greater or smaller simultaneously
-            if (bbox[2]-bbox[0]) - (box2d[2]-box2d[0]) > 0:
-                sign = 1
-            else:
-                sign = -1
-            diff_h = abs((bbox[2]-bbox[0]) - (box2d[2]-box2d[0]))
-            diff_w = abs((bbox[3]-bbox[1]) - (box2d[3]-box2d[0]))
-            while sign*((bbox[2]-bbox[0]) - ((box2d[2]-box2d[0])+sign*diff_h*CAMERA_WEIGHT)) > 0 and sign*((bbox[3]-bbox[1]) - ((box2d[3]-box2d[1])+sign*diff_w*CAMERA_WEIGHT)) > 0:
-                if camera_num in x_axis_camera:
-                    corner3d[:,1] += VERTICAL_INCREMENT * sign * axis_orientation[np.where(x_axis_camera==camera_num)][0]
-                    lidar_increment[1] += VERTICAL_INCREMENT * sign * axis_orientation[np.where(x_axis_camera==camera_num)][0]
-                elif camera_num in y_axis_camera:
-                    corner3d[:,0] += VERTICAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
-                    lidar_increment[0] += VERTICAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
-                pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
-                bbox = get_bbox_from_box3d(pixel_pose)
+        lidar_ratio = bbox[0] / bbox[1]
+        camera_ratio = box2d[0] / box2d[1]
+
+    # x_axis_camera = np.array([1, 3, 5, 7])
+    # y_axis_camera = np.array([2, 4, 6, 8])
+    # axis_orientation = np.array([1, -1, -1, 1])
+
+    # xcameras = np.array([-2, 4, 6, -8])
+    # ycameras = np.array([1, -3, -5, 7])
+    
+    # for obj in match:
+    #     camera_num, vehicle_num, camera_num_vehicle, box2d_num = obj[0], obj[1], obj[2], obj[3]
+    #     box2d = boxes2d[camera_num-1][box2d_num]
+    #     box3d, corner3d, pixel_pose = boxes3d[vehicle_num], corners3d[vehicle_num], pixels_poses[vehicle_num][camera_num_vehicle]
+
+    #     # truncated detect
+    #     if is_truncated(box2d, pixel_pose):
+    #         continue
+
+    #     CAMERA_WEIGHT = config['lid_cam_fusion']['camera_weight']
+    #     LIDAR_WEIGHT = config['lid_cam_fusion']['lidar_weight']
+    #     assert (CAMERA_WEIGHT+LIDAR_WEIGHT==1), 'The sum of weights should be 1.'
+    #     lidar_increment = np.array([0] * 7).astype(np.float64)                          # fix vector of lidar
+
+    #     # horzontal fix
+    #     lidar_center = np.array([np.mean([pixel_pose[0][0], pixel_pose[1][0], pixel_pose[2][0], pixel_pose[3][0]]),
+    #                              np.mean([pixel_pose[0][1], pixel_pose[3][1], pixel_pose[4][1], pixel_pose[7][1]])])
+    #     camera_center = np.array([np.mean([box2d[0], box2d[2]]), np.mean([box2d[1], box2d[3]])])
+    #     horizontal_diff = lidar_center[0] - camera_center[0]
+    #     if camera_num in xcameras:
+    #         dpm = get_dpm(calib, camera_num, box3d[0:2], 0)
+    #         lidar_increment[1] += dpm * horizontal_diff
+    #     elif camera_num in ycameras:
+    #         dpm = get_dpm(calib, camera_num, box3d[0:2], 1)
+    #         lidar_increment[0] += dpm * horizontal_diff
+        
+    #     # rotation fix
+    #     pixel_pose = 
+    #     lidar_ratio = 
+
+    #     # vertical axis
+    #     VERTICAL_INCREMENT = 0.00005
+    #     bbox = get_bbox_from_box3d(pixel_pose)
+    #     if ((bbox[2]-bbox[0]) - (box2d[2]-box2d[0])) * ((bbox[3]-bbox[1]) - (box2d[3]-box2d[1])) > 0:               # horizontal and vertical greater or smaller simultaneously
+    #         if (bbox[2]-bbox[0]) - (box2d[2]-box2d[0]) > 0:
+    #             sign = 1
+    #         else:
+    #             sign = -1
+    #         diff_h = abs((bbox[2]-bbox[0]) - (box2d[2]-box2d[0]))
+    #         diff_w = abs((bbox[3]-bbox[1]) - (box2d[3]-box2d[0]))
+    #         while sign*((bbox[2]-bbox[0]) - ((box2d[2]-box2d[0])+sign*diff_h*CAMERA_WEIGHT)) > 0 and sign*((bbox[3]-bbox[1]) - ((box2d[3]-box2d[1])+sign*diff_w*CAMERA_WEIGHT)) > 0:
+    #             if camera_num in x_axis_camera:
+    #                 corner3d[:,1] += VERTICAL_INCREMENT * sign * axis_orientation[np.where(x_axis_camera==camera_num)][0]
+    #                 lidar_increment[1] += VERTICAL_INCREMENT * sign * axis_orientation[np.where(x_axis_camera==camera_num)][0]
+    #             elif camera_num in y_axis_camera:
+    #                 corner3d[:,0] += VERTICAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
+    #                 lidar_increment[0] += VERTICAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
+    #             pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
+    #             bbox = get_bbox_from_box3d(pixel_pose)
                  
-        # horizontal axis
-        HORIZONTAL_INCREMENT = 0.00005
-        lidar_center = np.array([np.mean([pixel_pose[0][0], pixel_pose[1][0], pixel_pose[2][0], pixel_pose[3][0]]),
-                                 np.mean([pixel_pose[0][1], pixel_pose[3][1], pixel_pose[4][1], pixel_pose[7][1]])])
-        camera_center = np.array([np.mean([box2d[0], box2d[2]]), np.mean([box2d[1], box2d[3]])])
-        ou_distance = np.linalg.norm(lidar_center-camera_center)
-        if lidar_center[0] > camera_center[0]:
-            sign = 1
-        else:
-            sign = -1
-        diff = abs(lidar_center[0]-camera_center[0])
-        while(sign*(lidar_center[0]-(camera_center[0]+sign*diff*CAMERA_WEIGHT)) > 0):
-            if camera_num in x_axis_camera:
-                corner3d[:,0] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(x_axis_camera==camera_num)][0]
-                lidar_increment[0] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(x_axis_camera==camera_num)][0]
-            elif camera_num in y_axis_camera:
-                corner3d[:,1] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
-                lidar_increment[1] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
-            pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
-            lidar_center = np.array([np.mean([pixel_pose[0][0], pixel_pose[1][0], pixel_pose[2][0], pixel_pose[3][0]]),
-                                     np.mean([pixel_pose[0][1], pixel_pose[3][1], pixel_pose[4][1], pixel_pose[7][1]])])
+    #     # horizontal axis
+    #     HORIZONTAL_INCREMENT = 0.00005
+    #     lidar_center = np.array([np.mean([pixel_pose[0][0], pixel_pose[1][0], pixel_pose[2][0], pixel_pose[3][0]]),
+    #                              np.mean([pixel_pose[0][1], pixel_pose[3][1], pixel_pose[4][1], pixel_pose[7][1]])])
+    #     camera_center = np.array([np.mean([box2d[0], box2d[2]]), np.mean([box2d[1], box2d[3]])])
+    #     ou_distance = np.linalg.norm(lidar_center-camera_center)
+    #     if lidar_center[0] > camera_center[0]:
+    #         sign = 1
+    #     else:
+    #         sign = -1
+    #     diff = abs(lidar_center[0]-camera_center[0])
+    #     while(sign*(lidar_center[0]-(camera_center[0]+sign*diff*CAMERA_WEIGHT)) > 0):
+    #         if camera_num in x_axis_camera:
+    #             corner3d[:,0] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(x_axis_camera==camera_num)][0]
+    #             lidar_increment[0] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(x_axis_camera==camera_num)][0]
+    #         elif camera_num in y_axis_camera:
+    #             corner3d[:,1] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
+    #             lidar_increment[1] += HORIZONTAL_INCREMENT * (-sign) * axis_orientation[np.where(y_axis_camera==camera_num)][0]
+    #         pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
+    #         lidar_center = np.array([np.mean([pixel_pose[0][0], pixel_pose[1][0], pixel_pose[2][0], pixel_pose[3][0]]),
+    #                                  np.mean([pixel_pose[0][1], pixel_pose[3][1], pixel_pose[4][1], pixel_pose[7][1]])])
 
-        # update boxes3d
-        print(lidar_increment)
-        boxes3d[vehicle_num] = box3d + lidar_increment
-        pixels_poses[vehicle_num][camera_num_vehicle] = pixel_pose
+    #     # update boxes3d
+    #     print(lidar_increment)
+    #     boxes3d[vehicle_num] = box3d + lidar_increment
+    #     pixels_poses[vehicle_num][camera_num_vehicle] = pixel_pose
 
-        # add matched vehicle to msg
-        msglidcamobject = MsgLidCamObject()
-        msglidcamobject.pos_x = box3d[0]
-        msglidcamobject.pos_y = box3d[1]
-        msglidcamobject.alpha = box3d[6]
-        if msglidcamobject.pos_y >= 0:
-            msglidcam.objects_intersection.append(msglidcamobject)
-            msglidcam.num_intersection += 1
-        else:
-            msglidcam.objects_circle.append(msglidcamobject)
-            msglidcam.num_circle += 1
+    #     # add matched vehicle to msg
+    #     msglidcamobject = MsgLidCamObject()
+    #     msglidcamobject.pos_x = box3d[0]
+    #     msglidcamobject.pos_y = box3d[1]
+    #     msglidcamobject.alpha = box3d[6]
+    #     if msglidcamobject.pos_y >= 0:
+    #         msglidcam.objects_intersection.append(msglidcamobject)
+    #         msglidcam.num_intersection += 1
+    #     else:
+    #         msglidcam.objects_circle.append(msglidcamobject)
+    #         msglidcam.num_circle += 1
 
-    return msglidcam, boxes3d, pixels_poses
+    # return msglidcam, boxes3d, pixels_poses
 
 
 def is_truncated(box2d, pixel_pose):
@@ -380,7 +409,9 @@ if __name__ == '__main__':
     # fps evaluation
     counter = 1
     fps = 0
-
+    # get calaibration file
+    calib_dir = str(ROOT_DIR.joinpath(config['calib']['calib_dir']))
+    calib = np.loadtxt(os.path.join(calib_dir, 'calib.txt'))
     # Create an example of pointcloud detector
     pointcloud_detector = RT_Pred(str(ROOT_DIR), config)
     # Create YOLO detector
