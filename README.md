@@ -167,5 +167,6 @@ Some problems may occurred during debugging.
 - N > 0 assert faild. CUDA kernel launch blocks must be positive, but got N= 0 when training: https://github.com/open-mmlab/OpenPCDet/issues/945
 - raise NotImplementedError, NaN or Inf found in input tensor when training: https://github.com/open-mmlab/OpenPCDet/issues/280
 - fix recall calculation bug for empty scene: https://github.com/open-mmlab/OpenPCDet/pull/908
+- installation Error " fatal error: THC/THC.h: No such file or directory #include <THC/THC.h> ": https://github.com/open-mmlab/OpenPCDet/issues/1014
 
 [![wakatime](https://wakatime.com/badge/user/55e306c3-cea9-4c2e-9056-61b183dcb26a/project/8aa7cd6e-46d5-4132-baf0-12c0930aa059.svg)](https://wakatime.com/badge/user/55e306c3-cea9-4c2e-9056-61b183dcb26a/project/8aa7cd6e-46d5-4132-baf0-12c0930aa059)
