@@ -29,7 +29,7 @@ class eval3d():
             print(self.counter)
             for box3d in boxes3d:                                                       # boxes3d
                 box3d[6] = (box3d[6] - np.pi) if box3d[6] >=0 else (np.pi + box3d[6])
-            gt_boxes3d = common_utils.get_gt_boxes3d(odom)                                           # gt_boxes3d
+            gt_boxes3d = common_utils.get_gt_boxes3d(odom)                              # gt_boxes3d
             
             self.eval_rotation(gt_boxes3d, boxes3d)                                     # rotation
             self.eval_pose(gt_boxes3d, boxes3d)                                         # pose
