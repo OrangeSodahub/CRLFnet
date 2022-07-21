@@ -94,7 +94,7 @@ def pair_fusion(radar: MsgRadar, image: Image, w2c: np.ndarray, c2p: np.ndarray,
     pred_xpt_pile, pred_cov_pile = bulk_predict(state_xpt_pile, state_cov_pile, A)
     print("Predicted States:   \t", pred_xpt_pile)
     exist_idx, lost_idx, new_idx = bulk_comparison(pred_xpt_pile, zms, zrs, zis, w2c, c2p)
-    print("Exist Idx (o/s):    \t", exist_idx)
+    print("Exist Idx (s/o):    \t", exist_idx)
     print("Lost Idx  (s):      \t", lost_idx)
     print("New Idx   (obs):    \t", new_idx)
     bulk_update(exist_idx, state_xpt_pile, state_cov_pile, pred_xpt_pile, pred_cov_pile, zms, zrs, zis, w2c, c2p)
