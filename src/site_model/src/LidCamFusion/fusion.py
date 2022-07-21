@@ -29,7 +29,7 @@ from ..utils.poi_and_roi import image_roi               # image detection
 from ..utils.visualization import lidar_camera_match2visual, display_rviz
 from ..utils.evaluation import eval3d
 from ..utils.common_utils import get_gt_boxes3d, get_dpm, label2camera
-from ..utils.transform import lidar2pixel
+from ..utils.transform import lidar2pixel, box_to_corner_3d
 
 
 def fusion(pointcloud, msgcamera, odom=None):
@@ -47,7 +47,7 @@ def fusion(pointcloud, msgcamera, odom=None):
     cameras, pred_corners3d, pixel_poses = pointcloud_roi(calib, pred_boxes3d)            # get cameras and pixel_poses of all vehicles
     if params.print2screen_lidar:                                                                    # print pred results to screen
         print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
-    gt_cameras = gt_pixel_poses = None
+    gt_cameras = gt_corners3d = gt_pixel_poses = None
     if odom is not None and params.gt_boxes:
         gt_boxes3d = get_gt_boxes3d(odom)
         gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(calib, gt_boxes3d)
@@ -76,13 +76,16 @@ def fusion(pointcloud, msgcamera, odom=None):
     if odom is not None and len(pred_boxes3d) != 0:
         diff_x_1 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_1 = odom.pose.pose.position.y - pred_boxes3d[0][1]
-    msglidcam, fix_pred_boxes3d, fix_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, pred_corners3d, pixel_poses)
+    updated_boxes3d, updated_corners3d, updated_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, pred_corners3d, pixel_poses)
     if odom is not None and len(pred_boxes3d) != 0:
         diff_x_2 = odom.pose.pose.position.x - pred_boxes3d[0][0]
         diff_y_2 = odom.pose.pose.position.y - pred_boxes3d[0][1]
         if diff_x_1 != diff_x_2 or diff_y_1 != diff_y_2:
             print(diff_x_1, diff_y_1)
             print(diff_x_2, diff_y_2, '\n')
+
+    # generate fusion message
+    msglidcam = get_msgldcam(match, updated_boxes3d, image, lidar)
 
     # display 3d boxes to rviz
     marker_array = display_rviz(pred_corners3d, vehicles, gt_corners3d)
@@ -91,7 +94,7 @@ def fusion(pointcloud, msgcamera, odom=None):
 
     # post_eval
     if odom is not None and params.post_eval:
-        eval.eval(odom, fix_pred_boxes3d)
+        eval.eval(odom, updated_boxes3d)
 
     # publish result
     pub_lidcam = rospy.Publisher("/lidar_camera_fused", MsgLidCam)
@@ -128,7 +131,7 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
 
     # add labels for boxes2d: 0->mismatched, 1->matched
     for camera in range(len(boxes2d)):
-        labels = [0] * len(boxes2d[camera]) # if len=0 then labels is []
+        labels = [0] * len(boxes2d[camera])                         # if len=0 then labels is []
         labels_set.append(labels)
 
     # match lidar and camera
@@ -217,20 +220,23 @@ def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses):
         match: [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera)]
         box2d: [left, top, right, down]
     """
-    msglidcam = MsgLidCam()
-    msglidcam.header.stamp = rospy.Time.now()
-
     CAMERA = config['lid_cam_fusion']['camera_weight']
     LIDAR = config['lid_cam_fusion']['lidar_weight']
+    assert (CAMERA+LIDAR==1), 'The sum of weights should be 1.'
 
     for obj in match:
         camera_num, vehicle_num, camera_num_vehicle, box2d_num = obj[0], obj[1], obj[2], obj[3]
         box2d = boxes2d[camera_num-1][box2d_num]
         box3d, corner3d, pixel_pose = boxes3d[vehicle_num], corners3d[vehicle_num], pixels_poses[vehicle_num][camera_num_vehicle]
 
+        # truncated detect
+        if is_truncated(box2d, pixel_pose):
+            continue
+
         # ground pose fix
         estimate_xypose = ...
         increment_xypose = (estimate_xypose - box3d[0:2]) * CAMERA
+        box3d[0:2] += increment_xypose
 
         # rotation fix
         corner3d[:,0:2] += increment_xypose
@@ -239,6 +245,34 @@ def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses):
         lidar_ratio = bbox[0] / bbox[1]
         camera_ratio = box2d[0] / box2d[1]
 
+        INCREMENT_RY = 0.01
+        box3d[6] += INCREMENT_RY
+        corner3d = box_to_corner_3d(np.array([box3d]))[0]
+        box3d[6] -= INCREMENT_RY
+        pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
+        bbox = get_bbox_from_box3d(pixel_pose)
+        lidar_ratio_new = bbox[0] / bbox[1]
+        if abs(lidar_ratio_new-camera_ratio) < abs(lidar_ratio-camera_ratio):
+            anticlockwise = 1
+        else:
+            box3d[6] -= INCREMENT_RY
+            corner3d = box_to_corner_3d(np.array([box3d]))[0]
+            box3d[6] -= INCREMENT_RY
+            pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
+            bbox = get_bbox_from_box3d(pixel_pose)
+            lidar_ratio_new = bbox[0] / bbox[1]
+            if abs(lidar_ratio_new-camera_ratio) < abs(lidar_ratio-camera_ratio):
+                anticlockwise = -1
+
+        while(abs(lidar_ratio_new-camera_ratio) > abs(lidar_ratio-camera_ratio) * LIDAR):
+            box3d[6] += anticlockwise * INCREMENT_RY
+            corner3d = box_to_corner_3d(np.array([box3d]))[0]
+            pixel_pose = lidar2pixel(calib, label2camera[camera_num], corner3d)
+            bbox = get_bbox_from_box3d(pixel_pose)
+            lidar_ratio_new = bbox[0] / bbox[1]
+
+
+    return boxes3d, corners3d, pixels_poses
     # x_axis_camera = np.array([1, 3, 5, 7])
     # y_axis_camera = np.array([2, 4, 6, 8])
     # axis_orientation = np.array([1, -1, -1, 1])
@@ -336,6 +370,47 @@ def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses):
     #         msglidcam.num_circle += 1
 
     # return msglidcam, boxes3d, pixels_poses
+
+
+def get_msgldcam(match, updated_boxes3d, image, lidar) -> MsgLidCam:
+    msglidcam = MsgLidCam()
+    msglidcam.header.stamp = rospy.Time.now()
+
+    # add matched vehicles
+    for obj in match:
+        vehicle_num = obj[1]
+        box3d = updated_boxes3d[vehicle_num]
+        
+        msglidcamobject = MsgLidCamObject()
+        msglidcamobject.pos_x = box3d[0]
+        msglidcamobject.pos_y = box3d[1]
+        msglidcamobject.alpha = box3d[6]
+        if msglidcamobject.pos_y >= 0:
+            msglidcam.objects_intersection.append(msglidcamobject)
+            msglidcam.num_intersection += 1
+        else:
+            msglidcam.objects_circle.append(msglidcamobject)
+            msglidcam.num_circle += 1
+
+    # add lidar-based vehicles
+    for obj in lidar:
+        vehicle_num = obj[1]
+        box3d = updated_boxes3d[vehicle_num]
+
+        msglidcamobject = MsgLidCamObject()
+        msglidcamobject.pos_x = box3d[0]
+        msglidcamobject.pos_y = box3d[1]
+        msglidcamobject.alpha = box3d[6]
+        if msglidcamobject.pos_y >= 0:
+            msglidcam.objects_intersection.append(msglidcamobject)
+            msglidcam.num_intersection += 1
+        else:
+            msglidcam.objects_circle.append(msglidcamobject)
+            msglidcam.num_circle += 1
+    
+    # add camera-based vehicles
+
+    return msglidcam
 
 
 def is_truncated(box2d, pixel_pose):
