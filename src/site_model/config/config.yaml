@@ -55,5 +55,5 @@ lidar_detection:
 
 lid_cam_fusion:
   iou_thresh: 0.4
-  camera_weight: 0.8
-  lidar_weight: 0.2
+  camera_weight: 0.4
+  lidar_weight: 0.6

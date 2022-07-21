@@ -9,7 +9,7 @@
 
 import numpy as np
 import torch
-from .common_utils import check_numpy_to_torch
+from .common_utils import check_numpy_to_torch, label2camera
 
 
 def w2p(pos: np.ndarray, w2c: np.ndarray, c2p: np.ndarray):
@@ -226,3 +226,20 @@ def rotate_points_along_z(points, angle):
     points_rot = torch.cat((points_rot, points[:, :, 3:]), dim=-1)
 
     return points_rot.numpy() if is_numpy else points_rot
+
+
+def get_dpm(calib: np.array, camera_num: int, ground_pose: np.array, type: int):
+    """
+        Dots per m
+    """
+
+    camera_name = label2camera[camera_num]
+    if not type:
+        world_pose_1, world_pose_2 = np.array([ground_pose[0], ground_pose[1]-0.2, 0.2, 1]), np.array([ground_pose[0], ground_pose[1]+0.2, 0.2, 1])
+    elif type:
+        world_pose_1, world_pose_2 = np.array([ground_pose[0]-0.2, ground_pose[1], 0.2, 1]), np.array([ground_pose[0]+0.2, ground_pose[1], 0.2, 1])
+
+    pixel_pose_1, pixel_pose_2 = world2pixel(calib, camera_name, world_pose_1), world2pixel(calib, camera_name, world_pose_2)
+    dpm = 0.4 / abs(pixel_pose_2[0]-pixel_pose_1[0])
+
+    return dpm
