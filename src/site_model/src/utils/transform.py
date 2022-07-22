@@ -9,7 +9,7 @@
 
 import numpy as np
 import torch
-from .common_utils import check_numpy_to_torch, label2camera
+from .common_utils import check_numpy_to_torch, label2camera, transform
 
 
 def w2p(pos: np.ndarray, w2c: np.ndarray, c2p: np.ndarray):
@@ -43,13 +43,11 @@ def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
         tips: shift is need between external and internal parameter
     """
     # transform from camera name to camera number
-    transform = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
-                 'camera2': 4, 'camera3': 5,
-                 'camera41': 6, 'camera42': 7, 'camera43': 8, 'camera44': 9}
+    camera_num = transform[camera_name]
 
     # get external and internal parameter of camera
-    world_to_camera = calib[transform[camera_name]][1:17].reshape(4,4)
-    camera_to_pixel = calib[transform[camera_name]][17:30].reshape(3,4)
+    world_to_camera = calib[camera_num][1:17].reshape(4,4)
+    camera_to_pixel = calib[camera_num][17:30].reshape(3,4)
 
     # coordinates in camera coordinates
     camera_pose = np.matmul(world_to_camera, world_pose)

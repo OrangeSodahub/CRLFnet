@@ -9,6 +9,9 @@ label2camera = {
     5: 'camera41', 6: 'camera42', 7: 'camera43', 8: 'camera44'
 }
 
+transform = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
+            'camera2': 4, 'camera3': 5,
+            'camera41': 6, 'camera42': 7, 'camera43': 8, 'camera44': 9}
 
 def check_numpy_to_torch(x):
     if isinstance(x, np.ndarray):
