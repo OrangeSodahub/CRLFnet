@@ -22,23 +22,20 @@
 	<rosparam file="$(find pkg)/config/ctrl.yaml" command="load"/>
 
 	<!-- 加载机器人模型描述参数 -->
-	<group ns="deepracer1">
+	<!-- <group ns="deepracer1">
 	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer1.urdf"/>
-	<!--运行joint_state_publisher节点，发布机器人关节状态-->
 	<node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher">
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
-	<!-- 在gazebo中加载机器人模型-->
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
           args="-urdf -model deepracer1 -param robot_description -x 0 -y -1 -z 0.04"/> 
-	<!-- 加载控制器 spawner -->
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer1" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
 	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
 	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
 	            joint_state_controller"/>
-	</group>
+	</group> -->
 
 	<group ns="deepracer2">
 	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer2.urdf"/>

@@ -123,7 +123,7 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
             # print(img_file, "saved.")
             cv2.imwrite(img_file, img)
 
-def display_rviz(boxes3d, vehicles, gt_boxes3d) -> MarkerArray:
+def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
     """
         boxes3d: 3-d coordinates
     """
@@ -176,9 +176,10 @@ def display_rviz(boxes3d, vehicles, gt_boxes3d) -> MarkerArray:
         marker_array.markers.append(marker)
 
     # Add gt_boxes3d
-    for id_gt in range(len(gt_boxes3d)):
-        gt_box3d = gt_boxes3d[id_gt]
-        marker = process_single_box3d(gt_box3d, id_gt+len(boxes3d), "gt")
-        marker_array.markers.append(marker)
+    if gt_boxes3d is not None:
+        for id_gt in range(len(gt_boxes3d)):
+            gt_box3d = gt_boxes3d[id_gt]
+            marker = process_single_box3d(gt_box3d, id_gt+len(boxes3d), "gt")
+            marker_array.markers.append(marker)
 
     return marker_array
