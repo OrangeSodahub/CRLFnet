@@ -6,9 +6,8 @@ Convert raw images to regions of interest (ROIs).
 And many other related functions.
 """
 
-import os
+
 import numpy as np
-from pathlib import Path
 from PIL import Image
 
 import ros_numpy
@@ -39,14 +38,16 @@ def radar_poi(radar_objs: MsgRadarObject, w2c: np.ndarray, c2p: np.ndarray, imag
     The output is the position of objects in world coordinate, camera coordinate,
     the distance from object to camera, and the range rate (velocity) of objects.
     '''
-    ps = np.empty(shape=(0, 3), dtype=int)   # (u, v)
-    zs = np.empty(shape=(0, 3))              # (distance, angle, velocity)
+    ps = np.empty(shape=(0, 3), dtype=int)  # (u, v, 1)
+    zs = np.empty(shape=(0, 3))             # (distance, angle, velocity)
+    wps = np.empty(shape=(0, 2))            # (Xw, Yw) used for visual assistant
     for obj in radar_objs:
         pos_image, zc = w2p(np.array([obj.pos_x, obj.pos_y, 0.461, 1]), w2c, c2p)
         if 0 <= pos_image[0] <= image_width and 0 <= pos_image[1] <= image_height:
             ps = np.concatenate((ps, np.expand_dims(pos_image, axis=0))) 
             zs = np.concatenate((zs, [[zc, obj.angle_centroid, obj.velocity]]))
-    return ps, zs
+            wps = np.concatenate((wps, [[obj.pos_x, obj.pos_y]]))
+    return ps, zs, wps
 
 
 def expand_poi(poi: np.ndarray, distance: float, image_width: int, image_height: int):

@@ -12,6 +12,29 @@ from cv_bridge import CvBridge
 import cv2
 
 
+class VisualAssistant:
+    
+    def __init__(self, base_image_path: Path, output_path: Path):
+        self.base_image = cv2.imread(str(base_image_path))
+        self.output_path = output_path
+        self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
+
+    def scene_output(self, state_vecs: np.ndarray, radar_vecs: np.ndarray, image_vecs: np.ndarray, frame=0):
+        for state_vec in state_vecs:
+            v = np.matmul(self.w2s, np.array([state_vec[0], state_vec[1], 1])).astype(int)
+            cv2.circle(self.base_image, (v[0], v[1]), 5, (255, 0, 0), -1)
+        for radar_vec in radar_vecs:
+            v = np.matmul(self.w2s, np.array([radar_vec[0], radar_vec[1], 1])).astype(int)
+            cv2.circle(self.base_image, (v[0], v[1]), 5, (0, 255, 0), -1)
+        for image_vec in image_vecs:
+            v = np.matmul(self.w2s, np.array([image_vec[0], image_vec[1], 1])).astype(int)
+            cv2.circle(self.base_image, (v[0], v[1]), 5, (255, 255, 0), -1)
+        
+        file_name = "scene_{:04d}.jpg".format(frame)
+        cv2.imwrite(str(self.output_path.joinpath(file_name)), self.base_image)
+        print("\033[0;32mSaved scene \033[1;32m\"{}\"\033[0;32m sucessfully.\033[0m".format(frame))
+
+
 def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), radar_rois=(), image_rois=(), draw_radar=True, draw_image=True, appendix="Unknown"):
     # make output dir
     output_dir.mkdir(exist_ok=True)

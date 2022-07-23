@@ -11,6 +11,9 @@ import argparse
 import yaml
 import numpy as np
 
+from cv_bridge import CvBridge
+import cv2
+
 import rospy
 import message_filters
 from sensor_msgs.msg import Image               # Camera message
@@ -20,7 +23,8 @@ from msgs.msg._MsgRadCam import MsgRadCam       # fusion message
 from ..utils.yolo.yolo import YOLO
 from ..utils.kalman import KalmanFilter
 from ..utils.poi_and_roi import radar_poi, image_roi, expand_poi, optimize_iou
-from ..utils.visualization import radar2visual  # visualized output
+from ..utils.visualization import radar2visual, VisualAssistant
+from ..utils.transform import p2w
 
 
 def residual(uir, uii):
@@ -31,12 +35,13 @@ def residual(uir, uii):
 
 def pair_fusion(radar: MsgRadar, image: Image, kf: KalmanFilter, w2c: np.ndarray, c2p: np.ndarray, del_time: float):
     global yolo
+    global va
 
     # Separate Decection
     print("\033[1;36mSeparate Detection\033[0m")
     # acquire radar POIs in pixel coordinate and the observation vectors
     # poi = (u, v, 1), dtype=int;  z = (distance, angle, velocity)
-    radar_pois, radar_zs = radar_poi(radar.objects_left, w2c, c2p, image.width, image.height)
+    radar_pois, radar_zs, radar_pois_world = radar_poi(radar.objects_left, w2c, c2p, image.width, image.height)
     radar_obj_num = len(radar_pois)
     # acquire image ROIs in pixel coordinate and the observation vectors
     # roi = (left, top, right, bottom, score, class), dtype=int;  z = (u, v)
@@ -75,14 +80,17 @@ def pair_fusion(radar: MsgRadar, image: Image, kf: KalmanFilter, w2c: np.ndarray
     zis = image_zs[image_indices, 0:2]
     # EKF
     A = np.array([[1, 0, del_time, 0], [0, 1, 0, del_time], [0, 0, 1, 0], [0, 0, 0, 1]])
-    Q = np.eye(4, 5e-2)
-    kf.all_in_one()
+    Q = np.eye(4) * 10.0
+    kf.all_in_one(A, Q, zms, zrs, zis)
     kf.output()
 
     # Save Images
     if args.save and radar_obj_num !=0 and image_obj_num != 0:
         radar2visual(OUTPUT_DIR, image, radar_pois=radar_pois, radar_rois=radar_expanded_rois, image_rois=image_rois, appendix='Test')
     
+    img_vecs = list(map(lambda x: p2w(np.array([x[0], x[1], 1]), 0.461, w2c, c2p)[0], image_zs))
+    va.scene_output(kf.xpt_pile, radar_pois_world, img_vecs, frame_counter)
+
     # Publish
 
 
@@ -100,8 +108,8 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     my_timer = my_now
 
     # Pair Fusion
-    print("\033[1;36m{}\033[0m".format('camera2'))
-    pair_fusion(radar, image2, kf2, w2cs['camera2'], c2ps['camera2'], del_time, 'camera2')
+    print("\033[1;33m{}\033[0m".format('camera2'))
+    pair_fusion(radar, image2, kf2, w2cs['camera2'], c2ps['camera2'], del_time)
 
 
 if __name__ == '__main__':
@@ -116,12 +124,6 @@ if __name__ == '__main__':
                         default     = False,
                         required    = False,
                         help        = "Disable yolo, save radar POIs and images per frame instead."
-    )
-    parser.add_argument("--fps",
-                        type        = float,
-                        default     = 2,
-                        required    = False,
-                        help        = "Approximate virtual fps."
     )
     parser.add_argument("-s", "--save",
                         action      = 'store_true',
@@ -150,6 +152,7 @@ if __name__ == '__main__':
             exit(1)
     OUTPUT_DIR = ROOT_DIR.joinpath(config['output']['RadCamFusion_dir'])
     MEASUREMENT_DIR = ROOT_DIR.joinpath(config['measurement']['measurement_dir'], 'measurement.txt')
+    BASE_IMAGE = ROOT_DIR.joinpath("src/utils/visual/scene_base.png")
     # load measurement file
     camera_index = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
                     'camera2' : 4, 'camera3' : 5,
@@ -170,10 +173,11 @@ if __name__ == '__main__':
         print("\033[0;33mRunning in off-YOLO mode.\033[0m")
         OUTPUT_DIR = OUTPUT_DIR.joinpath("off_yolo")
         OUTPUT_DIR.mkdir(exist_ok=True)
-
     # initialize Kalman Filter
     kf2 = KalmanFilter(w2cs['camera2'], c2ps['camera2'])
-    
+    # initialize Visual Assistant
+    va = VisualAssistant(BASE_IMAGE, OUTPUT_DIR)
+
     # initialize publisher
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam, queue_size=10)
     # initialize ROS node
