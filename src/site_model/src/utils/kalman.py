@@ -2,16 +2,194 @@
 
 """
 Kalman Filter
+
+Some Abbr.:
+pred    ->  predicted
+obs     ->  observation
+zs      ->  observations
+xpt(s)  ->  expectation / mean vector(s)
+cov(s)  ->  covarience matirx (matrices)
+idx     ->  index / indices
+rmv     ->  remove
 """
 
 
+from abc import ABC, abstractmethod
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-from .transform import w2p
+from .transform import w2p, p2w
 
 
-class KalmanFilter:
+class Sensor(ABC):
+
+    @abstractmethod
+    def __init__(self, name: str, R: np.ndarray) -> None:
+        self.name = name
+        self.obs = None
+        self.R = R
+
+    @abstractmethod
+    def update(self, data: np.ndarray) -> None:
+        pass
+
+    @abstractmethod
+    def H(self, pred_xpt: np.ndarray) -> np.ndarray:
+        pass
+
+    @abstractmethod
+    def obs2world(self) -> np.ndarray:
+        pass
+
+    @abstractmethod
+    def world2obs(self, pos: np.ndarray) -> np.ndarray:
+        pass
+
+
+class RadarSensor(Sensor):
+
+    def __init__(self, name: str, R: np.ndarray, offset: np.ndarray) -> None:
+        super().__init__(name, R)
+        self.obs = np.empty(3)
+        self.offset = offset
+
+    def update(self, data: np.ndarray) -> None:
+        self.obs[0:3] = data[0:3]
+
+    def H(self, pred_xpt: np.ndarray) -> np.ndarray:
+        r = np.linalg.norm(pred_xpt[0:2] - self.offset[0:2])
+        s = (pred_xpt[0] - self.offset[0]) / r
+        c = (pred_xpt[1] - self.offset[1]) / r
+        Hr = np.array([[-s, c], [-c / r, -s / r]])
+        return Hr
+
+    def obs2world(self) -> np.ndarray:
+        x = self.offset[0] - self.obs[0] * np.sin(self.obs[1] * np.pi / 180)
+        y = self.offset[1] + self.obs[0] * np.cos(self.obs[1] * np.pi / 180)
+        return np.array([x, y])
+
+    def world2obs(self, pos: np.ndarray) -> np.ndarray:
+        x, y = pos[0] - self.offset[0], pos[1] - self.offset[1]
+        r = np.sqrt(np.square(x) + np.square(y))
+        if x == 0:
+            theta = 0
+        elif y == 0:
+            if x < 0:
+                theta = 90
+            else:
+                theta = -90
+        else:
+            theta = -np.rad2deg(np.arctan(x / y))
+            if y < 0:
+                if x < 0:
+                    theta = 180 - theta
+                elif x > 0:
+                    theta = -180 + theta
+        z = np.array([r, theta])
+        return z
+
+
+class ImageSensor(Sensor):
+
+    def __init__(self, name: str, R: np.ndarray, w2c: np.ndarray, c2p: np.ndarray, target_height: float) -> None:
+        super().__init__(name, R)
+        self.obs = np.empty(2)
+        self.w2c = w2c
+        self.c2p = c2p
+        self.height = target_height
+
+    def update(self, data: np.ndarray) -> None:
+        self.obs[0] = np.mean(data[0:4:2])
+        self.obs[1] = np.mean(data[1:4:2])
+    
+    def H(self, pred_xpt: np.ndarray) -> np.ndarray:
+        uv, zc = w2p(np.array([pred_xpt[0], pred_xpt[1], self.height, 1]), self.w2c, self.c2p)
+        m0 = np.matmul(self.c2p, self.w2c)[0:2, 0:2]
+        m1 = np.outer(uv[0:2], self.w2c[2, 0:2])
+        Hi = (m0 - m1) / zc
+        return Hi
+    
+    def obs2world(self) -> np.ndarray:
+        return p2w(self.obs, self.height, self.w2c, self.c2p)[0][0:2]
+    
+    def world2obs(self, pos: np.ndarray) -> np.ndarray:
+        return w2p(np.array([pos[0], pos[1], self.height, 1]), self.w2c, self.c2p)[0][0:2]
+
+
+class SensorBundle:
+
+    def __init__(self) -> None:
+        self.sensors = []
+        self.total_zs = 0
+
+    @property
+    def projections(self) -> np.ndarray:
+        pass
+
+    def update(self) -> None:
+        for s in self.sensors:
+            s.update()
+
+
+class Kalman:
+
+    def __init__(self, size: int, Q: np.ndarray, threshold: float) -> None:
+        self.xpts = np.empty((0, size))
+        self.covs = np.empty((0, size, size))
+        self.total_objs = 0
+        
+        self.Q = Q
+        self.THRESHOLD = threshold
+
+    def predict(self, A: np.ndarray) -> tuple:
+        pred_xpts = np.matmul(self.xpts, A.T)
+        pred_covs = np.matmul(A, np.matmul(self.covs, A.T)) + np.tile(self.Q, (self.total_objs, 1, 1))
+        return pred_xpts, pred_covs
+
+    def compare(self, pred_xpts: np.ndarray, zs: SensorBundle) -> tuple:
+        # generate comparison matrix
+        cmp = [np.linalg.norm(x - z) for x in pred_xpts for z in zs.projections]
+        cmp = np.array(cmp).reshape(self.total_objs, zs.total_zs)
+        # GNN
+        xpt_idx, obs_idx = linear_sum_assignment(cmp)
+        thres_filter = cmp[xpt_idx, obs_idx] < self.THRESHOLD
+        # get index(indices) of objects form different sources
+        xpt_idx = np.extract(thres_filter, xpt_idx)                     # pred_xpts
+        rmv_idx = np.setdiff1d(np.arange(self.total_objs), xpt_idx)     # pred_xpts
+        obs_idx = np.extract(thres_filter, obs_idx)                     # zs.projections
+        new_idx = np.setdiff1d(np.arange(zs.total_zs), obs_idx)         # zs.projections
+        return xpt_idx, obs_idx, rmv_idx, new_idx
+
+    def __single_update(self, pred_xpt: np.ndarray, pred_cov: np.ndarray, pred_z: np.ndarray,
+                        z: np.ndarray, H: np.ndarray, R: np.ndarray) -> tuple:
+        S = np.matmul(H, np.matmul(pred_cov, H.T)) + R
+        K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
+        xpt = pred_xpt + np.matmul(K, (z - pred_z))
+        cov = pred_cov - np.matmul(np.matmul(K, H), pred_cov)
+        return xpt, cov
+
+    def update(self, pred_xpts: np.ndarray, pred_covs: np.ndarray, zs: SensorBundle,
+               xpt_idx: np.ndarray, obs_idx: np.ndarray) -> None:
+        pass
+
+    def remove(self, rmv_idx: np.ndarray) -> None:
+        pass
+
+    def create(self, zs: SensorBundle, new_idx: np.ndarray) -> None:
+        pass
+
+    def output(self) -> None:
+        pass
+
+    def flush(self, A: np.ndarray, zs: SensorBundle) -> None:
+        pred_xpts, pred_covs = self.predict(A)
+        xpt_idx, obs_idx, rmv_idx, new_idx = self.compare(pred_xpts, zs)
+        self.update(pred_xpts, pred_covs, zs, xpt_idx, obs_idx)
+        self.remove(rmv_idx)
+        self.create(zs, new_idx)
+
+
+class OldKalmanFilter:
     '''
     Semi-nonlinear Filter
     '''
@@ -93,8 +271,8 @@ class KalmanFilter:
         return xpt, cov
 
     def __single_update(self, pred_xpt: np.ndarray, pred_cov: np.ndarray, z: np.ndarray, pred_z: np.ndarray, H, R):
-        K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(np.matmul(H, np.matmul(pred_cov, H.T)) + R)))
-        print(K)
+        S = np.matmul(H, np.matmul(pred_cov, H.T)) + R
+        K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
         xpt = pred_xpt + np.matmul(K, (z - pred_z))
         cov = pred_cov - np.matmul(np.matmul(K, H), pred_cov)
         return xpt, cov
