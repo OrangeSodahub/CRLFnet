@@ -110,6 +110,22 @@
     <material>Gazebo/Black</material>
     <turnGravityOff>false</turnGravityOff>
   </gazebo>
+  <gazebo reference="camera7_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera8_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera9_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera10_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
   <gazebo reference="CPU1_Link">
     <material>Gazebo/Black</material>
     <turnGravityOff>false</turnGravityOff>
@@ -1326,7 +1342,7 @@
     name="camera5"
     type="fixed">
     <origin
-      xyz="-1.4 2 0.8"
+      xyz="-1.4 2 0.7"
       rpy="0 0 0.792156862745098" />
     <parent
       link="base_link" />
@@ -1418,7 +1434,7 @@
     name="camera6"
     type="fixed">
     <origin
-      xyz="1 2 0.8"
+      xyz="1.1 1.9 0.7"
       rpy="0 0 2.356194490192345" />
     <parent
       link="base_link" />
@@ -1455,6 +1471,98 @@
         <imageTopicName>/image_raw_6</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
         <frameName>camera6_Link</frameName>
+        <hackBaseline>0.0</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- camera7 -->
+  <link
+    name="camera7_Link">
+    <inertial>
+      <origin
+        xyz="0.000108384331294675 -0.00200274517214477 0.0112406574811803"
+        rpy="0 0 0" />
+      <mass
+        value="0.814135587689854" />
+      <inertia
+        ixx="0.000299485503699371"
+        ixy="-8.50166027613617E-08"
+        ixz="-2.30003016200203E-09"
+        iyy="0.000280071339845325"
+        iyz="2.45106701788653E-06"
+        izz="0.000373933133462947" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="-0.02 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/camera7_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/camera7_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera7"
+    type="fixed">
+    <origin
+      xyz="-0.75 2.7 0.7"
+      rpy="0 0 0.3490658503988659" />
+    <parent
+      link="base_link" />
+    <child
+      link="camera7_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+<gazebo reference="camera7_Link">
+    <sensor type="camera" name="camera7">
+      <pose>0 0 0 0 0 0</pose>
+      <update_rate>15.0</update_rate>
+      <camera name="camera7">
+        <horizontal_fov>1.13</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>60</updateRate>
+        <cameraName>camera7</cameraName>
+        <imageTopicName>/image_raw_7</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera7_Link</frameName>
         <hackBaseline>0.0</hackBaseline>
         <distortionK1>0.0</distortionK1>
         <distortionK2>0.0</distortionK2>

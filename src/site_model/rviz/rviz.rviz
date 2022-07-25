@@ -163,6 +163,54 @@ Visualization Manager:
       Value: true
     - Class: rviz/Image
       Enabled: true
+      Image Topic: /image_raw_7
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image7
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /image_raw_8
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image8
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /image_raw_9
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image9
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /image_raw_10
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image10
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
       Image Topic: /image_raw_41
       Max Value: 1
       Median window: 5
