@@ -695,8 +695,8 @@
   <gazebo reference = "left_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -704,8 +704,8 @@
   <gazebo reference = "left_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -713,8 +713,8 @@
   <gazebo reference = "right_rear_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -722,8 +722,8 @@
   <gazebo reference = "right_front_wheel">
 <pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="5"/>
-   <mu2 value="5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
    <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
@@ -776,7 +776,7 @@
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
     <legacyModeNS>true</legacyModeNS>
     <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-    <robotNamespace>/deepracer2</robotNamespace>
+    <robotNamespace>/deepracer</robotNamespace>
     </plugin>
   </gazebo>
   
@@ -802,7 +802,7 @@
         <alwaysOn>true</alwaysOn>
         <!-- Turn down if virtual machine-->
         <updateRate>30</updateRate>
-        <cameraName>deepracer2/camera/zed_left</cameraName>
+        <cameraName>deepracer/camera/zed_left</cameraName>
         <imageTopicName>image_rect_color_left</imageTopicName>
         <cameraInfoTopicName>camera_info_left</cameraInfoTopicName>
         <frameName>camera_link_left</frameName>
@@ -837,7 +837,7 @@
         <alwaysOn>true</alwaysOn>
         <!-- Turn down if virtual machine-->
         <updateRate>30</updateRate>
-        <cameraName>deepracer2/camera/zed_right</cameraName>
+        <cameraName>deepracer/camera/zed_right</cameraName>
         <imageTopicName>image_rect_color_right</imageTopicName>
         <cameraInfoTopicName>camera_info_right</cameraInfoTopicName>
         <frameName>camera_link_right</frameName>
@@ -885,20 +885,6 @@
           <frameName>laser</frameName>
         </plugin>
     </sensor>
-  </gazebo>
-
-  <!--Send Position Information-->
-  <gazebo>
-    <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
-  	<alwaysOn>true</alwaysOn>
-  	<updateRate>30.0</updateRate>
-  	<bodyName>base_link</bodyName>
-  	<topicName>base_pose_ground_truth</topicName>
-  	<gaussianNoise>0.01</gaussianNoise>
-  	<frameName>world</frameName>
-  	<xyzOffsets>0 0 0</xyzOffsets>
-  	<rpyOffsets>0 0 0</rpyOffsets>
-    </plugin>
   </gazebo>
   
 </robot>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <launch>
+    
+    <!--include file="$(find pkg)/launch/multi.launch"/-->
+
+    <!--node pkg="pkg" type="tf_broadcaster"
+          args="deepracer1" name="deepracer1_tf_broadcaster" />
+    <node pkg="pkg" type="tf_broadcaster"
+          args="deepracer2" name="deepracer2_tf_broadcaster" /-->
+    <!--<node pkg="pkg" type="tf_broadcaster"
+          args="deepracer3" name="deepracer3_tf_broadcaster" />
+    <node pkg="pkg" type="tf_broadcaster"
+          args="deepracer4" name="deepracer4_tf_broadcaster" />
+    <node pkg="pkg" type="tf_broadcaster"
+          args="deepracer5" name="deepracer5_tf_broadcaster" />-->
+   
+    <node pkg="pkg" type="main" name="main" />
+    <node pkg="pkg" type="leader" name="leader" />
+    <node name="lane_keep" pkg="pkg" type="lane.py"/>
+    <node pkg="pkg" type="follower1" name="follower1"/>
+    <node pkg="pkg" type="follower2" name="follower2"/>
+    <node pkg="pkg" type="follower3" name="follower3"/>
+    <node pkg="pkg" type="follower4" name="follower4"/>
+    <!--<node pkg="pkg" type="slave_tf_listener3"
+          name="slave3" />
+    <node pkg="pkg" type="slave_tf_listener4"
+          name="slave4" />
+    <node pkg="pkg" type="slave_tf_listener5"
+          name="slave5" />-->
+          
+  </launch>

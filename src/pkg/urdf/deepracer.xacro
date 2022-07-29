@@ -6,7 +6,9 @@
 
 <!-- Links and Joints -->
   <link name="base_link" />
-    
+<gazebo reference="base_link">
+    <pose>0 0 0 0 0 0</pose>
+</gazebo>
   <link name="chassis">
     <inertial>
       <origin
@@ -92,6 +94,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_rear_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_rear_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_rear_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="right_rear_wheel">
@@ -147,6 +161,18 @@
       velocity="100" />
   </joint>
   
+    <transmission name="right_rear_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_rear_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_rear_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="left_steering_hinge">
@@ -177,7 +203,7 @@
   
   <joint
     name="left_steering_hinge_joint"
-    type="fixed">
+    type="continuous">
     <origin
       xyz="0.082311 0.079601 0.011759"
       rpy="0 0 0" />
@@ -194,6 +220,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_steering_hinge_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="left_front_wheel">
@@ -248,6 +286,18 @@
       velocity="100" />
   </joint>
   
+  <transmission name="left_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="left_front_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="left_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="right_steering_hinge">
@@ -278,7 +328,7 @@
   
   <joint
     name="right_steering_hinge_joint"
-    type="fixed">
+    type="continuous">
     <origin
       xyz="0.082311 -0.079601 0.011759"
       rpy="0 0 0" />
@@ -294,6 +344,20 @@
       effort="10"
       velocity="100" />
   </joint>
+  
+  <transmission name="right_steering_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_steering_hinge_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_steering_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
+  
   <link
     name="right_front_wheel">
     <inertial>
@@ -346,6 +410,19 @@
       effort="10"
       velocity="100" />
   </joint>
+  
+    <transmission name="right_front_axle_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="right_front_wheel_joint">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="right_front_axle_act">
+        <!-- This hardwareInterface element exists for compatibility
+             with ROS Hydro. -->
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+  </transmission>
   
   <link
     name="zed_camera_link_leftcam">
@@ -482,7 +559,7 @@
         iyz="0"
         izz="1e-6" />
     </inertial>
-<!--     <visual>
+    <visual>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -490,7 +567,7 @@
         <mesh
           filename="package://pkg/meshes/deepracer/camera_link_rightcam.STL" />
       </geometry>
-    </visual> -->
+    </visual> 
   </link>
 
   <joint
@@ -547,7 +624,7 @@
     type="fixed">
     <origin
       xyz="0.02913 0 0.16145" 
-      rpy="0 0 3.1416" />
+      rpy="0 0 0" />
     <parent
       link="chassis" />
     <child
@@ -609,81 +686,97 @@
 
 <!-- Vehicle body -->
   <gazebo reference = "chassis">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/Grey</material>
    <mu1 value="0.0"/>
    <mu2 value="0.0"/>
    <kp  value="1000000.0" />
   </gazebo>
   <gazebo reference = "left_rear_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "left_front_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "right_rear_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "right_front_wheel">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
-   <mu1 value="0.5"/>
-   <mu2 value="0.5"/>
+   <mu1 value="500"/>
+   <mu2 value="500"/>
    <kp  value="1000000.0" />
-   <kd  value="1.0" />
+   <kd  value="100000.0" />
    <fdir1 value="1 0 0"/>
   </gazebo>
   <gazebo reference = "left_steering_hinge">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "right_steering_hinge">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "zed_camera_link_leftcam">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "zed_camera_link_rightcam">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/DarkGrey</material>
   </gazebo>
   <gazebo reference = "car_body_link_v3">
+<pose>0 0 0 0 0 0</pose>
    <material>Gazebo/Grey</material>
   </gazebo>
   
 <!-- Chassis Controller-->
-   <gazebo>
+   <!--gazebo>
     <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
       <updateRate>30</updateRate>
-      <robotNamespace>$(arg bodyframe)</robotNamespace>
+      <robotNamespace>/</robotNamespace>
       <leftFrontJoint>left_front_wheel_joint</leftFrontJoint>
       <rightFrontJoint>right_front_wheel_joint</rightFrontJoint>
       <leftRearJoint>left_rear_wheel_joint</leftRearJoint>
       <rightRearJoint>right_rear_wheel_joint</rightRearJoint>
       <wheelSeparation>0.159202</wheelSeparation>
       <wheelDiameter>0.06</wheelDiameter>
-      
-      <robotBaseFrame>$(arg bodyframe)/base_link</robotBaseFrame>
-      
+      <robotBaseFrame>base_link</robotBaseFrame>
       <torque>20</torque>
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
-      <covariance_x>0.0001</covariance_x>
-      <covariance_y>0.0001</covariance_y>
-      <covariance_yaw>0.0001</covariance_yaw>
+      <covariance_x>0</covariance_x>
+      <covariance_y>0</covariance_y>
+      <covariance_yaw>0</covariance_yaw>
       <broadcastTF>true</broadcastTF>
+    </plugin>
+  </gazebo-->
+  
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <legacyModeNS>true</legacyModeNS>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    <robotNamespace>$(arg bodyframe)</robotNamespace>
     </plugin>
   </gazebo>
   
@@ -764,14 +857,16 @@
     <sensor type="ray" name="hokuyo_sensor">
       <pose>0 0 0 0 0 0</pose>
       <visualize>false</visualize>
-      <update_rate>30</update_rate>
+      <update_rate>10</update_rate>
       <ray>
         <scan>
           <horizontal>
             <samples>600</samples>
             <resolution>1</resolution>
-            <min_angle>-2.61799</min_angle>
-            <max_angle>2.61799</max_angle>
+             <min_angle>-3.1415926</min_angle>
+             <max_angle>3.1415926</max_angle>
+            <!--min_angle>0.52351</min_angle>
+            <max_angle>5.75949</max_angle-->
           </horizontal>
         </scan>
         <range>
@@ -781,24 +876,24 @@
         </range>
         <noise>
           <mean>0.0</mean>
-          <stddev>0.01</stddev>
+          <stddev>0</stddev>
         </noise>
       </ray>
 
        <plugin name="rp_lidar" filename="libgazebo_ros_laser.so">
           <topicName>scan</topicName>
-          <frameName>base_link</frameName>
+          <frameName>laser</frameName>
         </plugin>
     </sensor>
   </gazebo>
-  <!--Send Position Information-->
+
   <gazebo>
     <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
   	<alwaysOn>true</alwaysOn>
   	<updateRate>30.0</updateRate>
   	<bodyName>base_link</bodyName>
   	<topicName>base_pose_ground_truth</topicName>
-  	<gaussianNoise>0.01</gaussianNoise>
+  	<gaussianNoise>0</gaussianNoise>
   	<frameName>world</frameName>
   	<xyzOffsets>0 0 0</xyzOffsets>
   	<rpyOffsets>0 0 0</rpyOffsets>

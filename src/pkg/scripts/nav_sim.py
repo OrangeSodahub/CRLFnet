@@ -16,12 +16,12 @@ def callback(data):
     turn = data.angular.z
 
     msg = AckermannDriveStamped();
-    msg.header.stamp = rospy.Time.now();
-    msg.header.frame_id = "base_link";
+    msg.header.stamp = rospy.Time.now()
+    msg.header.frame_id = "base_link"
 
-    msg.drive.speed = speed;
-    msg.drive.acceleration = 1;
-    msg.drive.jerk = 1;
+    msg.drive.speed = speed
+    msg.drive.acceleration = 1
+    msg.drive.jerk = 1
     msg.drive.steering_angle = turn
     msg.drive.steering_angle_velocity = 1
 

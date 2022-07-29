@@ -1,0 +1,498 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="default">
+    <include>
+      <uri>model://ground_plane</uri>
+	  <pose frame=''>0 0 -0.10 0 0 0 </pose>
+    </include> 
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- <include>
+      <uri>model://track42</uri>
+    </include> -->
+    
+    <model name='tagcode1'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode1</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-1.54889 -4.02215 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode2'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode2</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-1.71128 -2.59959 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode3'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode3</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-1.71128 -0.81162 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode4'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode4</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-1.71128 1.47854 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode5'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode5</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-1.05585 2.72776 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode6'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode6</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-1.3707 1.12923 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode7'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode7</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-0.53511 -4.02215 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode8'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode8</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-0.42941 -2.76879 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode9'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode9</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>-0.58098 -1.63212 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode10'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode10</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>0.0049 -0.0752 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode11'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode11</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>0.0049 1.95597 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode12'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode12</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>0.50305 -4.02215 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode13'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode13</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>0.57857 -2.76879 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode14'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode14</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>0.41839 -1.81437 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode15'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode15</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>0.97289 1.39488 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode16'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode16</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>1.30683 2.72776 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode17'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode17</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>1.53731 -4.02215 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode18'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode18</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>1.75325 -1.86586 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode19'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode19</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>1.75325 -0.09029 0 0 0 0 </pose>
+</model>
+
+<model name='tagcode20'>
+	<static>1</static>
+	<link name='link'>
+		<visual name='visual'>
+		<cast_shadows>1</cast_shadows>
+		<geometry>
+		<box>
+		<size> 0.15 0.15 0.001</size>
+		</box>
+		</geometry>
+		<material>
+		<script>
+			<uri>model://tagcode/materials/scripts</uri>
+			<uri>model://tagcode/materials/textures</uri>
+			<name>tagcode20</name>
+		</script>
+		</material>
+		</visual>
+		<self_collide>0</self_collide>
+		<kinematic>0</kinematic>
+	</link>
+	<pose frame=''>1.75325 1.45287 0 0 0 0 </pose>
+</model>
+
+    
+  </world>
+</sdf>
+

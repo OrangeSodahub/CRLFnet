@@ -10,7 +10,7 @@
         <param name="use_gui" value="true"/>
     </node>-->
     <node name="gazebo_odometry" pkg="pkg" type="gazebo_odometry.py"/>
-    <node name="rviz" pkg="rviz" type="rviz"
-         args="-d $(find pkg)/rviz/movebase.rviz" required="true"/>
-
+    <!--node name="rviz" pkg="rviz" type="rviz"
+         args="-d $(find pkg)/rviz/deepracer.rviz" required="true"/-->
+    <node name="lane_keep" pkg="pkg" type="lane.py"/>
 </launch>

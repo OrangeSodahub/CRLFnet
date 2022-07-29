@@ -1,0 +1,6 @@
+    <launch>
+         <node pkg="rosbag" type="play" name="rosbag" args="-d 2 /home/duhaikuo/桌面/catkin_ws/4.bag"/>
+         <node name="extract" pkg="image_view" type="extract_images" respawn="false" output="screen" cwd="ROS_HOME">
+           <remap from="image" to="/deepracer1/camera/zed_left/image_rect_color_left"/>
+         </node>
+    </launch>
