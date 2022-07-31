@@ -9,6 +9,7 @@ And many other related functions.
 
 import numpy as np
 from PIL import Image
+from typing import List
 
 import ros_numpy
 from msgs.msg._MsgRadarObject import MsgRadarObject
@@ -33,7 +34,16 @@ def image_roi(image, yolo: YOLO):
     return yolo.detect_image(image)
 
 
-def radar_poi(radar_objs: MsgRadarObject, w2c: np.ndarray, c2p: np.ndarray, image_width: int, image_height: int):
+def radar_poi(obj_poses: np.ndarray, w2c: np.ndarray, c2p: np.ndarray, height: float):
+    '''
+    The function takes in the positions of objects in the world coordinate and calib matirces,
+    and outputs the point of interest in the pixel coordinate.
+    '''
+    ps = [w2p(np.concatenate((pos[0:2], [height, 1.])), w2c, c2p) for pos in obj_poses]
+    return np.array(ps, dtype=int)
+
+
+def old_radar_poi(radar_objs: List[MsgRadarObject], w2c: np.ndarray, c2p: np.ndarray, image_width: int, image_height: int):
     '''
     The output is the position of objects in world coordinate, camera coordinate,
     the distance from object to camera, and the range rate (velocity) of objects.
