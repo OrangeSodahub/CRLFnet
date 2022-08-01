@@ -27,15 +27,12 @@
   <arg name="organize_cloud" default="false"/>
   <param
     name="robot_description"
-    command="$(find xacro)/xacro --inorder '$(find site_model)/urdf/site_model.urdf.xacro' organize_cloud:=$(arg organize_cloud) gpu:=$(arg gpu)" />
+    command="$(find xacro)/xacro inorder '$(find site_model)/urdf/site_model.urdf.xacro' organize_cloud:=$(arg organize_cloud) gpu:=$(arg gpu)" />
   <node
     pkg="gazebo_ros"
     type="spawn_model"
     name="spawn_model"
     args="-urdf -param /robot_description -model site_model"/>
-
-    <!-- Spawn deepracer robot into Gazebo 
-    <node name="deepracer_urdf" pkg="gazebo_ros" type="spawn_model" output="screen" args="-file $(find site_model)/urdf/deepracer.urdf -urdf -model deepracer"  />-->
 
   <node
     pkg="robot_state_publisher"

@@ -1,9 +1,9 @@
 <?xml version = "1.0" encoding = "urtf-8" ?>
-<robot name="track">
-<static>1</static>
+<robot
+  name="track">
   <gazebo reference="base_link">
    <material>Gazebo/Residential</material>
-   <turnGravityOff>true</turnGravityOff>
+   <turnGravityOff>false</turnGravityOff>
    <mu1 value="5000"/>
    <mu2 value="5000"/>
    <kp  value="1000000.0" />
@@ -12,16 +12,11 @@
   </gazebo>
   <gazebo reference="Green">
     <material>Gazebo/Grass</material>
-    <turnGravityOff>true</turnGravityOff>
-     <mu1 value="5000"/>
-   <mu2 value="5000"/>
-   <kp  value="1000000.0" />
-   <kd  value="100000.0" />
-   <fdir1 value="1 0 0"/>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="GaoJiaLuMian">
    <material>Gazebo/Residential</material>
-   <turnGravityOff>true</turnGravityOff>
+   <turnGravityOff>false</turnGravityOff>
    <mu1 value="5000"/>
    <mu2 value="5000"/>
    <kp  value="1000000.0" />
@@ -34,35 +29,35 @@
   </gazebo>
   <gazebo reference="GaoJiaLiZhu">
     <material>Gazebo/Residential</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="JianZhu">
     <material>Gazebo/Bricks</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="Camera1">
     <material>Gazebo/Black</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="Camera2">
     <material>Gazebo/Black</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="LeiDa1">
     <material>Gazebo/Black</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="LeiDa2">
     <material>Gazebo/Black</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="BiaoXian">
-    <material>Gazebo/Blue</material>
-    <turnGravityOff>true</turnGravityOff>
+    <material>Gazebo/JointAnchor</material>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <gazebo reference="Parking">
     <material>Gazebo/Gray</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
   <link
     name="base_link">
@@ -440,7 +435,7 @@
     </inertial>
     <visual>
       <origin
-        xyz="-2 0 -3"
+        xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
