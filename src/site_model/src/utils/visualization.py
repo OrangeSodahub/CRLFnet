@@ -39,18 +39,23 @@ class VisualAssistant:
         file_name = "scene_{:04d}.jpg".format(frame)
         cv2.imwrite(str(self.output_path.joinpath(file_name)), self.base_image)
         print("\033[0;32mSaved scene \033[1;32m\"{}\"\033[0;32m sucessfully.\033[0m".format(frame))
+    
+    def image_output(self, frame: int, image: Image, camera: ImageSensor):
+        pass
 
-    '''
-    def grid2scene(self):
-        print("Please wait.")
-        for x in range(0, 640):
-            for y in range(0, 480):
-                vi = p2w(np.array([x, y, 1]), 0.461, self.w2c, self.c2p)[0]
-                p = np.matmul(self.w2s, np.array([vi[0], vi[1], 1])).astype(int)
-                cv2.circle(self.base_image, (p[0], p[1]), 1, (x/3, y/3, 0), -1)
-        cv2.imwrite(str(self.output_path.joinpath("grid.jpg")), self.base_image)
-        print("GRID")
-    '''
+    def image_range(self):
+        pass
+        '''
+        def grid2scene(self):
+            print("Please wait.")
+            for x in range(0, 640):
+                for y in range(0, 480):
+                    vi = p2w(np.array([x, y, 1]), 0.461, self.w2c, self.c2p)[0]
+                    p = np.matmul(self.w2s, np.array([vi[0], vi[1], 1])).astype(int)
+                    cv2.circle(self.base_image, (p[0], p[1]), 1, (x/3, y/3, 0), -1)
+            cv2.imwrite(str(self.output_path.joinpath("grid.jpg")), self.base_image)
+            print("GRID")
+        '''
 
 
 def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), radar_rois=(), image_rois=(), draw_radar=True, draw_image=True, appendix="Unknown"):
