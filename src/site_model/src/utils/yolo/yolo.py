@@ -89,7 +89,7 @@ class YOLO(object):
             
             # output
             if results[0] is None: 
-                return np.empty(shape=(0, 6))
+                return np.empty(shape=(0, 6), dtype=int)
             else:
                 # permutation
                 p = np.array([  [0, 1, 0, 0, 0, 0, 0],

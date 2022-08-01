@@ -163,6 +163,7 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
             # print(img_file, "saved.")
             cv2.imwrite(img_file, img)
 
+
 def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
     """
         boxes3d: 3-d coordinates

@@ -35,7 +35,7 @@ class Kalman:
         self.MAX_AGE = max_age
 
     def predict(self, A: np.ndarray) -> tuple:
-        pred_xpts = np.matmul(self.xpts[0:self.size], A.T)
+        pred_xpts = np.matmul(self.xpts[:, 0:self.size], A.T)
         pred_covs = np.matmul(A, np.matmul(self.covs, A.T)) + np.tile(self.Q, (self.total_objs, 1, 1))
         return pred_xpts, pred_covs
 
@@ -75,20 +75,19 @@ class Kalman:
         self.xpts[rmv_idx, self.size] -= 1
         # remove lost objects
         remaining_idx = np.argwhere(self.xpts[:, self.size] >= 0)[:, 0]
+        self.total_objs = len(remaining_idx)
         self.xpts = self.xpts[remaining_idx]
         self.covs = self.covs[remaining_idx]
 
     def create(self, zs: ObsBundle, new_idx: np.ndarray) -> None:
         new_objs = len(new_idx)
-        new_xpts = np.concatenate((zs.projections[new_idx], np.zeros((len(new_idx), 1)),
-            np.arange(self.max_id, self.max_id + new_objs)), axis=1)
+        new_xpts = np.concatenate([zs.projections[new_idx], np.zeros((len(new_idx), 1)),
+            np.expand_dims(np.arange(self.max_id, self.max_id + new_objs), axis=1)], axis=1)
         new_covs = np.full((new_objs, self.size, self.size), 1e6)
-        self.xpts = np.concatenate((self.xpts, new_xpts), axis=0)
-        self.covs = np.concatenate((self.covs, new_covs), axis=0)
+        self.xpts = np.concatenate([self.xpts, new_xpts], axis=0)
+        self.covs = np.concatenate([self.covs, new_covs], axis=0)
         self.max_id += new_objs
-
-    def output(self) -> None:
-        pass
+        self.total_objs += new_objs
 
     def flush(self, A: np.ndarray, zs: ObsBundle) -> None:
         pred_xpts, pred_covs = self.predict(A)
@@ -96,3 +95,10 @@ class Kalman:
         self.update(pred_xpts, pred_covs, zs, xpt_idx, obs_idx)
         self.remove(xpt_idx, rmv_idx)
         self.create(zs, new_idx)
+    
+    def output(self) -> np.ndarray:
+        # TODO: Match the input of the dispatch system
+        return self.xpts[:, 0:self.size]
+
+    def __repr__(self) -> str:
+        return "Objects ({}):\n{}".format(self.total_objs, self.xpts)

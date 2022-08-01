@@ -17,6 +17,7 @@ def w2p(pos: np.ndarray, w2c: np.ndarray, c2p: np.ndarray):
     Input the position of a point in the world coordinate, the w2c and c2p matrices.
     Output the position of the point in the pixel coordinate and the distance between the point and the camera.
     '''
+    pos = np.concatenate([pos[0:3], [1]], axis=0)
     pos_cam = np.matmul(w2c, pos)
     pos_pix = np.matmul(c2p, pos_cam) / pos_cam[2]
     return pos_pix.astype(int), pos_cam[2]
@@ -27,12 +28,13 @@ def p2w(pos: np.ndarray, zw: float, w2c: np.ndarray, c2p: np.ndarray):
     Input the position of a point in the pixel coordinate, the height of the radar, the w2c and c2p matrices.
     Output the position of the point in the world coordinate and the distance between the point and the camera.
     '''
+    pos = np.concatenate([pos[0:2], [1]], axis=0)
     m1 = c2p[:,0:3]
     m1i = np.linalg.inv(m1)
     m2i = np.linalg.inv(w2c)
     pos_cam_like = np.matmul(m1i, pos)
     zc = (zw - m2i[2, 3]) / np.dot(m2i[2, 0:3], pos_cam_like)
-    pos_wld = np.matmul(m2i, np.concatenate((zc * pos_cam_like, [1])))
+    pos_wld = np.matmul(m2i, np.concatenate([zc * pos_cam_like, [1]]))
     return pos_wld, zc
 
 

@@ -7,9 +7,10 @@ And many other related functions.
 """
 
 
-import numpy as np
 from PIL import Image
 from typing import List
+import numpy as np
+from scipy.optimize import linear_sum_assignment
 
 import ros_numpy
 from msgs.msg._MsgRadarObject import MsgRadarObject
@@ -39,7 +40,7 @@ def radar_poi(obj_poses: np.ndarray, w2c: np.ndarray, c2p: np.ndarray, height: f
     The function takes in the positions of objects in the world coordinate and calib matirces,
     and outputs the point of interest in the pixel coordinate.
     '''
-    ps = [w2p(np.concatenate((pos[0:2], [height, 1.])), w2c, c2p) for pos in obj_poses]
+    ps = [w2p(np.concatenate([pos[0:2], [height, 1.]]), w2c, c2p)[0] for pos in obj_poses]
     return np.array(ps, dtype=int)
 
 
@@ -53,8 +54,8 @@ def old_radar_poi(radar_objs: List[MsgRadarObject], w2c: np.ndarray, c2p: np.nda
     for obj in radar_objs:
         pos_image, zc = w2p(np.array([obj.pos_x, obj.pos_y, 0.461, 1]), w2c, c2p)
         if 0 <= pos_image[0] <= image_width and 0 <= pos_image[1] <= image_height:
-            ps = np.concatenate((ps, np.expand_dims(pos_image, axis=0))) 
-            zs = np.concatenate((zs, [[zc, obj.angle_centroid, obj.velocity]]))
+            ps = np.concatenate([ps, np.expand_dims(pos_image, axis=0)]) 
+            zs = np.concatenate([zs, [[zc, obj.angle_centroid, obj.velocity]]])
     return ps, zs
 
 
@@ -82,24 +83,19 @@ def get_iou(roi1: np.ndarray, roi2: np.ndarray):
     return ai / au
 
 
-def optimize_iou(rois1: np.ndarray, rois2: np.ndarray, threshold=0.6):
+def optimize_iou(rois1: np.ndarray, rois2: np.ndarray, threshold: float):
     '''
     The function calculates the IOU matrix of two groups of ROIs, and then match the IOUs.
     It gives the indices of the matched IOUs.\n
-    It looks for the max number of each row and set other numbers to 0, then repeats the process of each column.
-    So the results are the greatest of each row but maybe not the greatest of each column.\n
-    TODO: FIGURE OUT THE PROPER THRESHOLD.
     '''
     if rois1.size == 0 or rois2.size == 0:
-        return np.empty(shape=(2, 0), dtype=int)
-    # calculate all IOUs and arrange them in a matrix
-    ious = np.array([get_iou(x[0:4], y[0:4]) for x in rois1 for y in rois2]).reshape((rois1.shape[0], rois2.shape[0]))
-    # only keep the max number by rows and columns
-    ious = np.where(np.expand_dims(ious.argmax(axis=1), axis=1) == np.expand_dims(np.arange(ious.shape[1]), axis=0), ious, 0.0)
-    ious = np.where(np.expand_dims(ious.argmax(axis=0), axis=0) == np.expand_dims(np.arange(ious.shape[0]), axis=1), ious, 0.0)
-    print("IOU matrix:", ious)
-    # return indices of maximized IOUs of radar and image
-    return np.argwhere(ious > threshold).T
+        return np.empty(0, dtype=int), np.empty(0, dtype=int)
+    ious = np.array([get_iou(x[0:4], y[0:4]) for x in rois1 for y in rois2]).reshape((len(rois1), len(rois2)))
+    idx1, idx2 = linear_sum_assignment(ious, maximize=True)
+    thres_filter = ious[idx1, idx2] >= threshold
+    idx1 = np.extract(thres_filter, idx1)
+    idx2 = np.extract(thres_filter, idx2)
+    return idx1, idx2
 
 
 def pointcloud_roi(calib: np.array, boxes_3d: np.array(np.array)):
