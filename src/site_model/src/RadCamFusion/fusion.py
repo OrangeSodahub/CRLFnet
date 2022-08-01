@@ -97,6 +97,7 @@ def fusion(radar: MsgRadar, image2: Image, image3: Image):
     kf.flush(A, zs_2)
     print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
 
+    va.scene_output(frame_counter, zs_2, kf)
     """
     # Save Images
     if args.save and radar_obj_num !=0 and image_obj_num != 0:
@@ -142,7 +143,7 @@ if __name__ == '__main__':
             exit(1)
     OUTPUT_DIR = ROOT_DIR.joinpath(config['output']['RadCamFusion_dir'])
     MEASUREMENT_FILE = ROOT_DIR.joinpath(config['measurement']['measurement_dir'], 'measurement.txt')
-    BASE_IMAGE = ROOT_DIR.joinpath("src/utils/visual/scene_base.png")
+    BASE_IMAGE_FILE = ROOT_DIR.joinpath("src/utils/visual/scene_base.png")
     # load measurement file
     camera_index = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
                     'camera2' : 4, 'camera3' : 5,
@@ -179,7 +180,7 @@ if __name__ == '__main__':
     Q = np.eye(2) * 1.
     kf = Kalman(2, Q, 10.0, 3)
     # Visual Assistant
-    va = VisualAssistant(BASE_IMAGE, OUTPUT_DIR, w2cs['camera2'], c2ps['camera2'])
+    va = VisualAssistant(BASE_IMAGE_FILE, OUTPUT_DIR)
 
     # initialize publisher
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam, queue_size=10)

@@ -11,36 +11,36 @@ from visualization_msgs.msg import Marker, MarkerArray
 from cv_bridge import CvBridge
 import cv2
 
-from .transform import p2w
+from .sensor_and_obs import ObsBundle, RadarSensor, ImageSensor, FusedSensor
+from .kalman import Kalman
 
 
 class VisualAssistant:
     
-    def __init__(self, base_image_path: Path, output_path: Path, w2c, c2p):
+    def __init__(self, base_image_path: Path, output_path: Path):
         self.base_image = cv2.imread(str(base_image_path))
         self.output_path = output_path
         self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
-        self.w2c = w2c
-        self.c2p = c2p
 
-    def scene_output(self, state_vecs: np.ndarray, radar_zs: np.ndarray, image_zs: np.ndarray, frame=0):
-        for vs in state_vecs:
-            v = np.matmul(self.w2s, np.array([vs[0], vs[1], 1])).astype(int)
-            cv2.circle(self.base_image, (v[0], v[1]), 5, (255, 0, 0), -1)
-        for zr in radar_zs:
-            xw = self.radar_pos[0] - zr[0] * np.sin(zr[1] * np.pi / 180)
-            yw = self.radar_pos[1] + zr[0] * np.cos(zr[1] * np.pi / 180)
-            v = np.matmul(self.w2s, np.array([xw, yw, 1])).astype(int)
-            cv2.circle(self.base_image, (v[0], v[1]), 5, (0, 255, 0), -1)
-        for zi in image_zs:
-            vi = p2w(np.array([zi[0], zi[1], 1]), 0.461, self.w2c, self.c2p)[0]
-            v = np.matmul(self.w2s, np.array([vi[0], vi[1], 1])).astype(int)
-            cv2.circle(self.base_image, (v[0], v[1]), 5, (255, 255, 0), -1)
-        
+    def scene_output(self, frame: int, zs: ObsBundle, kf: Kalman):
+        for z, p, s in zip(zs.zs, zs.projections, zs.sensors):
+            if isinstance(s, ImageSensor):
+                my_color = (255, 0, 0)
+            elif isinstance(s, RadarSensor):
+                my_color = (0, 255, 0)
+            elif isinstance(s, FusedSensor):
+                my_color = (255, 255, 0)
+            else:
+                my_color = (0, 0, 0)
+            cv2.circle(self.base_image, p, 5, my_color, -1)
+        for x in kf.xpts:
+            my_color = (0, 0, 255)
+            cv2.circle(self.base_image, x[0:2], 5, my_color, -1)
         file_name = "scene_{:04d}.jpg".format(frame)
         cv2.imwrite(str(self.output_path.joinpath(file_name)), self.base_image)
         print("\033[0;32mSaved scene \033[1;32m\"{}\"\033[0;32m sucessfully.\033[0m".format(frame))
 
+    '''
     def grid2scene(self):
         print("Please wait.")
         for x in range(0, 640):
@@ -50,6 +50,7 @@ class VisualAssistant:
                 cv2.circle(self.base_image, (p[0], p[1]), 1, (x/3, y/3, 0), -1)
         cv2.imwrite(str(self.output_path.joinpath("grid.jpg")), self.base_image)
         print("GRID")
+    '''
 
 
 def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), radar_rois=(), image_rois=(), draw_radar=True, draw_image=True, appendix="Unknown"):
