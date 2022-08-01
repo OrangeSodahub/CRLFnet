@@ -32,13 +32,15 @@ class VisualAssistant:
                 my_color = (255, 255, 0)
             else:
                 my_color = (0, 0, 0)
-            cv2.circle(self.base_image, p, 5, my_color, -1)
+            c = np.matmul(self.w2s, [p[0], p[1], 1.]).astype(int)
+            cv2.circle(self.base_image, c[0:2], 3, my_color, -1)
         for x in kf.xpts:
             my_color = (0, 0, 255)
-            cv2.circle(self.base_image, x[0:2], 5, my_color, -1)
+            c = np.matmul(self.w2s, [x[0], x[1], 1.]).astype(int)
+            cv2.circle(self.base_image, c[0:2], 5, my_color, -1)
         file_name = "scene_{:04d}.jpg".format(frame)
         cv2.imwrite(str(self.output_path.joinpath(file_name)), self.base_image)
-        print("\033[0;32mSaved scene \033[1;32m\"{}\"\033[0;32m sucessfully.\033[0m".format(frame))
+        print("\033[0;32mSaved scene {} sucessfully.\033[0m".format(frame))
     
     def image_output(self, frame: int, image: Image, camera: ImageSensor):
         pass

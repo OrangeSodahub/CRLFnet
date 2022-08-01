@@ -166,8 +166,8 @@ if __name__ == '__main__':
     # Sensors
     # Radars
     R = np.eye(2) * 0.01
-    rad_2 = RadarSensor("radar_2", R, np.array([-1.59824637808195, -0.790114867663065, 0.461]))
-    rad_3 = RadarSensor("radar_3", R, np.array([0.964315628564147, 0.200335452740542, 0.461]))
+    rad_2 = RadarSensor("radar_2", R, np.array([-1.374475982753464, -1.1757576992522991, 0.461]))
+    rad_3 = RadarSensor("radar_3", R, np.array([0.9728163379849798, -0.0074961034847569885, 0.461]))
     # Cameras
     R = np.eye(2) * 32
     cam_2 = ImageSensor("image_2", R, w2cs['camera2'], c2ps['camera2'], 640, 480, 0.461)
