@@ -27,7 +27,7 @@
   <arg name="organize_cloud" default="false"/>
   <param
     name="robot_description"
-    command="$(find xacro)/xacro inorder '$(find site_model)/urdf/site_model.urdf.xacro' organize_cloud:=$(arg organize_cloud) gpu:=$(arg gpu)" />
+    command="$(find xacro)/xacro --inorder '$(find site_model)/urdf/site_model.urdf.xacro' organize_cloud:=$(arg organize_cloud) gpu:=$(arg gpu)" />
   <node
     pkg="gazebo_ros"
     type="spawn_model"
