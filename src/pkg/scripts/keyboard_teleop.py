@@ -65,7 +65,7 @@ if __name__ == "__main__":
                 break
             
             speed = state * ward
-            print("Speed: {}  ".format(speed), end='\r')
+            # print("Speed: {}  ".format(speed), end='\r')
             
             msg = AckermannDriveStamped()
             msg.header.stamp = rospy.Time.now()

@@ -9,9 +9,14 @@ from msgs.msg._MsgRadCam import *   # radar camera fusion message type
 from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
 
 class Agent():
-    def __init__(self, obj_threshold, muti_threshold):
+    def __init__(self, obj_threshold, multi_threshold, lanes_path):
         self.obj_threshold = obj_threshold
-        self.muti_threshold = muti_threshold
+        self.multi_threshold = multi_threshold
+        self.lanes = []
+        for i in range(6):
+            lane = np.loadtxt(lanes_path+"/"+str(i)+".txt", dtype=np.float64)
+            self.lanes.append(lane)
+        print(self.lanes)
     
     
     def is_front(vehicle: np.array, point: np.array, alpha):
@@ -21,37 +26,51 @@ class Agent():
         return abs(np.arctan2(point[1]-vehicle[1], point[0]-vehicle[0])-alpha) <= np.pi/2
 
 
-    def set_obj(self, lanes: np.array, vehicle: np.array):
+    def get_mindist(self, dists):
+        min_dist = np.inf
+        lane: int
+        for i, dist in enumerate(dists):
+            if np.min(dist) < min_dist:
+                min_dist = np.min(dist)
+                lane = i
+        loc = np.where(dists[lane]==min_dist)[0][0]
+        return lane, loc, min_dist
+                    
+
+    def set_obj(self, vehicle: np.array):
         """
             set objective & if need to make decision
         """
-        dists = np.array([np.array([np.linalg.norm(point - vehicle) for point in lane]) for lane in lanes])
-        while np.min(dists) < self.obj_threshold:                # remove the nearer points
-            loc = np.where(dists==np.min(dists))
-            for x, y in zip(loc[0], loc[1]):
-                dists[x, y] = np.inf
-        obj_dist = np.min(dists)
-        obj_loc = np.where(dists==obj_dist)
-        obj = lanes[obj_loc[0][0]][obj_loc[1][0]]
+        dists = [np.array([np.linalg.norm(point - vehicle) for point in lane]) for lane in self.lanes]
+        lane, loc, min_dist = self.get_mindist(dists)
+        while min_dist < self.obj_threshold:                     # remove the nearer points
+            print("lane:", lane, "loc:", loc)
+            dists[lane][loc] = np.inf
+            lane, loc, min_dist = self.get_mindist(dists)
+
+        obj_loc = [lane, loc]
+        obj = self.lanes[obj_loc[0]][obj_loc[1]]
 
         candi_obj = [obj]
         for i, dist in enumerate(dists):                         # whether to make decision
-            if obj_loc[0][0] == i:
+            if obj_loc[0] == i:
                 continue
-            if abs(np.min(dist)-obj_dist) <= self.muti_threshold:
-                candit_obj_loc = np.where(dists==np.min(dist))
-                candi_obj.append(lanes[candit_obj_loc[0][0]][candit_obj_loc[1][0]])
+            if abs(np.min(dist)-min_dist) <= self.multi_threshold:
+                candit_obj_loc = np.where(dists[i]==np.min(dist))[0][0]
+                candi_obj.append(self.lanes[i][candit_obj_loc])
 
         return candi_obj
         
 
-    def set_control(self, lanes: np.array, vehicle: np.array, alpha, msgradcam: MsgRadCam, msglidcam: MsgLidCam):
-        candi_obj, is_need = self.set_obj(lanes, vehicle)
+    def set_control(self, vehicle: np.array, alpha, msgradcam: MsgRadCam, msglidcam: MsgLidCam):
+        candi_obj = self.set_obj(vehicle)
         if len(candi_obj) != 1:                                 # need to make decision
+            print("need to make decision.")
                                                                 # caculate the density of vehicles
             pass
         else:                                                   # only one objective
             obj = candi_obj[0]
+            print("obj:", obj)
             diff = np.arctan2(obj[1]-vehicle[1], obj[0]-vehicle[0]) - alpha
             turn = 1 if diff > 0 else -1                        # left: turn=1; right: turn = -1
             return turn, 1                                      # return angle, speed
