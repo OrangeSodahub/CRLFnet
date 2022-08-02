@@ -1,95 +1,83 @@
 #!/usr/bin/python3
 import rospy
-import argparse
-import yaml
-from pathlib import Path
-from termcolor import colored
-from ackermann_msgs.msg import AckermannDriveStamped
+import numpy as np
+from std_msgs.msg import Bool
+from std_msgs.msg import Float32
+from std_msgs.msg import Float64
+import message_filters
+from msgs.msg._MsgRadCam import *   # radar camera fusion message type
+from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
 from .agent import Agent
-import sys, select, termios, tty
+from nav_msgs.msg import Odometry
+from ackermann_msgs.msg import AckermannDriveStamped
+from tf.transformations import euler_from_quaternion
 
-keyBindings = {
-    'x':(0,0)
-}
+flag_move = 0
 
-def get_key():
-   tty.setraw(sys.stdin.fileno())
-   select.select([sys.stdin], [], [], 0)
-   key = sys.stdin.read(1)
-   termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-   return key
+def set_throttle_steer(key: AckermannDriveStamped, odom: Odometry, msgradcam: MsgRadCam, msglidcam: MsgLidCam):
 
-speed = 1.5
-turn = 0.6
+    global flag_move
+    throttle = key.drive.speed*13.95348
+    steer = key.drive.steering_angle
 
+    # declear the publish tools
+    pub_vel_left_rear_wheel_1 = rospy.Publisher('/deepracer1/left_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_right_rear_wheel_1 = rospy.Publisher('/deepracer1/right_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_left_front_wheel_1 = rospy.Publisher('/deepracer1/left_front_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_right_front_wheel_1 = rospy.Publisher('/deepracer1/right_front_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_pos_left_steering_hinge_1 = rospy.Publisher('/deepracer1/left_steering_hinge_position_controller/command', Float64, queue_size=1)
+    pub_pos_right_steering_hinge_1 = rospy.Publisher('/deepracer1/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
-def vels(speed, turn):
-    return "currently:\tspeed %s\tturn %s " % (speed,turn)
+    pub_vel_left_rear_wheel_2 = rospy.Publisher('/deepracer2/left_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_right_rear_wheel_2 = rospy.Publisher('/deepracer2/right_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_left_front_wheel_2 = rospy.Publisher('/deepracer2/left_front_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_right_front_wheel_2 = rospy.Publisher('/deepracer2/right_front_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_pos_left_steering_hinge_2 = rospy.Publisher('/deepracer2/left_steering_hinge_position_controller/command', Float64, queue_size=1)
+    pub_pos_right_steering_hinge_2 = rospy.Publisher('/deepracer2/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
+    # publish the decisions
+    # vehicle1
+    vehicle1 = np.array([odom.pose.pose.position.x, odom.pose.pose.position.y])
+    r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
+                                    odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
+    steer, throttle = agent.set_control(lanes, vehicle1, y, msgradcam, msglidcam)
 
-if __name__=="__main__":
-    # get ROOT DIR
-    ROOT_DIR = Path(__file__).resolve().parents[2]
+    pub_vel_left_rear_wheel_1.publish(throttle)
+    pub_vel_right_rear_wheel_1.publish(throttle)
+    pub_vel_left_front_wheel_1.publish(throttle)
+    pub_vel_right_front_wheel_1.publish(throttle)
+    pub_pos_left_steering_hinge_1.publish(steer)
+    pub_pos_right_steering_hinge_1.publish(steer)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR.joinpath("config/config.yaml")))
-    params = parser.parse_args()
+    # vehicle2
+    pub_vel_left_rear_wheel_2.publish(throttle)
+    pub_vel_right_rear_wheel_2.publish(throttle)
+    pub_vel_left_front_wheel_2.publish(throttle)
+    pub_vel_right_front_wheel_2.publish(throttle)
+    pub_pos_left_steering_hinge_2.publish(steer)
+    pub_pos_right_steering_hinge_2.publish(steer)
 
-    with open(params.config, 'r') as f:
-        try:
-            config = yaml.load(f, Loader=yaml.FullLoader)
-        except:
-            print(colored('Config file could not be read.','red'))
-            exit(1)
+def servo_commands():
 
-    settings = termios.tcgetattr(sys.stdin)
-    pub = rospy.Publisher("/ackermann_cmd_mux/output", AckermannDriveStamped, queue_size=1)
-    rospy.init_node('/agent_dispatch')
+    rospy.init_node('servo_commands', anonymous=True)
 
-    x = 0
-    th = 0
-    status = 0
+    # rospy.Subscriber("/ackermann_cmd_mux/output", AckermannDriveStamped, set_throttle_steer)
 
-    # initialize the agent
-    agent = Agent(config)
+    sub_msgradcam = message_filters.Subscriber('/radar_camera_fused', MsgRadCam)
+    sub_msglidcam = message_filters.Subscriber('/lidar_camera_fused', MsgLidCam)
+    sub_key = message_filters.Subscriber('/ackermann_cmd_mux/output', AckermannDriveStamped)
+    sub_odom = message_filters.Subscriber('/deepracer2/base_pose_ground_truth', Odometry)
+    sync = message_filters.ApproximateTimeSynchronizer([sub_key, sub_odom, sub_msgradcam, sub_msglidcam], 1, 1)
+    sync.registerCallback(set_throttle_steer)
+    
+    # spin() simply keeps python from exiting until this node is stopped
+    rospy.spin()
 
+if __name__ == '__main__':
     try:
-        while True:
-            key = get_key()
-            if key in keyBindings.keys():
-                x = keyBindings[key][0]
-                th = keyBindings[key][1]
-            else:
-                x = 1
-                th =1
-                if key == '\x03':
-                    break
-    
-            msg = AckermannDriveStamped()
-            msg.header.stamp = rospy.Time.now()
-            msg.header.frame_id = 'base_link'
+        lanes = np.loadtxt()
+        agent = Agent(0.1)
+        servo_commands()
+    except rospy.ROSInterruptException:
+        pass
 
-            msg.drive.speed = x*speed
-            msg.drive.acceleration = 1
-            msg.drive.jerk = 1
-            msg.drive.steering_angle = th*turn
-            msg.drive.steering_angle_velocity = 1
-
-            pub.publish(msg)
-    
-    except:
-        print('error')
-
-    finally:
-        msg = AckermannDriveStamped()
-        msg.header.stamp = rospy.Time.now()
-        msg.header.frame_id = "base_link"
-
-        msg.drive.speed = 0
-        msg.drive.acceleration = 1
-        msg.drive.jerk = 1
-        msg.drive.steering_angle = 0
-        msg.drive.steering_angle_velocity = 1
-        pub.publish(msg)
-
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
