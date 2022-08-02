@@ -2,9 +2,11 @@
 #   This py file acts as agent representing the overpass.   #
 #############################################################
 
+
 import message_filters
 from msgs.msg._MsgRadCam import *   # radar camera fusion message type
 from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
+
 
 class Agent():
     def __init__(self, config: dict):
@@ -23,7 +25,7 @@ class Agent():
         AREA_INTERSECTION = self.config['ground']['width'] * self.config['ground']['len_interection']
         AREA_OVERPASS = self.config['ground']['width'] * self.config['ground']['len_overpass']
         # caculate the density of vehicles
-        self.density_overpass = None / AREA_OVERPASS
+        self.density_overpass = msgradcam.num_overpass / AREA_OVERPASS
         self.density_circle = msglidcam.num_circle / AREA_CIRCLE
         self.density_intersection = msglidcam.num_intersection / AREA_INTERSECTION
 

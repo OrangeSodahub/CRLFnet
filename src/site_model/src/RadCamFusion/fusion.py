@@ -137,6 +137,11 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
     # Visual assistant
     if args.save:
         va.scene_output(frame_counter, zs, kf)
+    # Publish
+    msg_rad_cam = MsgRadCam()
+    msg_rad_cam.num_overpass = zs.total_objs
+    msg_rad_cam.header.stamp = rospy.Time.now()
+    pub.publish(msg_rad_cam)
 
 
 if __name__ == '__main__':
@@ -186,6 +191,8 @@ if __name__ == '__main__':
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam, queue_size=10)
     # initialize ROS node
     rospy.init_node('radar_camera_fusion', anonymous=True)
+    # initialize publisher
+    pub = rospy.Publisher("/radar_camera_fused", MsgRadCam, queue_size=10)
     # subscribe messages
     msg_radar   = message_filters.Subscriber('/radar_msgs_combined', MsgRadar)
     msg_image_2 = message_filters.Subscriber('/image_raw_2', Image)
