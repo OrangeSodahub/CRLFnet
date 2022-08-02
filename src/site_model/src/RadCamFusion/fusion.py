@@ -10,7 +10,7 @@ from pathlib import Path
 import argparse
 import yaml
 import numpy as np
-from typing import List
+from typing import List, Tuple
 
 import rospy
 import message_filters
@@ -29,10 +29,13 @@ from ..utils.sensor_and_obs import RadarSensor, ImageSensor, SensorPair
 time_counter = 0
 frame_counter = 0
 
+CUDA = False
+
 ROOT_DIR = ''
 CONFIG_FILE = ''
 YOLO_DIR = ''
 OUTPUT_DIR = ''
+SAVE_DIR = ''
 MEASUREMENT_FILE = ''
 BASE_IMAGE_FILE = ''
 
@@ -51,7 +54,7 @@ OFFSET_RADAR_3 = np.array([0.9728163379849798, -0.0074961034847569885, 0.461])
 w2cs, c2ps = {}, {}
 
 
-def my_timer():
+def my_timer() -> float:
     global time_counter, frame_counter
     print('+------------------------+')
     frame_counter += 1
@@ -62,19 +65,7 @@ def my_timer():
     return del_time
 
 
-def my_detect(radar: List[MsgRadarObject], image: Image, pair: SensorPair):
-    global yolo
-    if len(radar) == 0:
-        radar_data = np.empty((0, 3))
-    else:
-        radar_data = np.array([np.array([obj.distance, obj.angle_centroid, obj.velocity]) for obj in radar])
-    image_data = image_roi(image, yolo)
-    pair.update(radar_data, image_data)
-    zs = pair.observe()
-    return zs
-
-
-def my_config_loader():
+def my_config_loader() -> None:
     global ROOT_DIR, CONFIG_FILE, YOLO_DIR, OUTPUT_DIR, MEASUREMENT_FILE, BASE_IMAGE_FILE
     global w2cs, c2ps
 
@@ -96,15 +87,46 @@ def my_config_loader():
         c2ps[c] = measurement[camera_index[c]][16:28].reshape(3, 4)
 
 
-def fusion(radar: MsgRadar, image_2: Image, image_3: Image):
+def msg2save(radar: List[MsgRadarObject], image: Image, save_path: Path, category: str) -> None:
+    pass
+
+
+def msg2data(radar: List[MsgRadarObject], image: Image) -> Tuple[np.ndarray, np.ndarray]:
+    global yolo
+    if len(radar) == 0:
+        radar_data = np.empty((0, 3))
+    else:
+        radar_data = np.array([np.array([obj.distance, obj.angle_centroid, obj.velocity]) for obj in radar])
+    image_data = image_roi(image, yolo)
+    return radar_data, image_data
+
+
+def save2data(save_path: Path, category: str) -> Tuple[np.ndarray, np.ndarray]:
+    pass
+
+
+def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
     global frame_counter
     global kf, va, args
     global pair_2, pair_3
     # Output FPS and Frame Info
     time_interval = my_timer()
-    # Observe and find out repeated objects
-    zs_2 = my_detect(radar.objects_left, image_2, pair_2)
-    zs_3 = my_detect(radar.objects_right, image_3, pair_3)
+    if args.mode == 'off-yolo':
+        msg2save(radar.objects_left, image_2, SAVE_DIR, '2')
+        msg2save(radar.objects_right, image_3, SAVE_DIR, '3')
+        return 
+    # Acquire radar and image data
+    if args.mode == 'from-save':
+        radar_data_2, image_data_2 = save2data(SAVE_DIR, '2')
+        radar_data_3, image_data_3 = save2data(SAVE_DIR, '3')
+    else:
+        radar_data_2, image_data_2 = msg2data(radar.objects_left, image_2)
+        radar_data_3, image_data_3 = msg2data(radar.objects_right, image_3)
+    # Update sensor pairs and get observations
+    pair_2.update(radar_data_2, image_data_2)
+    zs_2 = pair_2.observe()
+    pair_3.update(radar_data_3, image_data_3)
+    zs_3 = pair_3.observe()
     # Fuse and print detection results
     zs = zs_2 + zs_3
     print("\033[0;36mDetection\033[0m", zs, sep='\n')
@@ -120,11 +142,12 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image):
 if __name__ == '__main__':
     # set command arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--off-yolo",
-                        action      = 'store_true',
-                        default     = False,
-                        required    = False,
-                        help        = "Disable yolo, save radar POIs and images per frame instead."
+    parser.add_argument("-m", "--mode",
+                    choices     = ['normal', 'off-yolo', 'from-save'],
+                    type        = str,
+                    default     = 'normal',
+                    required    = False,
+                    help        = "Mode."
     )
     parser.add_argument("-s", "--save",
                         action      = 'store_true',
@@ -138,8 +161,8 @@ if __name__ == '__main__':
     
     # Initialization
     # YOLO
-    if not args.off_yolo:
-        yolo = YOLO(YOLO_DIR, cuda=False)
+    if args.mode != 'off-yolo':
+        yolo = YOLO(YOLO_DIR, cuda=CUDA)
         print("\033[0;32mYOLO initialized successfully.\033[0m")
     else:
         yolo = None

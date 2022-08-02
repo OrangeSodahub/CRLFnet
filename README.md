@@ -30,7 +30,7 @@ Absolute paths may need your mind:
 ## Rad-Cam Fusion
 ### Necessary Configurations on GPU and model data
 
-- If GPU and cuda is available on your device, you can set the parameter `cuda` to `True` in `src/site_model/src/utils/yolo/yolo.py`.
+- If GPU and cuda is available on your device, you can set the parameter `CUDA` to `True` in `src/site_model/src/RadCamFusion/fusion.py`.
 
 - Please download `yolo_weights.pth` from jbox, and move it to `src/site_model/src/utils/yolo/model_data`.
 
@@ -38,7 +38,7 @@ Absolute paths may need your mind:
 
 The steps to run the radar-camera fusion is listed as follows.
 
-For the last command, an optional parameter `--save` or `-s` is available if you need to save the POIs and ROIs as images. The `--trigger` or `-t` parameter controls under what situation to save images. The `--information` or `-i` parameter enables the program to print detailed POI and ROI information while running.
+For the last command, an optional parameter `--save` or `-s` is available if you need to save the POIs and ROIs as images. The `--mode` or `-m` parameter has three options, which are `normal`, `off-yolo` and `from-save`. The `off-yolo` and `from-save` modes enable the user to run YOLO seprately to simulate a higher FPS.
 
 ```bash
     cd /ROOT_DIR/
@@ -49,11 +49,11 @@ For the last command, an optional parameter `--save` or `-s` is available if you
     rosrun pkg keyboard_teleop.py       # use WASD to control the vehicle
 
     # run the radar message filter
-    python src/site_model/src/tools/radar_listener.py
+    rosrun site_model radar_listener.py
     
     # run the rad-cam fusion program
     cd src/site_model
-    python -m src.RadCamFusion.fusion [-i] [-s] [-t MODE]
+    python -m src.RadCamFusion.fusion [-m MODE] [-s]
 ```
 
 ### Camera Calibration
