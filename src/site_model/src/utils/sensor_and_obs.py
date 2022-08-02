@@ -6,9 +6,7 @@ from typing import List
 import numpy as np
 
 from .transform import w2p, p2w
-
-
-PROJ_SIZE = 2
+from .poi_and_roi import radar_poi, expand_poi, optimize_iou
 
 
 class Sensor(ABC):
@@ -192,6 +190,12 @@ class ObsBundle:
         return "Observations ({}):\n{}\nProjections:\n{}\nFrom Sensors:\n{}"\
             .format(self.total_objs, self.zs, self.projections, self.sensors)
 
+    def __add__(self, other):
+        zs = self.zs + other.zs
+        ps = np.concatenate([self.projections, other.projections], axis=0)
+        ss = self.sensors + other.sensors
+        return ObsBundle(zs, ps, ss)
+
 
 class SensorClust:
 
@@ -207,6 +211,42 @@ class SensorClust:
         zs, ss = [], []
         ps = np.concatenate([s.obs2world() for s in self.sensors], axis=0)
         for s in self.sensors:
+            for z in s.zs:
+                zs.append(z)
+                ss.append(s)
+        return ObsBundle(zs, ps, ss)
+
+
+class SensorPair:
+
+    def __init__(self, R: np.ndarray, radar_sensor: RadarSensor, image_sensor: ImageSensor, iou_threshold: float) -> None:
+        self.radar = radar_sensor
+        self.image = image_sensor
+        self.fused_sensor = FusedSensor(R, [radar_sensor, image_sensor], [1.0, 0.0])
+        self.iou_threshold = iou_threshold
+
+    def update(self, radar_data: np.ndarray, image_data: np.ndarray) -> None:
+        self.radar.update(radar_data)
+        self.image.update(image_data)
+
+    def observe(self) -> ObsBundle:
+        radar_pois = radar_poi(self.radar.obs2world(), self.image.w2c, self.image.c2p, self.image.target_height)
+        image_rois = self.image.boxes[0:4]
+        # IOU matching
+        radar_expanded_rois = np.array(list(map(
+            lambda p, d: expand_poi(p, d, self.image.size[0],self.image.size[1]),
+            radar_pois, self.radar.zs[:, 0])),
+            dtype=int)
+        fused_rad_idx, fused_cam_idx = optimize_iou(radar_expanded_rois, image_rois, self.iou_threshold)
+        # get observation bundle
+        fused_zs = np.concatenate([self.radar.zs[fused_rad_idx, 0:3], self.image.zs[fused_cam_idx, 0:2]], axis=1)
+        self.fused_sensor.update(fused_zs)
+        self.radar.obs_filter(fused_rad_idx)
+        self.image.obs_filter(fused_cam_idx)
+        # TODO: improve code
+        zs, ss = [], []
+        ps = np.concatenate([self.fused_sensor.obs2world(), self.radar.obs2world(), self.image.obs2world()], axis=0)
+        for s in [self.fused_sensor, self.radar, self.image]:
             for z in s.zs:
                 zs.append(z)
                 ss.append(s)

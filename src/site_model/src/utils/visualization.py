@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 import rospy
 from pathlib import Path
 from datetime import datetime
@@ -19,11 +22,12 @@ class VisualAssistant:
     
     def __init__(self, base_image_path: Path, output_path: Path):
         self.base_image = cv2.imread(str(base_image_path))
+        output_path.mkdir(exist_ok=True)
         self.output_path = output_path
         self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
 
     def scene_output(self, frame: int, zs: ObsBundle, kf: Kalman):
-        for z, p, s in zip(zs.zs, zs.projections, zs.sensors):
+        for p, s in zip(zs.projections, zs.sensors):
             if isinstance(s, ImageSensor):
                 my_color = (255, 0, 0)
             elif isinstance(s, RadarSensor):
@@ -38,8 +42,8 @@ class VisualAssistant:
             my_color = (0, 0, 255)
             c = np.matmul(self.w2s, [x[0], x[1], 1.]).astype(int)
             cv2.circle(self.base_image, c[0:2], 5, my_color, -1)
-        file_name = "scene_{:04d}.jpg".format(frame)
-        cv2.imwrite(str(self.output_path.joinpath(file_name)), self.base_image)
+        file_name = "{:04d}.jpg".format(frame)
+        cv2.imwrite(str(self.output_path.joinpath('scene', file_name)), self.base_image)
         print("\033[0;32mSaved scene {} sucessfully.\033[0m".format(frame))
     
     def image_output(self, frame: int, image: Image, camera: ImageSensor):
