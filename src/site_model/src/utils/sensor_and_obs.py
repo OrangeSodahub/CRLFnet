@@ -4,9 +4,13 @@
 from abc import ABC, abstractmethod
 from typing import List
 import numpy as np
+from scipy.optimize import linear_sum_assignment
 
 from .transform import w2p, p2w
 from .poi_and_roi import radar_poi, expand_poi, optimize_iou
+
+
+SCENE_THRESHOLD = 0.5
 
 
 class Sensor(ABC):
@@ -43,11 +47,12 @@ class Sensor(ABC):
 
 class RadarSensor(Sensor):
 
-    def __init__(self, name: str, R: np.ndarray, offset: np.ndarray) -> None:
+    def __init__(self, name: str, data: dict) -> None:
+        R = np.array(data['R']).reshape(2, 2)
         super().__init__(name, R)
         self.zs = np.empty((0, 2))
         self.boxes = np.empty((0, 3))
-        self.offset = offset
+        self.offset = np.array(data['offset'])
 
     def update(self, data: np.ndarray) -> None:
         self.zs = data[:, 0:2]
@@ -98,13 +103,14 @@ class RadarSensor(Sensor):
 
 class ImageSensor(Sensor):
 
-    def __init__(self, name: str, R: np.ndarray, w2c: np.ndarray, c2p: np.ndarray, width: int, height: int, target_height: float) -> None:
+    def __init__(self, name: str, data: dict, target_height: float) -> None:
+        R = np.array(data['R'], dtype=int).reshape((2, 2))
         super().__init__(name, R)
         self.zs = np.empty((0, 2))
         self.boxes = np.empty((0, 6))
-        self.size = np.array([width, height])
-        self.w2c = w2c
-        self.c2p = c2p
+        self.size = np.array([data['width'], data['height']], dtype=int)
+        self.w2c = np.array(data['w2c']).reshape((4, 4))
+        self.c2p = np.array(data['c2p']).reshape((3, 4))
         self.target_height = target_height
 
     def update(self, data: np.ndarray) -> None:
@@ -138,11 +144,12 @@ class ImageSensor(Sensor):
 class FusedSensor(Sensor):
     '''Only support the fusion of a radar sensor and an image sensor currently.'''
 
-    def __init__(self, R: np.ndarray, sensors: List[Sensor], weights: List[float]) -> None:
+    def __init__(self, sensors: List[Sensor], weights: List[float]) -> None:
         name = "Fusion_of"
         for s in sensors:
             name += '_'
             name += s.name
+        R = np.diag(np.concatenate([np.diag(sensors[0].R), np.diag(sensors[1].R)], axis=0))
         super().__init__(name, R)
         self.sensors = sensors
         self.weights = weights / np.sum(weights)
@@ -183,6 +190,7 @@ class ObsBundle:
             self.projections = projs
             self.sensors = sensors
             self.total_objs = len(self.zs)
+            self.scene_threshold = SCENE_THRESHOLD
         else:
             raise ValueError("zs: {}, ps: {}, ss: {}".format(len(zs), len(projs), len(sensors)))
 
@@ -191,22 +199,59 @@ class ObsBundle:
             .format(self.total_objs, self.zs, self.projections, self.sensors)
 
     def __add__(self, other):
-        zs = self.zs + other.zs
-        ps = np.concatenate([self.projections, other.projections], axis=0)
-        ss = self.sensors + other.sensors
+        if self.total_objs == 0 and other.total_objs == 0:
+            zs = self.zs + other.zs
+            ps = np.concatenate([self.projections, other.projections], axis=0)
+            ss = self.sensors + other.sensors
+            return ObsBundle(zs, ps, ss)
+        # two non-empty observations
+        distances = np.array([np.linalg.norm(p1 - p2) for p1 in self.projections for p2 in other.projections])\
+            .reshape((self.total_objs, other.total_objs))
+        same_idx_1, same_idx_2 = linear_sum_assignment(distances)
+        thres_filter = distances[same_idx_1, same_idx_2] <= self.scene_threshold
+        same_idx_1 = np.extract(thres_filter, same_idx_1)
+        same_idx_2 = np.extract(thres_filter, same_idx_2)
+        diff_idx_1 = np.setdiff1d(np.arange(self.total_objs), same_idx_1)
+        diff_idx_2 = np.setdiff1d(np.arange(other.total_objs), same_idx_2)
+        # TODO: improve coding
+        ps = np.concatenate([self.projections[diff_idx_1], other.projections[diff_idx_2],
+            (self.projections[same_idx_1] + other.projections[same_idx_2]) / 2], axis=0)
+        zs, ss = [], []
+        for i in diff_idx_1:
+            zs.append(self.zs[i])
+            ss.append(self.sensors[i])
+        for i in diff_idx_2:
+            zs.append(other.zs[i])
+            ss.append(other.sensors[i])
+        for i1, i2 in zip(same_idx_1, same_idx_2):
+            if self.sensors[i1] is other.sensors[i2]:
+                zs.append(self.zs[i1])
+                ss.append(self.sensors[i1])
+            else:
+                # not fully supported !!!
+                zs.append(np.concatenate([self.zs[i1], other.zs[i2]]))
+                ss.append(FusedSensor([self.sensors[i1], other.sensors[i2]], [0.5, 0.5]))
         return ObsBundle(zs, ps, ss)
-
 
 class SensorClust:
 
-    def __init__(self, sensors: List[Sensor]) -> None:
-        self.sensors = sensors
+    def __init__(self, radar_sensors: List[RadarSensor], image_sensors: List[ImageSensor]) -> None:
+        self.radar_sensors = radar_sensors
+        self.image_sensors = image_sensors
 
-    def update(self, data: List[np.ndarray]) -> None:
-        for s, d in zip(self.sensors, data):
+    def update(self, radar_data: List[np.ndarray], image_data: List[np.ndarray]) -> None:
+        for s, d in zip(self.radar_sensors, radar_data):
+            s.update(d)
+        for s, d in zip(self.image_sensors, image_data):
             s.update(d)
 
     def observe(self) -> ObsBundle:
+        # fuse radar objects
+        [s.zs for s in self.radar_sensors]
+        # fuse radar-image objects
+        for cam in self.image_sensors:
+            for rad in self.radar_sensors:
+                pass
         # TODO: improve code
         zs, ss = [], []
         ps = np.concatenate([s.obs2world() for s in self.sensors], axis=0)
@@ -219,10 +264,10 @@ class SensorClust:
 
 class SensorPair:
 
-    def __init__(self, R: np.ndarray, radar_sensor: RadarSensor, image_sensor: ImageSensor, iou_threshold: float) -> None:
+    def __init__(self, radar_sensor: RadarSensor, image_sensor: ImageSensor, iou_threshold: float) -> None:
         self.radar = radar_sensor
         self.image = image_sensor
-        self.fused_sensor = FusedSensor(R, [radar_sensor, image_sensor], [1.0, 0.0])
+        self.fused_sensor = FusedSensor([radar_sensor, image_sensor], [1.0, 0.0])
         self.iou_threshold = iou_threshold
 
     def update(self, radar_data: np.ndarray, image_data: np.ndarray) -> None:

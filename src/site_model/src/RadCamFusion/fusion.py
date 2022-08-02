@@ -28,6 +28,7 @@ from ..utils.sensor_and_obs import RadarSensor, ImageSensor, SensorPair
 
 time_counter = 0
 frame_counter = 0
+geometry = {}
 
 CUDA = False
 
@@ -36,22 +37,15 @@ CONFIG_FILE = ''
 YOLO_DIR = ''
 OUTPUT_DIR = ''
 SAVE_DIR = ''
-MEASUREMENT_FILE = ''
+GEOMETRY_FILE = ''
 BASE_IMAGE_FILE = ''
 
 # TODO: find out the proper threshold
-IOU_THRESHOLD = 0.0
-SCENE_THRESHOLD = 10.0
+IOU_THRESHOLD = 0.5
+SCENE_THRESHOLD = 0.2
 MAX_AGE = 3
-R_RADAR = np.eye(2) * 0.01
-R_IMAGE = np.eye(2) * 32
-R_FUSED = np.diag([0.01, 0.01, 32, 32])
+
 Q = np.eye(2) * 1.
-IMAGE_WIDTH = 640
-IMAGE_HEIGHT = 480
-OFFSET_RADAR_2 = np.array([-1.374475982753464, -1.1757576992522991, 0.461])
-OFFSET_RADAR_3 = np.array([0.9728163379849798, -0.0074961034847569885, 0.461])
-w2cs, c2ps = {}, {}
 
 
 def my_timer() -> float:
@@ -65,26 +59,22 @@ def my_timer() -> float:
     return del_time
 
 
-def my_config_loader() -> None:
-    global ROOT_DIR, CONFIG_FILE, YOLO_DIR, OUTPUT_DIR, MEASUREMENT_FILE, BASE_IMAGE_FILE
-    global w2cs, c2ps
+def my_file_loader() -> None:
+    global ROOT_DIR, CONFIG_FILE, YOLO_DIR, OUTPUT_DIR, GEOMETRY_FILE, BASE_IMAGE_FILE
+    global geometry
 
     ROOT_DIR = Path(__file__).resolve().parents[2]
+    YOLO_DIR = ROOT_DIR.joinpath("src/utils/yolo")
+    # load config file
     CONFIG_FILE = ROOT_DIR.joinpath("config/config.yaml")
     with open(CONFIG_FILE, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-    YOLO_DIR = ROOT_DIR.joinpath("src/utils/yolo")
     OUTPUT_DIR = ROOT_DIR.joinpath(config['output']['RadCamFusion_dir'])
-    MEASUREMENT_FILE = ROOT_DIR.joinpath(config['measurement']['measurement'])
     BASE_IMAGE_FILE = ROOT_DIR.joinpath(config['visual_assistant']['base_image'])
-
-    camera_index = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
-                    'camera2' : 4, 'camera3' : 5,
-                    'camera41': 6, 'camera42': 7, 'camera43': 8, 'camera44': 9}
-    measurement = np.loadtxt(MEASUREMENT_FILE)
-    for c in camera_index.keys():
-        w2cs[c] = measurement[camera_index[c]][0:16].reshape(4, 4)
-        c2ps[c] = measurement[camera_index[c]][16:28].reshape(3, 4)
+    # load geometry file
+    GEOMETRY_FILE = ROOT_DIR.joinpath("config/geometry.yaml")
+    with open(GEOMETRY_FILE, 'r') as f:
+        geometry = yaml.load(f, Loader=yaml.FullLoader)
 
 
 def msg2save(radar: List[MsgRadarObject], image: Image, save_path: Path, category: str) -> None:
@@ -131,9 +121,9 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
     zs = zs_2 + zs_3
     print("\033[0;36mDetection\033[0m", zs, sep='\n')
     # Kalman Filter
-    A = np.eye(2)
-    kf.flush(A, zs)
-    print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
+    # A = np.eye(2)
+    # kf.flush(A, zs)
+    # print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
     # Visual assistant
     if args.save:
         va.scene_output(frame_counter, zs, kf)
@@ -162,7 +152,7 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    my_config_loader()
+    my_file_loader()
     
     # Initialization
     # YOLO
@@ -174,14 +164,14 @@ if __name__ == '__main__':
         print("\033[0;33mRunning in off-YOLO mode.\033[0m")
     # Sensors
     # Radars
-    rad_2 = RadarSensor("Radar_2", R_RADAR, OFFSET_RADAR_2)
-    rad_3 = RadarSensor("Radar_3", R_RADAR, OFFSET_RADAR_3)
+    rad_2 = RadarSensor("Radar_2", geometry['radars']['radar_2'])
+    rad_3 = RadarSensor("Radar_3", geometry['radars']['radar_3'])
     # Cameras
-    cam_2 = ImageSensor("Image_2", R_IMAGE, w2cs['camera2'], c2ps['camera2'], IMAGE_WIDTH, IMAGE_HEIGHT, OFFSET_RADAR_2[2])
-    cam_3 = ImageSensor("Image_3", R_IMAGE, w2cs['camera3'], c2ps['camera3'], IMAGE_WIDTH, IMAGE_HEIGHT, OFFSET_RADAR_3[2])
+    cam_2 = ImageSensor("Image_2", geometry['cameras']['camera_2'], rad_2.offset[2])
+    cam_3 = ImageSensor("Image_3", geometry['cameras']['camera_3'], rad_3.offset[2])
     # Sensor Pairs
-    pair_2 = SensorPair(R_FUSED, rad_2, cam_2, IOU_THRESHOLD)
-    pair_3 = SensorPair(R_FUSED, rad_3, cam_3, IOU_THRESHOLD)
+    pair_2 = SensorPair(rad_2, cam_2, IOU_THRESHOLD)
+    pair_3 = SensorPair(rad_3, cam_3, IOU_THRESHOLD)
     # Kalman Filter
     kf = Kalman(2, Q, SCENE_THRESHOLD, MAX_AGE)
     # Visual Assistant
