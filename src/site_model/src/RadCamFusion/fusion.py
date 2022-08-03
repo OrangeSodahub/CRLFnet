@@ -12,6 +12,9 @@ import yaml
 import numpy as np
 from typing import List, Tuple
 
+import cv2
+from cv_bridge import CvBridge
+
 import rospy
 import message_filters
 from sensor_msgs.msg import Image               # Camera message
@@ -77,22 +80,47 @@ def my_file_loader() -> None:
         geometry = yaml.load(f, Loader=yaml.FullLoader)
 
 
-def msg2save(radar: List[MsgRadarObject], image: Image, save_path: Path, category: str) -> None:
-    pass
+
+def rad2data(radar: List[MsgRadarObject]) -> np.ndarray:
+    if len(radar) == 0:
+        return np.empty((0, 3))
+    else:
+        radar_data = np.array([np.array([obj.distance, obj.angle_centroid, obj.velocity]) for obj in radar])
+        return radar_data
+
 
 
 def msg2data(radar: List[MsgRadarObject], image: Image) -> Tuple[np.ndarray, np.ndarray]:
     global yolo
-    if len(radar) == 0:
-        radar_data = np.empty((0, 3))
-    else:
-        radar_data = np.array([np.array([obj.distance, obj.angle_centroid, obj.velocity]) for obj in radar])
+    radar_data = rad2data(radar)
     image_data = image_roi(image, yolo)
     return radar_data, image_data
 
 
-def save2data(save_path: Path, category: str) -> Tuple[np.ndarray, np.ndarray]:
-    pass
+def msg2save(frame: int, save_path: Path,
+             radar_data: List[np.ndarray], radar_sensors: List[RadarSensor],
+             image_data: List[Image], image_sensors: List[ImageSensor]
+            ) -> None:
+    p = save_path.joinpath(str(frame))
+    for r, s in zip(radar_data, radar_sensors):
+        np.savetxt(str(p.joinpath("{}.txt".format(s.name))), r)
+    for i, s in zip(image_data, image_sensors):
+        i = CvBridge().imgmsg_to_cv2(i, 'bgr8')
+        cv2.imwrite(str(p.joinpath("{}.png".format(s.name))), i)
+    print("\033[0;32mSaved radar and image data sucessfully.\033[0m")
+
+
+def save2data(frame: int, load_path: Path,
+              radar_sensors: List[RadarSensor], image_sensors: List[ImageSensor]
+             ) -> None:
+    p = load_path.joinpath(str(frame))
+    for s in radar_sensors:
+        d = np.loadtxt(str(p.joinpath("{}.txt".format(s.name))))
+        s.update(d)
+    for s in image_sensors:
+        d = np.loadtxt(str(p.joinpath("{}.txt".format(s.name))))
+        s.update(d)
+    print("\033[0;32mLoaded radar and image data sucessfully.\033[0m")
 
 
 def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
@@ -103,13 +131,11 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
     time_interval = my_timer()
     # Off-YOLO mode (only save radar and raw image data)
     if args.mode == 'off-yolo':
-        msg2save(radar.objects_left, image_2, SAVE_DIR, '2')
-        msg2save(radar.objects_right, image_3, SAVE_DIR, '3')
+        msg2save(frame_counter, radar.objects_left, image_2, SAVE_DIR)
         return 
     # Acquire radar and image data
     if args.mode == 'from-save':
         radar_data_2, image_data_2 = save2data(SAVE_DIR, '2')
-        radar_data_3, image_data_3 = save2data(SAVE_DIR, '3')
     else:
         radar_data_2, image_data_2 = msg2data(radar.objects_left, image_2)
         radar_data_3, image_data_3 = msg2data(radar.objects_right, image_3)
