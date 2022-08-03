@@ -1,10 +1,16 @@
 #!/usr/bin/python3
+
+
 import numpy as np
-import random
+
 from msgs.msg._MsgRadCam import *   # radar camera fusion message type
 from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
 
-class Agent():
+from .scene import SceneMap
+
+
+class Agent:
+
     def __init__(self, obj_threshold, multi_threshold, lanes_path):
         self.obj_threshold = obj_threshold
         self.multi_threshold = multi_threshold
@@ -79,7 +85,7 @@ class Agent():
             return 0, -1
         else:                                                   # only one objective
             obj = candi_obj[0]
-        print("obj:", obj)
+        print("obj:", obj, end='\r')
         diff = np.arctan2(obj[1]-vehicle[1], obj[0]-vehicle[0]) - alpha
         turn = diff / (np.pi/4) if abs(diff) <= np.pi/4 else np.sign(diff)          # left: turn=1; right: turn = -1
         return turn, 1                                                              # return angle, speed
