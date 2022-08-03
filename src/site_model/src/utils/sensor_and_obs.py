@@ -237,7 +237,7 @@ class ObsBundle:
         return ObsBundle(zs, ps, ss)
 
 
-class SensorClust:
+class SensorCluster:
 
     def __init__(self, radar_sensors: List[RadarSensor], image_sensors: List[ImageSensor]) -> None:
         self.radar_sensors = radar_sensors
