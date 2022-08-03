@@ -19,7 +19,6 @@ from tf.transformations import euler_from_quaternion
 flag_move = 0
 
 def set_throttle_steer(odom: Odometry, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None):
-    print("yes")
 
     global flag_move
     # throttle = key.drive.speed*13.95348
@@ -46,7 +45,7 @@ def set_throttle_steer(odom: Odometry, msgradcam: MsgRadCam = None, msglidcam: M
     r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
                                     odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
     steer, throttle = agent.set_control(vehicle1, y, msgradcam, msglidcam)
-    throttle *= 5
+    throttle *= 15
 
     pub_vel_left_rear_wheel_1.publish(throttle)
     pub_vel_right_rear_wheel_1.publish(throttle)
