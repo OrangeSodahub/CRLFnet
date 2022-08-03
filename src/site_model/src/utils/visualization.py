@@ -24,10 +24,17 @@ class VisualAssistant:
         self.base_image = cv2.imread(str(base_image_path))
         output_path.mkdir(exist_ok=True)
         output_path.joinpath('scene').mkdir(exist_ok=True)
+        output_path.joinpath('image').mkdir(exist_ok=True)
         self.output_path = output_path
         self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
 
     def scene_output(self, frame: int, zs: ObsBundle, kf: Kalman):
+        # Kalman Filter Data
+        for x in kf.xpts:
+            my_color = (0, 0, 255)
+            c = np.matmul(self.w2s, [x[0], x[1], 1.]).astype(int)
+            cv2.circle(self.base_image, c[0:2], 5, my_color, -1)
+        # Sensor Data
         for p, s in zip(zs.projections, zs.sensors):
             if isinstance(s, ImageSensor):
                 my_color = (255, 0, 0)
@@ -39,18 +46,19 @@ class VisualAssistant:
                 my_color = (0, 0, 0)
             c = np.matmul(self.w2s, [p[0], p[1], 1.]).astype(int)
             cv2.circle(self.base_image, c[0:2], 3, my_color, -1)
-        '''
-        for x in kf.xpts:
-            my_color = (0, 0, 255)
-            c = np.matmul(self.w2s, [x[0], x[1], 1.]).astype(int)
-            cv2.circle(self.base_image, c[0:2], 5, my_color, -1)
-        '''
-        file_name = "{:04d}.jpg".format(frame)
+        
+        file_name = "{:04d}.png".format(frame)
         cv2.imwrite(str(self.output_path.joinpath('scene', file_name)), self.base_image)
         print("\033[0;32mSaved scene {} sucessfully.\033[0m".format(frame))
     
     def image_output(self, frame: int, image: Image, camera: ImageSensor):
-        pass
+        image = CvBridge().imgmsg_to_cv2(image, 'bgr8')
+        for roi in camera.boxes:
+            cv2.rectangle(image, (roi[0], roi[1]), (roi[2], roi[3]), (255, 0, 0), 3)
+        
+        file_name = "{}_{:04d}.png".format(camera.name, frame)
+        cv2.imwrite(str(self.output_path.joinpath('image', file_name)), image)
+        print("\033[0;32mSaved {} image {} sucessfully.\033[0m".format(camera.name, frame))
 
     def image_range(self):
         pass
@@ -65,32 +73,6 @@ class VisualAssistant:
             cv2.imwrite(str(self.output_path.joinpath("grid.jpg")), self.base_image)
             print("GRID")
         '''
-
-
-def radar2visual(output_dir: Path, raw_image: Image, radar_pois=(), radar_rois=(), image_rois=(), draw_radar=True, draw_image=True, appendix="Unknown"):
-    # make output dir
-    output_dir.mkdir(exist_ok=True)
-
-    # convert image format to opencv
-    result_image = CvBridge().imgmsg_to_cv2(raw_image, 'bgr8')
-    # draw radar POIs
-    if draw_radar:
-        for rpoi in radar_pois:
-            cv2.circle(result_image, (rpoi[0], rpoi[1]), 5, (0, 0, 255), -1)
-    # draw image ROIs
-    if draw_image:
-        for iroi in image_rois:
-            cv2.rectangle(result_image, (iroi[0], iroi[1]), (iroi[2], iroi[3]), (255, 0, 0), 3)
-    # draw radar expanded ROIs
-    if draw_radar:
-        for rroi in radar_rois:
-            cv2.rectangle(result_image, (rroi[0], rroi[1]), (rroi[2], rroi[3]), (0, 255, 0), 3)
-
-    # save visualized result
-    file_name = "RCF_{}_{}.jpg".format(appendix, datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
-    output_path = output_dir.joinpath(file_name)
-    cv2.imwrite(str(output_path), result_image)
-    print("\033[0;32mSaved the visualized result \033[1;32m\"{}\"\033[0;32m sucessfully.\033[0m".format(file_name))
 
 
 def lidar2visual(img, box3d, color):

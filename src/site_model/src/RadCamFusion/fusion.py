@@ -42,7 +42,7 @@ BASE_IMAGE_FILE = ''
 
 # TODO: find out the proper threshold
 IOU_THRESHOLD = 0.5
-SCENE_THRESHOLD = 0.2
+SCENE_THRESHOLD = 1.0
 MAX_AGE = 3
 
 Q = np.eye(2) * 1.
@@ -99,8 +99,9 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
     global frame_counter
     global kf, va, args
     global pair_2, pair_3
-    # Output FPS and Frame Info
+    # Output FPS and frame info
     time_interval = my_timer()
+    # Off-YOLO mode (only save radar and raw image data)
     if args.mode == 'off-yolo':
         msg2save(radar.objects_left, image_2, SAVE_DIR, '2')
         msg2save(radar.objects_right, image_3, SAVE_DIR, '3')
@@ -127,6 +128,8 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
     # Visual assistant
     if args.save:
         va.scene_output(frame_counter, zs, kf)
+        va.image_output(frame_counter, image_2, cam_5)
+        va.image_output(frame_counter, image_3, cam_6)
     # Publish
     msg_rad_cam = MsgRadCam()
     msg_rad_cam.num_overpass = zs.total_objs
@@ -169,9 +172,12 @@ if __name__ == '__main__':
     # Cameras
     cam_2 = ImageSensor("Image_2", geometry['cameras']['camera_2'], rad_2.offset[2])
     cam_3 = ImageSensor("Image_3", geometry['cameras']['camera_3'], rad_3.offset[2])
+    cam_5 = ImageSensor("Image_5", geometry['cameras']['camera_5'], rad_2.offset[2])
+    cam_6 = ImageSensor("Image_6", geometry['cameras']['camera_6'], rad_3.offset[2])
+    cam_7 = ImageSensor("Image_7", geometry['cameras']['camera_7'], rad_2.offset[2])
     # Sensor Pairs
-    pair_2 = SensorPair(rad_2, cam_2, IOU_THRESHOLD)
-    pair_3 = SensorPair(rad_3, cam_3, IOU_THRESHOLD)
+    pair_2 = SensorPair(rad_2, cam_5, IOU_THRESHOLD)
+    pair_3 = SensorPair(rad_3, cam_6, IOU_THRESHOLD)
     # Kalman Filter
     kf = Kalman(2, Q, SCENE_THRESHOLD, MAX_AGE)
     # Visual Assistant
@@ -187,8 +193,11 @@ if __name__ == '__main__':
     msg_radar   = message_filters.Subscriber('/radar_msgs_combined', MsgRadar)
     msg_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     msg_image_3 = message_filters.Subscriber('/image_raw_3', Image)
+    msg_image_5 = message_filters.Subscriber('/image_raw_5', Image)
+    msg_image_6 = message_filters.Subscriber('/image_raw_6', Image)
+    msg_image_7 = message_filters.Subscriber('/image_raw_7', Image)
     # syncronize time stamps
-    sync = message_filters.ApproximateTimeSynchronizer([msg_radar, msg_image_2, msg_image_3], 1, 1)
+    sync = message_filters.ApproximateTimeSynchronizer([msg_radar, msg_image_5, msg_image_6], 1, 1)
     sync.registerCallback(fusion)
     print("\033[0;32mRadar-camera Fusion Initialized Sucessfully.\033[0m")
     rospy.spin()
