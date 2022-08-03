@@ -1,6 +1,7 @@
 #################################################################################
 #                          Config Files for Python                              #
 #################################################################################
+
 vehicle:
   size:
     width: 0.21
@@ -29,8 +30,6 @@ output:
 topic:
   radar_2: /ARS_408_21_2_Topic
   radar_3: /ARS_408_21_3_Topic
-measurement:
-  measurement: src/utils/calib/measurement.txt
 visual_assistant:
   base_image: src/utils/visual/scene_base.png
 

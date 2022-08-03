@@ -38,6 +38,34 @@ def p2w(pos: np.ndarray, zw: float, w2c: np.ndarray, c2p: np.ndarray):
     return pos_wld, zc
 
 
+def RT_matrix(xyzrpy: np.ndarray) -> np.ndarray:
+    # Translation matrix
+    T = np.expand_dims(xyzrpy[0:3], axis=1)
+    # Roatation matrix
+    r, p, y = xyzrpy[3:6]
+    Rx = [[ 1,          0,          0           ],
+          [ 0,          np.cos(r),  -np.sin(r)  ],
+          [ 0,          np.sin(r),  np.cos(r)   ]]
+    Ry = [[ np.cos(p),  0,          np.sin(p)   ],
+          [ 0,          1,          0           ],
+          [ -np.sin(p), 0,          np.cos(p)   ]]
+    Rz = [[ np.cos(y),  -np.sin(y), 0           ],
+          [ np.sin(y),  np.cos(y),  0           ],
+          [ 0,          0,          1           ]]
+    R = np.matmul(Rz, np.matmul(Ry, Rx))
+    # RTmatrix 
+    RT = np.block([[R, T], [np.zeros(3), 1]])
+    RT = np.linalg.inv(RT)  # Inverse the matrix
+    return RT
+
+
+def get_w2c(pole_xyzrpy: np.ndarray, cam_xyzrpy: np.ndarray):
+    world2pole = RT_matrix(pole_xyzrpy)
+    pole2camera = RT_matrix(cam_xyzrpy)
+    rearrange = np.array([[0, 0, 1], [-1, 0, 0], [0, -1, 0]])
+    return np.matmul(rearrange, np.matmul(pole2camera, world2pole))
+
+
 def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     """
         world_pose -> camera_pose : external parameter of camera
