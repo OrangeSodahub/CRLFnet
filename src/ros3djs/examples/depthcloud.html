@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<script src="https://static.robotwebtools.org/threejs/current/three.js"></script>
+<script src="https://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script src="https://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+<script src="../build/ros3d.js"></script>
+
+<script>
+  /**
+   * Setup all visualization elements when the page is loaded.
+   */
+  function init() {
+    // Connect to ROS.
+    var ros = new ROSLIB.Ros({
+      url : 'ws://localhost:9090'
+    });
+
+    // Create the main viewer.
+    var viewer = new ROS3D.Viewer({
+      divID : 'viewer',
+      width : 800,
+      height : 600,
+      antialias : true
+    });
+
+    // Setup a client to listen to TFs.
+    var tfClient = new ROSLIB.TFClient({
+      ros : ros,
+      angularThres : 0.01,
+      transThres : 0.01,
+      rate : 10.0,
+      fixedFrame : '/camera_link'
+    });
+
+    // Setup Kinect DepthCloud stream
+    depthCloud = new ROS3D.DepthCloud({
+      url : 'http://'+window.location.hostname+':9999/stream?topic=/depthcloud_encoded&type=vp8&bitrate=250000&quality=best',
+      f : 525.0
+    });
+    depthCloud.startStream();
+
+    // Create Kinect scene node
+    var kinectNode = new ROS3D.SceneNode({
+      frameID : '/camera_rgb_optical_frame',
+      tfClient : tfClient,
+      object : depthCloud
+    });
+    viewer.scene.add(kinectNode);
+  }
+</script>
+</head>
+
+<body onload="init()">
+  <h1>Simple DepthCloud Example</h1>
+  <p>Run the following commands in the terminal then refresh the page</p>
+  <ol>
+    <li><tt>roscore</tt></li>
+    <li><tt>roslaunch rosbridge_server rosbridge_websocket.launch</tt></li>
+    <li><tt>rosrun tf2_web_republisher tf2_web_republisher</tt></li>
+    <li><tt>roslaunch openni_launch openni.launch depth_registration:=true</tt></li>
+    <li><tt>rosrun web_video_server web_video_server _port:=9999</tt></li>
+    <li><tt>rosrun depthcloud_encoder depthcloud_encoder_node _depth:=/camera/depth_registered/image_float _rgb:=/camera/rgb/image_rect_color</tt></li>
+    <li><tt>rosrun nodelet nodelet standalone depth_image_proc/convert_metric image_raw:=/camera/depth_registered/image_raw image:=/camera/depth_registered/image_float</tt></li>
+
+  </ol>
+  <div id="viewer"></div>
+</body>
+</html>

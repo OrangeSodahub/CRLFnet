@@ -224,7 +224,7 @@ def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
     return marker_array
 
 
-def rt_vis():
+def rt_vis(data: float):
     plt.ion()
     plt.figure(1)
     t_list = []
@@ -241,6 +241,6 @@ def rt_vis():
         """
         t += 0.1
         t_list.append(t)
-        result_list.append(np.sin(t))
+        result_list.append(data)
         plt.plot(t_list, result_list,c='r',ls='-', marker='o', mec='b',mfc='w')  ## 保存历史数据
         plt.pause(0.1)

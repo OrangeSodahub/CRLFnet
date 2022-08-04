@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tests</title>
+  <link rel="stylesheet" media="all" href="../node_modules/mocha/mocha.css">
+</head>
+<body>
+  <div id="mocha"><p>ros3d.js Tests</p></div>
+  <div id="messages"></div>
+  <div id="fixtures"></div>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
+  <script src="../node_modules/lodash/lodash.min.js"></script>
+
+  <script src="../node_modules/three/build/three.min.js"></script>
+  <script src="../node_modules/eventemitter2/index.js"></script>
+  <script src="../node_modules/roslib/build/roslib.min.js"></script>
+  <script src="../build/ros3d.js"></script>
+
+  <script>mocha.setup('bdd')</script>
+  <script src="tests.js"></script>
+  <script>mocha.run();</script>
+</body>
+</html>

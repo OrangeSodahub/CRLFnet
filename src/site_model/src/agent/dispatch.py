@@ -13,22 +13,18 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from msgs.msg._MsgRadCam import *   # radar camera fusion message type
 from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
+from ..utils.visualization import rt_vis
 
 from .agent import Agents
 from .scene import SceneMap
 
 
-flag_move = 0
-
-
 def set_throttle_steer(odom1: Odometry, odom2: Odometry, odom3: Odometry, odom4: Odometry, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None):
 
-    global flag_move, agent
-
-    # throttle = key.drive.speed*13.95348
-    # steer = key.drive.steering_angle
-
     # declear the publish tools
+    # publish the vis data
+    pub_data = rospy.Publisher('/data', Float64, queue_size=1)
+
     pub_vel_left_rear_wheel_1 = rospy.Publisher('/deepracer1/left_rear_wheel_velocity_controller/command', Float64, queue_size=1)
     pub_vel_right_rear_wheel_1 = rospy.Publisher('/deepracer1/right_rear_wheel_velocity_controller/command', Float64, queue_size=1)
     pub_vel_left_front_wheel_1 = rospy.Publisher('/deepracer1/left_front_wheel_velocity_controller/command', Float64, queue_size=1)
@@ -97,6 +93,9 @@ def set_throttle_steer(odom1: Odometry, odom2: Odometry, odom3: Odometry, odom4:
     pub_vel_right_front_wheel_4.publish(throttles[3])
     pub_pos_left_steering_hinge_4.publish(steers[3])
     pub_pos_right_steering_hinge_4.publish(steers[3])
+
+    # data
+    pub_data.publish(np.random()*10)
     
     
 def get_status(odom: Odometry):
@@ -130,6 +129,7 @@ if __name__ == '__main__':
     ROOT_DIR = Path(__file__).resolve().parents[2]
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/config.yaml'))
+    parser.add_argument("--vis", help="whether to visualize", action='store_true', required=False)
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:
