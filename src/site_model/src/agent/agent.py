@@ -46,13 +46,16 @@ class Agent:
         throttle = 1 if abs(yaw) < np.pi / 2 else -1
         return steer, throttle
 
-    def choose_way(self, node: int) -> int:
+    def choose_way(self, node: int,  pos: np.ndarray, msg_rad_cam, msg_lid_cam) -> int:
         """Choose an accessable lane randomly."""
         lanes = self.scene_map.accessable_lanes(node)
         if len(lanes) == 0:
             return -1
         lane = np.random.choice(lanes)
         return lane
+
+    def calc_density(self, pos: np.ndarray, msg_rad_cam, msg_lid_cam):
+        pass
 
     def lost_nav(self) -> None:
         # find the nearest node
@@ -65,7 +68,7 @@ class Agent:
         self.tmp_lane_point = lane_point
         self.tmp_target = self.scene_map.lanes[lane][lane_point]
 
-    def lane_nav(self) -> None:
+    def lane_nav(self, pos: np.ndarray, msg_rad_cam, msg_lid_cam) -> None:
         # if the vehicle hasn't reached the target, do not change the target
         if self.distance > self.TARGET_THRES:
             return 
@@ -74,7 +77,7 @@ class Agent:
         # if the vehicle is at the end of the lane, change to intersect mode
         if self.tmp_lane_point >= len(lane):
             node = self.scene_map.accessable_node(self.tmp_lane)
-            self.tmp_lane = self.choose_way(node)
+            self.tmp_lane = self.choose_way(node, pos, msg_rad_cam, msg_lid_cam)
             if self.tmp_lane == -1:
                 self.mode = 'await'
                 print("\033[0;31mError: The vehicle is in a dead end.\033[0m")
@@ -105,7 +108,7 @@ class Agent:
             self.mode = 'lost'
             self.lost_nav()
         elif self.mode == 'lane':
-            self.lane_nav()
+            self.lane_nav(pos, msg_rad_cam, msg_lid_cam)
         elif self.mode == 'intersection':
             self.intersect_nav()
         # if an error occurs, the vehicle stops
