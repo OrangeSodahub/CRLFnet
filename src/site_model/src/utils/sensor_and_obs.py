@@ -50,10 +50,12 @@ class Sensor(ABC):
 class RadarSensor(Sensor):
 
     def __init__(self, name: str, data: dict) -> None:
+        """The angles are all in deg"""
         R = np.array(data['R']).reshape(2, 2)
         super().__init__(name, R, 2)
         self.boxes = np.empty((0, 3))
         self.offset = np.array(data['offset'])
+        self.angle_offset = np.array(data['angle'])
 
     def update(self, data: np.ndarray) -> None:
         self.zs = data[:, 0:2]
@@ -83,21 +85,8 @@ class RadarSensor(Sensor):
 
     def world2obs(self, pos: np.ndarray) -> np.ndarray:
         x, y = pos[0] - self.offset[0], pos[1] - self.offset[1]
-        r = np.sqrt(np.square(x) + np.square(y))
-        if x == 0:
-            theta = 0
-        elif y == 0:
-            if x < 0:
-                theta = 90
-            else:
-                theta = -90
-        else:
-            theta = -np.rad2deg(np.arctan(x / y))
-            if y < 0:
-                if x < 0:
-                    theta = 180 - theta
-                elif x > 0:
-                    theta = -180 + theta
+        r = np.linalg.norm([x, y])
+        theta = np.rad2deg(np.arctan2(-x, y))
         z = np.array([r, theta])
         return z
 

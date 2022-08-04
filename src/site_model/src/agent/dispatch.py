@@ -1,27 +1,30 @@
-#!/usr/bin/python3
+# !/usr/bin/python3
+
+import argparse
+from pathlib import Path
+import numpy as np
+import yaml
 
 import rospy
-import yaml
-import argparse
-import numpy as np
-from pathlib import Path
-from termcolor import colored
-from std_msgs.msg import Bool
-from std_msgs.msg import Float32
-from std_msgs.msg import Float64
 import message_filters
-from msgs.msg._MsgRadCam import *   # radar camera fusion message type
-from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
-from .agent import Agent
+from std_msgs.msg import Float64
 from nav_msgs.msg import Odometry
 from ackermann_msgs.msg import AckermannDriveStamped
+from msgs.msg._MsgRadCam import *   # radar camera fusion message type
+from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
+
+from .agent import Agent
+from .scene import SceneMap
+
 
 flag_move = 0
 
+
 def set_throttle_steer(odom: Odometry, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None):
 
-    global flag_move
+    global flag_move, agent
+
     # throttle = key.drive.speed*13.95348
     # steer = key.drive.steering_angle
 
@@ -45,7 +48,7 @@ def set_throttle_steer(odom: Odometry, msgradcam: MsgRadCam = None, msglidcam: M
     vehicle1 = np.array([odom.pose.pose.position.x, odom.pose.pose.position.y])
     r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
                                     odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
-    steer, throttle = agent.set_control(vehicle1, y, msgradcam, msglidcam)
+    steer, throttle = agent.navigate(vehicle1, y, msgradcam, msglidcam)
     throttle *= 15
 
     pub_vel_left_rear_wheel_1.publish(throttle)
@@ -62,6 +65,7 @@ def set_throttle_steer(odom: Odometry, msgradcam: MsgRadCam = None, msglidcam: M
     pub_vel_right_front_wheel_2.publish(throttle)
     pub_pos_left_steering_hinge_2.publish(steer)
     pub_pos_right_steering_hinge_2.publish(steer)
+
 
 def servo_commands():
 
@@ -90,8 +94,10 @@ if __name__ == '__main__':
         try:
             config = yaml.load(f, Loader=yaml.FullLoader)
         except:
-            print(colored('Config file could not be read.','red'))
+            print('\033[0;31mConfig file could not be read.\033[0m')
             exit(1)
 
-    agent = Agent(config['lanes']['obj_threshold'], config['lanes']['multi_threshold'], str(ROOT_DIR / config['lanes']['file_dir']))
+    MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
+    scene_map = SceneMap(MAP_DIR)
+    agent = Agent(config['lanes']['obj_threshold'], config['lanes']['multi_threshold'], ROOT_DIR / config['lanes']['file_dir'], scene_map)
     servo_commands()

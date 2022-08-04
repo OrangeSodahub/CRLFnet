@@ -21,6 +21,9 @@ lanes:
   obj_threshold: 0.1
   multi_threshold: 0.05
 
+dispatch:
+  scene_map: src/agent/map_0
+
 data: 
   cam_dir: /dataset/camera_data/
   rad_dir: /dataset/radar_data/

@@ -191,4 +191,4 @@ if __name__ == "__main__":
     np.savetxt(os.path.join(output_path, "nodes.txt"), data)
     # save graph
     data = np.array(graph, dtype=int).T
-    np.savetxt(os.path.join(output_path, "graph.txt"), data)
+    np.savetxt(os.path.join(output_path, "graph.txt"), data, fmt='%d')
