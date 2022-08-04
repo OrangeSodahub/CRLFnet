@@ -54,6 +54,15 @@
   <gazebo reference="base_link">
     <material>Gazebo/Residential</material>
   </gazebo>
+  <gazebo reference="base_Link_right">
+    <material>Gazebo/Gray</material>
+  </gazebo>
+  <gazebo reference="base_Link_left">
+    <material>Gazebo/Gray</material>
+  </gazebo>
+  <gazebo reference="base_Link_front">
+    <material>Gazebo/Gray</material>
+  </gazebo>
   <gazebo reference="pillar_Link">
     <material>Gazebo/Residential</material>
     <turnGravityOff>false</turnGravityOff>
@@ -184,6 +193,171 @@
       </geometry>
     </collision>
   </link>
+
+  <!-- base_link_right -->
+  <link
+    name="base_Link_right">
+    <inertial>
+      <origin
+        xyz="-1.2621568269662E-06 -1.00033198610052 -0.0249971241809568"
+        rpy="0 0 0" />
+      <mass
+        value="12481.4076184202" />
+      <inertia
+        ixx="29122.6374547981"
+        ixy="-3.27954372201533E-12"
+        ixz="3.08097412311762E-13"
+        iyy="16643.0318497451"
+        iyz="2.04194051276104E-12"
+        izz="45760.4693043086" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_link_right"
+    type="fixed">
+    <origin
+      xyz="4 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="base_Link_right" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- base_link_left -->
+  <link
+    name="base_Link_left">
+    <inertial>
+      <origin
+        xyz="-1.2621568269662E-06 -1.00033198610052 -0.0249971241809568"
+        rpy="0 0 0" />
+      <mass
+        value="12481.4076184202" />
+      <inertia
+        ixx="29122.6374547981"
+        ixy="-3.27954372201533E-12"
+        ixz="3.08097412311762E-13"
+        iyy="16643.0318497451"
+        iyz="2.04194051276104E-12"
+        izz="45760.4693043086" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_link_left"
+    type="fixed">
+    <origin
+      xyz="-4 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="base_Link_left" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- base_link_front -->
+  <link
+    name="base_Link_front">
+    <inertial>
+      <origin
+        xyz="-1.2621568269662E-06 -1.00033198610052 -0.0249971241809568"
+        rpy="0 0 0" />
+      <mass
+        value="12481.4076184202" />
+      <inertia
+        ixx="29122.6374547981"
+        ixy="-3.27954372201533E-12"
+        ixz="3.08097412311762E-13"
+        iyy="16643.0318497451"
+        iyz="2.04194051276104E-12"
+        izz="45760.4693043086" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_link_front"
+    type="fixed">
+    <origin
+      xyz="0 8 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="base_Link_front" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
 
 <!-- Lidar11 points1 -->
   <joint name="velodyne11_base_mount_joint" type="fixed">

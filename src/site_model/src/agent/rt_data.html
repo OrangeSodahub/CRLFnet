@@ -9,42 +9,7 @@
 </head>
 <body>
 <div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
-<script>
-	// Connecting to ROS
-	// -----------------
-	var ros = new ROSLIB.Ros();
-
-	// If there is an error on the backend, an 'error' emit will be emitted.
-	ros.on('error', function(error) {
-	document.getElementById('connecting').style.display = 'none';
-	document.getElementById('connected').style.display = 'none';
-	document.getElementById('closed').style.display = 'none';
-	document.getElementById('error').style.display = 'inline';
-	console.log(error);
-	});
-
-	// Find out exactly when we made a connection.
-	ros.on('connection', function() {
-	console.log('Connection made!');
-	document.getElementById('connecting').style.display = 'none';
-	document.getElementById('error').style.display = 'none';
-	document.getElementById('closed').style.display = 'none';
-	document.getElementById('connected').style.display = 'inline';
-	});
-
-	ros.on('close', function() {
-	console.log('Connection closed.');
-	document.getElementById('connecting').style.display = 'none';
-	document.getElementById('connected').style.display = 'none';
-	document.getElementById('closed').style.display = 'inline';
-	});
-
-	// Create a connection to the rosbridge WebSocket server.
-	ros.connect('http://YXYT3650:11311/');
-</script>
-
-<script language="JavaScript">
-$(document).ready(function() {
+<script type="text/javascript" type="text/javascript">
     var chart = Highcharts.chart('container', {
 	chart: {
 		type: 'spline',
@@ -125,7 +90,6 @@ $(document).ready(function() {
     });
 
    $('#container').highcharts(json);
-});
 </script>
 </body>
 </html>
