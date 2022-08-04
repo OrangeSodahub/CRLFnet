@@ -15,7 +15,8 @@ MODES = ['lane', 'intersection', 'lost', 'await']
 
 class Agent:
 
-    def __init__(self, obj_threshold, multi_threshold, lanes_path: Path, scene_map: SceneMap) -> None:
+    def __init__(self, obj_threshold, multi_threshold, lanes_path: Path, scene_map: SceneMap, num) -> None:
+        self.num = num
 
         self.LEN = 0.163974         # the length between the front wheel and the rear wheel
         self.MAX_STEER = np.pi / 4
@@ -182,3 +183,25 @@ class Agent:
             return 0, 0
         print("Mode: {}, Target: {}".format(self.mode, self.tmp_target), end='\r')
         return self.target2control()
+
+
+class Agents():
+
+    def __init__(self, obj_threshold, multi_threshold, lanes_path: Path, scene_map: SceneMap, nums) -> None:
+        self.nums = nums
+        self.vehicles = []
+        for i in range(nums):
+            self.vehicles.append(Agent(obj_threshold, multi_threshold, lanes_path, scene_map, i))
+
+
+    def navigate(self, status, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam):
+        """
+            Input the number, status of current vehicle
+            Output the control
+        """
+        steers, throttles = [], []
+        for num in range(self.nums):
+            steer, throttle = self.vehicles[num].navigate(status[num][0], status[num][1], msg_rad_cam, msg_lid_cam)
+            steers.append(steer)
+            throttles.append(throttle)
+        return steers, throttles

@@ -14,14 +14,14 @@ from msgs.msg._MsgRadCam import *   # radar camera fusion message type
 from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 
-from .agent import Agent
+from .agent import Agents
 from .scene import SceneMap
 
 
 flag_move = 0
 
 
-def set_throttle_steer(odom: Odometry, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None):
+def set_throttle_steer(odom1: Odometry, odom2: Odometry, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None):
 
     global flag_move, agent
 
@@ -44,27 +44,34 @@ def set_throttle_steer(odom: Odometry, msgradcam: MsgRadCam = None, msglidcam: M
     pub_pos_right_steering_hinge_2 = rospy.Publisher('/deepracer2/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
     # publish the decisions
-    # vehicle1
-    vehicle1 = np.array([odom.pose.pose.position.x, odom.pose.pose.position.y])
-    r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
-                                    odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
-    steer, throttle = agent.navigate(vehicle1, y, msgradcam, msglidcam)
-    throttle *= 15
+    # get all status
+    status = []
+    status.append(get_status(odom1))
+    status.append(get_status(odom2))
+    steers, throttles = agents.navigate(status, msgradcam, msglidcam)
+    throttles *= 15
 
-    pub_vel_left_rear_wheel_1.publish(throttle)
-    pub_vel_right_rear_wheel_1.publish(throttle)
-    pub_vel_left_front_wheel_1.publish(throttle)
-    pub_vel_right_front_wheel_1.publish(throttle)
-    pub_pos_left_steering_hinge_1.publish(steer)
-    pub_pos_right_steering_hinge_1.publish(steer)
+    pub_vel_left_rear_wheel_1.publish(throttles[0])
+    pub_vel_right_rear_wheel_1.publish(throttles[0])
+    pub_vel_left_front_wheel_1.publish(throttles[0])
+    pub_vel_right_front_wheel_1.publish(throttles[0])
+    pub_pos_left_steering_hinge_1.publish(steers[0])
+    pub_pos_right_steering_hinge_1.publish(steers[0])
 
     # vehicle2
-    pub_vel_left_rear_wheel_2.publish(throttle)
-    pub_vel_right_rear_wheel_2.publish(throttle)
-    pub_vel_left_front_wheel_2.publish(throttle)
-    pub_vel_right_front_wheel_2.publish(throttle)
-    pub_pos_left_steering_hinge_2.publish(steer)
-    pub_pos_right_steering_hinge_2.publish(steer)
+    pub_vel_left_rear_wheel_2.publish(throttles[1])
+    pub_vel_right_rear_wheel_2.publish(throttles[1])
+    pub_vel_left_front_wheel_2.publish(throttles[1])
+    pub_vel_right_front_wheel_2.publish(throttles[1])
+    pub_pos_left_steering_hinge_2.publish(steers[1])
+    pub_pos_right_steering_hinge_2.publish(steers[1])
+    
+    
+def get_status(odom: Odometry):
+    vehicle = np.array([odom.pose.pose.position.x, odom.pose.pose.position.y])
+    r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
+                                    odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
+    return [vehicle, y]
 
 
 def servo_commands():
@@ -76,8 +83,9 @@ def servo_commands():
     sub_msgradcam = message_filters.Subscriber('/radar_camera_fused', MsgRadCam)
     sub_msglidcam = message_filters.Subscriber('/lidar_camera_fused', MsgLidCam)
     sub_key = message_filters.Subscriber('/ackermann_cmd_mux/output', AckermannDriveStamped)
-    sub_odom = message_filters.Subscriber('/deepracer2/base_pose_ground_truth', Odometry)
-    sync = message_filters.ApproximateTimeSynchronizer([sub_odom], 1, 1)
+    sub_odom1 = message_filters.Subscriber('/deepracer1/base_pose_ground_truth', Odometry)
+    sub_odom2 = message_filters.Subscriber('/deepracer2/base_pose_ground_truth', Odometry)
+    sync = message_filters.ApproximateTimeSynchronizer([sub_odom1, sub_odom2], 1, 1)
     sync.registerCallback(set_throttle_steer)
     
     # spin() simply keeps python from exiting until this node is stopped
@@ -99,5 +107,5 @@ if __name__ == '__main__':
 
     MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
     scene_map = SceneMap(MAP_DIR)
-    agent = Agent(config['lanes']['obj_threshold'], config['lanes']['multi_threshold'], ROOT_DIR / config['lanes']['file_dir'], scene_map)
+    agents = Agents(config['lanes']['obj_threshold'], config['lanes']['multi_threshold'], ROOT_DIR / config['lanes']['file_dir'], scene_map)
     servo_commands()
