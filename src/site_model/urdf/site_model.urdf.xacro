@@ -2317,7 +2317,7 @@
   </joint>
 
   <!-- pillar -->
-  <link
+  <!-- <link
     name="pillar_Link">
     <inertial>
       <origin
@@ -2369,7 +2369,7 @@
       link="pillar_Link" />
     <axis
       xyz="0 0 0" />
-  </joint>
+  </joint> -->
 
   <!-- seperate line -->
   <link

@@ -52,8 +52,38 @@
 	            joint_state_controller"/>
 	</group>
 
-<node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen">
-</node>
+	<group ns="deepracer3">
+	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer3.urdf"/>
+	<node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher">
+		<param name="publish_frequency" type="double" value="20.0" />
+	</node>
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-urdf -model deepracer3 -param robot_description -x 0 -y -4 -z 0.04"/> 
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="true" output="screen" ns="/deepracer3" 
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+	</group>
+
+	<group ns="deepracer4">
+	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer4.urdf"/>
+	<node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher">
+		<param name="publish_frequency" type="double" value="20.0" />
+	</node>
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-urdf -model deepracer4 -param robot_description -x 0 -y -4.5 -z 0.04"/> 
+	<node name="controller_manager" pkg="controller_manager" type="spawner" 
+	      respawn="true" output="screen" ns="/deepracer4" 
+	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
+	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
+	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
+	            joint_state_controller"/>
+	</group>
+
+<!-- <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen">
+</node> -->
 
 </launch>
 

@@ -15,7 +15,7 @@ MODES = ['lane', 'intersection', 'lost', 'await']
 
 class Agent:
 
-    def __init__(self, obj_threshold, multi_threshold, lanes_path: Path, scene_map: SceneMap, num) -> None:
+    def __init__(self, lanes_path: Path, scene_map: SceneMap, num) -> None:
         self.num = num
 
         self.LEN = 0.163974         # the length between the front wheel and the rear wheel
@@ -31,75 +31,6 @@ class Agent:
         self.tmp_target = np.array([0, 0])
         self.tmp_lane = -1
         self.tmp_lane_point = -1
-
-        self.obj_threshold = obj_threshold
-        self.multi_threshold = multi_threshold
-        self.lanes = []
-        for i in range(6):
-            pth = str(lanes_path.joinpath("{}.txt".format(i)))
-            lane = np.loadtxt(pth, dtype=np.float64)
-            self.lanes.append(lane)
-        self.nodes = [[],
-                      [],
-                      [],
-                      []]
-        self.lane = -1
-
-    def is_front(self, vehicle: np.ndarray, point: np.ndarray, alpha):
-        """
-            only consider points that are in front of the vehicle
-        """
-        return abs(np.arctan2(point[1]-vehicle[1], point[0]-vehicle[0])-alpha) <= np.pi*2/3
-
-    def get_mindist(self, dists):
-        min_dist = np.inf
-        lane: int = -1
-        for i, dist in enumerate(dists):
-            if np.min(dist) < min_dist and np.min(dist) >= self.obj_threshold:
-                min_dist = np.min(dist)
-                lane = i
-        if lane == -1:
-            return lane, -1
-        loc = np.where(dists[lane]==min_dist)[0][0]
-        return lane, loc
-
-    def set_lane(self, vehicle: np.ndarray, alpha):
-        if self.lane == -1:                                     # no current lane
-            dists = [np.array([np.linalg.norm(point - vehicle) if self.is_front(vehicle, point, alpha) else np.inf for point in lane]) for lane in self.lanes]
-        else:                                                   # not at nodes
-            dists = [np.array([np.linalg.norm(point - vehicle) if self.is_front(vehicle, point, alpha) else np.inf for point in self.lanes[self.lane]])]
-        lane, loc = self.get_mindist(dists)
-        return lane, loc
-
-    def set_obj(self, vehicle: np.ndarray, alpha):
-        """
-            set objective
-        """
-        lane, loc = self.set_lane(vehicle, alpha)
-        if loc == -1:                                           # no candidate objectives in front of vehicle
-            return []
-        if loc == -2:
-            self.lane = lane                                    # switch lane
-
-        obj_loc = [self.lane, loc]
-        obj = self.lanes[obj_loc[0]][obj_loc[1]]
-        return [obj]
-
-    def set_control(self, vehicle: np.ndarray, alpha, msgradcam: MsgRadCam, msglidcam: MsgLidCam):
-        """
-        return the speed and angle to the vehicle
-        """
-        candi_obj = self.set_obj(vehicle, alpha)
-        if len(candi_obj) == 0:                                 # no candidate objectives: fall back
-            return 0, -1
-        else:                                                   # only one objective
-            obj = candi_obj[0]
-        print("obj:", obj, end='\r')
-        diff = np.arctan2(obj[1]-vehicle[1], obj[0]-vehicle[0]) - alpha
-        turn = diff / (np.pi/4) if abs(diff) <= np.pi/4 else np.sign(diff)          # left: turn=1; right: turn = -1
-        return turn, 1                                                              # return angle, speed
-
-
 
     def update(self, pos: np.ndarray, orient: float) -> None:
         self.pos = pos
@@ -187,11 +118,11 @@ class Agent:
 
 class Agents():
 
-    def __init__(self, obj_threshold, multi_threshold, lanes_path: Path, scene_map: SceneMap, nums) -> None:
+    def __init__(self, lanes_path: Path, scene_map: SceneMap, nums) -> None:
         self.nums = nums
         self.vehicles = []
         for i in range(nums):
-            self.vehicles.append(Agent(obj_threshold, multi_threshold, lanes_path, scene_map, i))
+            self.vehicles.append(Agent(lanes_path, scene_map, i))
 
 
     def navigate(self, status, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam):
