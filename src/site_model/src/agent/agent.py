@@ -5,6 +5,7 @@ from typing import Tuple
 
 from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
 from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
+from msgs.msg._MsgLidCamObject import MsgLidCamObject
 
 from .scene import SceneMap
 
@@ -23,6 +24,7 @@ class Agent:
         self.LENGTH = 0.22
         self.WIDTH = 0.21
         self.COLLIDE_THRES = 0.5
+        self.lane_orient = [0,0,0,1,2,3,0,0,...]  # 1: intersection, 2: circle, 3: overpass
 
         self.mode = 'lost'
         self.pos = np.array([0, 0])
@@ -38,18 +40,28 @@ class Agent:
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def is_collide(self, poses) -> bool:
-        # TODO: specify the lanes
+    def is_collide(self, poses, lanes: np.ndarray) -> bool:
+        def is_lane(sl, l, sp, p):
+            if sl != l:
+                if sl == 18 or l == 18:
+                    return False
+                else:
+                    if abs(sp[1]) - abs(p[1]) > np.pi / 3:
+                        return True
+                    return False
+            return True
+
         for i, p in enumerate(poses):
             if i == self.index:
                 continue
             sp = poses[self.index]
-            if (np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES:
+            if ((np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and
+                np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES and is_lane(self.tmp_lane, lanes[i], sp, p)):
                 return True
         return False
 
-    def target2control(self, poses) -> Tuple[float, float]:
-        if self.is_collide(poses):
+    def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
+        if self.is_collide(poses, lanes):
             return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
         distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
@@ -62,16 +74,34 @@ class Agent:
 
     def choose_way(self, node: int, pos: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> int:
         """Choose an accessable lane randomly."""
-        # TODO: code
         lanes = self.scene_map.accessable_lanes(node)
         if len(lanes) == 0:
             return -1
         lane = np.random.choice(lanes)
+        # lane = calc_density(lanes, msg_rad_cam, msg_lid_cam)
         return lane
 
-    def calc_density(self, pos: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam):
-        # TODO: code
-        pass
+    def calc_density(self, pos: np.ndarray, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam):
+        """
+            caculate weighted score of accessible lanes
+        """
+        def set_weight(orient, nums_area):
+            min_area, max_area = np.argmin(nums_area), np.argmax(nums_area)
+            if orient == min_area:
+                return 1
+            elif orient == max_area:
+                return 3
+            return 2
+        lane_num = [0]*len(lanes)
+        for i, lane in enumerate(lanes):
+            dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), p) for p in self.scene_map.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
+            dists_convert = dists <= 0.05
+            lane_num[i] += np.sum(dists_convert)
+        lane_orient = [self.lane_orient[lane] for lane in lanes]
+        nums_area = [msg_lid_cam.num_intersection, msg_lid_cam.objects_circle, msg_rad_cam.num_overpass]
+        lane_weight = [set_weight(orient, nums_area) for orient in lane_orient]
+        lane_score = np.average(lane_num, weights=lane_weight)
+        return lanes[np.where(lane_score==np.min(lane_score))[0][0]]
 
     def lost_nav(self) -> None:
         # find the nearest node
@@ -114,7 +144,7 @@ class Agent:
             self.mode = 'lane'
             return
 
-    def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> None:
+    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> None:
         # update the position and orientation data
         self.update(poses[self.index][0], poses[self.index][1])
         # if the vehicle is too far away from the target, change to lost mode
@@ -132,7 +162,7 @@ class Agent:
             print("AWAIT MODE #{}".format(self.index), end='\r')
             return 0, 0
         print("Vehicle:{}, Mode: {}, Target: {}".format(self.index, self.mode, self.tmp_target), end='\r')
-        return self.target2control(poses)
+        return self.target2control(poses, lanes)
 
 
 class Agents:
@@ -142,9 +172,10 @@ class Agents:
         self.vehicles = [Agent(scene_map, i) for i in range(num)]
 
     def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[int, int]:
+        lanes = [v.tmp_lane for v in self.vehicles]
         steers, throttles = [], []
         for v in self.vehicles:
-            steer, throttle = v.navigate(poses, msg_rad_cam, msg_lid_cam)
+            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam)
             steers.append(steer)
             throttles.append(throttle)
         return steers, throttles
