@@ -56,13 +56,16 @@ def add_lane() -> None:
 
 
 def draw_image(image: cv2.Mat) -> None:
+    # draw nodes
     for x, y in nodes:
         cv2.circle(image, w2p(x, y), 5, (0, 0, 255), thickness=-1)
+    # draw lanes
     for lane in lanes:
         for p in lane:
             cv2.circle(image, w2p(p[0], p[1]), 3, (255, 0, 0), thickness=-1)
     for x, y in zip(tmp_x, tmp_y):
         cv2.circle(image, w2p(x, y), 3, (0, 255, 0), thickness=-1)
+    # draw arrows
     for node_idx in range(len(nodes)):
         for lane_idx in range(len(lanes)):
             c = graph[lane_idx][node_idx]
@@ -74,6 +77,12 @@ def draw_image(image: cv2.Mat) -> None:
                 from_point = w2p(*nodes[node_idx])
                 to_point = w2p(*lanes[lane_idx][0])
                 cv2.arrowedLine(image, from_point, to_point, (255, 255, 0), thickness=2)
+    # draw text
+    for node_idx in range(len(nodes)):
+        cv2.putText(image, str(node_idx), w2p(*nodes[node_idx]), cv2.FONT_HERSHEY_PLAIN, 3, (127, 0, 256), 2)
+    for lane_idx in range(len(lanes)):
+        cv2.putText(image, str(lane_idx), w2p(*lanes[lane_idx][0]), cv2.FONT_HERSHEY_PLAIN, 2, (0, 127, 256), 2)
+        cv2.putText(image, str(lane_idx), w2p(*lanes[lane_idx][-1]), cv2.FONT_HERSHEY_PLAIN, 2, (0, 127, 256), 2)
 
 
 def node_mode(event, x, y) -> None:
