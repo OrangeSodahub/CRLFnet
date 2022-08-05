@@ -44,7 +44,8 @@ class Agent:
             if i == self.index:
                 continue
             sp = poses[self.index]
-            return (np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES
+            if (np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES:
+                return True
         return False
 
     def target2control(self, poses) -> Tuple[float, float]:
