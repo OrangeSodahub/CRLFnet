@@ -40,18 +40,15 @@ class Agent:
 
     def is_collide(self, poses) -> bool:
         # TODO: specify the lanes
-        def collision_area(sp, p):
-            return (np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES
-        for i, pos in enumerate(poses):
+        for i, p in enumerate(poses):
             if i == self.index:
                 continue
-            if collision_area(poses[self.index], pos):
-                return True
+            sp = poses[self.index]
+            return (np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES
         return False
 
     def target2control(self, poses) -> Tuple[float, float]:
         if self.is_collide(poses):
-            print("fuck")
             return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
         distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
