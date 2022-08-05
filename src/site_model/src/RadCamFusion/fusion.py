@@ -1,9 +1,7 @@
-#!/usr/bin/env python3
-
+# !/usr/bin/env python3
 """
 Get the radar and camera messages and do Radar-camera fusion.
 """
-
 
 from time import perf_counter
 from pathlib import Path
@@ -17,17 +15,16 @@ from cv_bridge import CvBridge
 
 import rospy
 import message_filters
-from sensor_msgs.msg import Image               # Camera message
+from sensor_msgs.msg import Image  # Camera message
 from msgs.msg._MsgRadarObject import MsgRadarObject
-from msgs.msg._MsgRadar import MsgRadar         # Radar message
-from msgs.msg._MsgRadCam import MsgRadCam       # fusion message
+from msgs.msg._MsgRadar import MsgRadar  # Radar message
+from msgs.msg._MsgRadCam import MsgRadCam  # fusion message
 
 from ..utils.yolo.yolo import YOLO
 from ..utils.kalman import Kalman
 from ..utils.poi_and_roi import image_roi
 from ..utils.visualization import VisualAssistant
 from ..utils.sensor_and_obs import RadarSensor, ImageSensor, SensorPair
-
 
 time_counter = 0
 frame_counter = 0
@@ -80,14 +77,12 @@ def my_file_loader() -> None:
         geometry = yaml.load(f, Loader=yaml.FullLoader)
 
 
-
 def rad2data(radar: List[MsgRadarObject]) -> np.ndarray:
     if len(radar) == 0:
         return np.empty((0, 3))
     else:
         radar_data = np.array([np.array([obj.distance, obj.angle_centroid, obj.velocity]) for obj in radar])
         return radar_data
-
 
 
 def msg2data(radar: List[MsgRadarObject], image: Image) -> Tuple[np.ndarray, np.ndarray]:
@@ -97,10 +92,7 @@ def msg2data(radar: List[MsgRadarObject], image: Image) -> Tuple[np.ndarray, np.
     return radar_data, image_data
 
 
-def msg2save(frame: int, save_path: Path,
-             radar_data: List[np.ndarray], radar_sensors: List[RadarSensor],
-             image_data: List[Image], image_sensors: List[ImageSensor]
-            ) -> None:
+def msg2save(frame: int, save_path: Path, radar_data: List[np.ndarray], radar_sensors: List[RadarSensor], image_data: List[Image], image_sensors: List[ImageSensor]) -> None:
     p = save_path.joinpath(str(frame))
     for r, s in zip(radar_data, radar_sensors):
         np.savetxt(str(p.joinpath("{}.txt".format(s.name))), r)
@@ -110,9 +102,7 @@ def msg2save(frame: int, save_path: Path,
     print("\033[0;32mSaved radar and image data sucessfully.\033[0m")
 
 
-def save2data(frame: int, load_path: Path,
-              radar_sensors: List[RadarSensor], image_sensors: List[ImageSensor]
-             ) -> None:
+def save2data(frame: int, load_path: Path, radar_sensors: List[RadarSensor], image_sensors: List[ImageSensor]) -> None:
     p = load_path.joinpath(str(frame))
     for s in radar_sensors:
         d = np.loadtxt(str(p.joinpath("{}.txt".format(s.name))))
@@ -128,11 +118,11 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
     global kf, va, args
     global pair_2, pair_3
     # Output FPS and frame info
-    time_interval = my_timer()
+    _ = my_timer()
     # Off-YOLO mode (only save radar and raw image data)
     if args.mode == 'off-yolo':
         msg2save(frame_counter, radar.objects_left, image_2, SAVE_DIR)
-        return 
+        return
     # Acquire radar and image data
     if args.mode == 'from-save':
         radar_data_2, image_data_2 = save2data(SAVE_DIR, '2')
@@ -166,23 +156,12 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
 if __name__ == '__main__':
     # set command arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--mode",
-                    choices     = ['normal', 'off-yolo', 'from-save'],
-                    type        = str,
-                    default     = 'normal',
-                    required    = False,
-                    help        = "Mode."
-    )
-    parser.add_argument("-s", "--save",
-                        action      = 'store_true',
-                        default     = False,
-                        required    = False,
-                        help        = "Save visualized POIs and ROIs as images."
-    )
+    parser.add_argument("-m", "--mode", choices=['normal', 'off-yolo', 'from-save'], type=str, default='normal', required=False, help="Mode.")
+    parser.add_argument("-s", "--save", action='store_true', default=False, required=False, help="Save visualized POIs and ROIs as images.")
     args = parser.parse_args()
 
     my_file_loader()
-    
+
     # Initialization
     # YOLO
     if args.mode != 'off-yolo':
@@ -216,7 +195,7 @@ if __name__ == '__main__':
     # initialize publisher
     pub = rospy.Publisher("/radar_camera_fused", MsgRadCam, queue_size=10)
     # subscribe messages
-    msg_radar   = message_filters.Subscriber('/radar_msgs_combined', MsgRadar)
+    msg_radar = message_filters.Subscriber('/radar_msgs_combined', MsgRadar)
     msg_image_2 = message_filters.Subscriber('/image_raw_2', Image)
     msg_image_3 = message_filters.Subscriber('/image_raw_3', Image)
     msg_image_5 = message_filters.Subscriber('/image_raw_5', Image)

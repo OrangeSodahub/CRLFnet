@@ -11,8 +11,8 @@ import message_filters
 from std_msgs.msg import Float64
 from nav_msgs.msg import Odometry
 from ackermann_msgs.msg import AckermannDriveStamped
-from msgs.msg._MsgRadCam import *   # radar camera fusion message type
-from msgs.msg._MsgLidCam import *   # lidar camera fusion message type
+from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
+from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 from ..utils.visualization import rt_vis
 
@@ -30,7 +30,7 @@ class PublisherBundle:
         self.rf_wheel = rospy.Publisher('/{}/right_front_wheel_velocity_controller/command'.format(vehicle_name), Float64, queue_size=1)
         self.l_steering_hinge = rospy.Publisher('/{}/left_steering_hinge_position_controller/command'.format(vehicle_name), Float64, queue_size=1)
         self.r_steering_hinge = rospy.Publisher('/{}/right_steering_hinge_position_controller/command'.format(vehicle_name), Float64, queue_size=1)
-    
+
     def publish(self, throttle: float, steer: float) -> None:
         self.lr_wheel.publish(throttle)
         self.rr_wheel.publish(throttle)
@@ -47,9 +47,7 @@ def odom2pose(odom: Odometry) -> Tuple[np.ndarray, float]:
     return np.array([pos.x, pos.y]), y
 
 
-def set_control(odom1: Odometry, odom2: Odometry, odom3: Odometry, odom4: Odometry,
-                msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None
-               ) -> None:
+def set_control(odom1: Odometry, odom2: Odometry, odom3: Odometry, odom4: Odometry, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None) -> None:
     global pub_data
     global pub_1, pub_2, pub_3, pub_4
 
@@ -61,8 +59,8 @@ def set_control(odom1: Odometry, odom2: Odometry, odom3: Odometry, odom4: Odomet
     pub_2.publish(throttles[1], steers[1])
     pub_3.publish(throttles[2], steers[2])
     pub_4.publish(throttles[3], steers[3])
-    
-    pub_data.publish(np.random.random()*10)
+
+    pub_data.publish(np.random.random() * 10)
 
 
 def servo_commands() -> None:
@@ -80,7 +78,7 @@ def servo_commands() -> None:
     sub_odom4 = message_filters.Subscriber('/deepracer4/base_pose_ground_truth', Odometry)
     sync = message_filters.ApproximateTimeSynchronizer([sub_odom1, sub_odom2, sub_odom3, sub_odom4], 1, 1)
     sync.registerCallback(set_control)
-    
+
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
@@ -89,15 +87,8 @@ if __name__ == '__main__':
     ROOT_DIR = Path(__file__).resolve().parents[2]
     CONFIG_FILE = ROOT_DIR.joinpath('config/config.yaml')
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help     = "path to config file",
-                                    metavar  = "FILE",
-                                    required = False,
-                                    default  = str(CONFIG_FILE)
-                       )
-    parser.add_argument("--vis",    help     = "whether to visualize",
-                                    action   = 'store_true',
-                                    required = False
-                       )
+    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default=str(CONFIG_FILE))
+    parser.add_argument("--vis", help="whether to visualize", action='store_true', required=False)
     params = parser.parse_args()
     with open(params.config, 'r') as f:
         try:

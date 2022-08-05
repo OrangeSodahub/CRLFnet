@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-
 """
 Subscribe the raw radar topics and publish filtered messages.
 """
-
 
 import rospy
 import message_filters
@@ -13,15 +11,15 @@ from msgs.msg._MsgRadar import MsgRadar
 from msgs.msg._MsgRadarObject import MsgRadarObject
 
 
-def append_obj(t: GeometryMsgsRadarObject, l: list):
+def append_obj(t: GeometryMsgsRadarObject, obj_list: list):
     obj = MsgRadarObject()
-    obj.distance        = t.range
-    obj.velocity        = t.range_rate
-    obj.angle_centroid  = t.angle_centroid
-    obj.pos_x           = t.obj_vcs_posex
-    obj.pos_y           = t.obj_vcs_posey
-    obj.track_id        = t.track_id
-    l.append(obj)
+    obj.distance = t.range
+    obj.velocity = t.range_rate
+    obj.angle_centroid = t.angle_centroid
+    obj.pos_x = t.obj_vcs_posex
+    obj.pos_y = t.obj_vcs_posey
+    obj.track_id = t.track_id
+    obj_list.append(obj)
 
 
 def radar_listener(radar2: SensorMsgsRadar, radar3: SensorMsgsRadar):

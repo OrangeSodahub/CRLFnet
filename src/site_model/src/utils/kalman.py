@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 """
 Kalman Filter
 
@@ -13,7 +11,6 @@ cov(s)  ->  covarience matirx (matrices)
 idx     ->  index / indices
 rmv     ->  remove
 """
-
 
 import numpy as np
 from scipy.optimize import linear_sum_assignment
@@ -28,7 +25,7 @@ class Kalman:
         self.covs = np.empty((0, size, size))
         self.total_objs = 0
         self.max_id = 0
-        
+
         self.size = size
         self.Q = Q
         self.THRESHOLD = threshold
@@ -47,14 +44,13 @@ class Kalman:
         xpt_idx, obs_idx = linear_sum_assignment(cmp)
         thres_filter = cmp[xpt_idx, obs_idx] < self.THRESHOLD
         # get index(indices) of objects form different sources
-        xpt_idx = np.extract(thres_filter, xpt_idx)                     # pred_xpts, existing object(s)
-        rmv_idx = np.setdiff1d(np.arange(self.total_objs), xpt_idx)     # pred_xpts, lost object(s)
-        obs_idx = np.extract(thres_filter, obs_idx)                     # zs.projections, existing object(s)
-        new_idx = np.setdiff1d(np.arange(zs.total_objs), obs_idx)       # zs.projections, new object(s)
+        xpt_idx = np.extract(thres_filter, xpt_idx)  # pred_xpts, existing object(s)
+        rmv_idx = np.setdiff1d(np.arange(self.total_objs), xpt_idx)  # pred_xpts, lost object(s)
+        obs_idx = np.extract(thres_filter, obs_idx)  # zs.projections, existing object(s)
+        new_idx = np.setdiff1d(np.arange(zs.total_objs), obs_idx)  # zs.projections, new object(s)
         return xpt_idx, obs_idx, rmv_idx, new_idx
 
-    def update(self, pred_xpts: np.ndarray, pred_covs: np.ndarray, zs: ObsBundle,
-               xpt_idx: np.ndarray, obs_idx: np.ndarray) -> None:
+    def update(self, pred_xpts: np.ndarray, pred_covs: np.ndarray, zs: ObsBundle, xpt_idx: np.ndarray, obs_idx: np.ndarray) -> None:
         for xi, zi in zip(xpt_idx, obs_idx):
             pred_xpt = pred_xpts[xi]
             pred_cov = pred_covs[xi]
@@ -81,8 +77,7 @@ class Kalman:
 
     def create(self, zs: ObsBundle, new_idx: np.ndarray) -> None:
         new_objs = len(new_idx)
-        new_xpts = np.concatenate([zs.projections[new_idx], np.zeros((len(new_idx), 1)),
-            np.expand_dims(np.arange(self.max_id, self.max_id + new_objs), axis=1)], axis=1)
+        new_xpts = np.concatenate([zs.projections[new_idx], np.zeros((len(new_idx), 1)), np.expand_dims(np.arange(self.max_id, self.max_id + new_objs), axis=1)], axis=1)
         new_covs = np.full((new_objs, self.size, self.size), 1e6)
         self.xpts = np.concatenate([self.xpts, new_xpts], axis=0)
         self.covs = np.concatenate([self.covs, new_covs], axis=0)
@@ -95,7 +90,7 @@ class Kalman:
         self.update(pred_xpts, pred_covs, zs, xpt_idx, obs_idx)
         self.remove(xpt_idx, rmv_idx)
         self.create(zs, new_idx)
-    
+
     def output(self) -> np.ndarray:
         # TODO: Match the input of the dispatch system
         return self.xpts[:, 0:self.size]

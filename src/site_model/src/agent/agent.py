@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 
-
 import numpy as np
 from typing import Tuple
 
-from msgs.msg._MsgRadCam import MsgRadCam   # radar camera fusion message type
-from msgs.msg._MsgLidCam import MsgLidCam   # lidar camera fusion message type
+from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
+from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
 
 from .scene import SceneMap
-
 
 MODES = ['lane', 'intersection', 'lost', 'await']
 
@@ -18,11 +16,11 @@ class Agent:
     def __init__(self, scene_map: SceneMap, index: int) -> None:
         self.index = index
         self.scene_map = scene_map
-        self.LEN = 0.163974         # the length between the front wheel and the rear wheel
+        self.LEN = 0.163974  # the length between the front wheel and the rear wheel
         self.MAX_STEER = np.pi / 4
         self.TARGET_RANGE = 1.0
         self.TARGET_THRES = 0.25
-        
+
         self.mode = 'lost'
         self.pos = np.array([0, 0])
         self.orient = 0
@@ -38,14 +36,14 @@ class Agent:
 
     def target2control(self) -> Tuple[float, float]:
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
-        distance = np.linalg.norm(self.tmp_target - self.pos)   # do not use self.distance !!!
-        sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1 )
+        distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
+        sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1)
         rotation = np.arcsin(sin_rot)
-        steer = np.clip(rotation / self.MAX_STEER, -1, 1) 
+        steer = np.clip(rotation / self.MAX_STEER, -1, 1)
         throttle = 1 if abs(yaw) < np.pi / 2 else -1
         return steer, throttle
 
-    def choose_way(self, node: int,  pos: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> int:
+    def choose_way(self, node: int, pos: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> int:
         """Choose an accessable lane randomly."""
         # TODO: code
         lanes = self.scene_map.accessable_lanes(node)
@@ -72,7 +70,7 @@ class Agent:
     def lane_nav(self, pos: np.ndarray, msg_rad_cam, msg_lid_cam) -> None:
         # if the vehicle hasn't reached the target, do not change the target
         if self.distance > self.TARGET_THRES:
-            return 
+            return
         # if the vehicle has reached the target
         lane = self.scene_map.lanes[self.tmp_lane]
         # if the vehicle is at the end of the lane, change to intersect mode

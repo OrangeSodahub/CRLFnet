@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-
 import rospy
 from ackermann_msgs.msg import AckermannDriveStamped
 import sys, select, termios, tty
-
 
 banner = """1. Reading from the keyboard  
 2. Publishing to AckermannDriveStamped!
@@ -63,10 +61,10 @@ if __name__ == "__main__":
                 turn = -0.6
             elif key == '\x03':
                 break
-            
+
             speed = state * ward
             # print("Speed: {}  ".format(speed), end='\r')
-            
+
             msg = AckermannDriveStamped()
             msg.header.stamp = rospy.Time.now()
             msg.header.frame_id = "base_link"

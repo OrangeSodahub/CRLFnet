@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import rospy
 from pathlib import Path
 from datetime import datetime
@@ -20,7 +19,7 @@ from .kalman import Kalman
 
 
 class VisualAssistant:
-    
+
     def __init__(self, base_image_path: Path, output_path: Path):
         self.base_image = cv2.imread(str(base_image_path))
         output_path.mkdir(exist_ok=True)
@@ -47,16 +46,16 @@ class VisualAssistant:
                 my_color = (0, 0, 0)
             c = np.matmul(self.w2s, [p[0], p[1], 1.]).astype(int)
             cv2.circle(self.base_image, c[0:2], 3, my_color, -1)
-        
+
         file_name = "{:04d}.png".format(frame)
         cv2.imwrite(str(self.output_path.joinpath('scene', file_name)), self.base_image)
         print("\033[0;32mSaved scene {} sucessfully.\033[0m".format(frame))
-    
+
     def image_output(self, frame: int, image: Image, camera: ImageSensor):
         image = CvBridge().imgmsg_to_cv2(image, 'bgr8')
         for roi in camera.boxes:
             cv2.rectangle(image, (roi[0], roi[1]), (roi[2], roi[3]), (255, 0, 0), 3)
-        
+
         file_name = "{}_{:04d}.png".format(camera.name, frame)
         cv2.imwrite(str(self.output_path.joinpath('image', file_name)), image)
         print("\033[0;32mSaved {} image {} sucessfully.\033[0m".format(camera.name, frame))
@@ -83,8 +82,7 @@ def lidar2visual(img, box3d, color):
     if isinstance(img, Image):
         img = CvBridge().imgmsg_to_cv2(img, 'bgr8')
 
-    lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6],
-         [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
+    lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
 
     # get 8 pts
     pts = []
@@ -121,12 +119,12 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
     # match
     for vehicle in match:
         camera_num, vehicle_num, camera_num_vehicle, box2d_num = vehicle[0], vehicle[1], vehicle[2], vehicle[3]
-        box2d = boxes2d[camera_num-1][box2d_num]
+        box2d = boxes2d[camera_num - 1][box2d_num]
         box3d = boxes3d[vehicle_num][camera_num_vehicle]
         # lidar
-        msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], box3d, (0,255,0))
+        msgcamera.camera[camera_num - 1] = lidar2visual(msgcamera.camera[camera_num - 1], box3d, (0, 255, 0))
         # camera
-        msgcamera.camera[camera_num-1] = camera2visual(msgcamera.camera[camera_num-1], box2d, (0,255,0))
+        msgcamera.camera[camera_num - 1] = camera2visual(msgcamera.camera[camera_num - 1], box2d, (0, 255, 0))
 
     # lidar only
     for vehicle in lidar:
@@ -134,29 +132,26 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
         vehicle_num = vehicle[1]
         for i, camera_num in enumerate(camera):
             box3d = boxes3d[vehicle_num][i]
-            msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], box3d, (255,0,0))
+            msgcamera.camera[camera_num - 1] = lidar2visual(msgcamera.camera[camera_num - 1], box3d, (255, 0, 0))
 
     # image only
     for camera in image:
         if len(camera) != 1:
             camera_num = camera[0]
             box2d = camera[1]
-            msgcamera.camera[camera_num-1] = camera2visual(msgcamera.camera[camera_num-1], box2d, (0,0,255))
+            msgcamera.camera[camera_num - 1] = camera2visual(msgcamera.camera[camera_num - 1], box2d, (0, 0, 255))
 
     # gt_box (for one car)
     if gt_cameras is not None and gt_boxes3d is not None:
         for cameras_vehicle, gt_boxes3d_vehicle in zip(gt_cameras, gt_boxes3d):
             for camera_num, gt_box3d in zip(cameras_vehicle, gt_boxes3d_vehicle):
-                msgcamera.camera[camera_num-1] = lidar2visual(msgcamera.camera[camera_num-1], gt_box3d, (0,255,255))
-        
+                msgcamera.camera[camera_num - 1] = lidar2visual(msgcamera.camera[camera_num - 1], gt_box3d, (0, 255, 255))
+
     # save images
-    num2camera = {
-        1: 'camera11', 2: 'camera12', 3: 'camera13', 4: 'camera14',
-        5: 'camera41', 6: 'camera42', 7: 'camera43', 8: 'camera44'
-    }
+    num2camera = {1: 'camera11', 2: 'camera12', 3: 'camera13', 4: 'camera14', 5: 'camera41', 6: 'camera42', 7: 'camera43', 8: 'camera44'}
     for num, img in enumerate(msgcamera.camera):
         if not isinstance(img, Image):
-            camera_name = num2camera[num+1]
+            camera_name = num2camera[num + 1]
             img_file = output_dir + ('/image_%s_' % datetime.now().strftime('%Y%m%d-%H%M%S') + camera_name + '.jpg')
             # print(img_file, "saved.")
             cv2.imwrite(img_file, img)
@@ -171,8 +166,7 @@ def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
     marker_array.markers.clear()
 
     def process_single_box3d(box3d, id, type):
-        lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6],
-                [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
+        lines = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]
 
         points_set = []
         for point in box3d:
@@ -188,15 +182,15 @@ def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
 
         marker.lifetime = rospy.Duration(0)
 
-        if type == "matched":                                                   # matched vehicle
+        if type == "matched":  # matched vehicle
             marker.color.r, marker.color.g, marker.color.b = 0, 1, 0
-        elif type == "unmatched":                                               # unmatched vehicle
+        elif type == "unmatched":  # unmatched vehicle
             marker.color.r, marker.color.g, marker.color.b = 1, 1, 1
-        elif type == "gt":                                                      # ground truth
+        elif type == "gt":  # ground truth
             marker.color.r, marker.color.g, marker.color.b = 0, 1, 1
 
         marker.color.a = 1
-        marker.scale.x = 0.01                                                   # width of lines
+        marker.scale.x = 0.01  # width of lines
         marker.points = []
 
         for line in lines:
@@ -218,7 +212,7 @@ def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
     if gt_boxes3d is not None:
         for id_gt in range(len(gt_boxes3d)):
             gt_box3d = gt_boxes3d[id_gt]
-            marker = process_single_box3d(gt_box3d, id_gt+len(boxes3d), "gt")
+            marker = process_single_box3d(gt_box3d, id_gt + len(boxes3d), "gt")
             marker_array.markers.append(marker)
 
     return marker_array
@@ -230,7 +224,7 @@ def rt_vis(data: float):
     t_list = []
     result_list = []
     t = 0
-    
+
     while True:
         """
         restore:
@@ -242,5 +236,5 @@ def rt_vis(data: float):
         t += 0.1
         t_list.append(t)
         result_list.append(data)
-        plt.plot(t_list, result_list,c='r',ls='-', marker='o', mec='b',mfc='w')  ## 保存历史数据
+        plt.plot(t_list, result_list, c='r', ls='-', marker='o', mec='b', mfc='w')  # 保存历史数据
         plt.pause(0.1)

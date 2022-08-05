@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 import os
 
-
 base_image_path = '/home/zzy/CRLFnet/src/site_model/src/utils/visual/scene_base.png'
 output_path = '/home/zzy/CRLFnet/src/site_model/output/Scene/map_test'
 
@@ -44,23 +43,23 @@ def add_lane() -> None:
 
     lane = np.concatenate([[xs], [ys]]).T
     start_index = np.argmin(np.linalg.norm(nodes - lane[0], axis=1))
-    end_index =  np.argmin(np.linalg.norm(nodes - lane[-1], axis=1))
+    end_index = np.argmin(np.linalg.norm(nodes - lane[-1], axis=1))
     if start_index == end_index:
         print("You can make a lane start from and end to the same point.")
         return
-    l = np.zeros(len(nodes), dtype=int)
-    l[start_index] = -1
-    l[end_index] = 1
+    lane_vec = np.zeros(len(nodes), dtype=int)
+    lane_vec[start_index] = -1
+    lane_vec[end_index] = 1
     lanes.append(lane)
-    graph.append(l)
+    graph.append(lane_vec)
     print("Added lane #{0} from node #{1} to node #{2}.".format(idx, start_index, end_index))
 
 
 def draw_image(image: cv2.Mat) -> None:
     for x, y in nodes:
         cv2.circle(image, w2p(x, y), 5, (0, 0, 255), thickness=-1)
-    for l in lanes:
-        for p in l:
+    for lane in lanes:
+        for p in lane:
             cv2.circle(image, w2p(p[0], p[1]), 3, (255, 0, 0), thickness=-1)
     for x, y in zip(tmp_x, tmp_y):
         cv2.circle(image, w2p(x, y), 3, (0, 255, 0), thickness=-1)
@@ -134,7 +133,7 @@ def lane_mode(event, x, y) -> None:
     if event == cv2.EVENT_MBUTTONDOWN:
         if drawing_flag:
             add_lane()
-    
+
     image_copy = base_image.copy()
     draw_image(image_copy)
     cv2.imshow("map", image_copy)
@@ -152,8 +151,7 @@ def mouse_event(event, x, y, flags, param) -> None:
 
 if __name__ == "__main__":
 
-    print(
-"""How To Use The Map Marker
+    print("""How To Use The Map Marker
 1. Node Mode:
     L Button: Add a node
     R Button: Delete the last node
@@ -167,8 +165,7 @@ if __name__ == "__main__":
     * The lanes will be connected to the nearest nodes automatically.
     * When all lanes are drawn, you can press 'ESC' to save data and exit.
 ** Remember to check the "base_image_path" and "output_path"!
-"""
-    )
+""")
 
     base_image = cv2.imread(base_image_path)
     cv2.namedWindow("map")

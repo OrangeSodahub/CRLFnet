@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 from abc import ABC, abstractmethod
 from typing import List
 import numpy as np
@@ -9,7 +8,6 @@ from scipy.linalg import block_diag
 
 from .transform import w2p, p2w
 from .poi_and_roi import radar_poi, expand_poi, optimize_iou
-
 
 SCENE_THRESHOLD = 0.5
 
@@ -106,19 +104,19 @@ class ImageSensor(Sensor):
     def update(self, data: np.ndarray) -> None:
         self.zs = np.concatenate([(data[:, 0:1] + data[:, 2:3]) // 2, (data[:, 1:2] + 3 * data[:, 3:4]) // 4], axis=1, dtype=int)
         self.boxes = data[0:6]
-    
+
     def obs_filter(self, useless_indices: np.ndarray) -> None:
         idx = np.setdiff1d(np.arange(len(self.zs)), useless_indices)
         self.zs = self.zs[idx]
         self.boxes = self.boxes[idx]
-    
+
     def H(self, pred_xpt: np.ndarray) -> np.ndarray:
         uv, zc = w2p(np.array([pred_xpt[0], pred_xpt[1], self.target_height, 1]), self.w2c, self.c2p)
         m0 = np.matmul(self.c2p, self.w2c)[0:2, 0:2]
         m1 = np.outer(uv[0:2], self.w2c[2, 0:2])
         Hi = (m0 - m1) / zc
         return Hi
-    
+
     def obs2world(self, zs: np.ndarray = None) -> np.ndarray:
         if zs is None:
             zs = self.zs
@@ -126,7 +124,7 @@ class ImageSensor(Sensor):
             return np.empty((0, 2))
         else:
             return np.array([p2w(obs, self.target_height, self.w2c, self.c2p)[0][0:2] for obs in zs])
-    
+
     def world2obs(self, pos: np.ndarray) -> np.ndarray:
         return w2p(np.array([pos[0], pos[1], self.target_height, 1]), self.w2c, self.c2p)[0][0:2]
 
@@ -146,7 +144,7 @@ class FusedSensor(Sensor):
         self.obs_size_list = obs_sizes
         self.sensors = sensors
         self.weights = weights / np.sum(weights)
-    
+
     def update(self, data: np.ndarray) -> None:
         self.zs = data[:, 0:self.obs_size]
 
@@ -166,7 +164,7 @@ class FusedSensor(Sensor):
         else:
             start, poses = 0, []
             for i in range(self.obs_size):
-                poses.append(self.sensors[i].obs2world(zs[:, start: start + self.obs_size_list[i]]))
+                poses.append(self.sensors[i].obs2world(zs[:, start:start + self.obs_size_list[i]]))
                 start += self.obs_size_list[i]
             pos = np.average(poses, 0, self.weights)
             return pos
@@ -207,8 +205,7 @@ class ObsBundle:
         diff_idx_1 = np.setdiff1d(np.arange(self.total_objs), same_idx_1)
         diff_idx_2 = np.setdiff1d(np.arange(other.total_objs), same_idx_2)
         # TODO: improve coding
-        ps = np.concatenate([self.projections[diff_idx_1], other.projections[diff_idx_2],
-            (self.projections[same_idx_1] + other.projections[same_idx_2]) / 2], axis=0)
+        ps = np.concatenate([self.projections[diff_idx_1], other.projections[diff_idx_2], (self.projections[same_idx_1] + other.projections[same_idx_2]) / 2], axis=0)
         zs, ss = [], []
         for i in diff_idx_1:
             zs.append(self.zs[i])
@@ -240,7 +237,7 @@ class SensorCluster:
 
     def observe(self) -> ObsBundle:
         # fuse radar objects
-        [s.zs for s in self.radar_sensors]
+        radar_zs_list = [s.zs for s in self.radar_sensors]
         # fuse radar-image objects
         for cam in self.image_sensors:
             for rad in self.radar_sensors:
@@ -271,10 +268,7 @@ class SensorPair:
         radar_pois = radar_poi(self.radar.obs2world(), self.image.w2c, self.image.c2p, self.image.target_height)
         image_rois = self.image.boxes[0:4]
         # IOU matching
-        radar_expanded_rois = np.array(list(map(
-            lambda p, d: expand_poi(p, d, self.image.width, self.image.height),
-            radar_pois, self.radar.zs[:, 0])),
-            dtype=int)
+        radar_expanded_rois = np.array(list(map(lambda p, d: expand_poi(p, d, self.image.width, self.image.height), radar_pois, self.radar.zs[:, 0])), dtype=int)
         fused_rad_idx, fused_cam_idx = optimize_iou(radar_expanded_rois, image_rois, self.iou_threshold)
         # get observation bundle
         fused_zs = np.concatenate([self.radar.zs[fused_rad_idx, 0:3], self.image.zs[fused_cam_idx, 0:2]], axis=1)
