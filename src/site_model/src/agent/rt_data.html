@@ -1,60 +1,121 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
-    <title>Data</title>
-    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
-    <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
-	<script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+<meta charset="utf-8" />
+
+  <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+  <script src="https://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
+  <script src="https://cdn.highcharts.com.cn/highcharts/modules/exporting.js"></script>
+  <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+  <script src="https://cdn.highcharts.com.cn/highcharts/themes/sand-signika.js"></script>
+  <script type="text/javascript" type="text/javascript">
+    // Connecting to ROS
+    var ros = new ROSLIB.Ros({
+      url : 'ws://localhost:9090'
+  });
+
+  //判断是否连接成功并输出相应的提示消息到web控制台
+  ros.on('connection', function() {
+    console.log('Connected to websocket server.');
+  });
+
+  ros.on('error', function(error) {
+    console.log('Error connecting to websocket server: ', error);
+  });
+  
+  ros.on('close', function() {
+    console.log('Connection to websocket server closed.');
+  });
+
+  // Subscribing to a Topic
+  var listener = new ROSLIB.Topic({
+    ros : ros,
+    name : '/deepracer1/left_steering_hinge_position_controller/command',
+    messageType : 'std_msgs/Float64'
+  });//创建一个topic,它的名字是'/chatter',,消息类型是'std_msgs/String'
+
+  function subscribe()//在点击”Subscribe”按钮后订阅'/chatter'的消息，并将其显示到网页中
+  {
+     listener.subscribe(function(message) {
+       document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
+     });
+  }
+
+  function unsubscribe()//在点击”Unsubscribe”按钮后取消订阅'/chatter'的消息
+  {
+    listener.unsubscribe();
+  }
+  
+</script>
 </head>
+
 <body>
-<div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
-<script type="text/javascript" type="text/javascript">
-    var chart = Highcharts.chart('container', {
+  <h1>Data visulization</h1>
+  <p>For now, /deepracer1/left_steering_hinge_position_controller/command' subscribed by default.</p>
+  <p>Open file: agent/rt_data.html, click 'Subscribe'.</p>
+  <p id = "output"></p>
+  <button onclick = "func()">Publish</button>
+  <button onclick = "subscribe2()">Subscribe</button>
+  <button onclick = "unsubscribe2()">Unsubscribe</button><br />
+  <div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+  <script type="text/javascript" type="text/javascript">
+    // Subscribing to a Topic
+    var listener = new ROSLIB.Topic({
+      ros : ros,
+      name : '/deepracer1/left_steering_hinge_position_controller/command',
+      messageType : 'std_msgs/Float64'
+    });
+
+  // Update data
+  var data;
+  function subscribe2()
+  {
+    listener.subscribe(function(message) {
+    document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
+    data = message.data
+    });
+  }
+  function unsubscribe2()
+  {
+    listener.unsubscribe();
+  }
+
+  // Draw line
+  var chart = Highcharts.chart('container', {
 	chart: {
 		type: 'spline',
 		margin: [70, 50, 60, 80],
 		events: {
-			click: function (e) {
-				// 从点击事件里获取 x, y 值
-				var x = e.xAxis[0].value,
-					y = e.yAxis[0].value,
-					series = this.series[0];
-				// 增加点
-				series.addPoint([x, y]);
-			}
+      load: function() {
+        var series = this.series[0];
+            setInterval(function () {
+              var x = (new Date()).getTime(),
+              y = Math.random();
+              series.addPoint([x,data]);
+            }, 100);
+          }
 		}
 	},
 	title: {
 		text: 'Data'
 	},
 	subtitle: {
-		text: ''
+		text: 'data'
 	},
 	xAxis: {
-		gridLineWidth: 1,
-		minPadding: 0.2,
+		type: 'datetime',
 		maxPadding: 0.2,
 		maxZoom: 60
 	},
 	yAxis: {
 		title: {
 			text: 'data'
-		},
-		minPadding: 0.2,
-		maxPadding: 0.2,
-		maxZoom: 60,
-		plotLines: [{
-			value: 0,
-			width: 1,
-			color: '#808080'
-		}]
-	},
-    tooltip: {
-		formatter: function () {
-			return '<b>' + this.series.name + '</b><br/>' +
-				Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-				Highcharts.numberFormat(this.y, 2);
 		}
 	},
 	legend: {
@@ -65,7 +126,7 @@
 			lineWidth: 1,
 			point: {
 				events: {
-					'click': function () {
+					'subscribe': function () {
 						if (this.series.data.length > 1) {
 							this.remove();
 						}
@@ -77,19 +138,16 @@
 	series: [{
 		name:'data1',
 		data: (function () {
-			// 生成随机值
 			var data = [],
 				time = (new Date()).getTime();
-            data.push({
-                x: 0,
-                y: 0
-            });
+      data.push({
+        x: time,
+        y: 0
+      });
 			return data;
 		}())
 	}]
-    });
-
-   $('#container').highcharts(json);
+});
 </script>
 </body>
 </html>
