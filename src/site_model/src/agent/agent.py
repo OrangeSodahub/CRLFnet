@@ -20,6 +20,9 @@ class Agent:
         self.MAX_STEER = np.pi / 4
         self.TARGET_RANGE = 1.0
         self.TARGET_THRES = 0.25
+        self.LENGTH = 0.22
+        self.WIDTH = 0.21
+        self.COLLIDE_THRES = 0.5
 
         self.mode = 'lost'
         self.pos = np.array([0, 0])
@@ -28,19 +31,35 @@ class Agent:
         self.tmp_target = np.array([0, 0])
         self.tmp_lane = -1
         self.tmp_lane_point = -1
+        self.throttle = 1
 
     def update(self, pos: np.ndarray, orient: float) -> None:
         self.pos = pos
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def target2control(self) -> Tuple[float, float]:
+    def is_collide(self, poses) -> bool:
+        # TODO: specify the lanes
+        def collision_area(sp, p):
+            return (np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES
+        for i, pos in enumerate(poses):
+            if i == self.index:
+                continue
+            if collision_area(poses[self.index], pos):
+                return True
+        return False
+
+    def target2control(self, poses) -> Tuple[float, float]:
+        if self.is_collide(poses):
+            print("fuck")
+            return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
         distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
         sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1)
         rotation = np.arcsin(sin_rot)
         steer = np.clip(rotation / self.MAX_STEER, -1, 1)
         throttle = 1 if abs(yaw) < np.pi / 2 else -1
+        self.throttle = throttle
         return steer, throttle
 
     def choose_way(self, node: int, pos: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> int:
@@ -97,9 +116,9 @@ class Agent:
             self.mode = 'lane'
             return
 
-    def navigate(self, pos: np.ndarray, orient: float, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> None:
+    def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> None:
         # update the position and orientation data
-        self.update(pos, orient)
+        self.update(poses[self.index][0], poses[self.index][1])
         # if the vehicle is too far away from the target, change to lost mode
         if self.mode == 'lost':
             self.lost_nav()
@@ -107,7 +126,7 @@ class Agent:
             self.mode = 'lost'
             self.lost_nav()
         elif self.mode == 'lane':
-            self.lane_nav(pos, msg_rad_cam, msg_lid_cam)
+            self.lane_nav(poses[self.index], msg_rad_cam, msg_lid_cam)
         elif self.mode == 'intersection':
             self.intersect_nav()
         # if an error occurs, the vehicle stops
@@ -115,7 +134,7 @@ class Agent:
             print("AWAIT MODE #{}".format(self.index), end='\r')
             return 0, 0
         print("Vehicle:{}, Mode: {}, Target: {}".format(self.index, self.mode, self.tmp_target), end='\r')
-        return self.target2control()
+        return self.target2control(poses)
 
 
 class Agents:
@@ -126,8 +145,8 @@ class Agents:
 
     def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[int, int]:
         steers, throttles = [], []
-        for v, p in zip(self.vehicles, poses):
-            steer, throttle = v.navigate(p[0], p[1], msg_rad_cam, msg_lid_cam)
+        for v in self.vehicles:
+            steer, throttle = v.navigate(poses, msg_rad_cam, msg_lid_cam)
             steers.append(steer)
             throttles.append(throttle)
         return steers, throttles
