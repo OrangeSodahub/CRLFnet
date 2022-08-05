@@ -80,7 +80,7 @@ def optimize_iou(rois1: np.ndarray, rois2: np.ndarray, threshold: float) -> Tupl
     return idx1, idx2
 
 
-def pointcloud_roi(calib: np.ndarray, boxes_3d: np.ndarray(np.ndarray)):
+def pointcloud_roi(calib: np.array, boxes_3d: np.array(np.array)):
     """
     boxes_3d: [[],[],[],...]
     cameras: [[],[],[],...]

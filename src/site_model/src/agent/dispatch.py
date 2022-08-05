@@ -14,7 +14,7 @@ from ackermann_msgs.msg import AckermannDriveStamped
 from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
 from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
-# from ..utils.visualization import rt_vis
+from ..utils.visualization import rt_vis
 
 from .agent import Agents
 from .scene import SceneMap
