@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 from abc import ABC, abstractmethod
 from typing import List
@@ -102,7 +102,9 @@ class ImageSensor(Sensor):
         self.target_height = target_height
 
     def update(self, data: np.ndarray) -> None:
-        self.zs = np.concatenate([(data[:, 0:1] + data[:, 2:3]) // 2, (data[:, 1:2] + 3 * data[:, 3:4]) // 4], axis=1, dtype=int)
+        self.zs = np.concatenate([(data[:, 0:1] + data[:, 2:3]) // 2, (data[:, 1:2] + 3 * data[:, 3:4]) // 4],
+                                 axis=1,
+                                 dtype=int)
         self.boxes = data[0:6]
 
     def obs_filter(self, useless_indices: np.ndarray) -> None:
@@ -183,21 +185,22 @@ class ObsBundle:
             self.sensors = sensors
             self.total_objs = len(self.zs)
         else:
-            raise ValueError("ObsBundle initialization failed: zs: {}, ps: {}, ss: {}".format(len(zs), len(projs), len(sensors)))
+            raise ValueError("ObsBundle initialization failed: zs: {}, ps: {}, ss: {}".format(
+                len(zs), len(projs), len(sensors)))
 
     def __repr__(self) -> str:
         return "Observations ({}):\n{}\nProjections:\n{}\nFrom Sensors:\n{}"\
             .format(self.total_objs, self.zs, self.projections, self.sensors)
 
     def __add__(self, other):
-        if self.total_objs == 0 and other.total_objs == 0:
+        if self.total_objs == 0 or other.total_objs == 0:
             zs = self.zs + other.zs
             ps = np.concatenate([self.projections, other.projections], axis=0)
             ss = self.sensors + other.sensors
             return ObsBundle(zs, ps, ss)
         # two non-empty observations
-        distances = np.array([np.linalg.norm(p1 - p2) for p1 in self.projections for p2 in other.projections])\
-            .reshape((self.total_objs, other.total_objs))
+        distances = np.array([np.linalg.norm(p1 - p2) for p1 in self.projections for p2 in other.projections]).reshape(
+            (self.total_objs, other.total_objs))
         same_idx_1, same_idx_2 = linear_sum_assignment(distances)
         thres_filter = distances[same_idx_1, same_idx_2] <= SCENE_THRESHOLD
         same_idx_1 = np.extract(thres_filter, same_idx_1)
@@ -205,7 +208,11 @@ class ObsBundle:
         diff_idx_1 = np.setdiff1d(np.arange(self.total_objs), same_idx_1)
         diff_idx_2 = np.setdiff1d(np.arange(other.total_objs), same_idx_2)
         # TODO: improve coding
-        ps = np.concatenate([self.projections[diff_idx_1], other.projections[diff_idx_2], (self.projections[same_idx_1] + other.projections[same_idx_2]) / 2], axis=0)
+        ps = np.concatenate([
+            self.projections[diff_idx_1], other.projections[diff_idx_2],
+            (self.projections[same_idx_1] + other.projections[same_idx_2]) / 2
+        ],
+                            axis=0)
         zs, ss = [], []
         for i in diff_idx_1:
             zs.append(self.zs[i])
@@ -268,7 +275,9 @@ class SensorPair:
         radar_pois = radar_poi(self.radar.obs2world(), self.image.w2c, self.image.c2p, self.image.target_height)
         image_rois = self.image.boxes[0:4]
         # IOU matching
-        radar_expanded_rois = np.array(list(map(lambda p, d: expand_poi(p, d, self.image.width, self.image.height), radar_pois, self.radar.zs[:, 0])), dtype=int)
+        radar_expanded_rois = np.array(list(
+            map(lambda p, d: expand_poi(p, d, self.image.width, self.image.height), radar_pois, self.radar.zs[:, 0])),
+                                       dtype=int)
         fused_rad_idx, fused_cam_idx = optimize_iou(radar_expanded_rois, image_rois, self.iou_threshold)
         # get observation bundle
         fused_zs = np.concatenate([self.radar.zs[fused_rad_idx, 0:3], self.image.zs[fused_cam_idx, 0:2]], axis=1)

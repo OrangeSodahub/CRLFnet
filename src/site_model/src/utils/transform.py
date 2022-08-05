@@ -6,7 +6,6 @@
 #                                                           #
 #############################################################
 
-
 import numpy as np
 import torch
 from .common_utils import check_numpy_to_torch, label2camera, transform
@@ -29,7 +28,7 @@ def p2w(pos: np.ndarray, zw: float, w2c: np.ndarray, c2p: np.ndarray):
     Output the position of the point in the world coordinate and the distance between the point and the camera.
     '''
     pos = np.concatenate([pos[0:2], [1]], axis=0)
-    m1 = c2p[:,0:3]
+    m1 = c2p[:, 0:3]
     m1i = np.linalg.inv(m1)
     m2i = np.linalg.inv(w2c)
     pos_cam_like = np.matmul(m1i, pos)
@@ -43,17 +42,11 @@ def RT_matrix(xyzrpy: np.ndarray) -> np.ndarray:
     T = np.expand_dims(xyzrpy[0:3], axis=1)
     # Roatation matrix
     r, p, y = xyzrpy[3:6]
-    Rx = [[ 1,          0,          0           ],
-          [ 0,          np.cos(r),  -np.sin(r)  ],
-          [ 0,          np.sin(r),  np.cos(r)   ]]
-    Ry = [[ np.cos(p),  0,          np.sin(p)   ],
-          [ 0,          1,          0           ],
-          [ -np.sin(p), 0,          np.cos(p)   ]]
-    Rz = [[ np.cos(y),  -np.sin(y), 0           ],
-          [ np.sin(y),  np.cos(y),  0           ],
-          [ 0,          0,          1           ]]
+    Rx = [[1, 0, 0], [0, np.cos(r), -np.sin(r)], [0, np.sin(r), np.cos(r)]]
+    Ry = [[np.cos(p), 0, np.sin(p)], [0, 1, 0], [-np.sin(p), 0, np.cos(p)]]
+    Rz = [[np.cos(y), -np.sin(y), 0], [np.sin(y), np.cos(y), 0], [0, 0, 1]]
     R = np.matmul(Rz, np.matmul(Ry, Rx))
-    # RTmatrix 
+    # RTmatrix
     RT = np.block([[R, T], [np.zeros(3), 1]])
     RT = np.linalg.inv(RT)  # Inverse the matrix
     return RT
@@ -76,18 +69,15 @@ def world2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     camera_num = transform[camera_name]
 
     # get external and internal parameter of camera
-    world_to_camera = calib[camera_num][1:17].reshape(4,4)
-    camera_to_pixel = calib[camera_num][17:30].reshape(3,4)
+    world_to_camera = calib[camera_num][1:17].reshape(4, 4)
+    camera_to_pixel = calib[camera_num][17:30].reshape(3, 4)
 
     # coordinates in camera coordinates
     camera_pose = np.matmul(world_to_camera, world_pose)
     distance = camera_pose[0]
-    
+
     # shift the coordinates
-    camera_pose_shift = [camera_pose[1],
-                        camera_pose[2],
-                       -camera_pose[0],
-                       -distance] / (-distance)
+    camera_pose_shift = [camera_pose[1], camera_pose[2], -camera_pose[0], -distance] / (-distance)
 
     # coordinates in pixel coordinates
     pixel_pose = np.matmul(camera_to_pixel, camera_pose_shift)
@@ -103,18 +93,18 @@ def lidar2pixel(calib: np.array, camera_name: str, world_pose: np.array):
     """
     pixel_pose = []
     for i in range(len(world_pose)):
-        world_pose_point = np.append(world_pose[i], 1) # expand size from 3 to 4
+        world_pose_point = np.append(world_pose[i], 1)  # expand size from 3 to 4
         pixel_pose.append(world2pixel(calib, camera_name, world_pose_point))
     return pixel_pose
 
 
 # For each time -> all vehicles
 def which_cameras(pred_boxes: np.array(np.array)):
-    """
+    r"""
         Function to sectorize the lidarData to represent sectors where an object is detected
         The location of cameras:
         +-------------------------------+
-        |\         /|\                 /| 
+        |\         /|\                 /|
         | \  (1)  / |  \     (3)     /  |
         |  \     /  |    \         /    |
         |   \   /   |      \     /      |
@@ -128,8 +118,8 @@ def which_cameras(pred_boxes: np.array(np.array)):
         +-------------------------------+
     """
     # defined information
-    intersection = [-1.92, 2.92, 1.92, 0, 0, 0.7] # [x1,y1, x2,y2, cx,cy]
-    circle = [-1.92, 0, 1.92, -2.5, 0, -0.95] # [x1,y1, x2,y2, cx,cy]
+    intersection = [-1.92, 2.92, 1.92, 0, 0, 0.7]  # [x1,y1, x2,y2, cx,cy]
+    circle = [-1.92, 0, 1.92, -2.5, 0, -0.95]  # [x1,y1, x2,y2, cx,cy]
     slope_intersection = np.abs(intersection[1]) / np.abs(intersection[0])
     slope_circle = np.abs(circle[3]) / np.abs(circle[2])
 
@@ -145,55 +135,57 @@ def which_cameras(pred_boxes: np.array(np.array)):
         camera = []
         # 1
         if loc[0] >= 0 and loc[1] >= 0:
-            if loc[1] <= loc[0]*slope_intersection+intersection[5] and loc[1] >= loc[0]*(-slope_intersection)+intersection[5]:
-                camera.append(4) # camera14
-                camera.append(7) # camera43
+            if loc[1] <= loc[0] * slope_intersection + intersection[5] and loc[1] >= loc[0] * (
+                    -slope_intersection) + intersection[5]:
+                camera.append(4)  # camera14
+                camera.append(7)  # camera43
             # 5
-            elif loc[1] >= loc[0]*slope_intersection+intersection[5]:
-                camera.append(1) # camera11
-                camera.append(7) # camera43
+            elif loc[1] >= loc[0] * slope_intersection + intersection[5]:
+                camera.append(1)  # camera11
+                camera.append(7)  # camera43
             # 6
-            elif loc[1] <= loc[0]*(-slope_intersection)+intersection[5]:
-                camera.append(3) # camera13
-                camera.append(7) # camera43
+            elif loc[1] <= loc[0] * (-slope_intersection) + intersection[5]:
+                camera.append(3)  # camera13
+                camera.append(7)  # camera43
         # 3
         elif loc[0] >= 0 and loc[1] <= 0:
-            if loc[1] <= loc[0]*slope_circle+circle[5] and loc[1] >= loc[0]*(-slope_circle)+circle[5]:
-                camera.append(6) # camera42
-                camera.append(3) # camera13
-            elif loc[1] >= loc[0]*slope_circle+circle[5]:
-                camera.append(7) # camera43
-                camera.append(3) # camera13
-            elif loc[1] <= loc[0]*(-slope_circle)+circle[5]:
-                camera.append(5) # camera41
-                camera.append(3) # camera13
+            if loc[1] <= loc[0] * slope_circle + circle[5] and loc[1] >= loc[0] * (-slope_circle) + circle[5]:
+                camera.append(6)  # camera42
+                camera.append(3)  # camera13
+            elif loc[1] >= loc[0] * slope_circle + circle[5]:
+                camera.append(7)  # camera43
+                camera.append(3)  # camera13
+            elif loc[1] <= loc[0] * (-slope_circle) + circle[5]:
+                camera.append(5)  # camera41
+                camera.append(3)  # camera13
         # 2
         elif loc[0] <= 0 and loc[1] >= 0:
-            if loc[1] <= loc[0]*(-slope_intersection)+intersection[5] and loc[1] >= loc[0]*slope_intersection+intersection[5]:
-                camera.append(2) # camera12
-                camera.append(7) # camera43
+            if loc[1] <= loc[0] * (
+                    -slope_intersection) + intersection[5] and loc[1] >= loc[0] * slope_intersection + intersection[5]:
+                camera.append(2)  # camera12
+                camera.append(7)  # camera43
             # 5
-            elif loc[1] >= loc[0]*(-slope_intersection)+intersection[5]:
-                camera.append(1) # camera11
-                camera.append(7) # camera43
+            elif loc[1] >= loc[0] * (-slope_intersection) + intersection[5]:
+                camera.append(1)  # camera11
+                camera.append(7)  # camera43
             # 6
-            elif loc[1] <= loc[0]*slope_intersection+intersection[5]:
-                camera.append(3) # camera13
-                camera.append(7) # camera43
+            elif loc[1] <= loc[0] * slope_intersection + intersection[5]:
+                camera.append(3)  # camera13
+                camera.append(7)  # camera43
         # 4
         elif loc[0] <= 0 and loc[1] <= 0:
-            if loc[1] <= loc[0]*(-slope_circle)+circle[5] and loc[1] >= loc[0]*slope_circle+circle[5]:
-                camera.append(8) # camera44
-                camera.append(3) # camera13
+            if loc[1] <= loc[0] * (-slope_circle) + circle[5] and loc[1] >= loc[0] * slope_circle + circle[5]:
+                camera.append(8)  # camera44
+                camera.append(3)  # camera13
             # 5
-            elif loc[1] >= loc[0]*(-slope_circle)+circle[5]:
-                camera.append(7) # camera43
-                camera.append(3) # camera13
+            elif loc[1] >= loc[0] * (-slope_circle) + circle[5]:
+                camera.append(7)  # camera43
+                camera.append(3)  # camera13
             # 6
-            elif loc[1] <= loc[0]*slope_circle+circle[5]:
-                camera.append(5) # camera41
-                camera.append(3) # camera13
-        
+            elif loc[1] <= loc[0] * slope_circle + circle[5]:
+                camera.append(5)  # camera41
+                camera.append(3)  # camera13
+
         return camera
 
     for pred_box in pred_boxes:
@@ -205,7 +197,7 @@ def which_cameras(pred_boxes: np.array(np.array)):
 # caculate the 8 points coordinates of pred_boxes: all vehicles
 def box_to_corner_3d(boxes3d):
     """
-    The label of each corner: 
+    The label of each corner:
            4--------------3
           /|             /|
          / |            / |
@@ -219,8 +211,14 @@ def box_to_corner_3d(boxes3d):
 
     boxes3d, is_numpy = check_numpy_to_torch(boxes3d)
     template = boxes3d.new_tensor((
-        [1, 1, -1], [1, -1, -1], [-1, -1, -1], [-1, 1, -1],
-        [1, 1, 1], [1, -1, 1], [-1, -1, 1], [-1, 1, 1],
+        [1, 1, -1],
+        [1, -1, -1],
+        [-1, -1, -1],
+        [-1, 1, -1],
+        [1, 1, 1],
+        [1, -1, 1],
+        [-1, -1, 1],
+        [-1, 1, 1],
     )) / 2
 
     corners3d = boxes3d[:, None, 3:6].repeat(1, 8, 1) * template[None, :, :]
@@ -245,11 +243,7 @@ def rotate_points_along_z(points, angle):
     sina = torch.sin(angle)
     zeros = angle.new_zeros(points.shape[0])
     ones = angle.new_ones(points.shape[0])
-    rot_matrix = torch.stack((
-        cosa,  sina, zeros,
-        -sina, cosa, zeros,
-        zeros, zeros, ones
-    ), dim=1).view(-1, 3, 3).float()
+    rot_matrix = torch.stack((cosa, sina, zeros, -sina, cosa, zeros, zeros, zeros, ones), dim=1).view(-1, 3, 3).float()
     points_rot = torch.matmul(points[:, :, 0:3], rot_matrix)
     points_rot = torch.cat((points_rot, points[:, :, 3:]), dim=-1)
 
@@ -263,11 +257,13 @@ def get_dpm(calib: np.array, camera_num: int, ground_pose: np.array, type: int):
 
     camera_name = label2camera[camera_num]
     if not type:
-        world_pose_1, world_pose_2 = np.array([ground_pose[0], ground_pose[1]-0.2, 0.2, 1]), np.array([ground_pose[0], ground_pose[1]+0.2, 0.2, 1])
+        world_pose_1, world_pose_2 = np.array([ground_pose[0], ground_pose[1] - 0.2, 0.2,
+                                               1]), np.array([ground_pose[0], ground_pose[1] + 0.2, 0.2, 1])
     elif type:
-        world_pose_1, world_pose_2 = np.array([ground_pose[0]-0.2, ground_pose[1], 0.2, 1]), np.array([ground_pose[0]+0.2, ground_pose[1], 0.2, 1])
+        world_pose_1, world_pose_2 = np.array([ground_pose[0] - 0.2, ground_pose[1], 0.2,
+                                               1]), np.array([ground_pose[0] + 0.2, ground_pose[1], 0.2, 1])
 
     pixel_pose_1, pixel_pose_2 = world2pixel(calib, camera_name, world_pose_1), world2pixel(calib, camera_name, world_pose_2)
-    dpm = 0.4 / abs(pixel_pose_2[0]-pixel_pose_1[0])
+    dpm = 0.4 / abs(pixel_pose_2[0] - pixel_pose_1[0])
 
     return dpm

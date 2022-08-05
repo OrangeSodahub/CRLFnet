@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
-import rospy
 from pathlib import Path
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
+import rospy
 from sensor_msgs.msg import Image
 from msgs.msg._MsgCamera import MsgCamera
 from geometry_msgs.msg import Point
@@ -105,7 +105,8 @@ def camera2visual(img, box2d, color):
     return img
 
 
-def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: MsgCamera, output_dir: str, gt_cameras, gt_boxes3d):
+def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: MsgCamera, output_dir: str, gt_cameras,
+                              gt_boxes3d):
     """
         cameras: [[camera1, camera2, ...],[camera1, camera2, ...], ...]
             vehicle: [camera1, camera2, ...]
@@ -148,7 +149,16 @@ def lidar_camera_match2visual(match, image, lidar, boxes2d, boxes3d, msgcamera: 
                 msgcamera.camera[camera_num - 1] = lidar2visual(msgcamera.camera[camera_num - 1], gt_box3d, (0, 255, 255))
 
     # save images
-    num2camera = {1: 'camera11', 2: 'camera12', 3: 'camera13', 4: 'camera14', 5: 'camera41', 6: 'camera42', 7: 'camera43', 8: 'camera44'}
+    num2camera = {
+        1: 'camera11',
+        2: 'camera12',
+        3: 'camera13',
+        4: 'camera14',
+        5: 'camera41',
+        6: 'camera42',
+        7: 'camera43',
+        8: 'camera44'
+    }
     for num, img in enumerate(msgcamera.camera):
         if not isinstance(img, Image):
             camera_name = num2camera[num + 1]

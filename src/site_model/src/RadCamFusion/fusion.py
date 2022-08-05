@@ -92,7 +92,8 @@ def msg2data(radar: List[MsgRadarObject], image: Image) -> Tuple[np.ndarray, np.
     return radar_data, image_data
 
 
-def msg2save(frame: int, save_path: Path, radar_data: List[np.ndarray], radar_sensors: List[RadarSensor], image_data: List[Image], image_sensors: List[ImageSensor]) -> None:
+def msg2save(frame: int, save_path: Path, radar_data: List[np.ndarray], radar_sensors: List[RadarSensor],
+             image_data: List[Image], image_sensors: List[ImageSensor]) -> None:
     p = save_path.joinpath(str(frame))
     for r, s in zip(radar_data, radar_sensors):
         np.savetxt(str(p.joinpath("{}.txt".format(s.name))), r)
@@ -156,8 +157,19 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
 if __name__ == '__main__':
     # set command arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--mode", choices=['normal', 'off-yolo', 'from-save'], type=str, default='normal', required=False, help="Mode.")
-    parser.add_argument("-s", "--save", action='store_true', default=False, required=False, help="Save visualized POIs and ROIs as images.")
+    parser.add_argument("-m",
+                        "--mode",
+                        choices=['normal', 'off-yolo', 'from-save'],
+                        type=str,
+                        default='normal',
+                        required=False,
+                        help="Mode.")
+    parser.add_argument("-s",
+                        "--save",
+                        action='store_true',
+                        default=False,
+                        required=False,
+                        help="Save visualized POIs and ROIs as images.")
     args = parser.parse_args()
 
     my_file_loader()

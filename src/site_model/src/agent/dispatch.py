@@ -24,12 +24,24 @@ class PublisherBundle:
 
     def __init__(self, vehicle_name: str) -> None:
         # l: left, r: right, f: front, r: rear
-        self.lr_wheel = rospy.Publisher('/{}/left_rear_wheel_velocity_controller/command'.format(vehicle_name), Float64, queue_size=1)
-        self.rr_wheel = rospy.Publisher('/{}/right_rear_wheel_velocity_controller/command'.format(vehicle_name), Float64, queue_size=1)
-        self.lf_wheel = rospy.Publisher('/{}/left_front_wheel_velocity_controller/command'.format(vehicle_name), Float64, queue_size=1)
-        self.rf_wheel = rospy.Publisher('/{}/right_front_wheel_velocity_controller/command'.format(vehicle_name), Float64, queue_size=1)
-        self.l_steering_hinge = rospy.Publisher('/{}/left_steering_hinge_position_controller/command'.format(vehicle_name), Float64, queue_size=1)
-        self.r_steering_hinge = rospy.Publisher('/{}/right_steering_hinge_position_controller/command'.format(vehicle_name), Float64, queue_size=1)
+        self.lr_wheel = rospy.Publisher('/{}/left_rear_wheel_velocity_controller/command'.format(vehicle_name),
+                                        Float64,
+                                        queue_size=1)
+        self.rr_wheel = rospy.Publisher('/{}/right_rear_wheel_velocity_controller/command'.format(vehicle_name),
+                                        Float64,
+                                        queue_size=1)
+        self.lf_wheel = rospy.Publisher('/{}/left_front_wheel_velocity_controller/command'.format(vehicle_name),
+                                        Float64,
+                                        queue_size=1)
+        self.rf_wheel = rospy.Publisher('/{}/right_front_wheel_velocity_controller/command'.format(vehicle_name),
+                                        Float64,
+                                        queue_size=1)
+        self.l_steering_hinge = rospy.Publisher('/{}/left_steering_hinge_position_controller/command'.format(vehicle_name),
+                                                Float64,
+                                                queue_size=1)
+        self.r_steering_hinge = rospy.Publisher('/{}/right_steering_hinge_position_controller/command'.format(vehicle_name),
+                                                Float64,
+                                                queue_size=1)
 
     def publish(self, throttle: float, steer: float) -> None:
         self.lr_wheel.publish(throttle)
@@ -47,7 +59,12 @@ def odom2pose(odom: Odometry) -> Tuple[np.ndarray, float]:
     return np.array([pos.x, pos.y]), y
 
 
-def set_control(odom1: Odometry, odom2: Odometry, odom3: Odometry, odom4: Odometry, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None) -> None:
+def set_control(odom1: Odometry,
+                odom2: Odometry,
+                odom3: Odometry,
+                odom4: Odometry,
+                msgradcam: MsgRadCam = None,
+                msglidcam: MsgLidCam = None) -> None:
     global pub_data
     global pub_1, pub_2, pub_3, pub_4
 
@@ -91,11 +108,7 @@ if __name__ == '__main__':
     parser.add_argument("--vis", help="whether to visualize", action='store_true', required=False)
     params = parser.parse_args()
     with open(params.config, 'r') as f:
-        try:
-            config = yaml.load(f, Loader=yaml.FullLoader)
-        except:
-            print('\033[0;31mConfig file could not be read.\033[0m')
-            exit(1)
+        config = yaml.load(f, Loader=yaml.FullLoader)
 
     MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
     scene_map = SceneMap(MAP_DIR)
