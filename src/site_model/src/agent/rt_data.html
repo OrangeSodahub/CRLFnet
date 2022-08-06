@@ -57,37 +57,37 @@
 
 <body>
   <h1>Data visulization</h1>
-  <p>For now, /deepracer1/left_steering_hinge_position_controller/command' subscribed by default.</p>
   <p>Open file: agent/rt_data.html, click 'Subscribe'.</p>
   <p id = "output"></p>
   <button onclick = "func()">Publish</button>
   <button onclick = "subscribe2()">Subscribe</button>
   <button onclick = "unsubscribe2()">Unsubscribe</button><br />
-  <div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+  <div id="nums_area" style="width: 550px; height: 400px; margin: 0 auto"></div>
+  <div id="velocity" style="width: 550px; height: 400px; margin: 0 auto"></div>
   <script type="text/javascript" type="text/javascript">
     // Subscribing to Topics
     var listener1 = new ROSLIB.Topic({
       ros : ros,
-      name : '/deepracer1/left_steering_hinge_position_controller/command',
-      messageType : 'std_msgs/Float64'
+      name : '/nums',
+      messageType : 'std_msgs/Float64MultiArray'
     });
     var listener2 = new ROSLIB.Topic({
       ros : ros,
-      name : '/deepracer2/left_steering_hinge_position_controller/command',
-      messageType : 'std_msgs/Float64'
+      name : '/velocity',
+      messageType : 'std_msgs/Float64MultiArray'
     });
 
   // Update data
-  var deepracer1, deepracer2;
+  var nums, velocity;
   function subscribe2()
   {
     listener1.subscribe(function(message) {
     document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
-    deepracer1 = message.data
+    nums = message.data
     });
     listener2.subscribe(function(message) {
     document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
-    deepracer2 = message.data
+    velocity = message.data
     });
   }
   function unsubscribe2()
@@ -97,18 +97,22 @@
   }
 
   // Draw line
-  var chart = Highcharts.chart('container', {
+  var chart = Highcharts.chart('nums_area', {
 	chart: {
 		type: 'spline',
 		margin: [70, 50, 60, 80],
 		events: {
       load: function() {
-        var series1 = this.series[0],
-            series2 = this.series[1];
+        var intersection = this.series[0],
+            circle = this.series[1],
+            overpass = this.series[2],
+            outerring = this.series[3];
             setInterval(function () {
               var x = (new Date()).getTime();
-              series1.addPoint([x,deepracer1]);
-              series2.addPoint([x,deepracer2]);
+              intersection.addPoint([x,nums[0]]),
+              circle.addPoint([x,nums[1]]),
+              overpass.addPoint([x,nums[2]]),
+              outterring.addPoint([x,nums[3]]);
             }, 100);
           }
 		}
@@ -147,7 +151,7 @@
 		}
 	},
 	series: [{
-		name:'deepracer1',
+		name:'intersection',
 		data: (function () {
 			var data = [],
 				time = (new Date()).getTime();
@@ -158,7 +162,130 @@
 			return data;
 		}())
 	},{
-		name:'deepracer2',
+		name:'circle',
+		data: (function () {
+			var data = [],
+				time = (new Date()).getTime();
+      data.push({
+        x: time,
+        y: 0
+      });
+			return data;
+		}())
+	},{
+		name:'overpass',
+		data: (function () {
+			var data = [],
+				time = (new Date()).getTime();
+      data.push({
+        x: time,
+        y: 0
+      });
+			return data;
+		}())
+	},{
+		name:'outerring',
+		data: (function () {
+			var data = [],
+				time = (new Date()).getTime();
+      data.push({
+        x: time,
+        y: 0
+      });
+			return data;
+		}())
+	}
+  ]
+});
+
+var chart = Highcharts.chart('velocity', {
+	chart: {
+		type: 'spline',
+		margin: [70, 50, 60, 80],
+		events: {
+      load: function() {
+        var v1 = this.series[0],
+            v2 = this.series[1],
+            v3 = this.series[2],
+            v4 = this.series[3];
+            setInterval(function () {
+              var x = (new Date()).getTime();
+              v1.addPoint([x,velocity[0]]),
+              v2.addPoint([x,velocity[1]]),
+              v3.addPoint([x,velocity[2]]),
+              v4.addPoint([x,velocity[3]]);
+            }, 100);
+          }
+		}
+	},
+	title: {
+		text: 'Data'
+	},
+	subtitle: {
+		text: 'data'
+	},
+	xAxis: {
+		type: 'datetime',
+		maxPadding: 0.2,
+		maxZoom: 60
+	},
+	yAxis: {
+		title: {
+			text: 'data'
+		}
+	},
+	legend: {
+		enabled: false
+	},
+	plotOptions: {
+		series: {
+			lineWidth: 1,
+			point: {
+				events: {
+					'subscribe': function () {
+						if (this.series.data.length > 1) {
+							this.remove();
+						}
+					}
+				}
+			}
+		}
+	},
+	series: [{
+		name:'v1',
+		data: (function () {
+			var data = [],
+				time = (new Date()).getTime();
+      data.push({
+        x: time,
+        y: 0
+      });
+			return data;
+		}())
+	},{
+		name:'v2',
+		data: (function () {
+			var data = [],
+				time = (new Date()).getTime();
+      data.push({
+        x: time,
+        y: 0
+      });
+			return data;
+		}())
+	},{
+		name:'v3',
+		data: (function () {
+			var data = [],
+				time = (new Date()).getTime();
+      data.push({
+        x: time,
+        y: 0
+      });
+			return data;
+		}())
+	},{
+		name:'v4',
 		data: (function () {
 			var data = [],
 				time = (new Date()).getTime();

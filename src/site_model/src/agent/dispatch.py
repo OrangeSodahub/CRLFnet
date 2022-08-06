@@ -8,7 +8,7 @@ import yaml
 
 import rospy
 import message_filters
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, Float64MultiArray
 from nav_msgs.msg import Odometry
 from ackermann_msgs.msg import AckermannDriveStamped
 from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
@@ -55,19 +55,24 @@ def set_control(odom1: Odometry,
                 odom4: Odometry,
                 msgradcam: MsgRadCam = None,
                 msglidcam: MsgLidCam = None) -> None:
-    global pub_data
+    global pub_nums, pub_velocity
     global pub_1, pub_2, pub_3, pub_4
 
     poses = [odom2pose(odom1), odom2pose(odom2), odom2pose(odom3), odom2pose(odom4)]
     steers, throttles, nums_area = agents.navigate(poses, msgradcam, msglidcam)
-    throttles = [t * 10 for t in throttles]
+    throttles = [t * 15 for t in throttles]
 
     pub_1.publish(throttles[0], steers[0])
     pub_2.publish(throttles[1], steers[1])
     pub_3.publish(throttles[2], steers[2])
     pub_4.publish(throttles[3], steers[3])
 
-    pub_data.publish(np.random.random() * 10)
+    nums = Float64MultiArray()
+    velocity = Float64MultiArray()
+    nums.data = nums_area
+    velocity.data = [abs(t) for t in throttles]
+    pub_nums.publish(nums)
+    pub_velocity.publish(velocity)
 
 
 def servo_commands() -> None:
@@ -104,7 +109,8 @@ if __name__ == '__main__':
     scene_map = SceneMap(MAP_DIR)
     agents = Agents(scene_map, 4)
 
-    pub_data = rospy.Publisher('/data', Float64, queue_size=1)
+    pub_nums = rospy.Publisher('/nums', Float64MultiArray, queue_size=1)
+    pub_velocity = rospy.Publisher('/velocity', Float64MultiArray, queue_size=1)
     pub_1 = PublisherBundle('deepracer1')
     pub_2 = PublisherBundle('deepracer2')
     pub_3 = PublisherBundle('deepracer3')

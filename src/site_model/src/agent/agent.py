@@ -23,8 +23,8 @@ class Agent:
         self.LENGTH = 0.22
         self.WIDTH = 0.21
         self.COLLIDE_THRES = 0.5
-        self.SLOW_DOWN_THRES = 1.5
-        self.lane_orient = [1,0,0,1,0,0,0,0,0,1,3,1,2,0,2,0,2,2,2,2]  # 1: intersection, 2: circle, 3: overpass
+        self.SLOW_DOWN_THRES = 2.5
+        self.lane_orient = [1,4,4,1,4,4,4,4,4,1,3,1,2,4,2,4,2,2,2,2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
 
         self.mode = 'lost'
         self.pos = np.array([0, 0])
@@ -84,8 +84,8 @@ class Agent:
         lanes = self.scene_map.accessable_lanes(node)
         if len(lanes) == 0:
             return -1
-        # lane = np.random.choice(lanes)
-        lane = self.score_lanes(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area)
+        lane = np.random.choice(lanes)
+        # lane = self.score_lanes(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area)
         return lane
 
     def score_lanes(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area):
@@ -93,12 +93,9 @@ class Agent:
             caculate weighted score of accessible lanes
         """
         def set_weight(orient, nums_area):
-            min_area, max_area = np.argmin(nums_area), np.argmax(nums_area)
-            if orient == min_area:
-                return 1
-            elif orient == max_area:
-                return 3
-            return 2
+            nums_index = np.argsort(nums_area) + 1
+            return (np.where(nums_index==orient)[0][0] + 1)
+
         lane_num = [0]*len(lanes)
         for i, lane in enumerate(lanes):
             # dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), pt) for pt in self.scene_map.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
@@ -193,8 +190,16 @@ class Agents:
         """
             For temporarily using vehicles num
         """
-        intersection = np.array([p[0][1]>=0 if lanes[i] != 10 else 0 for i, p in enumerate(poses)])
-        circle = np.array([p[0][1]<0 if lanes[i] != 10 else 0 for i, p in enumerate(poses)])
-        nums_area = [np.sum(intersection), np.sum(circle), np.sum(lanes==10)]
+        intersection, circle, overpass, outerring = 0,0,0,0
+        for i, p in enumerate(poses):
+            if lanes[i] == 10:
+                overpass += 1
+            elif (p[0][1]>=0 and p[0][1] <= 1.7 and p[0][0]<=1 and p[0][0]>=-1.2):
+                intersection += 1
+            elif (p[0][1]<0 and p[0][1]>=-2.2 and p[0][0]<=1 and p[0][0]>=-1.2):
+                circle += 1
+            else:
+                outerring += 1
+        nums_area = [intersection, circle, overpass, outerring]
 
         return nums_area
