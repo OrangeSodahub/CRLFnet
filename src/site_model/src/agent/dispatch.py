@@ -59,7 +59,7 @@ def set_control(odom1: Odometry,
     global pub_1, pub_2, pub_3, pub_4
 
     poses = [odom2pose(odom1), odom2pose(odom2), odom2pose(odom3), odom2pose(odom4)]
-    steers, throttles = agents.navigate(poses, msgradcam, msglidcam)
+    steers, throttles, nums_area = agents.navigate(poses, msgradcam, msglidcam)
     throttles = [t * 10 for t in throttles]
 
     pub_1.publish(throttles[0], steers[0])

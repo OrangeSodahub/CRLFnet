@@ -5,7 +5,6 @@ from typing import Tuple
 
 from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
 from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
-from msgs.msg._MsgLidCamObject import MsgLidCamObject
 
 from .scene import SceneMap
 
@@ -24,7 +23,8 @@ class Agent:
         self.LENGTH = 0.22
         self.WIDTH = 0.21
         self.COLLIDE_THRES = 0.5
-        self.lane_orient = [0,0,0,1,2,3,0,0,...]  # 1: intersection, 2: circle, 3: overpass
+        self.SLOW_DOWN_THRES = 1.5
+        self.lane_orient = [1,0,0,1,0,0,0,0,0,1,3,1,2,0,2,0,2,2,2,2]  # 1: intersection, 2: circle, 3: overpass
 
         self.mode = 'lost'
         self.pos = np.array([0, 0])
@@ -40,28 +40,35 @@ class Agent:
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def is_collide(self, poses, lanes: np.ndarray) -> bool:
+    def is_collide(self, poses, lanes: np.ndarray) -> int:
+        """
+            return if collide and v coeff.
+        """
         def is_lane(sl, l, sp, p):
             if sl != l:
-                if sl == 18 or l == 18:
+                if sl == 10 or l == 10:
                     return False
-                else:
-                    if abs(sp[1]) - abs(p[1]) > np.pi / 3:
-                        return True
-                    return False
+                elif abs(sp[1]) - abs(p[1]) > np.pi / 3:
+                    return True
+                return False
             return True
 
         for i, p in enumerate(poses):
             if i == self.index:
                 continue
             sp = poses[self.index]
-            if ((np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle) < np.pi / 12 and
-                np.linalg.norm(sp[0] - p[0]) <= self.COLLIDE_THRES and is_lane(self.tmp_lane, lanes[i], sp, p)):
-                return True
-        return False
+            yaw = np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle
+            dist = np.linalg.norm(sp[0] - p[0])
+            if yaw <= np.pi / 2 and is_lane(self.tmp_lane, lanes[i], sp, p):
+                if dist <= self.COLLIDE_THRES:
+                    return False
+                elif dist < self.SLOW_DOWN_THRES:
+                    return (dist-self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES)
+        return True
 
     def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
-        if self.is_collide(poses, lanes):
+        v_control = self.is_collide(poses, lanes)
+        if not v_control:
             return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
         distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
@@ -69,19 +76,19 @@ class Agent:
         rotation = np.arcsin(sin_rot)
         steer = np.clip(rotation / self.MAX_STEER, -1, 1)
         throttle = 1 if abs(yaw) < np.pi / 2 else -1
-        self.throttle = throttle
+        self.throttle = throttle * v_control
         return steer, throttle
 
-    def choose_way(self, node: int, pos: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> int:
+    def choose_way(self, node: int, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area) -> int:
         """Choose an accessable lane randomly."""
         lanes = self.scene_map.accessable_lanes(node)
         if len(lanes) == 0:
             return -1
-        lane = np.random.choice(lanes)
-        # lane = calc_density(lanes, msg_rad_cam, msg_lid_cam)
+        # lane = np.random.choice(lanes)
+        lane = self.score_lanes(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area)
         return lane
 
-    def calc_density(self, pos: np.ndarray, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam):
+    def score_lanes(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area):
         """
             caculate weighted score of accessible lanes
         """
@@ -94,13 +101,14 @@ class Agent:
             return 2
         lane_num = [0]*len(lanes)
         for i, lane in enumerate(lanes):
-            dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), p) for p in self.scene_map.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
+            # dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), pt) for pt in self.scene_map.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
+            dists = np.array([[np.linalg.norm(p[0] - pt) for pt in self.scene_map.lanes[lane]] for p in poses])
             dists_convert = dists <= 0.05
             lane_num[i] += np.sum(dists_convert)
         lane_orient = [self.lane_orient[lane] for lane in lanes]
-        nums_area = [msg_lid_cam.num_intersection, msg_lid_cam.objects_circle, msg_rad_cam.num_overpass]
+        # nums_area = [msg_lid_cam.num_intersection, msg_lid_cam.objects_circle, msg_rad_cam.num_overpass]
         lane_weight = [set_weight(orient, nums_area) for orient in lane_orient]
-        lane_score = np.average(lane_num, weights=lane_weight)
+        lane_score = [a*b for a,b in zip(lane_num, lane_weight)]
         return lanes[np.where(lane_score==np.min(lane_score))[0][0]]
 
     def lost_nav(self) -> None:
@@ -114,7 +122,7 @@ class Agent:
         self.tmp_lane_point = lane_point
         self.tmp_target = self.scene_map.lanes[lane][lane_point]
 
-    def lane_nav(self, pos: np.ndarray, msg_rad_cam, msg_lid_cam) -> None:
+    def lane_nav(self, poses, msg_rad_cam, msg_lid_cam, nums_area) -> None:
         # if the vehicle hasn't reached the target, do not change the target
         if self.distance > self.TARGET_THRES:
             return
@@ -123,7 +131,7 @@ class Agent:
         # if the vehicle is at the end of the lane, change to intersect mode
         if self.tmp_lane_point >= len(lane):
             node = self.scene_map.accessable_node(self.tmp_lane)
-            self.tmp_lane = self.choose_way(node, pos, msg_rad_cam, msg_lid_cam)
+            self.tmp_lane = self.choose_way(node, poses, msg_rad_cam, msg_lid_cam, nums_area)
             if self.tmp_lane == -1:
                 self.mode = 'await'
                 print("\033[0;31mError: The vehicle #{} is in a dead end.\033[0m".format(self.index))
@@ -144,7 +152,7 @@ class Agent:
             self.mode = 'lane'
             return
 
-    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> None:
+    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area) -> None:
         # update the position and orientation data
         self.update(poses[self.index][0], poses[self.index][1])
         # if the vehicle is too far away from the target, change to lost mode
@@ -154,7 +162,7 @@ class Agent:
             self.mode = 'lost'
             self.lost_nav()
         elif self.mode == 'lane':
-            self.lane_nav(poses[self.index], msg_rad_cam, msg_lid_cam)
+            self.lane_nav(poses, msg_rad_cam, msg_lid_cam, nums_area)
         elif self.mode == 'intersection':
             self.intersect_nav()
         # if an error occurs, the vehicle stops
@@ -173,9 +181,20 @@ class Agents:
 
     def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[int, int]:
         lanes = [v.tmp_lane for v in self.vehicles]
+        nums_area = self.calc_num(poses, lanes)
         steers, throttles = [], []
         for v in self.vehicles:
-            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam)
+            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area)
             steers.append(steer)
             throttles.append(throttle)
-        return steers, throttles
+        return steers, throttles, nums_area
+
+    def calc_num(self, poses, lanes: np.ndarray):
+        """
+            For temporarily using vehicles num
+        """
+        intersection = np.array([p[0][1]>=0 if lanes[i] != 10 else 0 for i, p in enumerate(poses)])
+        circle = np.array([p[0][1]<0 if lanes[i] != 10 else 0 for i, p in enumerate(poses)])
+        nums_area = [np.sum(intersection), np.sum(circle), np.sum(lanes==10)]
+
+        return nums_area

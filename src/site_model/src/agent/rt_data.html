@@ -38,16 +38,16 @@
     ros : ros,
     name : '/deepracer1/left_steering_hinge_position_controller/command',
     messageType : 'std_msgs/Float64'
-  });//创建一个topic,它的名字是'/chatter',,消息类型是'std_msgs/String'
+  });
 
-  function subscribe()//在点击”Subscribe”按钮后订阅'/chatter'的消息，并将其显示到网页中
+  function subscribe()
   {
      listener.subscribe(function(message) {
        document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
      });
   }
 
-  function unsubscribe()//在点击”Unsubscribe”按钮后取消订阅'/chatter'的消息
+  function unsubscribe()
   {
     listener.unsubscribe();
   }
@@ -65,25 +65,35 @@
   <button onclick = "unsubscribe2()">Unsubscribe</button><br />
   <div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
   <script type="text/javascript" type="text/javascript">
-    // Subscribing to a Topic
-    var listener = new ROSLIB.Topic({
+    // Subscribing to Topics
+    var listener1 = new ROSLIB.Topic({
       ros : ros,
       name : '/deepracer1/left_steering_hinge_position_controller/command',
       messageType : 'std_msgs/Float64'
     });
+    var listener2 = new ROSLIB.Topic({
+      ros : ros,
+      name : '/deepracer2/left_steering_hinge_position_controller/command',
+      messageType : 'std_msgs/Float64'
+    });
 
   // Update data
-  var data;
+  var deepracer1, deepracer2;
   function subscribe2()
   {
-    listener.subscribe(function(message) {
+    listener1.subscribe(function(message) {
     document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
-    data = message.data
+    deepracer1 = message.data
+    });
+    listener2.subscribe(function(message) {
+    document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
+    deepracer2 = message.data
     });
   }
   function unsubscribe2()
   {
-    listener.unsubscribe();
+    listener1.unsubscribe();
+    listener2.unsubscribe();
   }
 
   // Draw line
@@ -93,11 +103,12 @@
 		margin: [70, 50, 60, 80],
 		events: {
       load: function() {
-        var series = this.series[0];
+        var series1 = this.series[0],
+            series2 = this.series[1];
             setInterval(function () {
-              var x = (new Date()).getTime(),
-              y = Math.random();
-              series.addPoint([x,data]);
+              var x = (new Date()).getTime();
+              series1.addPoint([x,deepracer1]);
+              series2.addPoint([x,deepracer2]);
             }, 100);
           }
 		}
@@ -136,7 +147,7 @@
 		}
 	},
 	series: [{
-		name:'data1',
+		name:'deepracer1',
 		data: (function () {
 			var data = [],
 				time = (new Date()).getTime();
@@ -146,7 +157,19 @@
       });
 			return data;
 		}())
-	}]
+	},{
+		name:'deepracer2',
+		data: (function () {
+			var data = [],
+				time = (new Date()).getTime();
+      data.push({
+        x: time,
+        y: 0
+      });
+			return data;
+		}())
+	}
+  ]
 });
 </script>
 </body>
