@@ -45,21 +45,24 @@ class Agent:
             return if collide and v coeff.
         """
         def is_lane(sl, l, sp, p):
+            yaw = np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle
             if sl != l:
                 if sl == 10 or l == 10:
                     return False
                 elif abs(sp[1]) - abs(p[1]) > np.pi / 3:
                     return True
                 return False
-            return True
+            else:
+                if yaw <= np.pi / 3:
+                    return True
+                return False
 
         for i, p in enumerate(poses):
             if i == self.index:
                 continue
             sp = poses[self.index]
-            yaw = np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle
-            dist = np.linalg.norm(sp[0] - p[0])
-            if yaw <= np.pi / 2 and is_lane(self.tmp_lane, lanes[i], sp, p):
+            if is_lane(self.tmp_lane, lanes[i], sp, p):
+                dist = np.linalg.norm(sp[0] - p[0])
                 if dist <= self.COLLIDE_THRES:
                     return False
                 elif dist < self.SLOW_DOWN_THRES:
@@ -75,8 +78,8 @@ class Agent:
         sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1)
         rotation = np.arcsin(sin_rot)
         steer = np.clip(rotation / self.MAX_STEER, -1, 1)
-        throttle = 1 if abs(yaw) < np.pi / 2 else -1
-        self.throttle = throttle * v_control
+        throttle = (1 if abs(yaw) < np.pi / 2 else -1) * v_control
+        self.throttle = throttle
         return steer, throttle
 
     def choose_way(self, node: int, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area) -> int:
