@@ -1,7 +1,4 @@
 beautifulsoup4==4.8.2
-camera-calibration-parsers==1.12.0
-controller-manager==0.19.5
-controller-manager-msgs==0.19.5
 easydict==1.9
 fire==0.4.0
 google-api-python-client==1.7.11
@@ -15,7 +12,6 @@ matplotlib==3.5.1
 ninja==1.10.2.3
 numba==0.55.1
 numpy==1.21.5
-nuscenes-devkit==1.1.9
 nvidia-ml-py3==7.352.0
 oauth2client==4.1.2
 oauthlib==3.1.0
@@ -32,11 +28,6 @@ scipy==1.4.1
 SharedArray==3.0.0
 tensorboard==2.2.2
 tensorboardX==2.5
-torch==1.10.2+cu113
-torch-tb-profiler==0.3.1
-torchaudio==0.10.2+cu113
-torchfile==0.1.0
-torchvision==0.11.3+cu113
 tqdm==4.62.3
 vtk==9.1.0
 zipp==3.8.0
