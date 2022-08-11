@@ -11,8 +11,8 @@ from msgs.msg._MsgCamera import MsgCamera
 from geometry_msgs.msg import Point
 from visualization_msgs.msg import Marker, MarkerArray
 
-from cv_bridge import CvBridge
 import cv2
+from cv_bridge import CvBridge
 
 from .sensor_and_obs import ObsBundle, RadarSensor, ImageSensor, FusedSensor
 from .kalman import Kalman
