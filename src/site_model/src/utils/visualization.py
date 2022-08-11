@@ -4,6 +4,7 @@ from pathlib import Path
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
+from typing import List
 
 import rospy
 from sensor_msgs.msg import Image
@@ -27,6 +28,9 @@ class VisualAssistant:
         output_path.joinpath('image').mkdir(exist_ok=True)
         self.output_path = output_path
         self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
+
+        self.pois = []
+        self.rois = []
 
     def scene_output(self, frame: int, zs: ObsBundle, kf: Kalman):
         # Kalman Filter Data
@@ -59,6 +63,23 @@ class VisualAssistant:
         file_name = "{}_{:04d}.png".format(camera.name, frame)
         cv2.imwrite(str(self.output_path.joinpath('image', file_name)), image)
         print("\033[0;32mSaved {} image {} sucessfully.\033[0m".format(camera.name, frame))
+
+    def radar_input(self, pois: np.ndarray, rois: np.ndarray):
+        self.pois.append(pois)
+        self.rois.append(rois)
+
+    def radar_output(self, frame: int, images: List[Image]):
+        i = 0
+        for image, rois, pois in zip(images, self.rois, self.pois):
+            i = i + 1
+            image = CvBridge().imgmsg_to_cv2(image, 'bgr8')
+            for roi in rois:
+                cv2.rectangle(image, (roi[0], roi[1]), (roi[2], roi[3]), (255, 0, 0), 3)
+            for poi in pois:
+                cv2.circle(image, (poi[0], poi[1]), 3, (0, 0, 255), -1)
+            file_name = "radar_{}_{:04d}".format(i, frame)
+            cv2.imwrite(str(self.output_path.joinpath('radar', file_name)), image)
+            print("\033[0;32mSaved radar {} {} sucessfully.\033[0m".format(i, frame))
 
     def image_range(self):
         pass

@@ -8,6 +8,7 @@ from scipy.linalg import block_diag
 
 from .transform import w2p, p2w
 from .poi_and_roi import radar_poi, expand_poi, optimize_iou
+from .visualization import VisualAssistant
 
 SCENE_THRESHOLD = 0.5
 
@@ -271,7 +272,7 @@ class SensorPair:
         self.radar.update(radar_data)
         self.image.update(image_data)
 
-    def observe(self) -> ObsBundle:
+    def observe(self, va: VisualAssistant) -> ObsBundle:
         radar_pois = radar_poi(self.radar.obs2world(), self.image.w2c, self.image.c2p, self.image.target_height)
         image_rois = self.image.boxes[0:4]
         # IOU matching
@@ -279,6 +280,7 @@ class SensorPair:
             map(lambda p, d: expand_poi(p, d, self.image.width, self.image.height), radar_pois, self.radar.zs[:, 0])),
                                        dtype=int)
         fused_rad_idx, fused_cam_idx = optimize_iou(radar_expanded_rois, image_rois, self.iou_threshold)
+        va.radar_input(radar_pois, radar_expanded_rois)
         # get observation bundle
         fused_zs = np.concatenate([self.radar.zs[fused_rad_idx, 0:3], self.image.zs[fused_cam_idx, 0:2]], axis=1)
         self.fused_sensor.update(fused_zs)

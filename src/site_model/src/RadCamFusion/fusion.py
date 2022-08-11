@@ -132,9 +132,9 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
         radar_data_3, image_data_3 = msg2data(radar.objects_right, image_3)
     # Update sensor pairs and get observations
     pair_2.update(radar_data_2, image_data_2)
-    zs_2 = pair_2.observe()
+    zs_2 = pair_2.observe(va)
     pair_3.update(radar_data_3, image_data_3)
-    zs_3 = pair_3.observe()
+    zs_3 = pair_3.observe(va)
     # Fuse and print detection results
     zs = zs_2 + zs_3
     print("\033[0;36mDetection\033[0m", zs, sep='\n')
@@ -147,6 +147,7 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image) -> None:
         va.scene_output(frame_counter, zs, kf)
         va.image_output(frame_counter, image_2, cam_5)
         va.image_output(frame_counter, image_3, cam_6)
+        va.radar_output(frame_counter, [image_2, image_3])
     # Publish
     msg_rad_cam = MsgRadCam()
     msg_rad_cam.num_overpass = zs.total_objs
