@@ -215,7 +215,7 @@ if __name__ == '__main__':
     msg_image_6 = message_filters.Subscriber('/image_raw_6', Image)
     msg_image_7 = message_filters.Subscriber('/image_raw_7', Image)
     # syncronize time stamps
-    sync = message_filters.ApproximateTimeSynchronizer([msg_radar, msg_image_5, msg_image_6], 1, 1)
+    sync = message_filters.ApproximateTimeSynchronizer([msg_radar, msg_image_2, msg_image_6], 1, 1)
     sync.registerCallback(fusion)
     print("\033[0;32mRadar-camera Fusion Initialized Sucessfully.\033[0m")
     rospy.spin()
