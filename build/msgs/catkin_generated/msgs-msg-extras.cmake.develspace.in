@@ -1,0 +1,2 @@
+set(msgs_MESSAGE_FILES "/home/zonlin/CRLFnet/src/msgs/msg/ListPointCloud.msg;/home/zonlin/CRLFnet/src/msgs/msg/MsgCamera.msg;/home/zonlin/CRLFnet/src/msgs/msg/MsgRadar.msg;/home/zonlin/CRLFnet/src/msgs/msg/MsgRadarObject.msg;/home/zonlin/CRLFnet/src/msgs/msg/MsgRadCam.msg;/home/zonlin/CRLFnet/src/msgs/msg/MsgLidCamObject.msg;/home/zonlin/CRLFnet/src/msgs/msg/MsgLidCam.msg")
+set(msgs_SERVICE_FILES "")
