@@ -165,9 +165,9 @@ class FusedSensor(Sensor):
             return np.empty((0, 2))
         else:
             start, poses = 0, []
-            for i in range(self.obs_size):
-                poses.append(self.sensors[i].obs2world(zs[:, start:start + self.obs_size_list[i]]))
-                start += self.obs_size_list[i]
+            for s, obs_size in zip(self.sensors, self.obs_size_list):
+                poses.append(s.obs2world(zs[:, start:start + obs_size]))
+                start += obs_size
             pos = np.average(poses, 0, self.weights)
             return pos
 
@@ -260,7 +260,6 @@ class SensorCluster:
 
     def rad_cam_fusion(self, radar_zs: ObsBundle, camera: ImageSensor):
         radar_pois = radar_poi(radar_zs.projections, camera.w2c, camera.c2p, camera.target_height)
-        
 
 
 class SensorPair:
@@ -275,7 +274,7 @@ class SensorPair:
         self.radar.update(radar_data)
         self.image.update(image_data)
 
-    def observe(self, va=None) -> ObsBundle:
+    def observe(self, va) -> ObsBundle:
         radar_pois = radar_poi(self.radar.obs2world(), self.image.w2c, self.image.c2p, self.image.target_height)
         image_rois = self.image.boxes[0:4]
         # IOU matching
@@ -283,8 +282,7 @@ class SensorPair:
             map(lambda p, d: expand_poi(p, d, self.image.width, self.image.height), radar_pois, self.radar.zs[:, 0])),
                                        dtype=int)
         fused_rad_idx, fused_cam_idx = optimize_iou(radar_expanded_rois, image_rois, self.iou_threshold)
-        if va is not None:
-            va.radar_input(radar_pois, radar_expanded_rois)
+        va.radar_input(radar_pois, radar_expanded_rois)
         # get observation bundle
         fused_zs = np.concatenate([self.radar.zs[fused_rad_idx, 0:3], self.image.zs[fused_cam_idx, 0:2]], axis=1)
         self.fused_sensor.update(fused_zs)

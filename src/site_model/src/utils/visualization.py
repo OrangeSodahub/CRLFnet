@@ -74,13 +74,19 @@ class VisualAssistant:
         for image, rois, pois in zip(images, self.rois, self.pois):
             i = i + 1
             image = CvBridge().imgmsg_to_cv2(image, 'bgr8')
-            for roi in rois:
-                cv2.rectangle(image, (roi[0], roi[1]), (roi[2], roi[3]), (255, 0, 0), 3)
+            file_name = "{}_{:04d}_i.png".format(i, frame)
+            cv2.imwrite(str(self.output_path.joinpath('radar', file_name)), image)
             for poi in pois:
                 cv2.circle(image, (poi[0], poi[1]), 3, (0, 0, 255), -1)
-            file_name = "radar_{}_{:04d}.png".format(i, frame)
+            file_name = "{}_{:04d}_ip.png".format(i, frame)
+            cv2.imwrite(str(self.output_path.joinpath('radar', file_name)), image)
+            for roi in rois:
+                cv2.rectangle(image, (roi[0], roi[1]), (roi[2], roi[3]), (255, 0, 0), 3)
+            file_name = "{}_{:04d}_ipr.png".format(i, frame)
             cv2.imwrite(str(self.output_path.joinpath('radar', file_name)), image)
             print("\033[0;32mSaved radar {} {} sucessfully.\033[0m".format(i, frame))
+        self.rois.clear()
+        self.pois.clear()
 
     def image_range(self):
         pass

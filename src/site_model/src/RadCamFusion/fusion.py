@@ -194,7 +194,7 @@ if __name__ == '__main__':
     cam_6 = ImageSensor("Image_6", geometry['cameras']['camera_6'], rad_3.offset[2])
     cam_7 = ImageSensor("Image_7", geometry['cameras']['camera_7'], rad_2.offset[2])
     # Sensor Pairs
-    pair_2 = SensorPair(rad_2, cam_5, IOU_THRESHOLD)
+    pair_2 = SensorPair(rad_2, cam_2, IOU_THRESHOLD)
     pair_3 = SensorPair(rad_3, cam_6, IOU_THRESHOLD)
     # Kalman Filter
     kf = Kalman(2, Q, SCENE_THRESHOLD, MAX_AGE)
