@@ -25,8 +25,8 @@ class VisualAssistant:
         self.base_image = cv2.imread(str(base_image_path))
         output_path.mkdir(exist_ok=True)
         output_path.joinpath('scene').mkdir(exist_ok=True)
-        output_path.joinpath('image').mkdir(exist_ok=True)
-        output_path.joinpath('radar').mkdir(exist_ok=True)
+        # output_path.joinpath('image').mkdir(exist_ok=True)
+        # output_path.joinpath('radar').mkdir(exist_ok=True)
         self.output_path = output_path
         self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
 

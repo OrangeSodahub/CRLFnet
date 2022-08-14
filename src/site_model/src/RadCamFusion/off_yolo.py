@@ -25,6 +25,7 @@ if __name__ == '__main__':
             if file.suffix == '.png':
                 image = Image.open(file)
                 boxes = yolo.detect_image(image)
-                txt_pth = SAVE_DIR.joinpath("{}.txt".format(file.stem))
+                txt_pth = frame.joinpath("{}.txt".format(file.stem))
                 np.savetxt(txt_pth, boxes, fmt='%d')
-        print('Finished frame {}    '.format(frame), end='\r')
+        print('Finished frame {}    '.format(frame.stem))
+    print("\033[0;32mFinished all frames.\033[0m")
