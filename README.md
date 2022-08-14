@@ -27,6 +27,16 @@ Absolute paths may need your mind:
  | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pointrcnn.yaml|5     |
  | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml|5       |
 
+### Docker
+Build project from `Dockerfile`:
+```
+docker build -t [name]:tag /docker/
+```
+or pull image directly:
+```
+docker pull gzzyyxy/crlfnet:yxy
+```
+
 ## Rad-Cam Fusion
 ### Necessary Configurations on GPU and model data
 
