@@ -51,7 +51,8 @@ class RadarSensor(Sensor):
         """The angles are all in deg"""
         R = np.array(data['R']).reshape(2, 2)
         super().__init__(name, R, 2)
-        self.boxes = np.empty((0, 3))
+        self.box_size = 3
+        self.boxes = np.empty((0, self.box_size))
         self.offset = np.array(data['offset'])
         self.angle_offset = np.array(data['angle'])
 
@@ -94,7 +95,8 @@ class ImageSensor(Sensor):
     def __init__(self, name: str, data: dict, target_height: float) -> None:
         R = np.array(data['R'], dtype=int).reshape((2, 2))
         super().__init__(name, R, 2)
-        self.boxes = np.empty((0, 6))
+        self.box_size = 6
+        self.boxes = np.empty((0, self.box_size))
         self.width = data['width']
         self.height = data['height']
         self.w2c = np.array(data['w2c']).reshape((4, 4))
@@ -165,9 +167,9 @@ class FusedSensor(Sensor):
             return np.empty((0, 2))
         else:
             start, poses = 0, []
-            for i in range(self.obs_size):
-                poses.append(self.sensors[i].obs2world(zs[:, start:start + self.obs_size_list[i]]))
-                start += self.obs_size_list[i]
+            for s, obs_size in zip(self.sensors, self.obs_size_list):
+                poses.append(s.obs2world(zs[:, start:start + obs_size]))
+                start += obs_size
             pos = np.average(poses, 0, self.weights)
             return pos
 
@@ -235,6 +237,8 @@ class SensorCluster:
     def __init__(self, radar_sensors: List[RadarSensor], image_sensors: List[ImageSensor]) -> None:
         self.radar_sensors = radar_sensors
         self.image_sensors = image_sensors
+        self.pair_1 = SensorPair(self.radar_sensors[0], self.image_sensors[2], 0.6)  # rad 2, cam 5
+        self.pair_2 = SensorPair(self.radar_sensors[1], self.image_sensors[3], 0.6)  # rad 3, cam 6
 
     def update(self, radar_data: List[np.ndarray], image_data: List[np.ndarray]) -> None:
         for s, d in zip(self.radar_sensors, radar_data):
@@ -243,6 +247,11 @@ class SensorCluster:
             s.update(d)
 
     def observe(self) -> ObsBundle:
+        zs_2 = self.pair_1.observe()
+        zs_3 = self.pair_2.observe()
+        zs = zs_2 + zs_3
+        return zs
+        '''
         # fuse radar objects
         radar_zs_list = [s.zs for s in self.radar_sensors]
         # fuse radar-image objects
@@ -257,6 +266,7 @@ class SensorCluster:
                 zs.append(z)
                 ss.append(s)
         return ObsBundle(zs, ps, ss)
+        '''
 
 
 class SensorPair:
