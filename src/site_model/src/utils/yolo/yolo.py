@@ -62,7 +62,7 @@ class YOLO(object):
             self.net = nn.DataParallel(self.net)
             self.net = self.net.cuda()
 
-    def detect_image(self, image, count = False):
+    def detect_image(self, image):
         """
         The output is a 2-D numpy array. The numbers are integers.
         The structure of the output is [[left, top, right, bottom, score, type], [...], ...],

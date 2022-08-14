@@ -14,7 +14,7 @@ camera:
 dispatch:
   scene_map: src/agent/map_1
 
-data: 
+data:
   cam_dir: /dataset/camera_data/
   rad_dir: /dataset/radar_data/
 output:
@@ -25,6 +25,7 @@ topic:
   radar_3: /ARS_408_21_3_Topic
 visual_assistant:
   base_image: src/utils/visual/scene_base.png
+use_cuda: False
 
 calib:
   camera_info_dir: src/camera_info/

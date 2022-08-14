@@ -251,22 +251,6 @@ class SensorCluster:
         zs_3 = self.pair_2.observe()
         zs = zs_2 + zs_3
         return zs
-        '''
-        # fuse radar objects
-        radar_zs_list = [s.zs for s in self.radar_sensors]
-        # fuse radar-image objects
-        for cam in self.image_sensors:
-            for rad in self.radar_sensors:
-                pass
-        # TODO: improve code
-        zs, ss = [], []
-        ps = np.concatenate([s.obs2world() for s in self.sensors], axis=0)
-        for s in self.sensors:
-            for z in s.zs:
-                zs.append(z)
-                ss.append(s)
-        return ObsBundle(zs, ps, ss)
-        '''
 
 
 class SensorPair:

@@ -26,6 +26,10 @@ from ..utils.poi_and_roi import image_roi
 from ..utils.visualization import VisualAssistant
 from ..utils.sensor_and_obs import ObsBundle, RadarSensor, ImageSensor, SensorCluster
 
+import warnings
+
+warnings.filterwarnings("ignore")
+
 time_counter = 0
 frame_counter = 0
 geometry = {}
@@ -58,7 +62,7 @@ def my_timer() -> float:
 
 
 def my_file_loader() -> None:
-    global YOLO_DIR, OUTPUT_DIR, BASE_IMAGE_FILE, SAVE_DIR, LOAD_DIR
+    global YOLO_DIR, OUTPUT_DIR, BASE_IMAGE_FILE, SAVE_DIR, LOAD_DIR, CUDA
     global geometry
 
     ROOT_DIR = Path(__file__).resolve().parents[2]
@@ -67,6 +71,7 @@ def my_file_loader() -> None:
     CONFIG_FILE = ROOT_DIR.joinpath("config/config.yaml")
     with open(CONFIG_FILE, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
+    CUDA = config['use_cuda']
     OUTPUT_DIR = ROOT_DIR.joinpath(config['output']['RadCamFusion_dir'])
     SAVE_DIR = OUTPUT_DIR.joinpath("save")
     SAVE_DIR.mkdir(exist_ok=True)
@@ -122,7 +127,7 @@ def save2data(frame: int, load_path: Path, sensor_cluster: SensorCluster) -> Tup
         d = np.loadtxt(str(p.joinpath("{}.txt".format(s.name))), dtype=int)
         d = d.reshape((-1, s.box_size))
         image_data.append(d)
-    print("\033[0;32mLoaded radar and image data of frame {} sucessfully.\033[0m".format(frame))
+    # print("\033[0;32mLoaded radar and image data of frame {} sucessfully.\033[0m".format(frame))
     return radar_data, image_data
 
 
@@ -156,11 +161,11 @@ def fusion_core(radar_data: List[np.ndarray], image_data: List[np.ndarray], sens
     # Update sensor and acquire observation (including fusion)
     sensor_cluster.update(radar_data, image_data)
     zs = sensor_cluster.observe()
-    print("\033[0;36mDetection\033[0m", zs, sep='\n')
+    # print("\033[0;36mDetection\033[0m", zs, sep='\n')
     # Kalman Filter
     A = np.eye(2)
     kf.flush(A, zs)
-    print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
+    # print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
     return zs
 
 

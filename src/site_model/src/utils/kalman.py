@@ -53,14 +53,22 @@ class Kalman:
     def update(self, pred_xpts: np.ndarray, pred_covs: np.ndarray, zs: ObsBundle, xpt_idx: np.ndarray,
                obs_idx: np.ndarray) -> None:
         for xi, zi in zip(xpt_idx, obs_idx):
+            sensor = zs.sensors[zi]
             pred_xpt = pred_xpts[xi]
             pred_cov = pred_covs[xi]
-            pred_z = zs.sensors[zi].world2obs(pred_xpt)
+            pred_z = sensor.world2obs(pred_xpt)
             z = zs.zs[zi]
-            H = zs.sensors[zi].H(pred_xpt)
-            R = zs.sensors[zi].R
+            H = sensor.H(pred_xpt)
+            R = sensor.R
             S = np.matmul(H, np.matmul(pred_cov, H.T)) + R
             K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
+
+            p = np.trace(S) / np.sum(np.square(z - sensor.world2obs(pred_xpt)))
+            if p < 1:
+                print("\033[1;32mInnovation Inequality", p, "\033[0m")
+            else:
+                print("\033[1;31mInnovation Inequality", p, "\033[0m")
+
             xpt = pred_xpt + np.matmul(K, (z - pred_z))
             cov = pred_cov - np.matmul(np.matmul(K, H), pred_cov)
             self.xpts[xi, 0:self.size] = xpt
