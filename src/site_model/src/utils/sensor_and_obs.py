@@ -51,7 +51,8 @@ class RadarSensor(Sensor):
         """The angles are all in deg"""
         R = np.array(data['R']).reshape(2, 2)
         super().__init__(name, R, 2)
-        self.boxes = np.empty((0, 3))
+        self.box_size = 3
+        self.boxes = np.empty((0, self.box_size))
         self.offset = np.array(data['offset'])
         self.angle_offset = np.array(data['angle'])
 
@@ -94,7 +95,8 @@ class ImageSensor(Sensor):
     def __init__(self, name: str, data: dict, target_height: float) -> None:
         R = np.array(data['R'], dtype=int).reshape((2, 2))
         super().__init__(name, R, 2)
-        self.boxes = np.empty((0, 6))
+        self.box_size = 6
+        self.boxes = np.empty((0, self.box_size))
         self.width = data['width']
         self.height = data['height']
         self.w2c = np.array(data['w2c']).reshape((4, 4))
@@ -235,6 +237,8 @@ class SensorCluster:
     def __init__(self, radar_sensors: List[RadarSensor], image_sensors: List[ImageSensor]) -> None:
         self.radar_sensors = radar_sensors
         self.image_sensors = image_sensors
+        self.pair_1 = SensorPair(self.radar_sensors[0], self.image_sensors[2], 0.6)  # rad 2, cam 5
+        self.pair_2 = SensorPair(self.radar_sensors[1], self.image_sensors[3], 0.6)  # rad 3, cam 6
 
     def update(self, radar_data: List[np.ndarray], image_data: List[np.ndarray]) -> None:
         for s, d in zip(self.radar_sensors, radar_data):
@@ -243,6 +247,11 @@ class SensorCluster:
             s.update(d)
 
     def observe(self) -> ObsBundle:
+        zs_2 = self.pair_1.observe()
+        zs_3 = self.pair_2.observe()
+        zs = zs_2 + zs_3
+        return zs
+        '''
         # fuse radar objects
         radar_zs_list = [s.zs for s in self.radar_sensors]
         # fuse radar-image objects
@@ -257,9 +266,7 @@ class SensorCluster:
                 zs.append(z)
                 ss.append(s)
         return ObsBundle(zs, ps, ss)
-
-    def rad_cam_fusion(self, radar_zs: ObsBundle, camera: ImageSensor):
-        radar_pois = radar_poi(radar_zs.projections, camera.w2c, camera.c2p, camera.target_height)
+        '''
 
 
 class SensorPair:
@@ -274,7 +281,7 @@ class SensorPair:
         self.radar.update(radar_data)
         self.image.update(image_data)
 
-    def observe(self, va) -> ObsBundle:
+    def observe(self) -> ObsBundle:
         radar_pois = radar_poi(self.radar.obs2world(), self.image.w2c, self.image.c2p, self.image.target_height)
         image_rois = self.image.boxes[0:4]
         # IOU matching
@@ -282,7 +289,6 @@ class SensorPair:
             map(lambda p, d: expand_poi(p, d, self.image.width, self.image.height), radar_pois, self.radar.zs[:, 0])),
                                        dtype=int)
         fused_rad_idx, fused_cam_idx = optimize_iou(radar_expanded_rois, image_rois, self.iou_threshold)
-        va.radar_input(radar_pois, radar_expanded_rois)
         # get observation bundle
         fused_zs = np.concatenate([self.radar.zs[fused_rad_idx, 0:3], self.image.zs[fused_cam_idx, 0:2]], axis=1)
         self.fused_sensor.update(fused_zs)
