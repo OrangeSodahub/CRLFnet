@@ -25,9 +25,10 @@ def image_roi(image, yolo: YOLO) -> np.ndarray:
     '''
     The output is given in pixel coordinate and in the form of [left, top, right, bottom, score, class].
     '''
-    # convert image format
-    image = ros_numpy.numpify(image)
-    image = Image.fromarray(image)
+    if not isinstance(image, type(Image)):
+        # convert image format
+        image = ros_numpy.numpify(image)
+        image = Image.fromarray(image)
     # detect image
     return yolo.detect_image(image)
 

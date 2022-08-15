@@ -139,6 +139,7 @@ class RT_Pred():
     # Pre-load network
     def __init__(self, ROOT_DIR, config):
         # basic info
+        ROOT_DIR = str(ROOT_DIR)
         self.cfg_file = ROOT_DIR + config['lidar_detection']['cfg_file']
         self.ckpt_file = ROOT_DIR + config['lidar_detection']['ckpt_file']
 

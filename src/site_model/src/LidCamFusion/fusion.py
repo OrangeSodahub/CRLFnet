@@ -32,83 +32,76 @@ from ..utils.common_utils import get_gt_boxes3d, label2camera, transform
 from ..utils.transform import lidar2pixel, box_to_corner_3d, get_dpm, p2w, world2pixel
 
 
-def fusion(pointcloud, msgcamera, odom=None):
+def fusion(pointcloud=None, msgcamera=None, odom=None):
     """
         pointcloud: [N,4]
         msgcamera: [1,8] -> eight Images
+        In eval process, real time dataset collection and store done first. When preset limitation of
+        samples reach, evaluation begins.
     """
     assert isinstance(pointcloud, PointCloud2)
     assert isinstance(msgcamera, MsgCamera)
     global start_time
 
+    if params.eval:
+        pub_lidcam = rospy.Publisher("/lidar_camera_fused", MsgLidCam, queue_size=1)
+        # TODO: read points and image, gt_boxes files
+        # points = ...
+        # images = ...
+        pass
+    else:
+        points = convert_ros_pointcloud_to_numpy(pointcloud)
+        images = [img for img in msgcamera.camera]
+        
     # pointcloud roi
-    points = convert_ros_pointcloud_to_numpy(pointcloud)
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
-    cameras, pred_corners3d, pixel_poses = pointcloud_roi(calib, pred_boxes3d)            # get cameras and pixel_poses of all vehicles
-    if params.print2screen_lidar:                                                         # print pred results to screen
-        print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
+    cameras, pred_corners3d, pixel_poses = pointcloud_roi(calib, pred_boxes3d)
+    # image roi
+    pred_boxes2d = [image_roi(img, yolo) for img in images]
     gt_boxes3d = gt_cameras = gt_corners3d = gt_pixel_poses = None
-    if odom is not None and params.gt_boxes:
+    if params.gt:
+        assert isinstance(odom, Odometry) , f'odom message should be {type(Odometry)} but got {type(odom)}'
         gt_boxes3d = get_gt_boxes3d(odom)
         gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(calib, gt_boxes3d)
-
-    # image roi
-    pred_boxes2d = []
-    for img in msgcamera.camera:
-        pred_box2d = image_roi(img, yolo)
-        pred_boxes2d.append(pred_box2d)
-
-    # pre_eval: BEV (for one car)
-    if odom is not None and params.pre_eval:
-        eval.eval(odom, pred_boxes3d)                                                    # 3d-detection only: use 'pred_boxes3d' to eval
         
-    # object match
+    # matching
     iou_thresh = config['lid_cam_fusion']['iou_thresh']
     match, image, lidar, vehicles = get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
-    if params.print2screen_match:
+    # merging
+    updated_boxes3d, updated_corners3d, updated_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, pred_corners3d, pixel_poses, gt_boxes3d)
+
+    # generate fusion message and publish result
+    if not params.eval:
+        msglidcam = get_msgldcam(match, updated_boxes3d, image, lidar)
+        pub_lidcam.publish(msglidcam)
+        fps = get_fps(start_time)
+
+    # TODO: support multi evals
+    # eval
+    if params.eval:
+        eval.eval(odom, pred_boxes3d, updated_boxes3d)
+    
+    if params.disp:                                                                         # display 3d boxes to rviz
+        marker_array = display_rviz(pred_corners3d, vehicles, gt_corners3d)
+        pub_marker = rospy.Publisher('/display_rviz', MarkerArray, queue_size=1)
+        pub_marker.publish(marker_array)
+    if params.printl:                                                                       # print pred results to screen
+        print2screen_lidar(pred_boxes3d, pred_labels, pred_scores)
+    if params.printm:                                                                       # print match results to screen
         print2screen_match(match, image, lidar)
-    if params.save_match_result:
+    if params.savem:                                                                        # save match results
         output_dir = str(ROOT_DIR / config['output']['LidCamFusion_dir'])
         lidar_camera_match2visual(match, image, lidar, pred_boxes2d, pixel_poses, msgcamera, output_dir, gt_cameras, gt_pixel_poses)
 
-    # object fusion
-    # if odom is not None and len(pred_boxes3d) != 0:
-    #     diff_x_1 = gt_boxes3d[0][0] - pred_boxes3d[0][0]
-    #     diff_y_1 = gt_boxes3d[0][1] - pred_boxes3d[0][1]
-    #     diff_ry_1 = gt_boxes3d[0][6] - ((pred_boxes3d[0][6] - np.pi) if pred_boxes3d[0][6] >= 0 else (np.pi + pred_boxes3d[0][6]))
-    updated_boxes3d, updated_corners3d, updated_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, pred_corners3d, pixel_poses, gt_boxes3d)
-    # if odom is not None and len(pred_boxes3d) != 0:
-    #     diff_x_2 = gt_boxes3d[0][0] - updated_boxes3d[0][0]
-    #     diff_y_2 = gt_boxes3d[0][1] - updated_boxes3d[0][1]
-    #     diff_ry_2 = gt_boxes3d[0][6] - ((updated_boxes3d[0][6] - np.pi) if updated_boxes3d[0][6] >= 0 else (np.pi + updated_boxes3d[0][6]))
-    #     if diff_x_1 != diff_x_2:
-    #         print("x: ", diff_x_1-diff_x_2)
-    #     if diff_y_1 != diff_y_2:
-    #         print("y: ", diff_y_1-diff_y_2)
-    #     if diff_ry_1 != diff_ry_2:
-    #         print("ry: ", diff_ry_1-diff_ry_2, '\n')
 
-    # generate fusion message and publish result
-    msglidcam = get_msgldcam(match, updated_boxes3d, image, lidar)
-    pub_lidcam = rospy.Publisher("/lidar_camera_fused", MsgLidCam, queue_size=1)
-    pub_lidcam.publish(msglidcam)
-
-    # display 3d boxes to rviz
-    marker_array = display_rviz(pred_corners3d, vehicles, gt_corners3d)
-    pub_marker = rospy.Publisher('/display_rviz', MarkerArray, queue_size=1)
-    pub_marker.publish(marker_array)
-
-    # post_eval
-    if odom is not None and params.post_eval:
-        eval.eval(odom, updated_boxes3d)
-
+def get_fps():
     # fps evalution (without results evalution and visualization)
     cur_time = time.time()
     time_span = cur_time - start_time
     start_time = cur_time
     fps = 1 / time_span
-    # print('FPS: ', fps, 'cnt: ', counter)
-    
+    return fps
+
 
 def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
     """
@@ -213,7 +206,7 @@ def get_iou2d(boxa, boxesb, labels, iou_thresh):
     return np.array(iou2ds)
 
 
-def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses, gt_boxes3d):
+def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses, gt_boxes3d=None):
     """
         match: [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera)]
         box2d: [left, top, right, down]
@@ -232,8 +225,9 @@ def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses, gt_boxes3d):
 
         CAMERA = config['lid_cam_fusion']['camera_weight']
         LIDAR = config['lid_cam_fusion']['lidar_weight']
-        assert (CAMERA+LIDAR==1), 'The sum of weights should be 1.'
-        lidar_increment = np.array([0] * 7).astype(np.float64)                          # fix vector of lidar
+        assert (CAMERA+LIDAR==1), 'The sum of weights should equal to 1.'
+        # fix vector of lidar
+        lidar_increment = np.array([0] * 7).astype(np.float64)
 
         # horzontal fix
         lidar_center = np.array([np.mean([pixel_pose[0][0], pixel_pose[1][0], pixel_pose[2][0], pixel_pose[3][0]]),
@@ -336,20 +330,21 @@ def get_msgldcam(match, updated_boxes3d, image, lidar) -> MsgLidCam:
             msglidcam.num_circle += 1
     
     # add camera-based vehicles
-    for obj in image:
-        if len(obj) != 1 and not is_truncated(obj[1]):
-            box3d = get_boxes3d_from_boxes2d(calib, np.array(obj))
+    # TODO: measurement
+    # for obj in image:
+    #     if len(obj) != 1 and not is_truncated(obj[1]):
+    #         box3d = get_boxes3d_from_boxes2d(calib, np.array(obj))
             
-            msglidcamobject = MsgLidCamObject()
-            msglidcamobject.pos_x = box3d[0]
-            msglidcamobject.pos_y = box3d[1]
-            msglidcamobject.alpha = -1
-            if msglidcamobject.pos_y >= 0:
-                msglidcam.objects_intersection.append(msglidcamobject)
-                msglidcam.num_intersection += 1
-            else:
-                msglidcam.objects_circle.append(msglidcamobject)
-                msglidcam.num_circle += 1
+    #         msglidcamobject = MsgLidCamObject()
+    #         msglidcamobject.pos_x = box3d[0]
+    #         msglidcamobject.pos_y = box3d[1]
+    #         msglidcamobject.alpha = -1
+    #         if msglidcamobject.pos_y >= 0:
+    #             msglidcam.objects_intersection.append(msglidcamobject)
+    #             msglidcam.num_intersection += 1
+    #         else:
+    #             msglidcam.objects_circle.append(msglidcamobject)
+    #             msglidcam.num_circle += 1
     
     return msglidcam
 
@@ -422,12 +417,13 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/config.yaml'))
-    parser.add_argument("--save_match_result", help="wehter to save match result", action='store_true', required=False)
-    parser.add_argument("--print2screen_lidar", help="wehter to print to screen", action='store_true', required=False)
-    parser.add_argument("--print2screen_match", help="wehter to print to screen", action='store_true', required=False)
-    parser.add_argument("--pre_eval", help="wehter to eval", action='store_true', required=False)
-    parser.add_argument("--post_eval", help="wehter to eval", action='store_true', required=False)
-    parser.add_argument("--gt_boxes", help="wehter to caculate gt_goxes", action='store_true', required=False)
+    parser.add_argument("--eval", help="eval mode if specify", action='store_true', required=False)
+    parser.add_argument("--gt", help="wehter to caculate gt_goxes", action='store_true', required=False)
+    parser.add_argument("--re", help="run with eval online", action='store_true', required=False)
+    parser.add_argument("--disp", help="whether display to rviz", action='store_true', required=False)
+    parser.add_argument("--savem", help="wehter to save match result", action='store_true', required=False)
+    parser.add_argument("--printl", help="wehter to print lidar results to screen", action='store_true', required=False)
+    parser.add_argument("--printm", help="wehter to print match results to screen", action='store_true', required=False)
     params = parser.parse_args()
 
     with open(params.config, 'r') as f:
@@ -439,32 +435,29 @@ if __name__ == '__main__':
 
     rospy.init_node('lidar_camera_fusion', anonymous=True)
 
-    # fps evaluation
-    fps = 0
-    # get calaibration file
-    calib_dir = str(ROOT_DIR.joinpath(config['calib']['calib_dir']))
+    fps = 0                                                                     # fps evaluation
+    calib_dir = str(ROOT_DIR.joinpath(config['calib']['calib_dir']))            # get calaibration file
     calib = np.loadtxt(os.path.join(calib_dir, 'calib.txt'))
-    # Create an example of pointcloud detector
-    pointcloud_detector = RT_Pred(str(ROOT_DIR), config)
-    # Create YOLO detector
-    yolo = YOLO(ROOT_DIR)
+    pointcloud_detector = RT_Pred(ROOT_DIR, config)                             # Create pointcloud detector
+    yolo = YOLO(ROOT_DIR)                                                       # Create YOLO detector
 
     sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
     sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
 
-    if params.pre_eval or params.post_eval or params.gt_boxes:
-        if params.pre_eval or params.post_eval:
-            import os
-            import datetime
-            log_dir = str(ROOT_DIR)+'/src/LidCamFusion/eval/%s/' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
-            os.makedirs(log_dir, exist_ok=True)
-
-            eval = eval3d(log_dir)
+    if params.eval:
+        import os
+        import datetime
+        log_dir = str(ROOT_DIR)+'/src/LidCamFusion/eval/%s/' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        os.makedirs(log_dir, exist_ok=True)
+        eval = eval3d(log_dir)                                                  # Create evaluator
+        fusion()
         
-        sub_odom = message_filters.Subscriber('/deepracer2/base_pose_ground_truth', Odometry)
+    elif params.gt or params.re:
+        # TODO: define the number of vehicles
+        sub_odom = message_filters.Subscriber('/deepracer1/base_pose_ground_truth', Odometry)
         sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera, sub_odom], 1, 1) # syncronize time stamps
         sync.registerCallback(fusion)
-        print("Lidar Camera Fusion (with eval) Begin.")
+        print("Lidar Camera Fusion (with gt_boxes) Begin.")
         start_time = time.time()
         rospy.spin()
     else:
