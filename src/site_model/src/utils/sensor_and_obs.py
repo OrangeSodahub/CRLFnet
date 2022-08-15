@@ -130,7 +130,6 @@ class ImageSensor(Sensor):
         m0 = np.matmul(self.c2p, self.w2c)[0:2, 0:2]
         m1 = np.outer(uv[0:2], self.w2c[2, 0:2])
         Hi = (m0 - m1) / zc
-        Hi = np.concatenate((Hi, np.zeros((2, 2))), axis=1)
         return Hi
 
     def obs2world(self, zs: np.ndarray = None) -> np.ndarray:
