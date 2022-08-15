@@ -64,7 +64,7 @@ class Kalman:
             K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
 
             p = np.trace(S) / np.sum(np.square(z - sensor.world2obs(pred_xpt)))
-            if p < 1:
+            if p < 1e10:
                 print("\033[1;32mInnovation Inequality", p, "\033[0m")
             else:
                 print("\033[1;31mInnovation Inequality", p, "\033[0m")

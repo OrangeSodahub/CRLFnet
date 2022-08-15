@@ -66,7 +66,7 @@ class RadarSensor(Sensor):
         self.angle_offset = np.array(data['angle'])
 
     def update(self, data: np.ndarray) -> None:
-        self.zs = data[:, 0:self.obs_size]
+        self.zs = self.box2world(data)
         self.boxes = data[:, 0:self.box_size]
 
     def obs_filter(self, useless_indices: np.ndarray) -> None:
@@ -75,6 +75,9 @@ class RadarSensor(Sensor):
         self.boxes = self.boxes[idx]
 
     def H(self, pred_xpt: np.ndarray) -> np.ndarray:
+        return np.eye(2)
+
+    def old_H(self, pred_xpt: np.ndarray) -> np.ndarray:
         x, y = pred_xpt[0] - self.offset[0], pred_xpt[1] - self.offset[1]
         r = np.linalg.norm([x, y])
         c, s = x / r, y / r
@@ -84,6 +87,11 @@ class RadarSensor(Sensor):
     def obs2world(self, zs: np.ndarray = None) -> np.ndarray:
         if zs is None:
             zs = self.zs
+        return zs
+
+    def box2world(self, zs: np.ndarray = None) -> np.ndarray:
+        if zs is None:
+            zs = self.zs
         if len(zs) == 0:
             return np.empty((0, 2))
         else:
@@ -91,7 +99,7 @@ class RadarSensor(Sensor):
             y = self.offset[1] + zs[:, 0] * np.sin(np.deg2rad(zs[:, 1] + self.angle_offset))
             return np.array([x, y]).T
 
-    def world2obs(self, pos: np.ndarray) -> np.ndarray:
+    def world2box(self, pos: np.ndarray) -> np.ndarray:
         x, y = pos[0] - self.offset[0], pos[1] - self.offset[1]
         r = np.linalg.norm([x, y])
         co, so = np.cos(np.deg2rad(self.angle_offset)), np.sin(np.deg2rad(self.angle_offset))
@@ -99,6 +107,9 @@ class RadarSensor(Sensor):
         theta = np.rad2deg(np.arctan2(y1, x1))
         z = np.array([r, theta])
         return z
+
+    def world2obs(self, pos: np.ndarray) -> np.ndarray:
+        return pos
 
 
 class ImageSensor(Sensor):
