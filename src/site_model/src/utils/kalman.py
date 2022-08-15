@@ -91,7 +91,7 @@ class Kalman:
         new_objs = len(new_idx)
         new_xpts = np.concatenate([
             zs.projections[new_idx],
-            np.zeros((len(new_idx), 2 + 1)),
+            np.zeros((len(new_idx), 1)),
             np.expand_dims(np.arange(self.max_id, self.max_id + new_objs), axis=1)
         ],
                                   axis=1)
@@ -113,4 +113,7 @@ class Kalman:
         return self.xpts[:, 0:self.size]
 
     def __repr__(self) -> str:
-        return "Objects ({}):\n{}".format(self.total_objs, self.xpts)
+        if self.total_objs == 0:
+            return "Objects (0)"
+        else:
+            return "Objects ({}):\n{}".format(self.total_objs, self.xpts)

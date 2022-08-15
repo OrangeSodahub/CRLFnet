@@ -9,6 +9,7 @@ from scipy.linalg import block_diag
 from .transform import w2p, p2w
 from .poi_and_roi import radar_poi, expand_poi, optimize_iou
 
+# TODO: move to geometry.yaml
 SCENE_THRESHOLD = 0.5
 
 
@@ -65,8 +66,8 @@ class RadarSensor(Sensor):
         self.angle_offset = np.array(data['angle'])
 
     def update(self, data: np.ndarray) -> None:
-        self.zs = data[:, 0:2]
-        self.boxes = data[:, 0:3]
+        self.zs = data[:, 0:self.obs_size]
+        self.boxes = data[:, 0:self.box_size]
 
     def obs_filter(self, useless_indices: np.ndarray) -> None:
         idx = np.setdiff1d(np.arange(len(self.zs)), useless_indices)
@@ -74,10 +75,10 @@ class RadarSensor(Sensor):
         self.boxes = self.boxes[idx]
 
     def H(self, pred_xpt: np.ndarray) -> np.ndarray:
-        r = np.linalg.norm(pred_xpt[0:2] - self.offset[0:2])
-        s = (pred_xpt[0] - self.offset[0]) / r
-        c = (pred_xpt[1] - self.offset[1]) / r
-        Hr = np.array([[-s, c, 0, 0], [-c / r, -s / r, 0, 0]])
+        x, y = pred_xpt[0] - self.offset[0], pred_xpt[1] - self.offset[1]
+        r = np.linalg.norm([x, y])
+        c, s = x / r, y / r
+        Hr = np.array([[c, s], [-1 / (r * s), 1 / (r * c)]])
         return Hr
 
     def obs2world(self, zs: np.ndarray = None) -> np.ndarray:
@@ -86,14 +87,16 @@ class RadarSensor(Sensor):
         if len(zs) == 0:
             return np.empty((0, 2))
         else:
-            x = self.offset[0] - zs[:, 0] * np.sin(zs[:, 1] * np.pi / 180)
-            y = self.offset[1] + zs[:, 0] * np.cos(zs[:, 1] * np.pi / 180)
+            x = self.offset[0] + zs[:, 0] * np.cos(np.deg2rad(zs[:, 1] + self.angle_offset))
+            y = self.offset[1] + zs[:, 0] * np.sin(np.deg2rad(zs[:, 1] + self.angle_offset))
             return np.array([x, y]).T
 
     def world2obs(self, pos: np.ndarray) -> np.ndarray:
         x, y = pos[0] - self.offset[0], pos[1] - self.offset[1]
         r = np.linalg.norm([x, y])
-        theta = np.rad2deg(np.arctan2(-x, y))
+        co, so = np.cos(np.deg2rad(self.angle_offset)), np.sin(np.deg2rad(self.angle_offset))
+        x1, y1 = co * x + so * y, -so * x + co * y
+        theta = np.rad2deg(np.arctan2(y1, x1))
         z = np.array([r, theta])
         return z
 
@@ -200,8 +203,11 @@ class ObsBundle:
                 len(zs), len(projs), len(sensors)))
 
     def __repr__(self) -> str:
-        return "Observations ({}):\n{}\nProjections:\n{}\nFrom Sensors:\n{}"\
-            .format(self.total_objs, self.zs, self.projections, self.sensors)
+        if self.total_objs == 0:
+            return "Observations (0)"
+        else:
+            return "Observations ({}):\n{}\nProjections:\n{}\nFrom Sensors:\n{}".format(self.total_objs, self.zs,
+                                                                                        self.projections, self.sensors)
 
     def __add__(self, other):
         if self.total_objs == 0 or other.total_objs == 0:

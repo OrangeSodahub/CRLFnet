@@ -30,13 +30,16 @@ class VisualAssistant:
         self.output_path = output_path
         self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
 
+        self.kalman_color = 255 * 2
         self.pois = []
         self.rois = []
 
     def scene_output(self, frame: int, zs: ObsBundle, kf: Kalman):
         # Kalman Filter Data
         for x in kf.xpts:
-            my_color = (0, 0, 255)
+            my_color = (0, 0, self.kalman_color // 2)
+            if self.kalman_color > 1:
+                self.kalman_color -= 1
             c = np.matmul(self.w2s, [x[0], x[1], 1.]).astype(int)
             cv2.circle(self.base_image, c[0:2], 5, my_color, -1)
         # Sensor Data

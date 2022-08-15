@@ -42,12 +42,12 @@ SAVE_DIR = Path()
 LOAD_DIR = Path()
 BASE_IMAGE_FILE = Path()
 
-# TODO: find out the proper threshold
-IOU_THRESHOLD = 0.5
-SCENE_THRESHOLD = 1.0
-MAX_AGE = 3
-
-Q = np.eye(4) * 20.
+MODEL_SIZE = 0
+A = np.empty((0, 0))
+Q = np.empty((0, 0))
+MAX_AGE = 0
+THRES_IOU = 0
+THRES_SCENE = 0
 
 
 def my_timer() -> float:
@@ -62,14 +62,16 @@ def my_timer() -> float:
 
 
 def my_file_loader() -> None:
-    global YOLO_DIR, OUTPUT_DIR, BASE_IMAGE_FILE, SAVE_DIR, LOAD_DIR, CUDA
+    global YOLO_DIR, OUTPUT_DIR, BASE_IMAGE_FILE, SAVE_DIR, LOAD_DIR
+    global CUDA, A, Q, THRES_IOU, THRES_SCENE, MAX_AGE, MODEL_SIZE
     global geometry
 
     ROOT_DIR = Path(__file__).resolve().parents[2]
     YOLO_DIR = ROOT_DIR.joinpath("src/utils/yolo")
+
     # load config file
-    CONFIG_FILE = ROOT_DIR.joinpath("config/config.yaml")
-    with open(CONFIG_FILE, 'r') as f:
+    config_file = ROOT_DIR.joinpath("config/config.yaml")
+    with open(config_file, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     CUDA = config['use_cuda']
     OUTPUT_DIR = ROOT_DIR.joinpath(config['output']['RadCamFusion_dir'])
@@ -77,10 +79,17 @@ def my_file_loader() -> None:
     SAVE_DIR.mkdir(exist_ok=True)
     LOAD_DIR = OUTPUT_DIR.joinpath("load")
     BASE_IMAGE_FILE = ROOT_DIR.joinpath(config['visual_assistant']['base_image'])
+
     # load geometry file
-    GEOMETRY_FILE = ROOT_DIR.joinpath("config/geometry.yaml")
-    with open(GEOMETRY_FILE, 'r') as f:
+    geometry_file = ROOT_DIR.joinpath("config/geometry.yaml")
+    with open(geometry_file, 'r') as f:
         geometry = yaml.load(f, Loader=yaml.FullLoader)
+    MODEL_SIZE = geometry['scene']['kalman']['model_size']
+    A = np.array(geometry['scene']['kalman']['A']).reshape((MODEL_SIZE, MODEL_SIZE))
+    Q = np.array(geometry['scene']['kalman']['Q']).reshape((MODEL_SIZE, MODEL_SIZE))
+    MAX_AGE = geometry['scene']['kalman']['max_age']
+    THRES_IOU = geometry['scene']['kalman']['iou_thres']
+    THRES_SCENE = geometry['scene']['kalman']['scene_thres']
 
 
 def raw_radar_process(radar: List[MsgRadarObject]) -> np.ndarray:
@@ -158,12 +167,12 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image, image_5: Image, imag
 def fusion_core(radar_data: List[np.ndarray], image_data: List[np.ndarray], sensor_cluster: SensorCluster) -> ObsBundle:
     global frame_counter
     global kf, va, args
+    global A
     # Update sensor and acquire observation (including fusion)
     sensor_cluster.update(radar_data, image_data)
     zs = sensor_cluster.observe()
     print("\033[0;36mDetection\033[0m", zs, sep='\n')
     # Kalman Filter
-    A = np.array([[1, 0, 1, 0], [0, 1, 0, 1], [0, 0, 1, 0], [0, 0, 0, 1]])
     kf.flush(A, zs)
     print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
     return zs
@@ -209,19 +218,19 @@ if __name__ == '__main__':
     # Sensor Cluster
     sensor_cluster = SensorCluster([rad_2, rad_3], [cam_2, cam_3, cam_5, cam_6, cam_7])
     # Kalman Filter
-    kf = Kalman(4, Q, SCENE_THRESHOLD, MAX_AGE)
+    kf = Kalman(MODEL_SIZE, Q, THRES_SCENE, MAX_AGE)
     # Visual Assistant
     va = VisualAssistant(BASE_IMAGE_FILE, OUTPUT_DIR)
 
     # From-Save Mode
     if args.mode == 'from-save':
-        frame = 1
+        frame = 0
         while True:
             try:
-                radar_data, image_data = save2data(frame, LOAD_DIR, sensor_cluster)
                 frame += 1
+                radar_data, image_data = save2data(frame, LOAD_DIR, sensor_cluster)
             except FileNotFoundError:
-                print("\033[0;32mTraversed all {} frames.\033[0m".format(frame - 1))
+                print("\033[0;32mTraversed all {} frames.\033[0m".format(frame))
                 exit(0)
             finally:
                 zs = fusion_core(radar_data, image_data, sensor_cluster)
