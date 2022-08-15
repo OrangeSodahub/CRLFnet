@@ -44,6 +44,14 @@ class Sensor(ABC):
     def __repr__(self) -> str:
         return self.name
 
+    def observe(self):
+        zs, ss = [], []
+        for z in self.zs:
+            zs.append(z)
+            ss.append(self)
+        ps = self.obs2world()
+        return ObsBundle(zs, ps, ss)
+
 
 class RadarSensor(Sensor):
 
@@ -69,7 +77,7 @@ class RadarSensor(Sensor):
         r = np.linalg.norm(pred_xpt[0:2] - self.offset[0:2])
         s = (pred_xpt[0] - self.offset[0]) / r
         c = (pred_xpt[1] - self.offset[1]) / r
-        Hr = np.array([[-s, c], [-c / r, -s / r]])
+        Hr = np.array([[-s, c, 0, 0], [-c / r, -s / r, 0, 0]])
         return Hr
 
     def obs2world(self, zs: np.ndarray = None) -> np.ndarray:
@@ -119,6 +127,7 @@ class ImageSensor(Sensor):
         m0 = np.matmul(self.c2p, self.w2c)[0:2, 0:2]
         m1 = np.outer(uv[0:2], self.w2c[2, 0:2])
         Hi = (m0 - m1) / zc
+        Hi = np.concatenate((Hi, np.zeros((2, 2))), axis=1)
         return Hi
 
     def obs2world(self, zs: np.ndarray = None) -> np.ndarray:
@@ -247,8 +256,14 @@ class SensorCluster:
             s.update(d)
 
     def observe(self) -> ObsBundle:
+        '''
         zs_2 = self.pair_1.observe()
         zs_3 = self.pair_2.observe()
+        zs = zs_2 + zs_3
+        return zs
+        '''
+        zs_2 = self.radar_sensors[0].observe()
+        zs_3 = self.radar_sensors[1].observe()
         zs = zs_2 + zs_3
         return zs
 

@@ -47,7 +47,7 @@ IOU_THRESHOLD = 0.5
 SCENE_THRESHOLD = 1.0
 MAX_AGE = 3
 
-Q = np.eye(2) * 1.
+Q = np.eye(4) * 20.
 
 
 def my_timer() -> float:
@@ -127,7 +127,7 @@ def save2data(frame: int, load_path: Path, sensor_cluster: SensorCluster) -> Tup
         d = np.loadtxt(str(p.joinpath("{}.txt".format(s.name))), dtype=int)
         d = d.reshape((-1, s.box_size))
         image_data.append(d)
-    # print("\033[0;32mLoaded radar and image data of frame {} sucessfully.\033[0m".format(frame))
+    print("\033[0;32mLoaded radar and image data of frame {} sucessfully.\033[0m".format(frame))
     return radar_data, image_data
 
 
@@ -161,11 +161,11 @@ def fusion_core(radar_data: List[np.ndarray], image_data: List[np.ndarray], sens
     # Update sensor and acquire observation (including fusion)
     sensor_cluster.update(radar_data, image_data)
     zs = sensor_cluster.observe()
-    # print("\033[0;36mDetection\033[0m", zs, sep='\n')
+    print("\033[0;36mDetection\033[0m", zs, sep='\n')
     # Kalman Filter
-    A = np.eye(2)
+    A = np.array([[1, 0, 1, 0], [0, 1, 0, 1], [0, 0, 1, 0], [0, 0, 0, 1]])
     kf.flush(A, zs)
-    # print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
+    print("\033[0;36mKalman Filter\033[0m", kf, sep='\n')
     return zs
 
 
@@ -209,7 +209,7 @@ if __name__ == '__main__':
     # Sensor Cluster
     sensor_cluster = SensorCluster([rad_2, rad_3], [cam_2, cam_3, cam_5, cam_6, cam_7])
     # Kalman Filter
-    kf = Kalman(2, Q, SCENE_THRESHOLD, MAX_AGE)
+    kf = Kalman(4, Q, SCENE_THRESHOLD, MAX_AGE)
     # Visual Assistant
     va = VisualAssistant(BASE_IMAGE_FILE, OUTPUT_DIR)
 

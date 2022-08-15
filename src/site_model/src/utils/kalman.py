@@ -38,7 +38,7 @@ class Kalman:
 
     def compare(self, pred_xpts: np.ndarray, zs: ObsBundle) -> tuple:
         # generate comparison matrix
-        cmp = [np.linalg.norm(x - zx) for x in pred_xpts for zx in zs.projections]
+        cmp = [np.linalg.norm(x - zx) for x in pred_xpts[:, 0:2] for zx in zs.projections]
         cmp = np.array(cmp).reshape(self.total_objs, zs.total_objs)
         # GNN
         xpt_idx, obs_idx = linear_sum_assignment(cmp)
@@ -68,6 +68,9 @@ class Kalman:
                 print("\033[1;32mInnovation Inequality", p, "\033[0m")
             else:
                 print("\033[1;31mInnovation Inequality", p, "\033[0m")
+                pred_cov = (pred_cov - self.Q) / p + self.Q
+                S = np.matmul(H, np.matmul(pred_cov, H.T)) + R
+                K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
 
             xpt = pred_xpt + np.matmul(K, (z - pred_z))
             cov = pred_cov - np.matmul(np.matmul(K, H), pred_cov)
@@ -88,7 +91,7 @@ class Kalman:
         new_objs = len(new_idx)
         new_xpts = np.concatenate([
             zs.projections[new_idx],
-            np.zeros((len(new_idx), 1)),
+            np.zeros((len(new_idx), 2 + 1)),
             np.expand_dims(np.arange(self.max_id, self.max_id + new_objs), axis=1)
         ],
                                   axis=1)
