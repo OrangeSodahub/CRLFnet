@@ -19,14 +19,15 @@ def check_numpy_to_torch(x):
     return x, False
 
 
-def get_gt_boxes3d(odom: Odometry):
+def get_gt_boxes3d(odom):
     """
         output boxes3d according to odom meessage (just for one car temporarily)
     """
-    r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
-                                    odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
-    
-    gt_boxes3d = []
-    gt_box3d = np.array([odom.pose.pose.position.x, odom.pose.pose.position.y, 0.1120, 0.33, 0.22, 0.21, y])
-    gt_boxes3d.append(gt_box3d)
+    if isinstance(odom, Odometry):
+        r, p, y = euler_from_quaternion([odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
+                                        odom.pose.pose.orientation.z, odom.pose.pose.orientation.w])
+        gt_boxes3d = [np.array([odom.pose.pose.position.x, odom.pose.pose.position.y, 0.1120, 0.33, 0.22, 0.21, y])]
+    elif isinstance(odom, np.ndarray):
+        r, p, y = euler_from_quaternion([odom[3], odom[4], odom[5], odom[2]])
+        gt_boxes3d = [np.array([odom[0], odom[1], 0.1120, 0.33, 0.22, 0.21, y])]
     return np.array(gt_boxes3d)

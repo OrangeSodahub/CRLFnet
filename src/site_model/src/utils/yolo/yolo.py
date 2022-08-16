@@ -12,10 +12,10 @@ from .utils.utils_bbox import DecodeBox
 
 class YOLO(object):
     _defaults = {
-        "model_path"        : "model_data/yolo_weights.pth",        # 权值文件
-        "classes_path"      : "model_data/voc_classes.txt",         # 
+        "model_path"        : "src/utils/yolo/model_data/yolo_weights.pth",        # 权值文件
+        "classes_path"      : "src/utils/yolo/model_data/voc_classes.txt",         # 
 
-        "anchors_path"      : 'model_data/yolo_anchors.txt',        # 先验框对应的txt文件，一般不修改
+        "anchors_path"      : 'src/utils/yolo/model_data/yolo_anchors.txt',        # 先验框对应的txt文件，一般不修改
         "anchors_mask"      : [[6, 7, 8], [3, 4, 5], [0, 1, 2]],    # 帮助代码找到对应的先验框，一般不修改
 
         "input_shape"       : [416, 416],   # 输入图片的大小，必须为32的倍数

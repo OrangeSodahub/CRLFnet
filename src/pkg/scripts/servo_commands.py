@@ -40,7 +40,7 @@ def servo_commands():
     # rospy.Subscriber("/ackermann_cmd_mux/output", AckermannDriveStamped, set_throttle_steer)
 
     sub_key = message_filters.Subscriber('/ackermann_cmd_mux/output', AckermannDriveStamped)
-    sub_odom = message_filters.Subscriber('/deepracer2/base_pose_ground_truth', Odometry)
+    sub_odom = message_filters.Subscriber('/deepracer1/base_pose_ground_truth', Odometry)
     sync = message_filters.ApproximateTimeSynchronizer([sub_key, sub_odom], 1, 1)
     sync.registerCallback(set_throttle_steer)
     

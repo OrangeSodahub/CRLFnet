@@ -1,6 +1,5 @@
 import torch
 import numpy as np
-from tensorboard_logger import Logger
 from tensorboardX import SummaryWriter
 # odometry type
 from nav_msgs.msg import Odometry
@@ -11,10 +10,9 @@ from . import common_utils
 class eval3d():
     def __init__(self, log_dir: str):
         self.log_dir = log_dir
-        self.logger = Logger(logdir=log_dir, flush_secs=10)
         self.writter = SummaryWriter(log_dir=log_dir)
 
-        self.counter = 1
+        self.counter = 0
         self.alpha_diff = 0
         self.pose_diff = 0
         self.iou3d = 0
@@ -25,12 +23,13 @@ class eval3d():
         self.tp_fp_fn = np.array([np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS)])
     
 
-    def eval(self, odom: Odometry, preboxes3d: np.array, postboxes3d: np.array):
+    def eval(self, odom, preboxes3d: np.array, postboxes3d: np.array):
         if len(preboxes3d) != 0 and len(postboxes3d) != 0:
             self.counter += 1
-            print("{} done.".format(self.counter))
-            for prebox3d in preboxes3d:                                                                                         # boxes3d
+            print("{} done.".format(self.counter), end='\r')
+            for prebox3d, postbox3d in zip(preboxes3d, postboxes3d):                                                                 # boxes3d
                 prebox3d[6] = (prebox3d[6] - np.pi) if prebox3d[6] >=0 else (np.pi + prebox3d[6])
+                postbox3d[6] = (postbox3d[6] - np.pi) if postbox3d[6] >=0 else (np.pi + postbox3d[6])
             gt_boxes3d = common_utils.get_gt_boxes3d(odom)                                                                      # gt_boxes3d
             
             # rotation
@@ -41,7 +40,7 @@ class eval3d():
             self.writter.add_scalars('alpha_precision', {'post': alpha_precision}, self.counter)
             self.writter.add_scalars('alpha_cur_precision', {'post': alpha_cur_precision}, self.counter)
 
-            # post
+            # pose
             pose_mean_diff, pose_cur_diff = self.eval_pose(gt_boxes3d, preboxes3d)
             self.writter.add_scalars('pose_mean_diff', {'pre': pose_mean_diff}, self.counter)
             self.writter.add_scalars('pose_cur_diff', {'pre': pose_cur_diff}, self.counter)
@@ -66,10 +65,8 @@ class eval3d():
     def eval_rotation(self, gt_boxes3d, boxes3d):
         alpha_cur_diff = np.abs(((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6])) - gt_boxes3d[0][6]) # pred_boxes3d[0] -> for one car
         self.alpha_diff += alpha_cur_diff
-        alpha_cur_precision = 1 - (alpha_cur_diff / self.counter) / (2*np.pi)
+        alpha_cur_precision = 1 - (alpha_cur_diff) / (2*np.pi)
         alpha_precision = 1 - (self.alpha_diff / self.counter) / (2*np.pi)
-        self.logger.log_value('alpha_precision', alpha_precision, self.counter)
-        self.logger.log_value('alpha_cur_precision', alpha_cur_precision, self.counter)
         return alpha_precision, alpha_cur_precision
 
 
@@ -80,8 +77,6 @@ class eval3d():
         pose_cur_diff = np.sqrt(np.square(x_cur_diff)+np.square(y_cur_diff))
         self.pose_diff += pose_cur_diff
         pose_mean_diff = self.pose_diff / self.counter
-        self.logger.log_value('pose_diff', pose_mean_diff, self.counter)
-        self.logger.log_value('pose_cur_diff', pose_cur_diff, self.counter)
         return pose_mean_diff, pose_cur_diff
 
 
@@ -94,15 +89,15 @@ class eval3d():
         iou_bev_cur = boxes_iou_bev_gpu(boxes_a=gt_boxes3d_gpu, boxes_b=boxes3d_gpu)
         iou3d_cur_cpu = iou3d_cur.cpu().numpy()                                                         # convert tensor to numpy
         iou_bev_cur_cpu = iou_bev_cur.cpu().numpy()
-        self.logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], self.counter)                           # here [0][0] is for one car!!!
-        self.logger.log_value('iou_bev_cur', iou_bev_cur_cpu[0][0], self.counter)
+        # self.logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], self.counter)                           # here [0][0] is for one car!!!
+        # self.logger.log_value('iou_bev_cur', iou_bev_cur_cpu[0][0], self.counter)
 
         self.iou3d += iou3d_cur_cpu[0][0]
         self.iou_bev += iou_bev_cur_cpu[0][0]
         iou3d_mean = self.iou3d / self.counter
         iou_bev_mean = self.iou_bev / self.counter
-        self.logger.log_value('iou3d_mean', iou3d_mean, self.counter)
-        self.logger.log_value('iou_bev_mean', iou_bev_mean, self.counter)
+        # self.logger.log_value('iou3d_mean', iou3d_mean, self.counter)
+        # self.logger.log_value('iou_bev_mean', iou_bev_mean, self.counter)
 
         # caculate tp_fp_fn
         true_or_false = iou_bev_cur_cpu[0][0] > self.thresholds
