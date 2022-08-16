@@ -61,6 +61,7 @@ if __name__ == '__main__':
     sub_img = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
     sub_odom = message_filters.Subscriber('/deepracer1/base_pose_ground_truth', Odometry)
     sync = message_filters.ApproximateTimeSynchronizer([sub_pcd, sub_img, sub_odom], 1, 1) # syncronize time stamps
+    sync_exact = message_filters.TimeSynchronizer([sub_pcd, sub_img, sub_odom], 1, 1)
     sync.registerCallback(writter)
     print("Lidar Camera Record Begin.")
     rospy.spin()

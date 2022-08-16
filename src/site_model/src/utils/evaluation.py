@@ -27,10 +27,10 @@ class eval3d():
         if len(preboxes3d) != 0 and len(postboxes3d) != 0:
             self.counter += 1
             print("{} done.".format(self.counter), end='\r')
-            for prebox3d, postbox3d in zip(preboxes3d, postboxes3d):                                                                 # boxes3d
+            for prebox3d, postbox3d in zip(preboxes3d, postboxes3d):
                 prebox3d[6] = (prebox3d[6] - np.pi) if prebox3d[6] >=0 else (np.pi + prebox3d[6])
                 postbox3d[6] = (postbox3d[6] - np.pi) if postbox3d[6] >=0 else (np.pi + postbox3d[6])
-            gt_boxes3d = common_utils.get_gt_boxes3d(odom)                                                                      # gt_boxes3d
+            gt_boxes3d = common_utils.get_gt_boxes3d(odom)
             
             # rotation
             alpha_precision, alpha_cur_precision = self.eval_rotation(gt_boxes3d, preboxes3d)

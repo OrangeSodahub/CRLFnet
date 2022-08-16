@@ -37,7 +37,7 @@
 	            joint_state_controller"/>
 	</group>
 
-	<group ns="deepracer2">
+	<!-- <group ns="deepracer2">
 	<param name="robot_description" textfile="$(find pkg)/urdf/deepracer2.urdf"/>
 	<node name= "robot_state_publisher" pkg= "robot_state_publisher" type= "robot_state_publisher">
 		<param name="publish_frequency" type="double" value="20.0" />
@@ -80,7 +80,7 @@
 	            left_front_wheel_velocity_controller      right_front_wheel_velocity_controller
 	            left_steering_hinge_position_controller   right_steering_hinge_position_controller
 	            joint_state_controller"/>
-	</group>
+	</group> -->
 
 <!-- <node pkg="pkg" type="servo_commands.py" name="servo_commands" output="screen">
 </node> -->
