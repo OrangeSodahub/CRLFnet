@@ -40,7 +40,7 @@ docker pull gzzyyxy/crlfnet:yxy
 ## Rad-Cam Fusion
 ### Necessary Configurations on GPU and model data
 
-- If GPU and cuda is available on your device, you can set the parameter `CUDA` to `True` in `src/site_model/src/RadCamFusion/fusion.py`.
+- If GPU and cuda is available on your device, you can set the parameter `use_cuda` to `True` in `src/site_model/config/config.yaml`.
 
 - Please download `yolo_weights.pth` from jbox, and move it to `src/site_model/src/utils/yolo/model_data`.
 
@@ -48,7 +48,7 @@ docker pull gzzyyxy/crlfnet:yxy
 
 The steps to run the radar-camera fusion is listed as follows.
 
-For the last command, an optional parameter `--save` or `-s` is available if you need to save the POIs and ROIs as images. The `--mode` or `-m` parameter has three options, which are `normal`, `off-yolo` and `from-save`. The `off-yolo` and `from-save` modes enable the user to run YOLO seprately to simulate a higher FPS.
+For the last command, an optional parameter `--save` or `-s` is available if you need to save the track of vehicles as images. The `--mode` or `-m` parameter has three options, which are `normal`, `off-yolo` and `from-save`. The `off-yolo` and `from-save` modes enable the user to run YOLO seprately to simulate a higher FPS.
 
 ```bash
     cd /ROOT_DIR/
@@ -56,6 +56,7 @@ For the last command, an optional parameter `--save` or `-s` is available if you
     # load the simulation scene
     roslaunch site_model spawn.launch   # load the site
     roslaunch pkg racecar.launch        # load the vehicle
+    rosrun pkg servo_commands.py        # control the vehicles manually
     rosrun pkg keyboard_teleop.py       # use WASD to control the vehicle
 
     # run the radar message filter
