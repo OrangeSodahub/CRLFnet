@@ -55,11 +55,12 @@ def fusion(pointcloud=None, msgcamera=None, odom=None, counter=None):
         
     # pointcloud roi
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
+    print(pred_scores, '\n')
     cameras, pred_corners3d, pixel_poses = pointcloud_roi(calib, pred_boxes3d)
     # image roi
     pred_boxes2d = [image_roi(img, yolo) for img in images]
     gt_boxes3d = gt_cameras = gt_corners3d = gt_pixel_poses = None
-    if params.disp or params.savem:
+    if params.savem or params.re:
         assert isinstance(odom, Odometry) , f'odom message should be {Odometry} but got {type(odom)}'
         gt_boxes3d = get_gt_boxes3d(odom)
         gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(calib, gt_boxes3d)
@@ -413,7 +414,7 @@ def print2screen_match(match, image, lidar):
 
 
 def eval_fusion():
-    limit = 2000
+    limit = 501
     counter = 0
     while(counter != limit):
         fusion(counter=counter)
@@ -456,7 +457,7 @@ if __name__ == '__main__':
         eval = eval3d(log_dir)                                                  # Create evaluator
 
     if params.eval:
-        odoms = np.loadtxt(os.path.join(str(ROOT_DIR / 'dataset' / 'test_dataset' / 'odom'), '2000.txt'))
+        odoms = np.loadtxt(os.path.join(str(ROOT_DIR / 'dataset' / 'test_dataset' / 'odom'), '500.txt'))
         eval_fusion()
     else:
         rospy.init_node('lidar_camera_fusion', anonymous=True)
@@ -465,7 +466,7 @@ if __name__ == '__main__':
         sub_pointcloud = message_filters.Subscriber('/point_cloud_combined', PointCloud2)
         sub_camera = message_filters.Subscriber('/camera_msgs_combined', MsgCamera)
         
-        if params.disp or params.savem or params.re:
+        if params.savem or params.re:
             # TODO: define the number of vehicles
             sub_odom = message_filters.Subscriber('/deepracer1/base_pose_ground_truth', Odometry)
             sync = message_filters.ApproximateTimeSynchronizer([sub_pointcloud, sub_camera, sub_odom], 1, 1) # syncronize time stamps
