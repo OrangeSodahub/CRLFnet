@@ -7,7 +7,6 @@ import message_filters
 import ros_numpy
 import numpy as np
 from PIL import Image
-import sys, select, termios, tty
 
 from sensor_msgs.msg import PointCloud2                 # pointcloud type
 from nav_msgs.msg import Odometry                       # odometry type
@@ -18,35 +17,25 @@ odoms = []
 counter = 0
 def writter(pcd: PointCloud2, img: MsgCamera, odom: Odometry):
     global odoms, counter
-    key = getKey()
-    if key == ' ':
-        points = convert_ros_pointcloud_to_numpy(pcd)
-        odoms.append([odom.pose.pose.position.x, odom.pose.pose.position.y,
-                    odom.pose.pose.orientation.w, odom.pose.pose.orientation.x,
-                    odom.pose.pose.orientation.y, odom.pose.pose.orientation.z])
-        # imgs = np.array([np.reshape(ros_numpy.numpify(image), (1, 640, -1))[0] for image in img.camera])
-        # imgs = np.reshape(imgs, (1, -1, imgs.shape[2]))[0]
-        imgs = [ros_numpy.numpify(image) for image in img.camera]
-        for i, image in enumerate(imgs):
-            image = Image.fromarray(image)
-            os.makedirs(os.path.join(params.dir, 'img/{}'.format(counter)), exist_ok=True)
-            image.save(os.path.join(params.dir, 'img/{}/{}.jpg'.format(counter, i)))
-        
-        np.savetxt(os.path.join(params.dir, 'pcd/{}.txt'.format(counter)), points)
-        if counter == 500:
-            odoms = np.array(odoms)
-            np.savetxt(os.path.join(params.dir, 'odom/{}.txt'.format(counter)), odoms)
-            print("\033[0;32mdodoms #{} done.\033[0m".format(counter))
-        print("{} done.".format(counter), end='\r')
-        counter += 1
-
-
-def getKey():
-    tty.setraw(sys.stdin.fileno())
-    select.select([sys.stdin], [], [], 0)
-    key = sys.stdin.read(1)
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
+    points = convert_ros_pointcloud_to_numpy(pcd)
+    odoms.append([odom.pose.pose.position.x, odom.pose.pose.position.y,
+                odom.pose.pose.orientation.w, odom.pose.pose.orientation.x,
+                odom.pose.pose.orientation.y, odom.pose.pose.orientation.z])
+    # imgs = np.array([np.reshape(ros_numpy.numpify(image), (1, 640, -1))[0] for image in img.camera])
+    # imgs = np.reshape(imgs, (1, -1, imgs.shape[2]))[0]
+    imgs = [ros_numpy.numpify(image) for image in img.camera]
+    for i, image in enumerate(imgs):
+        image = Image.fromarray(image)
+        os.makedirs(os.path.join(params.dir, 'img/{}'.format(counter)), exist_ok=True)
+        image.save(os.path.join(params.dir, 'img/{}/{}.jpg'.format(counter, i)))
+    
+    np.savetxt(os.path.join(params.dir, 'pcd/{}.txt'.format(counter)), points)
+    if counter == 2000:
+        odoms = np.array(odoms)
+        np.savetxt(os.path.join(params.dir, 'odom/{}.txt'.format(counter)), odoms)
+        print("\033[0;32mdodoms #{} done.\033[0m".format(counter))
+    print("{} done.".format(counter), end='\r')
+    counter += 1
 
 
 def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):
@@ -59,7 +48,6 @@ def convert_ros_pointcloud_to_numpy(pointcloud: PointCloud2):
 
 
 if __name__ == '__main__':
-    settings = termios.tcgetattr(sys.stdin)
     # get ROOT DIR
     ROOT_DIR = Path(__file__).resolve().parents[2]
     

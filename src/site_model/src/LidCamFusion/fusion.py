@@ -55,7 +55,6 @@ def fusion(pointcloud=None, msgcamera=None, odom=None, counter=None):
         
     # pointcloud roi
     pred_boxes3d, pred_labels, pred_scores = pointcloud_detector.get_pred_dicts(points, False)
-    print(pred_scores, '\n')
     cameras, pred_corners3d, pixel_poses = pointcloud_roi(calib, pred_boxes3d)
     # image roi
     pred_boxes2d = [image_roi(img, yolo) for img in images]
@@ -414,7 +413,7 @@ def print2screen_match(match, image, lidar):
 
 
 def eval_fusion():
-    limit = 501
+    limit = 2000
     counter = 0
     while(counter != limit):
         fusion(counter=counter)
@@ -457,7 +456,7 @@ if __name__ == '__main__':
         eval = eval3d(log_dir)                                                  # Create evaluator
 
     if params.eval:
-        odoms = np.loadtxt(os.path.join(str(ROOT_DIR / 'dataset' / 'test_dataset' / 'odom'), '500.txt'))
+        odoms = np.loadtxt(os.path.join(str(ROOT_DIR / 'dataset' / 'test_dataset' / 'odom'), '2000.txt'))
         eval_fusion()
     else:
         rospy.init_node('lidar_camera_fusion', anonymous=True)
