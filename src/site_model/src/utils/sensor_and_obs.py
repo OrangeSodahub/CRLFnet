@@ -66,7 +66,8 @@ class RadarSensor(Sensor):
         self.angle_offset = np.array(data['angle'])
 
     def update(self, data: np.ndarray) -> None:
-        self.zs = self.box2world(data)
+        self.zs = self.__box2world(data)
+        self.zs = self.zs + np.random.normal(0.0, 0.05, size=(len(self.zs), 2))  # add noise
         self.boxes = data[:, 0:self.box_size]
 
     def obs_filter(self, useless_indices: np.ndarray) -> None:
