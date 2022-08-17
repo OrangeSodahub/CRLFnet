@@ -20,7 +20,7 @@ from .sensor_and_obs import ObsBundle
 
 class Kalman:
 
-    def __init__(self, size: int, Q: np.ndarray, threshold: float, max_age: int) -> None:
+    def __init__(self, size: int, Q: np.ndarray, threshold: float, max_age: int, freeze: bool = False) -> None:
         self.xpts = np.empty((0, size + 2))
         self.covs = np.empty((0, size, size))
         self.total_objs = 0
@@ -30,6 +30,7 @@ class Kalman:
         self.Q = Q
         self.THRESHOLD = threshold
         self.MAX_AGE = max_age
+        self.freeze = freeze
 
     def predict(self, A: np.ndarray) -> tuple:
         pred_xpts = np.matmul(self.xpts[:, 0:self.size], A.T)
@@ -62,16 +63,15 @@ class Kalman:
             R = sensor.R
             S = np.matmul(H, np.matmul(pred_cov, H.T)) + R
             K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
-
-            p = np.trace(S) / np.sum(np.square(z - sensor.world2obs(pred_xpt)))
-            if p < 1e10:
-                print("\033[1;32mInnovation Inequality", p, "\033[0m")
-            else:
-                print("\033[1;31mInnovation Inequality", p, "\033[0m")
-                pred_cov = (pred_cov - self.Q) / p + self.Q
-                S = np.matmul(H, np.matmul(pred_cov, H.T)) + R
-                K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
-
+            if self.freeze:
+                p = np.trace(S) / np.sum(np.square(z - sensor.world2obs(pred_xpt)))
+                if p < 1:
+                    print("\033[1;32mInnovation Inequality", p, "\033[0m")
+                else:
+                    print("\033[1;31mInnovation Inequality", p, "\033[0m")
+                    pred_cov = (pred_cov - self.Q) / p + self.Q
+                    S = np.matmul(H, np.matmul(pred_cov, H.T)) + R
+                    K = np.matmul(pred_cov, np.matmul(H.T, np.linalg.inv(S)))
             xpt = pred_xpt + np.matmul(K, (z - pred_z))
             cov = pred_cov - np.matmul(np.matmul(K, H), pred_cov)
             self.xpts[xi, 0:self.size] = xpt
