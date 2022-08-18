@@ -19,6 +19,8 @@ from sensor_msgs.msg import Image  # Camera message
 from msgs.msg._MsgRadarObject import MsgRadarObject
 from msgs.msg._MsgRadar import MsgRadar  # Radar message
 from msgs.msg._MsgRadCam import MsgRadCam  # fusion message
+from nav_msgs.msg import Odometry
+from tf.transformations import euler_from_quaternion
 
 from ..utils.yolo.yolo import YOLO
 from ..utils.kalman import Kalman
@@ -111,7 +113,7 @@ def msg2data(raw_radar_data: List[List[MsgRadarObject]], images: List[Image]) ->
 
 
 def msg2save(frame: int, save_path: Path, raw_radar_data: List[List[MsgRadarObject]], images: List[Image],
-             sensor_cluster: SensorCluster) -> None:
+             odoms: List[Odometry], sensor_cluster: SensorCluster) -> None:
     radar_data = list(map(raw_radar_process, raw_radar_data))
     p = save_path.joinpath(str(frame))
     p.mkdir(exist_ok=True)
@@ -120,6 +122,13 @@ def msg2save(frame: int, save_path: Path, raw_radar_data: List[List[MsgRadarObje
     for i, s in zip(images, sensor_cluster.image_sensors):
         i = CvBridge().imgmsg_to_cv2(i, 'bgr8')
         cv2.imwrite(str(p.joinpath("{}.png".format(s.name))), i)
+    for i, o in enumerate(odoms):
+        pos = o.pose.pose.position
+        ori = o.pose.pose.orientation
+        ar, ap, ay = euler_from_quaternion([ori.x, ori.y, ori.z, ori.w])
+        data = np.array([pos.x, pos.y, pos.z, ar, ap, ay])
+        np.savetxt(str(p.joinpath("odom_{}.txt".format(i))), data)
+
     print("\033[0;32mSaved radar and image data of frame {} sucessfully.\033[0m".format(frame))
 
 
@@ -140,7 +149,8 @@ def save2data(frame: int, load_path: Path, sensor_cluster: SensorCluster) -> Tup
     return radar_data, image_data
 
 
-def fusion(radar: MsgRadar, image_2: Image, image_3: Image, image_5: Image, image_6: Image, image_7: Image) -> None:
+def fusion(radar: MsgRadar, image_2: Image, image_3: Image, image_5: Image, image_6: Image, image_7: Image, odom_1: Odometry,
+           odom_2: Odometry) -> None:
     global frame_counter
     global sensor_cluster, kf, va, args
     # Output FPS and frame info
@@ -148,7 +158,7 @@ def fusion(radar: MsgRadar, image_2: Image, image_3: Image, image_5: Image, imag
     # Off-YOLO mode (only save radar and raw image data)
     if args.mode == 'off-yolo':
         msg2save(frame_counter, SAVE_DIR, [radar.objects_left, radar.objects_right],
-                 [image_2, image_3, image_5, image_6, image_7], sensor_cluster)
+                 [image_2, image_3, image_5, image_6, image_7], [odom_1, odom_2], sensor_cluster)
         sleep(0.05)  # fps ~ 20
         return
     # Acquire radar and image data
@@ -249,9 +259,12 @@ if __name__ == '__main__':
     msg_image_5 = message_filters.Subscriber('/image_raw_5', Image)
     msg_image_6 = message_filters.Subscriber('/image_raw_6', Image)
     msg_image_7 = message_filters.Subscriber('/image_raw_7', Image)
+
+    msg_odom_1 = message_filters.Subscriber('/deepracer1/base_pose_ground_truth', Odometry)
+    msg_odom_2 = message_filters.Subscriber('/deepracer2/base_pose_ground_truth', Odometry)
     # Syncronize Time Stamps
     sync = message_filters.ApproximateTimeSynchronizer(
-        [msg_radar, msg_image_2, msg_image_3, msg_image_5, msg_image_6, msg_image_7], 1, 1)
+        [msg_radar, msg_image_2, msg_image_3, msg_image_5, msg_image_6, msg_image_7, msg_odom_1, msg_odom_2], 1, 1)
     sync.registerCallback(fusion)
     print("\033[0;32mRadar-camera Fusion Initialized Sucessfully.\033[0m")
     rospy.spin()
