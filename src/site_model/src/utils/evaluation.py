@@ -1,3 +1,4 @@
+import os
 import torch
 import numpy as np
 from tensorboardX import SummaryWriter
@@ -11,6 +12,8 @@ class eval3d():
     def __init__(self, log_dir: str):
         self.log_dir = log_dir
         self.writter = SummaryWriter(log_dir=log_dir)
+        self.heat_map = np.zeros((32, 64))
+        self.heat_map_count = np.zeros((32, 64))
 
         self.counter = 0
         self.alpha_diff = 0
@@ -23,7 +26,7 @@ class eval3d():
         self.tp_fp_fn = np.array([np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS)])
     
 
-    def eval(self, odom, preboxes3d: np.array, postboxes3d: np.array):
+    def eval(self, odom, preboxes3d: np.array, postboxes3d: np.array, scores3d: np.array):
         if len(preboxes3d) != 0 and len(postboxes3d) != 0:
             self.counter += 1
             print("{} done.".format(self.counter), end='\r')
@@ -55,11 +58,28 @@ class eval3d():
             iou_bev_mean, iou_bev_cur = self.eval_iou(gt_boxes3d, postboxes3d)
             self.writter.add_scalars('iou_bev_mean', {'post': iou_bev_mean}, self.counter)
             self.writter.add_scalars('iou_bev_cur', {'post': iou_bev_cur}, self.counter)
+
+            # score
+            self.writter.add_scalars('alpha_cur_precision', {'score': scores3d[0]}, self.counter)
+            self.writter.add_scalars('pose_cur_diff', {'score': 1-scores3d[0]}, self.counter)
+            self.writter.add_scalars('iou_bev_cur', {'score': scores3d[0]}, self.counter)
+
+            # heat map
+            if isinstance(odom, np.ndarray):
+                i = int((odom[0] + 2) // 0.125)
+                j = int((odom[1] + 5) // 0.125)
+                print(i, j)
+                self.heat_map[i][j] += pose_cur_diff
+                self.heat_map_count[i][j] += 1
         else:
             self.tp_fp_fn[2] += 1
 
-        if self.counter % 1000 == 0:
-            np.savetxt(self.log_dir + 'tp_fp_fn.txt', self.tp_fp_fn)
+        if self.counter % 1900 == 0:
+            np.savetxt(os.path.join(self.log_dir, 'tp_fp_fn.txt'), self.tp_fp_fn)
+            for i in range(len(self.heat_map)):
+                for j in range(len(self.heat_map[i])):
+                    self.heat_map[i][j] /= self.heat_map_count[i][j] if self.heat_map[i][j] != 0 else 0
+            np.savetxt(os.path.join(self.log_dir, 'heat_map.txt'), self.heat_map)
             
 
     def eval_rotation(self, gt_boxes3d, boxes3d):

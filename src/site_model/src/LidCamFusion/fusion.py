@@ -28,8 +28,8 @@ from ..utils.yolo.yolo import YOLO                      # vision detection
 from ..utils.poi_and_roi import pointcloud_roi          # pointcloud detection
 from ..utils.poi_and_roi import image_roi               # image detection
 from ..utils.visualization import lidar_camera_match2visual, display_rviz
-from ..utils.evaluation import eval3d
-from ..utils.common_utils import get_gt_boxes3d, label2camera, transform
+from ..utils.evaluation import eval3d                   # evaluation wizard
+from ..utils.common_utils import get_gt_boxes3d, label2camera, label2camera_
 from ..utils.transform import lidar2pixel, box_to_corner_3d, get_dpm, p2w, world2pixel
 
 
@@ -60,7 +60,7 @@ def fusion(pointcloud=None, msgcamera=None, odom=None, counter=None):
     pred_boxes2d = [image_roi(img, yolo) for img in images]
     gt_boxes3d = gt_cameras = gt_corners3d = gt_pixel_poses = None
     if params.savem or params.re:
-        assert isinstance(odom, Odometry) , f'odom message should be {Odometry} but got {type(odom)}'
+        assert isinstance(odom, (Odometry, np.ndarray)) , f'odom message should be {Odometry} or {np.ndarray} but got {type(odom)}'
         gt_boxes3d = get_gt_boxes3d(odom)
         gt_cameras, gt_corners3d, gt_pixel_poses = pointcloud_roi(calib, gt_boxes3d)
         
@@ -68,7 +68,7 @@ def fusion(pointcloud=None, msgcamera=None, odom=None, counter=None):
     iou_thresh = config['lid_cam_fusion']['iou_thresh']
     match, image, lidar, vehicles = get_match(cameras, pixel_poses, pred_boxes2d, iou_thresh)
     # merging
-    updated_boxes3d, updated_corners3d, updated_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, pred_corners3d, pixel_poses, gt_boxes3d)
+    updated_boxes3d, updated_corners3d, updated_pixel_poses = get_fusion(match, pred_boxes2d, pred_boxes3d, pred_corners3d, pred_scores, pixel_poses)
 
     # generate fusion message and publish result
     if not params.eval:
@@ -79,7 +79,7 @@ def fusion(pointcloud=None, msgcamera=None, odom=None, counter=None):
     # TODO: support multi evals
     # eval
     if params.eval or params.re:
-        eval.eval(odom, pred_boxes3d, updated_boxes3d)
+        eval.eval(odom, pred_boxes3d, updated_boxes3d, pred_scores)
     
     if params.disp:                                                                         # display 3d boxes to rviz
         marker_array = display_rviz(pred_corners3d, vehicles, gt_corners3d)
@@ -138,13 +138,13 @@ def get_match(cameras, pixel_poses, boxes2d, iou_thresh):
             labels = labels_set[camera-1]
             bbox = get_bbox_from_box3d(pixel_pose[i])           
             if len(box2d) != 0:
-                iou2ds = get_iou2d(bbox, box2d, labels, iou_thresh)     # ious of 1-lidar detected and N-camera detected
-                if len(np.where(iou2ds != -1)[0]) != 0:                 # matched box exist
-                    idx = np.where(iou2ds==np.max(iou2ds))              # idx: index of maximum iou2d: 2-d
-                    labels_set[camera-1][idx[0][0]] = 1                 # label matched box2d and remove box2d if this vehicle already matched
-                    if vehicle not in vehicles:                         # current vehicle not matched
-                        vehicles.append(vehicle)                        # label matched vehicle
-                        cur_match = [camera, vehicle, i, idx[0][0]]     # [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera)]
+                iou2ds = get_iou2d(bbox, box2d, labels, iou_thresh)                             # ious of 1-lidar detected and N-camera detected
+                if len(np.where(iou2ds != -1)[0]) != 0:                                         # matched box exist
+                    idx = np.where(iou2ds==np.max(iou2ds))                                      # idx: index of maximum iou2d: 2-d
+                    labels_set[camera-1][idx[0][0]] = 1                                         # label matched box2d and remove box2d if this vehicle already matched
+                    if vehicle not in vehicles:                                                 # current vehicle not matched
+                        vehicles.append(vehicle)                                                # label matched vehicle
+                        cur_match = [camera, vehicle, i, idx[0][0], box2d[idx[0][0]][4]]        # [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera), score(image)]
                         match.append(cur_match)
     
     # image only: add remaining detecteion results (midmatched) to the list according to labels_set
@@ -207,18 +207,24 @@ def get_iou2d(boxa, boxesb, labels, iou_thresh):
     return np.array(iou2ds)
 
 
-def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses, gt_boxes3d=None):
+def get_fusion(match, boxes2d, boxes3d_origin, corners3d_origin, scores3d, pixels_poses_origin):
     """
-        match: [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera)]
+        match: [camera num, vehcile num(lidar), camera num(vehicle), box2d num(camera), socre(image)]
         box2d: [left, top, right, down]
+        update boxes3d, corners3d, pixels_poses
     """
+    import copy
+    boxes3d = copy.deepcopy(boxes3d_origin)
+    corners3d = copy.deepcopy(corners3d_origin)
+    pixels_poses = copy.deepcopy(pixels_poses_origin)
+    
     xcameras = np.array([-2, 4, 6, -8])
     ycameras = np.array([1, -3, -5, 7])
     
     for obj in match:
-        camera_num, vehicle_num, camera_num_vehicle, box2d_num = obj[0], obj[1], obj[2], obj[3]
+        camera_num, vehicle_num, camera_num_vehicle, box2d_num, score2d = obj
         box2d = boxes2d[camera_num-1][box2d_num]
-        box3d, corner3d, pixel_pose = boxes3d[vehicle_num], corners3d[vehicle_num], pixels_poses[vehicle_num][camera_num_vehicle]
+        box3d, corner3d, score3d, pixel_pose = boxes3d[vehicle_num], corners3d[vehicle_num], scores3d[vehicle_num], pixels_poses[vehicle_num][camera_num_vehicle]
 
         # truncated detect
         if is_truncated(box2d, pixel_pose):
@@ -234,13 +240,7 @@ def get_fusion(match, boxes2d, boxes3d, corners3d, pixels_poses, gt_boxes3d=None
         lidar_center = np.array([np.mean([pixel_pose[0][0], pixel_pose[1][0], pixel_pose[2][0], pixel_pose[3][0]]),
                                  np.mean([pixel_pose[0][1], pixel_pose[3][1], pixel_pose[4][1], pixel_pose[7][1]])])
         camera_center = np.array([np.mean([box2d[0], box2d[2]]), np.mean([box2d[1], box2d[3]])])
-        if gt_boxes3d is not None:
-            camera_name = label2camera[camera_num]
-            world_pose = np.append(gt_boxes3d[0][0:3], 1)
-            gt_center = world2pixel(calib, camera_name, world_pose)
-            print("lidar_center: ", lidar_center)
-            print("camer_center: ", camera_center)
-            print("gt_center: ", gt_center, '\n')
+
         horizontal_diff = (lidar_center[0] - camera_center[0]) * CAMERA
         if camera_num in abs(xcameras):
             dpm = get_dpm(calib, camera_num, box3d[0:2], 0)
@@ -350,15 +350,14 @@ def get_msgldcam(match, updated_boxes3d, image, lidar) -> MsgLidCam:
     return msglidcam
 
 
-def get_boxes3d_from_boxes2d(calib, obj):               # obj: [camera_num, box2d]
-    MEASUREMENT_DIR = ROOT_DIR.joinpath(config['measurement']['measurement_dir'], 'measurement.txt')
-    measurement = np.loadtxt(MEASUREMENT_DIR)
-    w2c = measurement[transform[label2camera[obj[0]]]][0:16].reshape(4,4)
-    c2p = measurement[transform[label2camera[obj[0]]]][16:28].reshape(3,4)
-
-    box2d = obj[1][0:4]
-    pos_pxl = np.array([np.mean([box2d[0], box2d[2]]), np.mean([box2d[1], box2d[3]]), 1])
-    pos_wld, zc = p2w(pos_pxl, 0.1, w2c, c2p)
+def get_boxes3d_from_boxes2d(center, camera_num):
+    """
+        Using p2w function
+        Get 3d coordiantes according to center of box2d genertated by camera detection
+    """
+    w2c = np.array(geometry['cameras'][label2camera_[camera_num]]['w2c']).reshape(4,4)
+    c2p = np.array(geometry['cameras'][label2camera_[camera_num]]['c2p']).reshape(3,4)
+    pos_wld, _ = p2w(center, 0.1, w2c, c2p)
 
     return pos_wld
     
@@ -428,6 +427,7 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/config.yaml'))
+    parser.add_argument("--geometry", help="path to geometry file", metavar="FILE", required=False, default= str(ROOT_DIR / 'config/geometry.yaml'))
     parser.add_argument("--eval", help="eval mode if specify", action='store_true', required=False)
     parser.add_argument("--gt", help="wehter to caculate gt_goxes", action='store_true', required=False)
     parser.add_argument("--re", help="run with eval online", action='store_true', required=False)
@@ -441,6 +441,12 @@ if __name__ == '__main__':
             config = yaml.load(f, Loader=yaml.FullLoader)
         except:
             print(colored('Config file could not be read.','red'))
+            exit(1)
+    with open(params.geometry, 'r') as z:
+        try:
+            geometry = yaml.load(z, Loader=yaml.FullLoader)
+        except:
+            print(colored('Geometry file could not be read.','red'))
             exit(1)
 
     pointcloud_detector = RT_Pred(ROOT_DIR, config)                             # Create pointcloud detector

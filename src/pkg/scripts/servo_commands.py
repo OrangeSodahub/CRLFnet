@@ -25,6 +25,13 @@ def set_throttle_steer(key: AckermannDriveStamped, odom: Odometry):
     pub_pos_left_steering_hinge_1 = rospy.Publisher('/deepracer1/left_steering_hinge_position_controller/command', Float64, queue_size=1)
     pub_pos_right_steering_hinge_1 = rospy.Publisher('/deepracer1/right_steering_hinge_position_controller/command', Float64, queue_size=1)
 
+    pub_vel_left_rear_wheel_2 = rospy.Publisher('/deepracer2/left_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_right_rear_wheel_2 = rospy.Publisher('/deepracer2/right_rear_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_left_front_wheel_2 = rospy.Publisher('/deepracer2/left_front_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_vel_right_front_wheel_2 = rospy.Publisher('/deepracer2/right_front_wheel_velocity_controller/command', Float64, queue_size=1)
+    pub_pos_left_steering_hinge_2 = rospy.Publisher('/deepracer2/left_steering_hinge_position_controller/command', Float64, queue_size=1)
+    pub_pos_right_steering_hinge_2 = rospy.Publisher('/deepracer2/right_steering_hinge_position_controller/command', Float64, queue_size=1)
+
     # vehicle1
     pub_vel_left_rear_wheel_1.publish(throttle)
     pub_vel_right_rear_wheel_1.publish(throttle)
@@ -32,6 +39,14 @@ def set_throttle_steer(key: AckermannDriveStamped, odom: Odometry):
     pub_vel_right_front_wheel_1.publish(throttle)
     pub_pos_left_steering_hinge_1.publish(steer)
     pub_pos_right_steering_hinge_1.publish(steer)
+
+    # vehicle2
+    pub_vel_left_rear_wheel_2.publish(throttle)
+    pub_vel_right_rear_wheel_2.publish(throttle)
+    pub_vel_left_front_wheel_2.publish(throttle)
+    pub_vel_right_front_wheel_2.publish(throttle)
+    pub_pos_left_steering_hinge_2.publish(steer)
+    pub_pos_right_steering_hinge_2.publish(steer)
 
 def servo_commands():
 

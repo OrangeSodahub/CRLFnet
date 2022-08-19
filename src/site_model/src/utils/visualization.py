@@ -259,23 +259,9 @@ def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
     return marker_array
 
 
-def rt_vis(data: float):
-    plt.ion()
-    plt.figure(1)
-    t_list = []
-    result_list = []
-    t = 0
-
-    while True:
-        """
-        restore:
-            plt.clf()
-            t = 0
-            t_list.clear()
-            result_list.clear()
-        """
-        t += 0.1
-        t_list.append(t)
-        result_list.append(data)
-        plt.plot(t_list, result_list, c='r', ls='-', marker='o', mec='b', mfc='w')  # 保存历史数据
-        plt.pause(0.1)
+def heat_map(data: np.array):
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    sns.set()
+    map = sns.heatmap(data)
+    plt.show()

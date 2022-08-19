@@ -8,6 +8,10 @@ label2camera = {
     1: 'camera11', 2: 'camera12', 3: 'camera13', 4: 'camera14',
     5: 'camera41', 6: 'camera42', 7: 'camera43', 8: 'camera44'
 }
+label2camera_ = {
+    1: 'camera_11', 2: 'camera_12', 3: 'camera_13', 4: 'camera_14',
+    5: 'camera_41', 6: 'camera_42', 7: 'camera_43', 8: 'camera_44'
+}
 
 transform = {'camera11': 0, 'camera12': 1, 'camera13': 2, 'camera14': 3,
             'camera2': 4, 'camera3': 5,

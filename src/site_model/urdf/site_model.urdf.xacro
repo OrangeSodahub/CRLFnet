@@ -443,7 +443,7 @@
         <organize_cloud>False</organize_cloud>
         <min_range>0.9</min_range>
         <max_range>130.0</max_range>
-        <gaussianNoise>0.006</gaussianNoise>
+        <gaussianNoise>0.02</gaussianNoise>
       </plugin>
     </sensor>
   </gazebo>
@@ -532,7 +532,7 @@
         <organize_cloud>False</organize_cloud>
         <min_range>0.9</min_range>
         <max_range>130.0</max_range>
-        <gaussianNoise>0.006</gaussianNoise>
+        <gaussianNoise>0.02</gaussianNoise>
       </plugin>
     </sensor>
   </gazebo>
@@ -1831,7 +1831,7 @@
         <organize_cloud>False</organize_cloud>
         <min_range>0.9</min_range>
         <max_range>130.0</max_range>
-        <gaussianNoise>0.006</gaussianNoise>
+        <gaussianNoise>0.02</gaussianNoise>
       </plugin>
     </sensor>
   </gazebo>

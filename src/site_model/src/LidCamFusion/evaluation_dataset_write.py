@@ -1,4 +1,3 @@
-from email.mime import image
 import os
 from pathlib import Path
 import argparse
