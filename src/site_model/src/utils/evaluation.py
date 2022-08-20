@@ -12,10 +12,13 @@ class eval3d():
     def __init__(self, log_dir: str):
         self.log_dir = log_dir
         self.writter = SummaryWriter(log_dir=log_dir)
-        self.heat_map = np.zeros((32, 64))
+        self.heat_map_pose = np.zeros((32, 64))
+        self.heat_map_alpha = np.zeros((32, 64))
+        self.heat_map_iou = np.zeros((32, 64))
         self.heat_map_count = np.zeros((32, 64))
 
         self.counter = 0
+        self.global_counter = 0
         self.alpha_diff = 0
         self.pose_diff = 0
         self.iou3d = 0
@@ -27,9 +30,11 @@ class eval3d():
     
 
     def eval(self, odom, preboxes3d: np.array, postboxes3d: np.array, scores3d: np.array):
+        print("{} done.".format(self.global_counter), end='\r')
+        self.global_counter += 1
         if len(preboxes3d) != 0 and len(postboxes3d) != 0:
+            print("{}, global: {} have obects.".format(self.counter, self.global_counter))
             self.counter += 1
-            print("{} done.".format(self.counter), end='\r')
             for prebox3d, postbox3d in zip(preboxes3d, postboxes3d):
                 prebox3d[6] = (prebox3d[6] - np.pi) if prebox3d[6] >=0 else (np.pi + prebox3d[6])
                 postbox3d[6] = (postbox3d[6] - np.pi) if postbox3d[6] >=0 else (np.pi + postbox3d[6])
@@ -68,18 +73,26 @@ class eval3d():
             if isinstance(odom, np.ndarray):
                 i = int((odom[0] + 2) // 0.125)
                 j = int((odom[1] + 5) // 0.125)
-                print(i, j)
-                self.heat_map[i][j] += pose_cur_diff
-                self.heat_map_count[i][j] += 1
+                if i>=0 and i<32 and j>=0 and j<64:
+                    self.heat_map_pose[i][j] += pose_cur_diff
+                    self.heat_map_alpha[i][j] += alpha_cur_precision
+                    self.heat_map_iou[i][j] += iou_bev_cur
+                    self.heat_map_count[i][j] += 1
         else:
             self.tp_fp_fn[2] += 1
 
-        if self.counter % 1900 == 0:
+        if self.global_counter % 29900 == 0:
             np.savetxt(os.path.join(self.log_dir, 'tp_fp_fn.txt'), self.tp_fp_fn)
-            for i in range(len(self.heat_map)):
-                for j in range(len(self.heat_map[i])):
-                    self.heat_map[i][j] /= self.heat_map_count[i][j] if self.heat_map[i][j] != 0 else 0
-            np.savetxt(os.path.join(self.log_dir, 'heat_map.txt'), self.heat_map)
+            for i in range(len(self.heat_map_count)):
+                for j in range(len(self.heat_map_count[i])):
+                    if self.heat_map_count[i][j] != 0:
+                        self.heat_map_pose[i][j] /= self.heat_map_count[i][j]
+                        self.heat_map_alpha[i][j] /= self.heat_map_count[i][j]
+                        self.heat_map_iou[i][j] /= self.heat_map_count[i][j]
+            np.savetxt(os.path.join(self.log_dir, 'heat_map_pose.txt'), self.heat_map_pose)
+            np.savetxt(os.path.join(self.log_dir, 'heat_map_alpha.txt'), self.heat_map_alpha)
+            np.savetxt(os.path.join(self.log_dir, 'heat_map_iou_bev.txt'), self.heat_map_iou)
+            np.savetxt(os.path.join(self.log_dir, 'heat_map_iou_count.txt'), self.heat_map_count)
             
 
     def eval_rotation(self, gt_boxes3d, boxes3d):

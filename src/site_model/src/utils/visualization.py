@@ -261,7 +261,29 @@ def display_rviz(boxes3d, vehicles, gt_boxes3d=None) -> MarkerArray:
 
 def heat_map(data: np.array):
     import seaborn as sns
-    import matplotlib.pyplot as plt
     sns.set()
-    map = sns.heatmap(data)
+    map = sns.heatmap(data, cmap='Reds')
+    plt.show()
+
+
+def contour(data: np.array, img_dir: str):
+    x = np.linspace(0, 63, 64, dtype=int)
+    y = np.linspace(0, 31, 32, dtype=int)
+    X, Y = np.meshgrid(x, y)
+    C = plt.contour(X, Y, data, 8, linewidths = 0)
+    plt.contourf(X, Y, data, 8, alpha = .75, cmap = 'Reds_r')
+    plt.colorbar()
+    plt.xticks([])
+    plt.yticks([])
+    plt.savefig(img_dir, dpi = 600)
+    plt.show()
+
+
+def contour_heat(data: np.array):
+    x = np.linspace(0, 31, 32, dtype=int)
+    y = np.linspace(0, 63, 64, dtype=int)
+    X, Y = np.meshgrid(x, y)
+    plt.figure("Hot", facecolor="lightgray")
+    plt.grid(linestyle=":")
+    C = plt.imshow(np.transpose(data), cmap='Reds')
     plt.show()

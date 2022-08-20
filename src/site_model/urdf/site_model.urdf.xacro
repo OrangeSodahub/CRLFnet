@@ -443,7 +443,7 @@
         <organize_cloud>False</organize_cloud>
         <min_range>0.9</min_range>
         <max_range>130.0</max_range>
-        <gaussianNoise>0.02</gaussianNoise>
+        <gaussianNoise>0.006</gaussianNoise>
       </plugin>
     </sensor>
   </gazebo>
@@ -532,7 +532,7 @@
         <organize_cloud>False</organize_cloud>
         <min_range>0.9</min_range>
         <max_range>130.0</max_range>
-        <gaussianNoise>0.02</gaussianNoise>
+        <gaussianNoise>0.006</gaussianNoise>
       </plugin>
     </sensor>
   </gazebo>
@@ -1747,6 +1747,61 @@
     </sensor>
   </gazebo>
 
+<!-- camera8 -->
+  <link
+    name="camera8_Link">
+    <inertial>
+      <origin
+        xyz="0.000108384331294675 -0.00200274517214477 0.0112406574811803"
+        rpy="0 0 0" />
+      <mass
+        value="0.814135587689854" />
+      <inertia
+        ixx="0.000299485503699371"
+        ixy="-8.50166027613617E-08"
+        ixz="-2.30003016200203E-09"
+        iyy="0.000280071339845325"
+        iyz="2.45106701788653E-06"
+        izz="0.000373933133462947" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="-0.02 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/camera8_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site_model/meshes/camera8_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera8"
+    type="fixed">
+    <origin
+      xyz="0.55 2.7 0.7"
+      rpy="0 0 0.3490658503988659" />
+    <parent
+      link="base_link" />
+    <child
+      link="camera8_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
   <!-- Lidar_2 points3 -->
   <joint name="velodyne2_base_mount_joint" type="fixed">
     <origin rpy="-1.570796327 0 0" xyz="0 -0.38 1.14"/>
@@ -1831,7 +1886,7 @@
         <organize_cloud>False</organize_cloud>
         <min_range>0.9</min_range>
         <max_range>130.0</max_range>
-        <gaussianNoise>0.02</gaussianNoise>
+        <gaussianNoise>0.006</gaussianNoise>
       </plugin>
     </sensor>
   </gazebo>

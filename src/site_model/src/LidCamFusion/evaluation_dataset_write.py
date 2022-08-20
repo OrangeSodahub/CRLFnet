@@ -29,7 +29,7 @@ def writter(pcd: PointCloud2, img: MsgCamera, odom: Odometry):
         image.save(os.path.join(params.dir, 'img/{}/{}.jpg'.format(counter, i)))
     
     np.savetxt(os.path.join(params.dir, 'pcd/{}.txt'.format(counter)), points)
-    if counter == 2000:
+    if counter == 30000:
         odoms = np.array(odoms)
         np.savetxt(os.path.join(params.dir, 'odom/{}.txt'.format(counter)), odoms)
         print("\033[0;32mdodoms #{} done.\033[0m".format(counter))

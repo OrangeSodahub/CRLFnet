@@ -412,7 +412,7 @@ def print2screen_match(match, image, lidar):
 
 
 def eval_fusion():
-    limit = 2000
+    limit = 30000
     counter = 0
     while(counter != limit):
         fusion(counter=counter)
@@ -462,7 +462,7 @@ if __name__ == '__main__':
         eval = eval3d(log_dir)                                                  # Create evaluator
 
     if params.eval:
-        odoms = np.loadtxt(os.path.join(str(ROOT_DIR / 'dataset' / 'test_dataset' / 'odom'), '2000.txt'))
+        odoms = np.loadtxt(os.path.join(str(ROOT_DIR / 'dataset' / 'test_dataset' / 'odom'), '30000.txt'))
         eval_fusion()
     else:
         rospy.init_node('lidar_camera_fusion', anonymous=True)
