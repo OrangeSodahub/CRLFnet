@@ -275,7 +275,6 @@ def contour(data: np.array, img_dir: str):
     plt.colorbar()
     plt.xticks([])
     plt.yticks([])
-    plt.savefig(img_dir, dpi = 600)
     plt.show()
 
 
@@ -286,4 +285,16 @@ def contour_heat(data: np.array):
     plt.figure("Hot", facecolor="lightgray")
     plt.grid(linestyle=":")
     C = plt.imshow(np.transpose(data), cmap='Reds')
+    plt.show()
+
+
+def draw_pr_line(txt_dir: str):
+    import matplotlib.pyplot as plt
+    tp_fp_fn = np.loadtxt(txt_dir)
+    precision = tp_fp_fn[0] / (tp_fp_fn[0] + tp_fp_fn[1])
+    recall = tp_fp_fn[0] / (tp_fp_fn[0] + tp_fp_fn[2])
+
+    thresholds = np.linspace(0.0, 1.0, num=41, endpoint=True)
+
+    plt.plot(thresholds, recall, '-o')
     plt.show()

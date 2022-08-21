@@ -97,6 +97,7 @@ class eval3d():
 
     def eval_rotation(self, gt_boxes3d, boxes3d):
         alpha_cur_diff = np.abs(((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6])) - gt_boxes3d[0][6]) # pred_boxes3d[0] -> for one car
+        print(((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6])), gt_boxes3d[0][6])
         self.alpha_diff += alpha_cur_diff
         alpha_cur_precision = 1 - (alpha_cur_diff) / (2*np.pi)
         alpha_precision = 1 - (self.alpha_diff / self.counter) / (2*np.pi)
@@ -240,15 +241,3 @@ def bbox_iou(boxes3d: np.array, boxes2d: np.array, critierion=-1):
     #                 overlaps[n, k] = iw * ih / ua
     # return overlaps
     pass
-
-def draw_pr_line():
-    import matplotlib.pyplot as plt
-    txt_dir = '/home/zonlin/CRLFnet/src/site_model/src/LidCamFusion/eval/3d_detection_only_1000.txt'
-    tp_fp_fn = np.loadtxt(txt_dir)
-    precision = tp_fp_fn[0] / (tp_fp_fn[0] + tp_fp_fn[1])
-    recall = tp_fp_fn[0] / (tp_fp_fn[0] + tp_fp_fn[2])
-
-    thresholds = np.linspace(0.0, 1.0, num=41, endpoint=True)
-
-    plt.plot(thresholds, recall)
-    plt.show()
