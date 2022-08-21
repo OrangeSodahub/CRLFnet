@@ -96,8 +96,8 @@ class eval3d():
             
 
     def eval_rotation(self, gt_boxes3d, boxes3d):
-        alpha_cur_diff = np.abs(((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6])) - gt_boxes3d[0][6]) # pred_boxes3d[0] -> for one car
-        print(((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6])), gt_boxes3d[0][6])
+        # ((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6]))
+        alpha_cur_diff = np.abs(boxes3d[0][6] - gt_boxes3d[0][6]) # pred_boxes3d[0] -> for one car
         self.alpha_diff += alpha_cur_diff
         alpha_cur_precision = 1 - (alpha_cur_diff) / (2*np.pi)
         alpha_precision = 1 - (self.alpha_diff / self.counter) / (2*np.pi)
@@ -123,7 +123,7 @@ class eval3d():
         iou_bev_cur = boxes_iou_bev_gpu(boxes_a=gt_boxes3d_gpu, boxes_b=boxes3d_gpu)
         iou3d_cur_cpu = iou3d_cur.cpu().numpy()                                                         # convert tensor to numpy
         iou_bev_cur_cpu = iou_bev_cur.cpu().numpy()
-        # self.logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], self.counter)                           # here [0][0] is for one car!!!
+        # self.logger.log_value('iou3d_cur', iou3d_cur_cpu[0][0], self.counter)                         # here [0][0] is for one car!!!
         # self.logger.log_value('iou_bev_cur', iou_bev_cur_cpu[0][0], self.counter)
 
         self.iou3d += iou3d_cur_cpu[0][0]
