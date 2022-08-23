@@ -266,12 +266,12 @@ def heat_map(data: np.array):
     plt.show()
 
 
-def contour(data: np.array, img_dir: str):
+def contour(data: np.array):
     x = np.linspace(0, 63, 64, dtype=int)
     y = np.linspace(0, 31, 32, dtype=int)
     X, Y = np.meshgrid(x, y)
     C = plt.contour(X, Y, data, 8, linewidths = 0)
-    plt.contourf(X, Y, data, 8, alpha = .75, cmap = 'Reds_r')
+    plt.contourf(X, Y, data, 8, alpha = .75, cmap = 'Reds', levels = np.linspace(0,1,11))
     plt.colorbar()
     plt.xticks([])
     plt.yticks([])
