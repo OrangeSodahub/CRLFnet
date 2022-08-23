@@ -30,18 +30,16 @@ class VisualAssistant:
         self.output_path = output_path
         self.w2s = np.array([[0, -1, 3], [-1, 0, 2], [0, 0, 1]]) * 200
 
-        self.kalman_color = 255 * 2
         self.pois = []
         self.rois = []
 
     def scene_output(self, frame: int, zs: ObsBundle, kf: Kalman):
         # Kalman Filter Data
         for x in kf.xpts:
-            my_color = (0, 0, self.kalman_color // 2)
-            if self.kalman_color > 1:
-                self.kalman_color -= 1
+            # my_color = (x[-1]*48, 0, 255-x[-1]*48)
+            my_color = (0, 0, 255)
             c = np.matmul(self.w2s, [x[0], x[1], 1.]).astype(int)
-            cv2.circle(self.base_image, c[0:2], 5, my_color, -1)
+            cv2.circle(self.base_image, c[0:2], 4, my_color, -1)
         # Sensor Data
         for p, s in zip(zs.projections, zs.sensors):
             if isinstance(s, ImageSensor):
@@ -53,7 +51,7 @@ class VisualAssistant:
             else:
                 my_color = (0, 0, 0)
             c = np.matmul(self.w2s, [p[0], p[1], 1.]).astype(int)
-            cv2.circle(self.base_image, c[0:2], 3, my_color, -1)
+            cv2.circle(self.base_image, c[0:2], 2, my_color, -1)
 
         file_name = "{:04d}.png".format(frame)
         cv2.imwrite(str(self.output_path.joinpath('scene', file_name)), self.base_image)
