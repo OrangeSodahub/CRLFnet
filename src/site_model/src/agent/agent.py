@@ -24,7 +24,8 @@ class Agent:
         self.WIDTH = 0.21
         self.COLLIDE_THRES = 0.5
         self.SLOW_DOWN_THRES = 2.5
-        self.lane_orient = [1,4,4,1,4,4,4,4,4,1,3,1,2,4,2,4,2,2,2,2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
+        self.lane_orient = [1, 4, 4, 1, 4, 4, 4, 4, 4, 1, 3, 1, 2, 4, 2, 4, 2, 2, 2,
+                            2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
 
         self.mode = 'lost'
         self.pos = np.array([0, 0])
@@ -44,8 +45,9 @@ class Agent:
         """
             return if collide and v coeff.
         """
+
         def is_lane(sl, l, sp, p):
-            yaw = np.arctan2(p[0][1]-sp[0][1], p[0][0]-sp[0][0]) - sp[1]*self.throttle
+            yaw = np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - sp[1] * self.throttle
             if sl != l:
                 if sl == 10 or l == 10:
                     return False
@@ -66,7 +68,7 @@ class Agent:
                 if dist <= self.COLLIDE_THRES:
                     return False
                 elif dist < self.SLOW_DOWN_THRES:
-                    return (dist-self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES)
+                    return (dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES)
         return True
 
     def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
@@ -95,11 +97,12 @@ class Agent:
         """
             caculate weighted score of accessible lanes
         """
+
         def set_weight(orient, nums_area):
             nums_index = np.argsort(nums_area) + 1
-            return (np.where(nums_index==orient)[0][0] + 1)
+            return (np.where(nums_index == orient)[0][0] + 1)
 
-        lane_num = [0]*len(lanes)
+        lane_num = [0] * len(lanes)
         for i, lane in enumerate(lanes):
             # dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), pt) for pt in self.scene_map.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
             dists = np.array([[np.linalg.norm(p[0] - pt) for pt in self.scene_map.lanes[lane]] for p in poses])
@@ -108,8 +111,8 @@ class Agent:
         lane_orient = [self.lane_orient[lane] for lane in lanes]
         # nums_area = [msg_lid_cam.num_intersection, msg_lid_cam.objects_circle, msg_rad_cam.num_overpass]
         lane_weight = [set_weight(orient, nums_area) for orient in lane_orient]
-        lane_score = [a*b for a,b in zip(lane_num, lane_weight)]
-        return lanes[np.where(lane_score==np.min(lane_score))[0][0]]
+        lane_score = [a * b for a, b in zip(lane_num, lane_weight)]
+        return lanes[np.where(lane_score == np.min(lane_score))[0][0]]
 
     def lost_nav(self) -> None:
         # find the nearest node
@@ -193,13 +196,13 @@ class Agents:
         """
             For temporarily using vehicles num
         """
-        intersection, circle, overpass, outerring = 0,0,0,0
+        intersection, circle, overpass, outerring = 0, 0, 0, 0
         for i, p in enumerate(poses):
             if lanes[i] == 10:
                 overpass += 1
-            elif (p[0][1]>=0 and p[0][1] <= 1.7 and p[0][0]<=1 and p[0][0]>=-1.2):
+            elif (p[0][1] >= 0 and p[0][1] <= 1.7 and p[0][0] <= 1 and p[0][0] >= -1.2):
                 intersection += 1
-            elif (p[0][1]<0 and p[0][1]>=-2.2 and p[0][0]<=1 and p[0][0]>=-1.2):
+            elif (p[0][1] < 0 and p[0][1] >= -2.2 and p[0][0] <= 1 and p[0][0] >= -1.2):
                 circle += 1
             else:
                 outerring += 1
