@@ -29,8 +29,10 @@ class SceneMap:
             raise IOError("A node in \"graph.txt\" has no entrance.")
         if not np.all(np.any(self.graph <= -1, axis=1)):
             raise IOError("A node in \"graph.txt\" has no exit.")
+        """
         if not np.all(np.sum(self.graph, axis=0) == 0):
             raise IOError("A lane in \"graph.txt\" is illegal.")
+        """
 
     def save(self, save_path: Path) -> None:
         print("You cannot save the map temporarily since the function is unfinished.")
