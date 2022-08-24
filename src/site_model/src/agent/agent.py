@@ -83,7 +83,7 @@ class Agent:
         steer = rotation / self.MAX_STEER
         if steer < -1 or steer > 1:
             # target is not accessable
-            steer = 0
+            steer = 1 if steer < -1 else -1
             throttle = -1 * v_control
         elif yaw > np.pi / 2 or yaw < -np.pi / 2:
             # target is behind the vehicle
