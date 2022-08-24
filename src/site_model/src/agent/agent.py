@@ -80,6 +80,11 @@ class Agent:
         distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
         sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1)
         rotation = np.arcsin(sin_rot)
+        # old method
+        steer = np.clip(rotation / self.MAX_STEER, -1, 1)
+        throttle = (1 if abs(yaw) < np.pi / 2 else -1) * v_control
+        # new method
+        '''
         steer = rotation / self.MAX_STEER
         if steer < -1 or steer > 1:
             # target is not accessable
@@ -92,6 +97,7 @@ class Agent:
         else:
             # common situation
             throttle = 1 * v_control
+        '''
         self.throttle = throttle
         return steer, throttle
 
