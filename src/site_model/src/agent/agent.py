@@ -19,10 +19,10 @@ class Agent:
         self.LEN = 0.163974  # the length between the front wheel and the rear wheel
         self.MAX_STEER = np.pi / 4
         self.TARGET_RANGE = 1.0
-        self.TARGET_THRES = 0.25
+        self.TARGET_THRES = 0.15
         self.LENGTH = 0.22
         self.WIDTH = 0.21
-        self.COLLIDE_THRES = 0.5
+        self.COLLIDE_THRES = 1.0
         self.SLOW_DOWN_THRES = 2.5
         self.lane_orient = [1, 4, 4, 1, 4, 4, 4, 4, 4, 1, 3, 1, 2, 4, 2, 4, 2, 2, 2,
                             2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
@@ -95,9 +95,9 @@ class Agent:
         self.throttle = throttle
         return steer, throttle
 
-    def choose_way(self, node: int, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area) -> int:
+    def choose_way(self, node: int, from_lane: int, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area) -> int:
         """Choose an accessable lane randomly."""
-        lanes = self.scene_map.accessable_lanes(node)
+        lanes = self.scene_map.accessable_lanes(node, from_lane)
         if len(lanes) == 0:
             return -1
         lane = np.random.choice(lanes)
@@ -145,7 +145,7 @@ class Agent:
         # if the vehicle is at the end of the lane, change to intersect mode
         if self.tmp_lane_point >= len(lane):
             node = self.scene_map.accessable_node(self.tmp_lane)
-            self.tmp_lane = self.choose_way(node, poses, msg_rad_cam, msg_lid_cam, nums_area)
+            self.tmp_lane = self.choose_way(node, self.tmp_lane, poses, msg_rad_cam, msg_lid_cam, nums_area)
             if self.tmp_lane == -1:
                 self.mode = 'await'
                 print("\033[0;31mError: The vehicle #{} is in a dead end.\033[0m".format(self.index))
