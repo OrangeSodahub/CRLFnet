@@ -43,7 +43,7 @@ class SceneMap:
         if from_lane_index == -1:
             return np.nonzero(ls <= -1)[0]
         else:
-            return np.nonzero(np.logical_and(ls <= -1, ls != ls[from_lane_index]))[0]
+            return np.nonzero(np.logical_and(ls <= -1, ls != -ls[from_lane_index]))[0]
 
     def accessable_node(self, lane_index: int) -> int:
         ns = self.graph[:, lane_index]
