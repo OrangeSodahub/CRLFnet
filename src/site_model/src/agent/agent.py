@@ -19,10 +19,10 @@ class Agent:
         self.LEN = 0.163974  # the length between the front wheel and the rear wheel
         self.MAX_STEER = np.pi / 4
         self.TARGET_RANGE = 1.0
-        self.TARGET_THRES = 0.15
+        self.TARGET_THRES = 0.25
         self.LENGTH = 0.22
         self.WIDTH = 0.21
-        self.COLLIDE_THRES = 1.0
+        self.COLLIDE_THRES = 0.5
         self.SLOW_DOWN_THRES = 2.5
         self.lane_orient = [1, 4, 4, 1, 4, 4, 4, 4, 4, 1, 3, 1, 2, 4, 2, 4, 2, 2, 2,
                             2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
