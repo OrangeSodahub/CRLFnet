@@ -55,7 +55,7 @@ class Agent:
                     return True
                 return False
             else:
-                if yaw <= np.pi / 6:
+                if yaw <= np.pi / 4:
                     return True
                 return False
 
