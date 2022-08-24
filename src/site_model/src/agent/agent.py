@@ -26,6 +26,8 @@ class Agent:
         self.SLOW_DOWN_THRES = 1.5
         self.lane_orient = [1, 4, 4, 1, 4, 4, 4, 4, 4, 1, 3, 1, 2, 4, 2, 4, 2, 2, 2,
                             2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
+        self.lane_intersection = [1, 0, 2, 1, 3, 2, 0, 3, 2, 1, 3, 1, 4, 3, 5, 0, 6, 4, 5, 6]
+        self.intersection = -1 # not at the intersectino
 
         self.mode = 'lost'
         self.pos = np.array([0, 0])
@@ -71,7 +73,11 @@ class Agent:
                     return (dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES)
         return True
 
-    def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
+    def target2control(self, poses, lanes: np.ndarray, intersection_num, priority) -> Tuple[float, float]:
+        if self.mode == 'intersection':
+            if intersection_num[self.intersection] != 0:
+                if priority[self.intersection][0] != self.index:
+                    return 0, 0
         v_control = self.is_collide(poses, lanes)
         if not v_control:
             return 0, 0
@@ -131,18 +137,27 @@ class Agent:
         lane_score = [a * b for a, b in zip(lane_num, lane_weight)]
         return lanes[np.where(lane_score == np.min(lane_score))[0][0]]
 
-    def lost_nav(self) -> None:
+    def lost_nav(self, intersection_num, priority) -> None:
         # find the nearest node
         if self.distance < self.TARGET_THRES:
             self.tmp_lane_point += 1
             self.mode = 'lane'
+            # remove if exist in intersections
+            for intersection in priority:
+                if len(intersection) == 0:
+                    continue
+                else:
+                    if len(np.where(np.array(intersection)==self.index)[0]) != 0:
+                        del intersection[(np.where(np.array(intersection)==self.index))[0][0]]
+                        intersection_num[self.intersection] -= 1
+                        self.intersection = -1
             return
         lane, lane_point = self.scene_map.nearest_point(self.pos)
         self.tmp_lane = lane
         self.tmp_lane_point = lane_point
         self.tmp_target = self.scene_map.lanes[lane][lane_point]
 
-    def lane_nav(self, poses, msg_rad_cam, msg_lid_cam, nums_area) -> None:
+    def lane_nav(self, poses, msg_rad_cam, msg_lid_cam, nums_area, intersection_num, priority) -> None:
         # if the vehicle hasn't reached the target, do not change the target
         if self.distance > self.TARGET_THRES:
             return
@@ -159,52 +174,62 @@ class Agent:
                 self.tmp_lane_point = 0
                 self.tmp_target = self.scene_map.lanes[self.tmp_lane][0]
                 self.mode = 'intersection'
+                self.intersection = self.lane_intersection[self.tmp_lane]
+                intersection_num[self.intersection] += 1
+                priority[self.intersection].append(self.index)
                 print("\033[0;32mThe vehicle #{} is in intersection #{}.\033[0m".format(self.index, node))
         else:
             # change a new target
             self.tmp_target = lane[self.tmp_lane_point]
             self.tmp_lane_point += 1
 
-    def intersect_nav(self) -> None:
+    def intersect_nav(self, intersection_num, priority) -> None:
         # if the vehicle has reached the target, change to lane mode
         if self.distance < self.TARGET_THRES:
             self.tmp_lane_point = 1
             self.mode = 'lane'
+            intersection_num[self.intersection] -= 1
+            del priority[self.intersection][0]
+            self.intersection = -1
             return
 
-    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area) -> None:
+    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area, intersection_num, priority) -> None:
         # update the position and orientation data
         self.update(poses[self.index][0], poses[self.index][1])
         # if the vehicle is too far away from the target, change to lost mode
         if self.mode == 'lost':
-            self.lost_nav()
+            self.lost_nav(intersection_num, priority)
         elif self.distance > self.TARGET_RANGE:
             self.mode = 'lost'
-            self.lost_nav()
+            self.lost_nav(intersection_num, priority)
         elif self.mode == 'lane':
-            self.lane_nav(poses, msg_rad_cam, msg_lid_cam, nums_area)
+            self.lane_nav(poses, msg_rad_cam, msg_lid_cam, nums_area, intersection_num, priority)
         elif self.mode == 'intersection':
-            self.intersect_nav()
+            self.intersect_nav(intersection_num, priority)
         # if an error occurs, the vehicle stops
         elif self.mode == 'await':
             print("AWAIT MODE #{}".format(self.index), end='\r')
             return 0, 0
         print("Vehicle:{}, Mode: {}, Target: {}".format(self.index, self.mode, self.tmp_target), end='\r')
-        return self.target2control(poses, lanes)
+        return self.target2control(poses, lanes, intersection_num, priority)
 
 
 class Agents:
 
     def __init__(self, scene_map: SceneMap, num: int) -> None:
         self.num = num
+        self.intersection_num = [0]*7 # label: 0, 1, 2, 3, 4, 5, 6
+        self.priority = [[],[],[],[],[],[],[]] # priority of vehicles in intersection
         self.vehicles = [Agent(scene_map, i) for i in range(num)]
 
     def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[int, int]:
+        print(self.intersection_num)
+        print(self.priority, '\n')
         lanes = [v.tmp_lane for v in self.vehicles]
         nums_area = self.calc_num(poses, lanes)
         steers, throttles = [], []
         for v in self.vehicles:
-            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area)
+            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area, self.intersection_num, self.priority)
             steers.append(steer)
             throttles.append(throttle)
         return steers, throttles, nums_area
