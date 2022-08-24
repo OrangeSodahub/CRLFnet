@@ -23,7 +23,7 @@ class Agent:
         self.LENGTH = 0.22
         self.WIDTH = 0.21
         self.COLLIDE_THRES = 0.5
-        self.SLOW_DOWN_THRES = 2.5
+        self.SLOW_DOWN_THRES = 1.5
         self.lane_orient = [1, 4, 4, 1, 4, 4, 4, 4, 4, 1, 3, 1, 2, 4, 2, 4, 2, 2, 2,
                             2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
 
@@ -47,7 +47,7 @@ class Agent:
         """
 
         def is_lane(sl, l, sp, p):
-            yaw = np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - sp[1] * self.throttle
+            yaw = abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - sp[1] * self.throttle)
             if sl != l:
                 if sl == 10 or l == 10:
                     return False
@@ -55,7 +55,7 @@ class Agent:
                     return True
                 return False
             else:
-                if yaw <= np.pi / 3:
+                if yaw <= np.pi / 6:
                     return True
                 return False
 

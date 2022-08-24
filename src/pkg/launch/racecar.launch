@@ -28,7 +28,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer1 -param robot_description -x -1.5 -y -3 -z 0.04"/> 
+          args="-urdf -model deepracer1 -param robot_description -x -1.5 -y -3 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer1" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -43,7 +43,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer2 -param robot_description -x 1.5 -y -3 -z 0.04"/> 
+          args="-urdf -model deepracer2 -param robot_description -x 1.5 -y -3 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer2" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -58,7 +58,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer3 -param robot_description -x 0 -y -3 -z 0.04"/> 
+          args="-urdf -model deepracer3 -param robot_description -x 0 -y -3 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer3" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -73,7 +73,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer4 -param robot_description -x 0 -y -3.5 -z 0.04"/> 
+          args="-urdf -model deepracer4 -param robot_description -x 0 -y -3.5 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer4" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -88,7 +88,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer5 -param robot_description -x -1.5 -y -3.5 -z 0.04"/> 
+          args="-urdf -model deepracer5 -param robot_description -x -1.5 -y -3.5 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer5" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -103,7 +103,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer6 -param robot_description -x 1.5 -y -3.5 -z 0.04"/> 
+          args="-urdf -model deepracer6 -param robot_description -x 1.5 -y -3.5 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer6" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -118,7 +118,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer7 -param robot_description -x -1.5 -y -4 -z 0.04"/> 
+          args="-urdf -model deepracer7 -param robot_description -x -1.5 -y -4 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer7" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -133,7 +133,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer8 -param robot_description -x 1.5 -y -4 -z 0.04"/> 
+          args="-urdf -model deepracer8 -param robot_description -x 1.5 -y -4 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer8" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -148,7 +148,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer9 -param robot_description -x 0 -y -4 -z 0.04"/> 
+          args="-urdf -model deepracer9 -param robot_description -x 0 -y -4 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer9" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller
@@ -163,7 +163,7 @@
 		<param name="publish_frequency" type="double" value="20.0" />
 	</node>
     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-          args="-urdf -model deepracer10 -param robot_description -x -1.5 -y -4.5 -z 0.04"/> 
+          args="-urdf -model deepracer10 -param robot_description -x -1.5 -y -4.5 -z 0.05"/> 
 	<node name="controller_manager" pkg="controller_manager" type="spawner" 
 	      respawn="true" output="screen" ns="/deepracer10" 
 	      args="left_rear_wheel_velocity_controller       right_rear_wheel_velocity_controller

@@ -12,7 +12,7 @@ camera:
   height: 480
 
 dispatch:
-  scene_map: src/agent/map_2
+  scene_map: src/agent/map_1
 
 data:
   cam_dir: /dataset/camera_data/
