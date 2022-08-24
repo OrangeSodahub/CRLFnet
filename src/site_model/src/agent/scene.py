@@ -47,7 +47,7 @@ class SceneMap:
 
     def accessable_node(self, lane_index: int) -> int:
         ns = self.graph[:, lane_index]
-        return np.nonzero(ns == 1)[0][0]
+        return np.nonzero(ns >= 1)[0][0]
 
     def nearest_point(self, pos: np.ndarray) -> Tuple[int, int]:
         distances, point_indices = [], []
