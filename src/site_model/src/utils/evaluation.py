@@ -197,3 +197,38 @@ def boxes_iou3d_gpu(boxes_a, boxes_b):
 
 def bbox_iou(boxes3d: np.array, boxes2d: np.array, critierion=-1):
     pass
+
+
+class evalagent():
+    def __init__(self, num: int, save_dir):
+        self.num = num
+        self.dir = str(save_dir)
+        self.frame = 0
+        self.pose = []
+        self.velocity = []
+        self.density = []
+        self.counter = 0
+
+    def write(self, poses: np.array, throttles: np.ndarray, density: np.ndarray):
+        """
+        update records
+        """
+        if self.counter == 1000:
+            self.save()
+        frame_pose = np.array([[pose[0][0], pose[0][1]] for pose in poses]).reshape(1, -1)[0]
+        self.pose.append(frame_pose)
+        self.velocity.append(np.array(throttles))
+        self.density.append(np.array(density))
+        self.counter += 1
+
+    def save(self):
+        """
+        save results to files
+        """
+        np.savetxt(os.path.join(self.dir, 'pose.txt'), self.pose)
+        np.savetxt(os.path.join(self.dir, 'veloccity.txt'), self.velocity)
+        np.savetxt(os.path.join(self.dir, 'density.txt'), self.density)
+        self.pose.clear()
+        self.velocity.clear()
+        self.density.clear()
+        print("\033[0;32msaved.\033[0m")

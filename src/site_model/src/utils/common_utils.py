@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from nav_msgs.msg import Odometry
+import sys, select, termios, tty
 from tf.transformations import euler_from_quaternion
 
 
@@ -35,3 +36,11 @@ def get_gt_boxes3d(odom):
         r, p, y = euler_from_quaternion([odom[3], odom[4], odom[5], odom[2]])
         gt_boxes3d = [np.array([odom[0], odom[1], 0.1120, 0.33, 0.22, 0.21, y])]
     return np.array(gt_boxes3d)
+
+
+def getKey(settings):
+    tty.setraw(sys.stdin.fileno())
+    select.select([sys.stdin], [], [], 0)
+    key = sys.stdin.read(1)
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    return key

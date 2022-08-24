@@ -17,6 +17,7 @@ from tf.transformations import euler_from_quaternion
 
 from .agent import Agents
 from .scene import SceneMap
+from ..utils.evaluation import evalagent
 
 N = 10  # the number of vewhicles
 
@@ -79,6 +80,10 @@ def set_control(odom1: Odometry,
     steers, throttles, nums_area = agents.navigate(poses, msgradcam, msglidcam)
     throttles = [t * 15 for t in throttles]
 
+    # record
+    if params.eval:
+        eval.write(poses, throttles, nums_area)
+
     for i, pub in enumerate(pub_vehicles):
         pub.publish(throttles[i], steers[i])
 
@@ -112,6 +117,7 @@ if __name__ == '__main__':
     CONFIG_FILE = ROOT_DIR.joinpath('config/config.yaml')
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default=str(CONFIG_FILE))
+    parser.add_argument("--eval", help="whether to evaluate", action='store_true', required=False)
     parser.add_argument("--vis", help="whether to visualize", action='store_true', required=False)
     params = parser.parse_args()
     with open(params.config, 'r') as f:
@@ -120,6 +126,9 @@ if __name__ == '__main__':
     MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
     scene_map = SceneMap(MAP_DIR)
     agents = Agents(scene_map, 10)
+    if params.eval:
+        SAVE_DIR = ROOT_DIR.joinpath('src/agent/eval')
+        eval = evalagent(10, SAVE_DIR)
 
     pub_nums = rospy.Publisher('/nums', Float64MultiArray, queue_size=1)
     pub_velocity = rospy.Publisher('/velocity', Float64MultiArray, queue_size=1)
