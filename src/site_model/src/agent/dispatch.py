@@ -16,7 +16,7 @@ from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 
 from .agent import Agents, DynamicMap
-# from ..utils.evaluation import evalagent
+from ..utils.evaluation import evalagent
 
 N = 10  # the number of vehicles
 

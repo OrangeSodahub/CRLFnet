@@ -46,23 +46,19 @@ class Agent:
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def is_collide(self, poses, lanes: np.ndarray) -> int:
+    def vcontrol(self, poses, lanes: np.ndarray) -> int:
         """Return if collide and v coeff."""
 
         def is_lane(sl, l, sp, p):
-            if self.throttle == -1:
-                self_steer = (sp[1] + np.pi) if sp[1] <= 0 else (sp[1] - np.pi)
-            else:
-                self_steer = sp[1]
-            yaw = abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - self_steer * self.throttle)
             if sl != l:
                 if sl == 10 or l == 10:
                     return False
-                elif abs(sp[1]) - abs(p[1]) > np.pi / 3:
+                elif abs(sp[1] - p[1]) > np.pi / 6 and abs(sp[1] - p[1]) < np.pi * 5 / 6:
                     return True
                 return False
             else:
-                if yaw <= np.pi / 4:
+                self_steer = ((sp[1] + np.pi) if sp[1] <= 0 else (sp[1] - np.pi)) if self.throttle == -1 else sp[1]
+                if abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - self_steer) <= np.pi / 3:
                     return True
                 return False
 
@@ -79,8 +75,7 @@ class Agent:
         return True
 
     def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
-        v_control = self.is_collide(poses, lanes)
-        v_control = 1
+        v_control = self.vcontrol(poses, lanes)
         if not v_control:
             return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
