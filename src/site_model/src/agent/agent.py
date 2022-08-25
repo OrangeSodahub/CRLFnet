@@ -243,8 +243,10 @@ class Agents:
         self.scene_map = scene_map
 
     def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[int, int]:
+        for v in self.vehicles:
+            print(v)
         for i, q in enumerate(self.scene_map.intersect_queues):
-            print(i, end=': ')
+            print("Node", i, end=': ')
             for v in q:
                 print(v.index, end=', ')
             print()

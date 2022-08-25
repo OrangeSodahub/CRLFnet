@@ -76,7 +76,8 @@ def set_control(odom1: Odometry,
         odom2pose(odom9),
         odom2pose(odom10)
     ]
-    steers, throttles, nums_area = agents.navigate(poses, msgradcam, msglidcam)
+    steers, throttles = agents.navigate(poses, msgradcam, msglidcam)
+    nums_area = [0, 0, 0, 0]
     throttles = [t * 15 for t in throttles]
 
     # record
