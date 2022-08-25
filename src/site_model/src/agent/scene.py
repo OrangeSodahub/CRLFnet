@@ -12,6 +12,7 @@ class SceneMap:
         self.nodes = np.empty((0, 2))
         self.lanes = []
         self.graph = np.empty((0, 0))
+        self.lane_in_area = np.empty(0)
         self.load(load_path)
 
     def load(self, load_path: Path) -> None:
@@ -23,6 +24,9 @@ class SceneMap:
         for i in range(self.graph.shape[1]):
             lane = np.loadtxt(str(load_path.joinpath("lane_{}.txt".format(i))))
             self.lanes.append(lane)
+        self.lane_in_area = np.loadtxt(str(load_path.joinpath("lane_in_area.txt")))
+        if len(self.lane_in_area) != len(self.lanes):
+            raise IOError("The numbers of lanes in \"lane_in_area.txt\" and \"graph.txt\" differ.")
 
     def check_graph(self) -> None:
         if not np.all(np.any(self.graph >= 1, axis=1)):

@@ -14,21 +14,25 @@ MODES = ['lane', 'intersection', 'lost', 'await']
 class Agent:
 
     def __init__(self, scene_map: SceneMap, index: int) -> None:
-        self.index = index
-        self.scene_map = scene_map
-        self.LEN = 0.163974  # the length between the front wheel and the rear wheel
-        self.MAX_STEER = np.pi / 4
-        self.TARGET_RANGE = 1.0
-        self.TARGET_THRES = 0.25
-        self.LENGTH = 0.22
-        self.WIDTH = 0.21
-        self.COLLIDE_THRES = 0.5
-        self.SLOW_DOWN_THRES = 1.5
+        # vehicle data
+        self.index = index          # the index of the vehicle
+        self.LEN = 0.163974         # the length between the front wheel and the rear wheel
+        self.MAX_STEER = np.pi / 4  # the max turning angle (rad) of the front wheels
+        self.LENGTH = 0.22          # the length of the vehicle
+        self.WIDTH = 0.21           # the width of the vehicle
+
+        # thresholds
+        self.TARGET_RANGE = 1.0     # if d(target, self) > TARGET_RANGE, switch to lost mode
+        self.TARGET_THRES = 0.25    # if d(target, self) < TARGET_THRES, the vehicle has reached the target
+        self.COLLIDE_THRES = 0.5    # if d(another_vehicle, self) < COLLIDE_THRES, the vehicle stops
+        self.SLOW_DOWN_THRES = 1.5  # if d(another_vehicle, self) < SLOW_DOWN_THRES, the vehicle slows down
+
+        # map data
+        self.scene_map = scene_map  # the map of the scene
         self.lane_orient = [1, 4, 4, 1, 4, 4, 4, 4, 4, 1, 3, 1, 2, 4, 2, 4, 2, 2, 2,
                             2]  # 1: intersection, 2: circle, 3: overpass, 4: outerring
-        self.lane_intersection = [1, 0, 2, 1, 3, 2, 0, 3, 2, 1, 3, 1, 4, 3, 5, 0, 6, 4, 5, 6]
-        self.intersection = -1 # not at the intersectino
 
+        # running data
         self.mode = 'lost'
         self.pos = np.array([0, 0])
         self.orient = 0
@@ -36,6 +40,7 @@ class Agent:
         self.tmp_target = np.array([0, 0])
         self.tmp_lane = -1
         self.tmp_lane_point = -1
+        self.tmp_node = -1  # not at the intersection
         self.throttle = 1
 
     def update(self, pos: np.ndarray, orient: float) -> None:
@@ -43,10 +48,8 @@ class Agent:
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def vcontrol(self, poses, lanes: np.ndarray) -> int:
-        """
-            return if collide and v coeff.
-        """
+    def is_collide(self, poses, lanes: np.ndarray) -> int:
+        """Return if collide and v coeff."""
 
         def is_lane(sl, l, sp, p):
             if self.throttle == -1:
@@ -79,8 +82,8 @@ class Agent:
 
     def target2control(self, poses, lanes: np.ndarray, intersection_num, priority) -> Tuple[float, float]:
         if self.mode == 'intersection':
-            if intersection_num[self.intersection] != 0:
-                if priority[self.intersection][0] != self.index:
+            if intersection_num[self.tmp_node] != 0:
+                if priority[self.tmp_node][0] != self.index:
                     return 0, 0
         v_control = self.vcontrol(poses, lanes)
         if not v_control:
@@ -121,9 +124,7 @@ class Agent:
         return lane
 
     def score_lanes(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area):
-        """
-            caculate weighted score of accessible lanes
-        """
+        """Calculate weighted score of accessible lanes."""
 
         def set_weight(orient, nums_area):
             nums_index = np.argsort(nums_area) + 1
@@ -157,9 +158,9 @@ class Agent:
         if self.distance > self.TARGET_THRES:
             return
         # if the vehicle has reached the target
-        lane = self.scene_map.lanes[self.tmp_lane]
+        lane_points = self.scene_map.lanes[self.tmp_lane]
         # if the vehicle is at the end of the lane, change to intersect mode
-        if self.tmp_lane_point >= len(lane):
+        if self.tmp_lane_point >= len(lane_points):
             node = self.scene_map.accessable_node(self.tmp_lane)
             self.tmp_lane = self.choose_way(node, self.tmp_lane, poses, msg_rad_cam, msg_lid_cam, nums_area)
             if self.tmp_lane == -1:
@@ -169,13 +170,13 @@ class Agent:
                 self.tmp_lane_point = 0
                 self.tmp_target = self.scene_map.lanes[self.tmp_lane][0]
                 self.mode = 'intersection'
-                self.intersection = self.lane_intersection[self.tmp_lane]
-                intersection_num[self.intersection] += 1
-                priority[self.intersection].append(self.index)
+                self.tmp_node = self.scene_map.accessable_node(self.tmp_lane)
+                intersection_num[self.tmp_node] += 1
+                priority[self.tmp_node].append(self.index)
                 print("\033[0;32mThe vehicle #{} is in intersection #{}.\033[0m".format(self.index, node))
         else:
             # change a new target
-            self.tmp_target = lane[self.tmp_lane_point]
+            self.tmp_target = lane_points[self.tmp_lane_point]
             self.tmp_lane_point += 1
 
     def intersect_nav(self, intersection_num, priority) -> None:
@@ -183,12 +184,13 @@ class Agent:
         if self.distance < self.TARGET_THRES:
             self.tmp_lane_point = 1
             self.mode = 'lane'
-            intersection_num[self.intersection] -= 1
-            del priority[self.intersection][0]
-            self.intersection = -1
+            intersection_num[self.tmp_node] -= 1
+            del priority[self.tmp_node][0]
+            self.tmp_node = -1
             return
 
-    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area, intersection_num, priority) -> None:
+    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area, intersection_num,
+                 priority) -> None:
         # update the position and orientation data
         self.update(poses[self.index][0], poses[self.index][1])
         # if the vehicle is too far away from the target, change to lost mode
@@ -221,8 +223,8 @@ class Agents:
 
     def __init__(self, scene_map: SceneMap, num: int) -> None:
         self.num = num
-        self.intersection_num = [0]*7 # label: 0, 1, 2, 3, 4, 5, 6
-        self.priority = [[],[],[],[],[],[],[]] # priority of vehicles in intersection
+        self.intersection_num = [0] * 7  # label: 0, 1, 2, 3, 4, 5, 6
+        self.priority = [[], [], [], [], [], [], []]  # priority of vehicles in intersection
         self.vehicles = [Agent(scene_map, i) for i in range(num)]
 
     def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[int, int]:
@@ -233,7 +235,8 @@ class Agents:
         nums_area = self.calc_num(poses, lanes)
         steers, throttles = [], []
         for v in self.vehicles:
-            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area, self.intersection_num, self.priority)
+            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area, self.intersection_num,
+                                         self.priority)
             steers.append(steer)
             throttles.append(throttle)
         return steers, throttles, nums_area

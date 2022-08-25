@@ -9,6 +9,7 @@ from . import common_utils
 
 
 class eval3d():
+
     def __init__(self, log_dir: str):
         self.log_dir = log_dir
         self.writter = SummaryWriter(log_dir=log_dir)
@@ -24,7 +25,6 @@ class eval3d():
         N_SAMPLE_PTS = 41
         self.thresholds = np.linspace(0.0, 1.0, num=N_SAMPLE_PTS, endpoint=True)
         self.tp_fp_fn = np.array([np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS), np.zeros(N_SAMPLE_PTS)])
-    
 
     def eval(self, odom, preboxes3d: np.array, postboxes3d: np.array, scores3d: np.array):
         print("{} done.".format(self.global_counter), end='\r')
@@ -33,10 +33,10 @@ class eval3d():
             print("{}, global: {} have obects.".format(self.counter, self.global_counter))
             self.counter += 1
             for prebox3d, postbox3d in zip(preboxes3d, postboxes3d):
-                prebox3d[6] = (prebox3d[6] - np.pi) if prebox3d[6] >=0 else (np.pi + prebox3d[6])
-                postbox3d[6] = (postbox3d[6] - np.pi) if postbox3d[6] >=0 else (np.pi + postbox3d[6])
+                prebox3d[6] = (prebox3d[6] - np.pi) if prebox3d[6] >= 0 else (np.pi + prebox3d[6])
+                postbox3d[6] = (postbox3d[6] - np.pi) if postbox3d[6] >= 0 else (np.pi + postbox3d[6])
             gt_boxes3d = common_utils.get_gt_boxes3d(odom)
-            
+
             # rotation
             alpha_precision_pre, alpha_similarity_pre = self.eval_rotation(gt_boxes3d, preboxes3d)
             self.writter.add_scalars('alpha_precision', {'pre': alpha_precision_pre}, self.counter)
@@ -57,14 +57,14 @@ class eval3d():
 
             # score
             self.writter.add_scalars('alpha_precision', {'score': scores3d[0]}, self.counter)
-            self.writter.add_scalars('pose_diff', {'score': 1-scores3d[0]}, self.counter)
+            self.writter.add_scalars('pose_diff', {'score': 1 - scores3d[0]}, self.counter)
             self.writter.add_scalars('iou_bev', {'score': scores3d[0]}, self.counter)
 
             # heat map
             if isinstance(odom, np.ndarray):
                 i = int((odom[0] + 2) // 0.125)
                 j = int((odom[1] + 5) // 0.125)
-                if i>=0 and i<32 and j>=0 and j<64:
+                if i >= 0 and i < 32 and j >= 0 and j < 64:
                     self.heat_map_pose[i][j] += pose_diff
                     self.heat_map_alpha[i][j] += alpha_precision_pre
                     self.heat_map_alpha_similarity[i][j] += alpha_similarity_pre
@@ -87,38 +87,35 @@ class eval3d():
             np.savetxt(os.path.join(self.log_dir, 'heat_map_alpha_similarity.txt'), self.heat_map_alpha_similarity)
             np.savetxt(os.path.join(self.log_dir, 'heat_map_iou_bev.txt'), self.heat_map_iou)
             np.savetxt(os.path.join(self.log_dir, 'heat_map_iou_count.txt'), self.heat_map_count)
-            
 
     def eval_rotation(self, gt_boxes3d, boxes3d):
         # ((boxes3d[0][6] - np.pi) if boxes3d[0][6] >= 0 else (np.pi + boxes3d[0][6]))
-        alpha_diff = np.abs(boxes3d[0][6] - gt_boxes3d[0][6]) # pred_boxes3d[0] -> for one car
-        alpha_precision = 1 - (alpha_diff) / (2*np.pi)
-        alpha_similarity = (1 + np.cos(2*alpha_diff)) / 2
+        alpha_diff = np.abs(boxes3d[0][6] - gt_boxes3d[0][6])  # pred_boxes3d[0] -> for one car
+        alpha_precision = 1 - (alpha_diff) / (2 * np.pi)
+        alpha_similarity = (1 + np.cos(2 * alpha_diff)) / 2
         return alpha_precision, alpha_similarity
-
 
     def eval_pose(self, gt_boxes3d, boxes3d):
         # pose_x_y
-        x_diff = np.abs(gt_boxes3d[0][0]-boxes3d[0][0])
-        y_diff = np.abs(gt_boxes3d[0][1]-boxes3d[0][1])
-        pose_diff = np.sqrt(np.square(x_diff)+np.square(y_diff))
+        x_diff = np.abs(gt_boxes3d[0][0] - boxes3d[0][0])
+        y_diff = np.abs(gt_boxes3d[0][1] - boxes3d[0][1])
+        pose_diff = np.sqrt(np.square(x_diff) + np.square(y_diff))
         return pose_diff
-
 
     def eval_iou(self, gt_boxes3d, boxes3d):
         # iou3d and iou_bev
-        gt_boxes3d_gpu = torch.tensor(gt_boxes3d, dtype=torch.float32).cuda()                           # load to gpu: double->float64 float->float32
-        boxes3d_gpu = torch.tensor(boxes3d, dtype=torch.float32).cuda()                                 # load to gpu
+        gt_boxes3d_gpu = torch.tensor(gt_boxes3d, dtype=torch.float32).cuda()  # load to gpu: double->float64 float->float32
+        boxes3d_gpu = torch.tensor(boxes3d, dtype=torch.float32).cuda()  # load to gpu
 
         iou3d = boxes_iou3d_gpu(boxes_a=gt_boxes3d_gpu, boxes_b=boxes3d_gpu)
         iou_bev = boxes_iou_bev_gpu(boxes_a=gt_boxes3d_gpu, boxes_b=boxes3d_gpu)
-        iou3d_cpu = iou3d.cpu().numpy()                                                                 # iou3d_cpu[0][0]
-        iou_bev_cpu = iou_bev.cpu().numpy()                                                             # iou_bev_cpu[0][0]
+        iou3d_cpu = iou3d.cpu().numpy()  # iou3d_cpu[0][0]
+        iou_bev_cpu = iou_bev.cpu().numpy()  # iou_bev_cpu[0][0]
 
         # caculate tp_fp_fn
         true_or_false = iou_bev_cpu[0][0] > self.thresholds
-        self.tp_fp_fn[0] += true_or_false                                                               # tp
-        self.tp_fp_fn[2] += np.logical_not(true_or_false)                                               # fn
+        self.tp_fp_fn[0] += true_or_false  # tp
+        self.tp_fp_fn[2] += np.logical_not(true_or_false)  # fn
 
         return iou_bev_cpu[0][0]
 
@@ -200,6 +197,7 @@ def bbox_iou(boxes3d: np.array, boxes2d: np.array, critierion=-1):
 
 
 class evalagent():
+
     def __init__(self, num: int, save_dir):
         self.num = num
         self.dir = str(save_dir)

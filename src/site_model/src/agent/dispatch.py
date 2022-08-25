@@ -15,7 +15,7 @@ from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
 from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 
-from .agent import Agents
+from .agent import Agents, Agent
 from .scene import SceneMap
 from ..utils.evaluation import evalagent
 
@@ -42,6 +42,13 @@ class VehiclePublisher:
         self.rf_wheel.publish(throttle)
         self.l_steering_hinge.publish(steer)
         self.r_steering_hinge.publish(steer)
+
+
+class VehicleController:
+
+    def __init__(self, index: int, map: SceneMap) -> None:
+        self.agent = Agent(map, index)
+        self.pub = VehiclePublisher("deepracer{}".format(index))
 
 
 def odom2pose(odom: Odometry) -> Tuple[np.ndarray, float]:
@@ -113,14 +120,14 @@ def servo_commands() -> None:
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-e", "--eval", help="whether to evaluate", action='store_true', required=False)
+    parser.add_argument("-v", "--vis", help="whether to visualize", action='store_true', required=False)
+    params = parser.parse_args()
+    # load config file
     ROOT_DIR = Path(__file__).resolve().parents[2]
     CONFIG_FILE = ROOT_DIR.joinpath('config/config.yaml')
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", help="path to config file", metavar="FILE", required=False, default=str(CONFIG_FILE))
-    parser.add_argument("--eval", help="whether to evaluate", action='store_true', required=False)
-    parser.add_argument("--vis", help="whether to visualize", action='store_true', required=False)
-    params = parser.parse_args()
-    with open(params.config, 'r') as f:
+    with open(CONFIG_FILE, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
