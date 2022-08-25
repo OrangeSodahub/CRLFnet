@@ -43,13 +43,17 @@ class Agent:
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def is_collide(self, poses, lanes: np.ndarray) -> int:
+    def vcontrol(self, poses, lanes: np.ndarray) -> int:
         """
             return if collide and v coeff.
         """
 
         def is_lane(sl, l, sp, p):
-            yaw = abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - sp[1] * self.throttle)
+            if self.throttle == -1:
+                self_steer = (sp[1] + np.pi) if sp[1] <= 0 else (sp[1] - np.pi)
+            else:
+                self_steer = sp[1]
+            yaw = abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - self_steer * self.throttle)
             if sl != l:
                 if sl == 10 or l == 10:
                     return False
@@ -78,7 +82,7 @@ class Agent:
             if intersection_num[self.intersection] != 0:
                 if priority[self.intersection][0] != self.index:
                     return 0, 0
-        v_control = self.is_collide(poses, lanes)
+        v_control = self.vcontrol(poses, lanes)
         if not v_control:
             return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
@@ -137,20 +141,11 @@ class Agent:
         lane_score = [a * b for a, b in zip(lane_num, lane_weight)]
         return lanes[np.where(lane_score == np.min(lane_score))[0][0]]
 
-    def lost_nav(self, intersection_num, priority) -> None:
+    def lost_nav(self) -> None:
         # find the nearest node
         if self.distance < self.TARGET_THRES:
             self.tmp_lane_point += 1
             self.mode = 'lane'
-            # remove if exist in intersections
-            for intersection in priority:
-                if len(intersection) == 0:
-                    continue
-                else:
-                    if len(np.where(np.array(intersection)==self.index)[0]) != 0:
-                        del intersection[(np.where(np.array(intersection)==self.index))[0][0]]
-                        intersection_num[self.intersection] -= 1
-                        self.intersection = -1
             return
         lane, lane_point = self.scene_map.nearest_point(self.pos)
         self.tmp_lane = lane
@@ -198,10 +193,18 @@ class Agent:
         self.update(poses[self.index][0], poses[self.index][1])
         # if the vehicle is too far away from the target, change to lost mode
         if self.mode == 'lost':
-            self.lost_nav(intersection_num, priority)
+            self.lost_nav()
         elif self.distance > self.TARGET_RANGE:
             self.mode = 'lost'
-            self.lost_nav(intersection_num, priority)
+            # remove if exist in intersections
+            for intersection in priority:
+                if len(intersection) == 0:
+                    continue
+                elif len(np.where(np.array(intersection)==self.index)[0]) != 0:
+                        del intersection[(np.where(np.array(intersection)==self.index))[0][0]]
+                        intersection_num[self.intersection] -= 1
+                        self.intersection = -1
+            self.lost_nav()
         elif self.mode == 'lane':
             self.lane_nav(poses, msg_rad_cam, msg_lid_cam, nums_area, intersection_num, priority)
         elif self.mode == 'intersection':
@@ -224,8 +227,9 @@ class Agents:
 
     def navigate(self, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[int, int]:
         print(self.intersection_num)
-        print(self.priority, '\n')
+        print(self.priority)
         lanes = [v.tmp_lane for v in self.vehicles]
+        print(lanes, '\n')
         nums_area = self.calc_num(poses, lanes)
         steers, throttles = [], []
         for v in self.vehicles:
