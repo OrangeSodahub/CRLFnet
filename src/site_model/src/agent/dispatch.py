@@ -15,11 +15,10 @@ from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
 from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 
-from .agent import Agents, Agent
-from .scene import SceneMap
-from ..utils.evaluation import evalagent
+from .agent import Agents, DynamicMap
+# from ..utils.evaluation import evalagent
 
-N = 10  # the number of vewhicles
+N = 10  # the number of vehicles
 
 
 class VehiclePublisher:
@@ -42,13 +41,6 @@ class VehiclePublisher:
         self.rf_wheel.publish(throttle)
         self.l_steering_hinge.publish(steer)
         self.r_steering_hinge.publish(steer)
-
-
-class VehicleController:
-
-    def __init__(self, index: int, map: SceneMap) -> None:
-        self.agent = Agent(map, index)
-        self.pub = VehiclePublisher("deepracer{}".format(index))
 
 
 def odom2pose(odom: Odometry) -> Tuple[np.ndarray, float]:
@@ -115,6 +107,7 @@ def servo_commands() -> None:
     sync = message_filters.ApproximateTimeSynchronizer(sub_odoms, 1, 1)
     sync.registerCallback(set_control)
 
+    print("success init")
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
@@ -131,7 +124,7 @@ if __name__ == '__main__':
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
-    scene_map = SceneMap(MAP_DIR)
+    scene_map = DynamicMap(MAP_DIR)
     agents = Agents(scene_map, 10)
     if params.eval:
         SAVE_DIR = ROOT_DIR.joinpath('src/agent/eval')
