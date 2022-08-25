@@ -9,7 +9,7 @@ from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
 
 from .scene import SceneMap
 
-MODES = ['lane', 'intersect', 'lost', 'error']
+MODES = ['lane', 'node', 'lost', 'error']
 
 
 class Agent:
@@ -78,12 +78,9 @@ class Agent:
                     return (dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES)
         return True
 
-    def target2control(self, poses, lanes: np.ndarray, intersection_num, priority) -> Tuple[float, float]:
-        if self.mode == 'intersection':
-            if intersection_num[self.tmp_node] != 0:
-                if priority[self.tmp_node][0] != self.index:
-                    return 0, 0
-        v_control = self.vcontrol(poses, lanes)
+    def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
+        v_control = self.is_collide(poses, lanes)
+        v_control = 1
         if not v_control:
             return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
@@ -91,54 +88,25 @@ class Agent:
         distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
         sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1)
         rotation = np.arcsin(sin_rot)
-        # old method
         steer = np.clip(rotation / self.MAX_STEER, -1, 1)
         throttle = (1 if abs(yaw) < np.pi / 2 else -1) * v_control
-        # new method
-        '''
-        steer = rotation / self.MAX_STEER
-        if steer < -1 or steer > 1:
-            # target is not accessable
-            steer = 1 if steer < -1 else -1
-            throttle = -1 * v_control
-        elif yaw > np.pi / 2 or yaw < -np.pi / 2:
-            # target is behind the vehicle
-            steer = 1 if yaw > np.pi / 2 else -1
-            throttle = 1 * v_control
-        else:
-            # common situation
-            throttle = 1 * v_control
-        '''
         self.throttle = throttle
         return steer, throttle
 
-    def choose_way(self, node: int, from_lane: int, poses, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area) -> int:
-        """Choose an accessable lane randomly."""
-        lanes = self.scene_map.accessable_lanes(node, from_lane)
-        if len(lanes) == 0:
+    def choose_way(self, node: int, from_lane: int, vehicles, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, mode: str = 'random') -> int:
+        # get accessible
+        accessible_lanes = self.scene_map.accessible_lanes(node, from_lane)
+        if len(accessible_lanes) == 0:
             return -1
-        lane = np.random.choice(lanes)
-        # lane = self.score_lanes(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area)
+        if mode == 'random':
+            lane = np.random.choice(accessible_lanes)
+        elif mode == 'odom':
+            lane = self.scene_map.score_lanes(accessible_lanes, vehicles)
+        elif mode == 'fusion':
+            lane = self.scene_map.score_lanes_2(msg_rad_cam, msg_lid_cam)
+        else:
+            raise ValueError("Illegal choose-way mode.")
         return lane
-
-    def score_lanes(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam, nums_area):
-        """Calculate weighted score of accessible lanes."""
-
-        def set_weight(orient, nums_area):
-            nums_index = np.argsort(nums_area) + 1
-            return (np.where(nums_index == orient)[0][0] + 1)
-
-        lane_num = [0] * len(lanes)
-        for i, lane in enumerate(lanes):
-            # dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), pt) for pt in self.scene_map.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
-            dists = np.array([[np.linalg.norm(p[0] - pt) for pt in self.scene_map.lanes[lane]] for p in poses])
-            dists_convert = dists <= 0.05
-            lane_num[i] += np.sum(dists_convert)
-        lane_orient = [self.scene_map.lane_in_area[lane] for lane in lanes]
-        # nums_area = [msg_lid_cam.num_intersection, msg_lid_cam.objects_circle, msg_rad_cam.num_overpass]
-        lane_weight = [set_weight(orient, nums_area) for orient in lane_orient]
-        lane_score = [a * b for a, b in zip(lane_num, lane_weight)]
-        return lanes[np.where(lane_score == np.min(lane_score))[0][0]]
 
     def lost_nav(self) -> None:
         # find the nearest node
@@ -151,66 +119,78 @@ class Agent:
         self.tmp_lane_point = lane_point
         self.tmp_target = self.scene_map.lanes[lane][lane_point]
 
-    def lane_nav(self, poses, msg_rad_cam, msg_lid_cam, nums_area) -> None:
+    def lane_nav(self, vehicles, msg_rad_cam, msg_lid_cam) -> None:
         # if the vehicle hasn't reached the target, do not change the target
         if self.distance > self.TARGET_THRES:
             return
         # if the vehicle has reached the target
         lane_points = self.scene_map.lanes[self.tmp_lane]
-        # if the vehicle is at the end of the lane, change to intersect mode
-        if self.tmp_lane_point >= len(lane_points):
-            node = self.scene_map.accessable_node(self.tmp_lane)
-            self.tmp_lane = self.choose_way(node, self.tmp_lane, poses, msg_rad_cam, msg_lid_cam, nums_area)
-            if self.tmp_lane == -1:
-                self.mode = 'error'
-                print("\033[0;31mError: The vehicle #{} is in a dead end.\033[0m".format(self.index))
-            else:
-                self.tmp_node = node
-                self.tmp_lane_point = 0
-                self.tmp_target = self.scene_map.lanes[self.tmp_lane][0]
-                self.mode = 'intersect'
-                self.scene_map.reach_intersect(self, node)
-                print("\033[0;32mThe vehicle #{} is in intersection #{}.\033[0m".format(self.index, node))
-        else:
-            # change a new target
+        # if the vehicle is not at the end, find the next target
+        if self.tmp_lane_point < len(lane_points):
             self.tmp_target = lane_points[self.tmp_lane_point]
             self.tmp_lane_point += 1
+            return
+        # if the vehicle is at the end of the lane, switch to intersect mode
+        node = self.scene_map.accessible_node(self.tmp_lane)
+        self.tmp_lane = self.choose_way(node, self.tmp_lane, vehicles, msg_rad_cam, msg_lid_cam)
+        if self.tmp_lane == -1:
+            self.mode = 'error'
+            print("\033[0;31mError: The vehicle #{} is in a dead end.\033[0m".format(self.index))
+        else:
+            self.tmp_node = node
+            self.tmp_lane_point = 0
+            self.tmp_target = self.scene_map.lanes[self.tmp_lane][0]
+            self.scene_map.reach_intersect(self, node)
+            self.mode = 'node'
 
-    def intersect_nav(self) -> None:
+    def node_nav(self) -> None:
         # if the vehicle has reached the target, change to lane mode
         if self.distance < self.TARGET_THRES:
             self.tmp_lane_point = 1
-            self.mode = 'lane'
             self.scene_map.leave_intersect(self, self.tmp_node)
-            return
+            self.mode = 'lane'
 
-    def navigate(self, poses, lanes: np.ndarray, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam,
-                 nums_area) -> Tuple[float, float]:
+    def navigate(self, poses: Tuple[np.ndarray, float], lanes: np.ndarray, vehicles, msg_rad_cam: MsgRadCam,
+                 msg_lid_cam: MsgLidCam) -> Tuple[float, float]:
         # update the position and orientation data
         self.update(poses[self.index][0], poses[self.index][1])
-        # force stop
+        # if the stop flag is on, force the vehicle to stop
         if self.stop_flag:
             return 0, 0
-        # if the vehicle is too far away from the target, change to lost mode
-        if self.mode == 'lost':
-            self.lost_nav()
-        elif self.distance > self.TARGET_RANGE:
-            if self.mode == 'intersect':
+        # if the vehicle is too far from the target, switch to lost mode
+        if self.distance > self.TARGET_RANGE:
+            if self.mode == 'node':
                 self.scene_map.leave_intersect(self, self.tmp_node)
             self.mode = 'lost'
+        # different modes
+        if self.mode == 'lost':
             self.lost_nav()
         elif self.mode == 'lane':
-            self.lane_nav(poses, msg_rad_cam, msg_lid_cam, nums_area)
-        elif self.mode == 'intersect':
-            self.intersect_nav()
-        # if an error occurs, the vehicle stops
+            self.lane_nav(vehicles, msg_rad_cam, msg_lid_cam)
+        elif self.mode == 'node':
+            self.node_nav()
         elif self.mode == 'error':
-            print("ERROR #{}".format(self.index), end='\r')
+            print("\033[0;31mERROR #{}\033[0m".format(self.index), end='\n')
             return 0, 0
         return self.target2control(poses, lanes)
 
     def __repr__(self) -> str:
-        return "Vehicle: {}, Mode: {}, Target: {}, Flag: {}".format(self.index, self.mode, self.tmp_target, self.stop_flag)
+        return "Index: {},\tMode: {},\tFlag: {},\tTarget: {}".format(self.index, self.mode, self.stop_flag, self.tmp_target)
+
+
+def calc_num(vehicles: List[Agent]):
+    """temporarily using vehicles num"""
+    nums_area = [0, 0, 0, 0]  # intersection, circle, overpass, outerring
+    for v in vehicles:
+        if v.tmp_lane == 10:
+            nums_area[2] += 1
+        elif 0.0 <= v.pos[1] <= 1.7 and -1.2 <= v.pos[0] <= 1.0:
+            nums_area[0] += 1
+        elif -2.2 <= v.pos[1] < 0.0 and -1.2 <= v.pos[0] <= 1.0:
+            nums_area[1] += 1
+        else:
+            nums_area[3] += 1
+    return nums_area
 
 
 class DynamicMap(SceneMap):
@@ -231,11 +211,34 @@ class DynamicMap(SceneMap):
         if len(q) > 0:
             q[0].stop_flag = False
 
+    def score_lanes(self, accessible_lanes: np.ndarray, vehicles: List[Agent]) -> int:
+        nums_area = calc_num(vehicles)
+        poses = [v.pos for v in vehicles]
+        """Calculate weighted score of accessible lanes."""
+
+        def set_weight(orient, nums_area):
+            nums_index = np.argsort(nums_area) + 1
+            return (np.where(nums_index == orient)[0][0] + 1)
+
+        lane_num = [0] * len(accessible_lanes)
+        for i, lane in enumerate(accessible_lanes):
+            # dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), pt) for pt in self.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
+            dists = np.array([[np.linalg.norm(p[0] - pt) for pt in self.lanes[lane]] for p in poses])
+            dists_convert = dists <= 0.05
+            lane_num[i] += np.sum(dists_convert)
+        lane_orient = [self.lane_in_area[lane] for lane in accessible_lanes]
+        # nums_area = [msg_lid_cam.num_intersection, msg_lid_cam.objects_circle, msg_rad_cam.num_overpass]
+        lane_weight = [set_weight(orient, nums_area) for orient in lane_orient]
+        lane_score = [a * b for a, b in zip(lane_num, lane_weight)]
+        return accessible_lanes[np.where(lane_score == np.min(lane_score))[0][0]]
+
+    def score_lanes_2(self, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> int:
+        pass
+
 
 class Agents:
 
     def __init__(self, scene_map: DynamicMap, num: int) -> None:
-        self.num = num
         self.vehicles = [Agent(scene_map, i) for i in range(num)]
         self.scene_map = scene_map
 
@@ -247,28 +250,10 @@ class Agents:
             print()
 
         lanes = [v.tmp_lane for v in self.vehicles]
-        nums_area = self.calc_num(poses, lanes)
+
         steers, throttles = [], []
         for v in self.vehicles:
-            steer, throttle = v.navigate(poses, lanes, msg_rad_cam, msg_lid_cam, nums_area)
+            steer, throttle = v.navigate(poses, lanes, self.vehicles, msg_rad_cam, msg_lid_cam)
             steers.append(steer)
             throttles.append(throttle)
-        return steers, throttles, nums_area
-
-    def calc_num(self, poses, lanes: np.ndarray):
-        """
-            For temporarily using vehicles num
-        """
-        intersection, circle, overpass, outerring = 0, 0, 0, 0
-        for i, p in enumerate(poses):
-            if lanes[i] == 10:
-                overpass += 1
-            elif (p[0][1] >= 0 and p[0][1] <= 1.7 and p[0][0] <= 1 and p[0][0] >= -1.2):
-                intersection += 1
-            elif (p[0][1] < 0 and p[0][1] >= -2.2 and p[0][0] <= 1 and p[0][0] >= -1.2):
-                circle += 1
-            else:
-                outerring += 1
-        nums_area = [intersection, circle, overpass, outerring]
-
-        return nums_area
+        return steers, throttles
