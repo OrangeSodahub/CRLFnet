@@ -52,10 +52,6 @@ class Agent:
 
         def is_lane(sl, l, sp, p):
             if sl != l:
-                if sl == 10 or l == 10:
-                    return False
-                elif abs(sp[1] - p[1]) > np.pi / 6 and abs(sp[1] - p[1]) < np.pi * 5 / 6:
-                    return True
                 return False
             else:
                 self_steer = ((sp[1] + np.pi) if sp[1] <= 0 else (sp[1] - np.pi)) if self.throttle == -1 else sp[1]
