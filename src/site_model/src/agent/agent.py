@@ -1,6 +1,7 @@
 # !/usr/bin/python3
 
 from pathlib import Path
+from sys import flags
 from typing import Tuple, List
 import numpy as np
 
@@ -58,10 +59,11 @@ class Agent:
                 return False
             else:
                 self_steer = ((sp[1] + np.pi) if sp[1] <= 0 else (sp[1] - np.pi)) if self.throttle == -1 else sp[1]
-                if abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - self_steer) <= np.pi / 3:
+                if abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - self_steer) <= np.pi / 6:
                     return True
                 return False
 
+        vcontrols = []
         for i, p in enumerate(poses):
             if i == self.index:
                 continue
@@ -69,10 +71,14 @@ class Agent:
             if is_lane(self.tmp_lane, lanes[i], sp, p):
                 dist = np.linalg.norm(sp[0] - p[0])
                 if dist <= self.COLLIDE_THRES:
-                    return False
+                    vcontrols.append(0)
                 elif dist < self.SLOW_DOWN_THRES:
-                    return (dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES)
-        return True
+                    vcontrols.append((dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES))
+                else:
+                    vcontrols.append(1)
+            else:
+                vcontrols.append(1)
+        return 1 if (self.mode == 'node' and not self.stop_flag) else min(np.array(vcontrols))
 
     def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
         v_control = self.vcontrol(poses, lanes)
@@ -145,8 +151,8 @@ class Agent:
             self.scene_map.leave_intersect(self, self.tmp_node)
             self.mode = 'lane'
 
-    def navigate(self, poses: Tuple[np.ndarray, float], lanes: np.ndarray, vehicles, msg_rad_cam: MsgRadCam,
-                 msg_lid_cam: MsgLidCam) -> Tuple[float, float]:
+    def navigate(self, poses: Tuple[np.ndarray, float], lanes: np.ndarray,
+                 vehicles, msg_rad_cam: MsgRadCam, msg_lid_cam: MsgLidCam) -> Tuple[float, float]:
         # update the position and orientation data
         self.update(poses[self.index][0], poses[self.index][1])
         # if the stop flag is on, force the vehicle to stop
