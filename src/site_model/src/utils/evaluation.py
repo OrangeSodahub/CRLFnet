@@ -3,7 +3,6 @@ import torch
 import numpy as np
 from tensorboardX import SummaryWriter
 # odometry type
-from nav_msgs.msg import Odometry
 from .iou3d import iou3d_nms_cuda
 from . import common_utils
 
@@ -196,7 +195,7 @@ def bbox_iou(boxes3d: np.array, boxes2d: np.array, critierion=-1):
     pass
 
 
-class evalagent():
+class Evalagent():
 
     def __init__(self, num: int, save_dir):
         self.num = num

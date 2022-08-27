@@ -109,7 +109,6 @@ class Kalman:
         self.create(zs, new_idx)
 
     def output(self) -> np.ndarray:
-        # TODO: Match the input of the dispatch system
         return self.xpts[:, 0:self.size]
 
     def __repr__(self) -> str:

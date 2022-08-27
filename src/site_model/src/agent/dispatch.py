@@ -2,7 +2,7 @@
 
 import argparse
 from pathlib import Path
-from typing import Tuple
+from typing import List, Tuple
 import numpy as np
 import yaml
 
@@ -11,14 +11,16 @@ import message_filters
 from std_msgs.msg import Float64, Float64MultiArray
 from nav_msgs.msg import Odometry
 from ackermann_msgs.msg import AckermannDriveStamped
-from msgs.msg._MsgRadCam import MsgRadCam  # radar camera fusion message type
-from msgs.msg._MsgLidCam import MsgLidCam  # lidar camera fusion message type
+from msgs.msg._MsgRadCam import MsgRadCam      # radar camera fusion message type
+from msgs.msg._MsgLidCam import MsgLidCam      # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 
-from .agent import Agents, DynamicMap
-from ..utils.evaluation import evalagent
+from .scene import SceneMap
+from .agent import DynamicMap, Agent
+from ..utils.evaluation import Evalagent
 
-N = 10  # the number of vehicles
+N = 10         # the number of vehicles
+THROTTLE = 15  # the base value of throttle
 
 
 class VehiclePublisher:
@@ -43,96 +45,108 @@ class VehiclePublisher:
         self.r_steering_hinge.publish(steer)
 
 
+class Dispatch:
+
+    def __init__(self, vehicle_num: int, scene_map: SceneMap, evalagent: Evalagent) -> None:
+        self.scene_map = scene_map
+        self.vehicles = [Agent(self.scene_map, i) for i in range(1, vehicle_num + 1)]
+        self.pub_vehicles = [VehiclePublisher('deepracer{}'.format(i)) for i in range(1, N + 1)]
+        self.pub_velocity = rospy.Publisher('/velocity', Float64MultiArray, queue_size=1)
+        self.pub_num_area = rospy.Publisher('/nums', Float64MultiArray, queue_size=1)
+        self.evalagent = evalagent
+
+    def flush(self, odoms: List[Odometry], evaluate: bool = False):
+        poses = list(map(odom2pose, odoms))
+        num_lane, num_area = density(self.scene_map, poses)
+        steers, throttles = [], []
+        for p, v, pub in zip(poses, self.vehicles, self.pub_vehicles):
+            steer, throttle = v.navigate(p, num_lane, num_area)
+            pub.publish(throttle * THROTTLE, steer)
+            steers.append(steer)
+            throttles.append(throttle)
+        self.publish(num_area, throttles)
+        # evaluation
+        if evaluate:
+            self.evalagent.write(poses, throttles, num_area)
+
+    def publish(self, num_area: np.ndarray, throttles: List[float]):
+        """Publish the num_area and throttle data."""
+        num_area_array = Float64MultiArray()
+        velocity_array = Float64MultiArray()
+        num_area_array.data = num_area
+        velocity_array.data = np.abs(throttles)
+        self.pub_num_area.publish(num_area_array)
+        self.pub_velocity.publish(velocity_array)
+
+
+def density(scene_map: SceneMap, target_poses: List[Tuple[np.ndarray, float]]) -> Tuple[np.ndarray, np.ndarray]:
+    # the 'target_poses' is given in ((X, Y, Z), theta)
+    num_lane = np.zeros(len(scene_map.lanes))
+    num_area = np.zeros(4)
+    for p in target_poses:
+        # which way the target is on
+        lane_index, _ = scene_map.nearest_point(p[0][0:2])
+        num_lane[lane_index] += 1
+        # which area the target is in
+        # TODO: mark the areas in the scene map
+        if p[0][3] >= 0.1:
+            num_area[2] += 1   # overpass
+        elif 0.0 <= p[1] <= 1.7 and -1.2 <= p[0] <= 1.0:
+            num_area[0] += 1   # intersection
+        elif -2.2 <= p[1] < 0.0 and -1.2 <= p[0] <= 1.0:
+            num_area[1] += 1   # roundabout
+        else:
+            num_area[3] += 1   # outer ring
+    return num_lane, num_area
+
+
 def odom2pose(odom: Odometry) -> Tuple[np.ndarray, float]:
     pos = odom.pose.pose.position
     orient = odom.pose.pose.orientation
     r, p, y = euler_from_quaternion([orient.x, orient.y, orient.z, orient.w])
-    return np.array([pos.x, pos.y]), y
+    return np.array([pos.x, pos.y, pos.z]), y
 
 
-def set_control(odom1: Odometry,
-                odom2: Odometry,
-                odom3: Odometry,
-                odom4: Odometry,
-                odom5: Odometry,
-                odom6: Odometry,
-                odom7: Odometry,
-                odom8: Odometry,
-                odom9: Odometry,
-                odom10: Odometry,
-                msgradcam: MsgRadCam = None,
-                msglidcam: MsgLidCam = None) -> None:
-    global pub_nums, pub_velocity, pub_vehicles
+def set_control(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None) -> None:
+    global dispatch_system
+    global params
 
-    poses = [
-        odom2pose(odom1),
-        odom2pose(odom2),
-        odom2pose(odom3),
-        odom2pose(odom4),
-        odom2pose(odom5),
-        odom2pose(odom6),
-        odom2pose(odom7),
-        odom2pose(odom8),
-        odom2pose(odom9),
-        odom2pose(odom10)
-    ]
-    steers, throttles = agents.navigate(poses, msgradcam, msglidcam)
-    nums_area = [0, 0, 0, 0]
-    throttles = [t * 15 for t in throttles]
-
-    # record
-    if params.eval:
-        eval.write(poses, throttles, nums_area)
-
-    for i, pub in enumerate(pub_vehicles):
-        pub.publish(throttles[i], steers[i])
-
-    nums = Float64MultiArray()
-    velocity = Float64MultiArray()
-    nums.data = nums_area
-    velocity.data = [abs(t) for t in throttles]
-    pub_nums.publish(nums)
-    pub_velocity.publish(velocity)
-
-
-def servo_commands() -> None:
-
-    rospy.init_node('servo_commands', anonymous=True)
-
-    # rospy.Subscriber("/ackermann_cmd_mux/output", AckermannDriveStamped, set_throttle_steer)
-
-    sub_msgradcam = message_filters.Subscriber('/radar_camera_fused', MsgRadCam)
-    sub_msglidcam = message_filters.Subscriber('/lidar_camera_fused', MsgLidCam)
-    sub_key = message_filters.Subscriber('/ackermann_cmd_mux/output', AckermannDriveStamped)
-    sub_odoms = [message_filters.Subscriber('/deepracer{}/base_pose_ground_truth'.format(i), Odometry) for i in range(1, N + 1)]
-    sync = message_filters.ApproximateTimeSynchronizer(sub_odoms, 1, 1)
-    sync.registerCallback(set_control)
-
-    print("success init")
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
+    odoms: List[Odometry] = [o1, o2, o3, o4, o5, o6, o7, o8, o9, o10]
+    dispatch_system.flush(odoms, params.eval)
 
 
 if __name__ == '__main__':
+    # parser
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--eval", help="whether to evaluate", action='store_true', required=False)
     parser.add_argument("-v", "--vis", help="whether to visualize", action='store_true', required=False)
     params = parser.parse_args()
+
     # load config file
     ROOT_DIR = Path(__file__).resolve().parents[2]
     CONFIG_FILE = ROOT_DIR.joinpath('config/config.yaml')
     with open(CONFIG_FILE, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-
     MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
+    SAVE_DIR = ROOT_DIR.joinpath("src/agent/eval")
+
+    # initialization
     scene_map = DynamicMap(MAP_DIR)
-    agents = Agents(scene_map, 10)
-    if params.eval:
-        SAVE_DIR = ROOT_DIR.joinpath('src/agent/eval')
-        eval = evalagent(10, SAVE_DIR)
+    evalagent = Evalagent(N, SAVE_DIR)
+    dispatch_system = Dispatch(N, scene_map, evalagent)
 
-    pub_nums = rospy.Publisher('/nums', Float64MultiArray, queue_size=1)
-    pub_velocity = rospy.Publisher('/velocity', Float64MultiArray, queue_size=1)
-    pub_vehicles = [VehiclePublisher('deepracer{}'.format(i)) for i in range(1, N + 1)]
+    # ROS messages
+    rospy.init_node('servo_commands', anonymous=True)
+    # rospy.Subscriber("/ackermann_cmd_mux/output", AckermannDriveStamped, set_throttle_steer)
+    sub_msgradcam = message_filters.Subscriber('/radar_camera_fused', MsgRadCam)
+    sub_msglidcam = message_filters.Subscriber('/lidar_camera_fused', MsgLidCam)
+    sub_key = message_filters.Subscriber('/ackermann_cmd_mux/output', AckermannDriveStamped)
+    sub_odoms = [message_filters.Subscriber('/deepracer{}/base_pose_ground_truth'.format(i), Odometry) for i in range(1, N + 1)]
 
-    servo_commands()
+    sync = message_filters.ApproximateTimeSynchronizer(sub_odoms, 1, 1)
+
+    sync.registerCallback(set_control)
+
+    print("\033[0;32mDispatch System Initialized Successfully\033[0m")
+
+    rospy.spin()
