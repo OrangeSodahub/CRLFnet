@@ -1,6 +1,6 @@
 # !/usr/bin/env python3
 
-from typing import Tuple
+from typing import List, Tuple
 import numpy as np
 
 from .scene import DynamicMap
@@ -23,7 +23,7 @@ class Agent:
         self.TARGET_RANGE = 1.0                # if d(target, self) > TARGET_RANGE, switch to lost mode
         self.TARGET_THRES = 0.25               # if d(target, self) < TARGET_THRES, the vehicle has reached the target
         self.COLLIDE_THRES = 0.5               # if d(another_vehicle, self) < COLLIDE_THRES, the vehicle stops
-        self.SLOW_DOWN_THRES = 1.5             # if d(another_vehicle, self) < SLOW_DOWN_THRES, the vehicle slows down
+        self.SLOW_DOWN_THRES = 1.0             # if d(another_vehicle, self) < SLOW_DOWN_THRES, the vehicle slows down
 
         # running data
         self.mode = 'lost'
@@ -42,58 +42,40 @@ class Agent:
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def vcontrol(self, poses) -> int:
-        # TODO: improve coding
-        """Return if collide and v coeff."""
-
-        def is_lane(sl, l, sp, p):
-            if sl != l:
-                return False
-            else:
-                self_steer = ((sp[1] + np.pi) if sp[1] <= 0 else (sp[1] - np.pi)) if self.throttle == -1 else sp[1]
-                if abs(np.arctan2(p[0][1] - sp[0][1], p[0][0] - sp[0][0]) - self_steer) <= np.pi / 6:
-                    return True
-                return False
-
-        vcontrols = []
-        for i, p in enumerate(poses):
+    def no_crash(self, all_poses: List[Tuple[np.ndarray, float]]) -> int:
+        v = 1.0
+        for i, p in enumerate(all_poses):
+            # the index of the vehicles start from 1, while i starts from 0
             if i + 1 == self.index:
                 continue
-            sp = poses[i]
-            '''
-            if is_lane(self.tmp_lane, lanes[i], sp, p):
-                dist = np.linalg.norm(sp[0] - p[0])
-                if dist <= self.COLLIDE_THRES:
-                    vcontrols.append(0)
-                elif dist < self.SLOW_DOWN_THRES:
-                    vcontrols.append((dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES))
-                else:
-                    vcontrols.append(1)
-            else:
-                vcontrols.append(1)
-            '''
-            dist = np.linalg.norm(sp[0] - p[0])
-            if dist <= self.COLLIDE_THRES:
-                vcontrols.append(0)
-            elif dist < self.SLOW_DOWN_THRES:
-                vcontrols.append((dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES))
-            else:
-                vcontrols.append(1)
-        return 1 if (self.mode == 'node' and not self.stop_flag) else min(np.array(vcontrols))
+            # calculate the distance and angle
+            vec = p[0][0:2] - self.pos
+            dst = np.linalg.norm(vec)
+            ang = np.arctan2(vec[1], vec[0]) - self.orient * np.sign(self.throttle)
+            # -pi <= ang <= pi
+            ang = (ang + np.pi) % (2 * np.pi) - np.pi
+            # the vehicle only slows down or stops when there is an obstacle in front of it
+            if -np.pi / 4 <= ang <= np.pi / 4:
+                if dst <= self.COLLIDE_THRES:
+                    v = 0
+                    break
+                elif dst <= self.SLOW_DOWN_THRES:
+                    v = 0.5
+        return v
 
-    def target2control(self, all_poses) -> Tuple[float, float]:
-        # TODO: improve coding
-        v_control = self.vcontrol(all_poses)
-        v_control = 1
-        if not v_control:
+    def target2control(self, all_poses: List[Tuple[np.ndarray, float]]) -> Tuple[float, float]:
+        # prevent crash
+        v = self.no_crash(all_poses)
+        if v == 0:
             return 0, 0
+        # calculate yaw angle and velocity
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
-        yaw = (yaw + np.pi) % (2 * np.pi) - np.pi
+        yaw = (yaw + np.pi) % (2 * np.pi) - np.pi              # -pi <= yaw <= pi
         distance = np.linalg.norm(self.tmp_target - self.pos)  # do not use self.distance !!!
         sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1)
         rotation = np.arcsin(sin_rot)
         steer = np.clip(rotation / self.MAX_STEER, -1, 1)
-        throttle = (1 if abs(yaw) < np.pi / 2 else -1) * v_control
+        throttle = (1 if abs(yaw) < np.pi / 2 else -1) * v
         self.throttle = throttle
         return steer, throttle
 
@@ -150,8 +132,8 @@ class Agent:
             self.scene_map.leave_intersect(self, self.tmp_node)
             self.mode = 'lane'
 
-    def navigate(self, pos: Tuple[np.ndarray, float], num_lane: np.ndarray, num_area: np.ndarray, all_poses: np.ndarray) -> Tuple[float, float]:
-        # TODO: improve coding
+    def navigate(self, pos: Tuple[np.ndarray, float], num_lane: np.ndarray, num_area: np.ndarray,
+                 all_poses: List[Tuple[np.ndarray, float]]) -> Tuple[float, float]:
         # update the position and orientation data
         self.update(pos[0][0:2], pos[1])
         # if the stop flag is on, force the vehicle to stop

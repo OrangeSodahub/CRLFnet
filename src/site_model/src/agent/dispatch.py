@@ -65,6 +65,7 @@ class Dispatch:
             pub.publish(throttle * THROTTLE, steer)
             steers.append(steer)
             throttles.append(throttle)
+        print("----------------")
         self.publish(num_area, throttles)
         # evaluation
         if evaluate:
@@ -133,8 +134,10 @@ if __name__ == '__main__':
 
     # initialization
     scene_map = DynamicMap(MAP_DIR)
-    # evalagent = Evalagent(N, SAVE_DIR)
-    evalagent = None
+    if params.eval:
+        evalagent = Evalagent(N, SAVE_DIR)
+    else:
+        evalagent = None
     dispatch_system = Dispatch(N, scene_map, evalagent)
 
     # ROS messages
