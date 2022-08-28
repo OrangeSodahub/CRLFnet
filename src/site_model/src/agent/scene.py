@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import numpy as np
-from typing import Tuple
+from typing import Tuple, List
 
 
 class SceneMap:
@@ -61,3 +61,36 @@ class SceneMap:
         lane_idx = np.argmin(distances)
         point_idx = point_indices[lane_idx]
         return lane_idx, point_idx
+
+
+class DynamicMap(SceneMap):
+
+    def __init__(self, load_path: Path) -> None:
+        super().__init__(load_path)
+        self.intersect_queues = [[] for _ in range(len(self.nodes))]
+
+    def reach_intersect(self, vehicle, node_index: int) -> None:
+        q = self.intersect_queues[node_index]
+        q.append(vehicle)
+        if len(q) > 1:
+            vehicle.stop_flag = True
+
+    def leave_intersect(self, vehicle, node_index: int) -> None:
+        q = self.intersect_queues[node_index]
+        q.remove(vehicle)
+        if len(q) > 0:
+            q[0].stop_flag = False
+
+    def score_lanes(self, accessible_lanes: np.ndarray, num_lane: np.ndarray, num_area: np.ndarray) -> int:
+        # TODO: improve coding
+        def set_weight(orient, num_area):
+            nums_index = np.argsort(num_area) + 1
+            return (np.where(nums_index == orient)[0][0] + 1)
+
+        # choose the accessible lanes
+        num_lane = num_lane[accessible_lanes]
+
+        lane_orient = [self.lane_in_area[lane] for lane in accessible_lanes]
+        lane_weight = [set_weight(orient, num_area) for orient in lane_orient]
+        lane_score = [a * b for a, b in zip(num_lane, lane_weight)]
+        return accessible_lanes[np.where(lane_score == np.min(lane_score))[0][0]]

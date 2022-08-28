@@ -1,52 +1,11 @@
 # !/usr/bin/env python3
 
-from pathlib import Path
-from typing import Tuple, List
+from typing import Tuple
 import numpy as np
 
-from .scene import SceneMap
+from .scene import DynamicMap
 
 MODES = ['lane', 'node', 'lost', 'error']
-
-
-class DynamicMap(SceneMap):
-
-    def __init__(self, load_path: Path) -> None:
-        super().__init__(load_path)
-        self.intersect_queues: List[List[Agent]] = [[] for _ in range(len(self.nodes))]
-
-    def reach_intersect(self, vehicle, node_index: int) -> None:
-        q = self.intersect_queues[node_index]
-        q.append(vehicle)
-        if len(q) > 1:
-            vehicle.stop_flag = True
-
-    def leave_intersect(self, vehicle, node_index: int) -> None:
-        q = self.intersect_queues[node_index]
-        q.remove(vehicle)
-        if len(q) > 0:
-            q[0].stop_flag = False
-
-    def score_lanes(self, accessible_lanes: np.ndarray, num_lane: np.ndarray, num_area: np.ndarray) -> int:
-        # TODO
-        poses = [v.pos for v in vehicles]
-        """Calculate weighted score of accessible lanes."""
-
-        def set_weight(orient, nums_area):
-            nums_index = np.argsort(nums_area) + 1
-            return (np.where(nums_index == orient)[0][0] + 1)
-
-        lane_num = [0] * len(accessible_lanes)
-        for i, lane in enumerate(accessible_lanes):
-            # dists = np.array([[np.linalg.norm(np.array([v.pos_x, v.pos_y]), pt) for pt in self.lanes[lane]] for v in (msg_lid_cam.objects_circle+msg_lid_cam.objects_intersection)])
-            dists = np.array([[np.linalg.norm(p[0] - pt) for pt in self.lanes[lane]] for p in poses])
-            dists_convert = dists <= 0.05
-            lane_num[i] += np.sum(dists_convert)
-        lane_orient = [self.lane_in_area[lane] for lane in accessible_lanes]
-        # nums_area = [msg_lid_cam.num_intersection, msg_lid_cam.objects_circle, msg_rad_cam.num_overpass]
-        lane_weight = [set_weight(orient, nums_area) for orient in lane_orient]
-        lane_score = [a * b for a, b in zip(lane_num, lane_weight)]
-        return accessible_lanes[np.where(lane_score == np.min(lane_score))[0][0]]
 
 
 class Agent:
@@ -83,8 +42,8 @@ class Agent:
         self.orient = orient
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
-    def vcontrol(self, poses, lanes: np.ndarray) -> int:
-        # TODO
+    def vcontrol(self, poses) -> int:
+        # TODO: improve coding
         """Return if collide and v coeff."""
 
         def is_lane(sl, l, sp, p):
@@ -98,9 +57,10 @@ class Agent:
 
         vcontrols = []
         for i, p in enumerate(poses):
-            if i == self.index:
+            if i + 1 == self.index:
                 continue
-            sp = poses[self.index]
+            sp = poses[i]
+            '''
             if is_lane(self.tmp_lane, lanes[i], sp, p):
                 dist = np.linalg.norm(sp[0] - p[0])
                 if dist <= self.COLLIDE_THRES:
@@ -111,11 +71,20 @@ class Agent:
                     vcontrols.append(1)
             else:
                 vcontrols.append(1)
+            '''
+            dist = np.linalg.norm(sp[0] - p[0])
+            if dist <= self.COLLIDE_THRES:
+                vcontrols.append(0)
+            elif dist < self.SLOW_DOWN_THRES:
+                vcontrols.append((dist - self.COLLIDE_THRES) / (self.SLOW_DOWN_THRES - self.COLLIDE_THRES))
+            else:
+                vcontrols.append(1)
         return 1 if (self.mode == 'node' and not self.stop_flag) else min(np.array(vcontrols))
 
-    def target2control(self, poses, lanes: np.ndarray) -> Tuple[float, float]:
-        # TODO
-        v_control = self.vcontrol(poses, lanes)
+    def target2control(self, all_poses) -> Tuple[float, float]:
+        # TODO: improve coding
+        v_control = self.vcontrol(all_poses)
+        v_control = 1
         if not v_control:
             return 0, 0
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
@@ -181,8 +150,8 @@ class Agent:
             self.scene_map.leave_intersect(self, self.tmp_node)
             self.mode = 'lane'
 
-    def navigate(self, pos: Tuple[np.ndarray, float], num_lane: np.ndarray, num_area: np.ndarray) -> Tuple[float, float]:
-        # TODO
+    def navigate(self, pos: Tuple[np.ndarray, float], num_lane: np.ndarray, num_area: np.ndarray, all_poses: np.ndarray) -> Tuple[float, float]:
+        # TODO: improve coding
         # update the position and orientation data
         self.update(pos[0][0:2], pos[1])
         # if the stop flag is on, force the vehicle to stop
@@ -203,7 +172,7 @@ class Agent:
         elif self.mode == 'error':
             print("\033[0;31mERROR #{}\033[0m".format(self.index), end='\n')
             return 0, 0
-        return self.target2control(all_poses, lanes)
+        return self.target2control(all_poses)
 
     def __repr__(self) -> str:
         return "Index: {},\tMode: {},\tFlag: {},\tTarget: {}".format(self.index, self.mode, self.stop_flag, self.tmp_target)

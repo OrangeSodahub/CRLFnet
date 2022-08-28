@@ -17,7 +17,7 @@ from tf.transformations import euler_from_quaternion
 
 from .scene import SceneMap
 from .agent import DynamicMap, Agent
-from ..utils.evaluation import Evalagent
+# from ..utils.evaluation import Evalagent
 
 N = 10         # the number of vehicles
 THROTTLE = 15  # the base value of throttle
@@ -47,7 +47,7 @@ class VehiclePublisher:
 
 class Dispatch:
 
-    def __init__(self, vehicle_num: int, scene_map: SceneMap, evalagent: Evalagent) -> None:
+    def __init__(self, vehicle_num: int, scene_map: SceneMap, evalagent) -> None:
         self.scene_map = scene_map
         self.vehicles = [Agent(self.scene_map, i) for i in range(1, vehicle_num + 1)]
         self.pub_vehicles = [VehiclePublisher('deepracer{}'.format(i)) for i in range(1, N + 1)]
@@ -55,12 +55,13 @@ class Dispatch:
         self.pub_num_area = rospy.Publisher('/nums', Float64MultiArray, queue_size=1)
         self.evalagent = evalagent
 
-    def flush(self, odoms: List[Odometry], evaluate: bool = False):
+    def flush(self, odoms: List[Odometry], evaluate: bool = False) -> None:
         poses = list(map(odom2pose, odoms))
         num_lane, num_area = density(self.scene_map, poses)
         steers, throttles = [], []
         for p, v, pub in zip(poses, self.vehicles, self.pub_vehicles):
-            steer, throttle = v.navigate(p, num_lane, num_area)
+            steer, throttle = v.navigate(p, num_lane, num_area, poses)
+            print(v)
             pub.publish(throttle * THROTTLE, steer)
             steers.append(steer)
             throttles.append(throttle)
@@ -69,7 +70,7 @@ class Dispatch:
         if evaluate:
             self.evalagent.write(poses, throttles, num_area)
 
-    def publish(self, num_area: np.ndarray, throttles: List[float]):
+    def publish(self, num_area: np.ndarray, throttles: List[float]) -> None:
         """Publish the num_area and throttle data."""
         num_area_array = Float64MultiArray()
         velocity_array = Float64MultiArray()
@@ -89,11 +90,11 @@ def density(scene_map: SceneMap, target_poses: List[Tuple[np.ndarray, float]]) -
         num_lane[lane_index] += 1
         # which area the target is in
         # TODO: mark the areas in the scene map
-        if p[0][3] >= 0.1:
+        if p[0][2] >= 0.1:
             num_area[2] += 1   # overpass
-        elif 0.0 <= p[1] <= 1.7 and -1.2 <= p[0] <= 1.0:
+        elif 0.0 <= p[0][1] <= 1.7 and -1.2 <= p[0][0] <= 1.0:
             num_area[0] += 1   # intersection
-        elif -2.2 <= p[1] < 0.0 and -1.2 <= p[0] <= 1.0:
+        elif -2.2 <= p[0][1] < 0.0 and -1.2 <= p[0][0] <= 1.0:
             num_area[1] += 1   # roundabout
         else:
             num_area[3] += 1   # outer ring
@@ -107,7 +108,7 @@ def odom2pose(odom: Odometry) -> Tuple[np.ndarray, float]:
     return np.array([pos.x, pos.y, pos.z]), y
 
 
-def set_control(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10, msgradcam: MsgRadCam = None, msglidcam: MsgLidCam = None) -> None:
+def set_control(o1, o2, o3, o4, o5, o6, o7, o8, o9, o10) -> None:
     global dispatch_system
     global params
 
@@ -132,7 +133,8 @@ if __name__ == '__main__':
 
     # initialization
     scene_map = DynamicMap(MAP_DIR)
-    evalagent = Evalagent(N, SAVE_DIR)
+    # evalagent = Evalagent(N, SAVE_DIR)
+    evalagent = None
     dispatch_system = Dispatch(N, scene_map, evalagent)
 
     # ROS messages
