@@ -94,3 +94,12 @@ class DynamicMap(SceneMap):
         lane_weight = [set_weight(orient, num_area) for orient in lane_orient]
         lane_score = [a * b for a, b in zip(num_lane, lane_weight)]
         return accessible_lanes[np.where(lane_score == np.min(lane_score))[0][0]]
+
+    def __repr__(self) -> str:
+        s = ""
+        for i, q in enumerate(self.intersect_queues):
+            s += "Node {:02d}: ".format(i)
+            for v in q:
+                s += "{} ".format(v.index)
+            s += '\n'
+        return s

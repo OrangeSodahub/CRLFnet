@@ -20,7 +20,7 @@ from .agent import DynamicMap, Agent
 # from ..utils.evaluation import Evalagent
 
 N = 10         # the number of vehicles
-THROTTLE = 15  # the base value of throttle
+THROTTLE = 20  # the base value of throttle
 
 
 class VehiclePublisher:
@@ -65,7 +65,7 @@ class Dispatch:
             pub.publish(throttle * THROTTLE, steer)
             steers.append(steer)
             throttles.append(throttle)
-        print("----------------")
+        print(self.scene_map)
         self.publish(num_area, throttles)
         # evaluation
         if evaluate:

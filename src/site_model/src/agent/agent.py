@@ -30,12 +30,12 @@ class Agent:
         self.pos = np.array([0, 0])            # position (X, Y) (m) | np.ndarray(shape=(2), dtype=float)
         self.orient = 0                        # orientation (rad)
         self.distance = 0                      # d(target, self) (m)
-        self.throttle = 1                      # throttle
         self.tmp_target = np.array([0, 0])     # target (X, Y) (m) | np.ndarray(shape=(2), dtype=float)
         self.tmp_lane = -1                     # index of lane (-1 represents None)
         self.tmp_lane_point = -1               # index of lane point (-1 represents None)
         self.tmp_node = -1                     # index of node (-1 represents None)
-        self.stop_flag = False
+        self.stop_flag = False                 # used for intersections
+        self.back_flag = False
 
     def update(self, pos: np.ndarray, orient: float) -> None:
         self.pos = pos
@@ -43,15 +43,23 @@ class Agent:
         self.distance = np.linalg.norm(self.tmp_target - self.pos)
 
     def no_crash(self, all_poses: List[Tuple[np.ndarray, float]]) -> int:
+        # TODO: improve coding
         v = 1.0
+        self_z = all_poses[self.index - 1][0][2]
         for i, p in enumerate(all_poses):
             # the index of the vehicles start from 1, while i starts from 0
             if i + 1 == self.index:
                 continue
+            # the vehicles are not on the same z-plane, such as overpass
+            if np.abs(p[0][2] - self_z) > 0.1:
+                continue
+            # sector
+            '''
             # calculate the distance and angle
             vec = p[0][0:2] - self.pos
             dst = np.linalg.norm(vec)
-            ang = np.arctan2(vec[1], vec[0]) - self.orient * np.sign(self.throttle)
+            ori = self.orient + np.pi if self.back_flag else self.orient
+            ang = np.arctan2(vec[1], vec[0]) - ori
             # -pi <= ang <= pi
             ang = (ang + np.pi) % (2 * np.pi) - np.pi
             # the vehicle only slows down or stops when there is an obstacle in front of it
@@ -60,14 +68,29 @@ class Agent:
                     v = 0
                     break
                 elif dst <= self.SLOW_DOWN_THRES:
-                    v = 0.5
+                    v = 0.6
+            '''
+            # rectangle
+            vec = p[0][0:2] - self.pos
+            ori = self.orient + np.pi if self.back_flag else self.orient
+            dst_para = vec[0] * np.cos(ori) + vec[1] * np.sin(ori)
+            dst_orth = np.abs(vec[0] * np.sin(ori) - vec[1] * np.cos(ori))
+            if dst_orth <= self.WIDTH:
+                if 0 <= dst_para <= self.COLLIDE_THRES + self.LENGTH / 2:
+                    v = 0
+                    break
+                elif 0 <= dst_para <= self.SLOW_DOWN_THRES + self.LENGTH / 2:
+                    v = 0.6
         return v
 
     def target2control(self, all_poses: List[Tuple[np.ndarray, float]]) -> Tuple[float, float]:
         # prevent crash
-        v = self.no_crash(all_poses)
-        if v == 0:
-            return 0, 0
+        if self.mode != 'node':
+            v = self.no_crash(all_poses)
+            if v == 0:
+                return 0, 0
+        else:
+            v = 1.0
         # calculate yaw angle and velocity
         yaw = np.arctan2(self.tmp_target[1] - self.pos[1], self.tmp_target[0] - self.pos[0]) - self.orient
         yaw = (yaw + np.pi) % (2 * np.pi) - np.pi              # -pi <= yaw <= pi
@@ -75,8 +98,8 @@ class Agent:
         sin_rot = np.clip(2 * self.LEN * np.sin(yaw) / distance, -1, 1)
         rotation = np.arcsin(sin_rot)
         steer = np.clip(rotation / self.MAX_STEER, -1, 1)
-        throttle = (1 if abs(yaw) < np.pi / 2 else -1) * v
-        self.throttle = throttle
+        self.back_flag = abs(yaw) > np.pi / 2
+        throttle = (-1 if self.back_flag else 1) * v
         return steer, throttle
 
     def choose_way(self, node: int, from_lane: int, num_lane: np.ndarray, num_area: np.ndarray, rand_mode: bool = True) -> int:
