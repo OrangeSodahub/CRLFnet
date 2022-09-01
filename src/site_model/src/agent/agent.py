@@ -24,6 +24,9 @@ class Agent:
         self.TARGET_THRES = 0.25               # if d(target, self) < TARGET_THRES, the vehicle has reached the target
         self.COLLIDE_THRES = 0.5               # if d(another_vehicle, self) < COLLIDE_THRES, the vehicle stops
         self.SLOW_DOWN_THRES = 1.0             # if d(another_vehicle, self) < SLOW_DOWN_THRES, the vehicle slows down
+        # add the length of the vehicle
+        self.COLLIDE_THRES = self.COLLIDE_THRES + self.LENGTH / 2
+        self.SLOW_DOWN_THRES = self.SLOW_DOWN_THRES + self.LENGTH / 2
 
         # running data
         self.mode = 'lost'
@@ -53,34 +56,14 @@ class Agent:
             # the vehicles are not on the same z-plane, such as overpass
             if np.abs(p[0][2] - self_z) > 0.1:
                 continue
-            # sector
-            '''
-            # calculate the distance and angle
-            vec = p[0][0:2] - self.pos
-            dst = np.linalg.norm(vec)
-            ori = self.orient + np.pi if self.back_flag else self.orient
-            ang = np.arctan2(vec[1], vec[0]) - ori
-            # -pi <= ang <= pi
-            ang = (ang + np.pi) % (2 * np.pi) - np.pi
-            # the vehicle only slows down or stops when there is an obstacle in front of it
-            if -np.pi / 4 <= ang <= np.pi / 4:
-                if dst <= self.COLLIDE_THRES:
-                    v = 0
-                    break
-                elif dst <= self.SLOW_DOWN_THRES:
-                    v = 0.6
-            '''
-            # rectangle
+            # rectanglar detection area
             vec = p[0][0:2] - self.pos
             ori = self.orient + np.pi if self.back_flag else self.orient
             dst_para = vec[0] * np.cos(ori) + vec[1] * np.sin(ori)
             dst_orth = np.abs(vec[0] * np.sin(ori) - vec[1] * np.cos(ori))
-            if dst_orth <= self.WIDTH:
-                if 0 <= dst_para <= self.COLLIDE_THRES + self.LENGTH / 2:
-                    v = 0
-                    break
-                elif 0 <= dst_para <= self.SLOW_DOWN_THRES + self.LENGTH / 2:
-                    v = 0.6
+            if dst_orth <= self.WIDTH and dst_para > 0:
+                v_tmp = np.interp(dst_para, [self.COLLIDE_THRES, self.SLOW_DOWN_THRES], [0.0, 1.0])
+                v = np.min([v, v_tmp])
         return v
 
     def target2control(self, all_poses: List[Tuple[np.ndarray, float]]) -> Tuple[float, float]:
