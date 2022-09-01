@@ -210,7 +210,7 @@ class Evalagent():
         """
         update records
         """
-        if self.counter == 1000:
+        if self.counter == 2000:
             self.save()
         frame_pose = np.array([[pose[0][0], pose[0][1]] for pose in poses]).reshape(1, -1)[0]
         self.pose.append(frame_pose)

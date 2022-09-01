@@ -2,6 +2,7 @@
 
 import argparse
 from pathlib import Path
+from random import random
 from typing import List, Tuple
 import numpy as np
 import yaml
@@ -17,7 +18,7 @@ from tf.transformations import euler_from_quaternion
 
 from .scene import SceneMap
 from .agent import DynamicMap, Agent
-# from ..utils.evaluation import Evalagent
+from ..utils.evaluation import Evalagent
 
 N = 10         # the number of vehicles
 THROTTLE = 20  # the base value of throttle
@@ -47,20 +48,21 @@ class VehiclePublisher:
 
 class Dispatch:
 
-    def __init__(self, vehicle_num: int, scene_map: SceneMap, evalagent) -> None:
+    def __init__(self, vehicle_num: int, scene_map: SceneMap, evalagent, random: bool) -> None:
         self.scene_map = scene_map
         self.vehicles = [Agent(self.scene_map, i) for i in range(1, vehicle_num + 1)]
         self.pub_vehicles = [VehiclePublisher('deepracer{}'.format(i)) for i in range(1, N + 1)]
         self.pub_velocity = rospy.Publisher('/velocity', Float64MultiArray, queue_size=1)
         self.pub_num_area = rospy.Publisher('/nums', Float64MultiArray, queue_size=1)
         self.evalagent = evalagent
+        self.random = random
 
     def flush(self, odoms: List[Odometry], evaluate: bool = False) -> None:
         poses = list(map(odom2pose, odoms))
         num_lane, num_area = density(self.scene_map, poses)
         steers, throttles = [], []
         for p, v, pub in zip(poses, self.vehicles, self.pub_vehicles):
-            steer, throttle = v.navigate(p, num_lane, num_area, poses)
+            steer, throttle = v.navigate(p, num_lane, num_area, poses, random)
             print(v)
             pub.publish(throttle * THROTTLE, steer)
             steers.append(steer)
@@ -122,6 +124,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--eval", help="whether to evaluate", action='store_true', required=False)
     parser.add_argument("-v", "--vis", help="whether to visualize", action='store_true', required=False)
+    parser.add_argument("-r", "--random", help="whether to random", action='store_true', required=False)
     params = parser.parse_args()
 
     # load config file
@@ -138,7 +141,7 @@ if __name__ == '__main__':
         evalagent = Evalagent(N, SAVE_DIR)
     else:
         evalagent = None
-    dispatch_system = Dispatch(N, scene_map, evalagent)
+    dispatch_system = Dispatch(N, scene_map, evalagent, params.random)
 
     # ROS messages
     rospy.init_node('servo_commands', anonymous=True)
