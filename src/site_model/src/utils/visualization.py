@@ -1,5 +1,7 @@
 # !/usr/bin/env python3
 
+import cv2
+from cv_bridge import CvBridge
 from pathlib import Path
 from datetime import datetime
 import numpy as np
@@ -11,9 +13,6 @@ from sensor_msgs.msg import Image
 from msgs.msg._MsgCamera import MsgCamera
 from geometry_msgs.msg import Point
 from visualization_msgs.msg import Marker, MarkerArray
-
-import cv2
-from cv_bridge import CvBridge
 
 from .sensor_and_obs import ObsBundle, RadarSensor, ImageSensor, FusedSensor
 from .kalman import Kalman
@@ -296,3 +295,20 @@ def draw_pr_line(txt_dir: str):
 
     plt.plot(thresholds, recall, '-o')
     plt.show()
+
+
+class Visualvehicle():
+    def __init__ (self):
+        pass
+    
+    def draw_velocity(self, data: np.ndarray, num: int):
+        data = abs(np.transpose(data))
+        x = np.linspace(1, 2000, 2000)
+        for i in range(num):
+            plt.plot(x, data[i], label='v{}'.format(i+1))
+
+        plt.legend()
+        plt.show()
+
+    def draw_density(self, data, num):
+        pass

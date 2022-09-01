@@ -1,10 +1,12 @@
 import os
 import torch
 import numpy as np
+from pathlib import Path
 from tensorboardX import SummaryWriter
 # odometry type
 from .iou3d import iou3d_nms_cuda
 from . import common_utils
+from ..utils.visualization import Visualvehicle
 
 
 class eval3d():
@@ -197,7 +199,7 @@ def bbox_iou(boxes3d: np.array, boxes2d: np.array, critierion=-1):
 
 class Evalagent():
 
-    def __init__(self, num: int, save_dir):
+    def __init__(self, num: int, save_dir: Path, vis: Visualvehicle=None):
         self.num = num
         self.dir = str(save_dir)
         self.frame = 0
@@ -205,6 +207,7 @@ class Evalagent():
         self.velocity = []
         self.density = []
         self.counter = 0
+        self.vis = vis
 
     def write(self, poses: np.array, throttles: np.ndarray, density: np.ndarray):
         """
@@ -223,9 +226,15 @@ class Evalagent():
         save results to files
         """
         np.savetxt(os.path.join(self.dir, 'pose.txt'), self.pose)
-        np.savetxt(os.path.join(self.dir, 'veloccity.txt'), self.velocity)
+        np.savetxt(os.path.join(self.dir, 'velocity.txt'), self.velocity)
         np.savetxt(os.path.join(self.dir, 'density.txt'), self.density)
         self.pose.clear()
         self.velocity.clear()
         self.density.clear()
         print("\033[0;32msaved.\033[0m")
+
+    def eval(self):
+        # visualization
+        v = np.loadtxt(os.path.join(self.dir, 'velocity.txt'))
+        d = np.loadtxt(os.path.join(self.dir, 'density.txt'))
+        self.vis.draw_velocity(v, self.num)
