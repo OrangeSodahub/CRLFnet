@@ -206,10 +206,11 @@ class Evalagent():
         self.pose = []
         self.velocity = []
         self.density = []
+        self.flow = []
         self.counter = 0
         self.vis = vis
 
-    def write(self, poses: np.array, throttles: np.ndarray, density: np.ndarray):
+    def write(self, poses: np.array, throttles: np.ndarray, density: np.ndarray, flow: np.ndarray):
         """
         update records
         """
@@ -219,6 +220,7 @@ class Evalagent():
         self.pose.append(frame_pose)
         self.velocity.append(np.array(throttles))
         self.density.append(np.array(density))
+        self.flow.append(np.array(flow))
         self.counter += 1
 
     def save(self):
@@ -228,9 +230,11 @@ class Evalagent():
         np.savetxt(os.path.join(self.dir, 'pose.txt'), self.pose)
         np.savetxt(os.path.join(self.dir, 'velocity.txt'), self.velocity)
         np.savetxt(os.path.join(self.dir, 'density.txt'), self.density)
+        np.savetxt(os.path.join(self.dir, 'flow.txt'), self.density)
         self.pose.clear()
         self.velocity.clear()
         self.density.clear()
+        self.flow.clear()
         print("\033[0;32msaved.\033[0m")
 
     def eval(self, frame: int):

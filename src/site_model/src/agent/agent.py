@@ -107,7 +107,7 @@ class Agent:
         self.tmp_lane_point = lane_point
         self.tmp_target = self.scene_map.lanes[lane][lane_point]
 
-    def lane_nav(self, num_lane: np.ndarray, num_area: np.ndarray, random: bool) -> None:
+    def lane_nav(self, num_lane: np.ndarray, num_area: np.ndarray, random: bool, frame: int) -> None:
         # if the vehicle hasn't reached the target, do not change the target
         if self.distance > self.TARGET_THRES:
             return
@@ -128,7 +128,7 @@ class Agent:
             self.tmp_node = node
             self.tmp_lane_point = 0
             self.tmp_target = self.scene_map.lanes[self.tmp_lane][0]
-            self.scene_map.reach_intersect(self, node)
+            self.scene_map.reach_intersect(self, node, frame)
             self.mode = 'node'
 
     def node_nav(self) -> None:
@@ -139,7 +139,7 @@ class Agent:
             self.mode = 'lane'
 
     def navigate(self, pos: Tuple[np.ndarray, float], num_lane: np.ndarray, num_area: np.ndarray,
-                 all_poses: List[Tuple[np.ndarray, float]], random: bool = True) -> Tuple[float, float]:
+                 all_poses: List[Tuple[np.ndarray, float]], random: bool, frame = None) -> Tuple[float, float]:
         # update the position and orientation data
         self.update(pos[0][0:2], pos[1])
         # if the stop flag is on, force the vehicle to stop
@@ -154,7 +154,7 @@ class Agent:
         if self.mode == 'lost':
             self.lost_nav()
         elif self.mode == 'lane':
-            self.lane_nav(num_lane, num_area, random)
+            self.lane_nav(num_lane, num_area, random, frame)
         elif self.mode == 'node':
             self.node_nav()
         elif self.mode == 'error':

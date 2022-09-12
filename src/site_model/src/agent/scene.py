@@ -68,10 +68,14 @@ class DynamicMap(SceneMap):
     def __init__(self, load_path: Path) -> None:
         super().__init__(load_path)
         self.intersect_queues = [[] for _ in range(len(self.nodes))]
+        self.flow = [[] for _ in range(len(self.nodes))]
 
-    def reach_intersect(self, vehicle, node_index: int) -> None:
+    def reach_intersect(self, vehicle, node_index: int, frame = None) -> None:
         q = self.intersect_queues[node_index]
+        f = self.flow[node_index]
         q.append(vehicle)
+        if frame is not None:
+            f.append(frame)
         if len(q) > 1:
             vehicle.stop_flag = True
 

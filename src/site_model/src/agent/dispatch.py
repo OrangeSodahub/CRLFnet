@@ -47,7 +47,7 @@ class VehiclePublisher:
 
 class Dispatch:
 
-    def __init__(self, vehicle_num: int, scene_map: SceneMap, evalagent, random: bool) -> None:
+    def __init__(self, vehicle_num: int, scene_map: DynamicMap, evalagent, random: bool = False) -> None:
         self.scene_map = scene_map
         self.vehicles = [Agent(self.scene_map, i) for i in range(1, vehicle_num + 1)]
         self.pub_vehicles = [VehiclePublisher('deepracer{}'.format(i)) for i in range(1, N + 1)]
@@ -61,7 +61,7 @@ class Dispatch:
         num_lane, num_area = density(self.scene_map, poses)
         steers, throttles = [], []
         for p, v, pub in zip(poses, self.vehicles, self.pub_vehicles):
-            steer, throttle = v.navigate(p, num_lane, num_area, poses, self.random)
+            steer, throttle = v.navigate(p, num_lane, num_area, poses, self.random, (evalagent.counter if evalagent is not None else None))
             print(v)
             pub.publish(throttle * THROTTLE, steer)
             steers.append(steer)
@@ -70,7 +70,7 @@ class Dispatch:
         self.publish(num_area, throttles)
         # evaluation
         if evaluate:
-            self.evalagent.write(poses, throttles, num_area)
+            self.evalagent.write(poses, throttles, num_area, self.scene_map.flow)
 
     def publish(self, num_area: np.ndarray, throttles: List[float]) -> None:
         """Publish the num_area and throttle data."""
