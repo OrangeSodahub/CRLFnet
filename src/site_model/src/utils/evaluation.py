@@ -233,8 +233,8 @@ class Evalagent():
         self.density.clear()
         print("\033[0;32msaved.\033[0m")
 
-    def eval(self):
+    def eval(self, frame: int):
         # visualization
         v = np.loadtxt(os.path.join(self.dir, 'velocity.txt'))
         d = np.loadtxt(os.path.join(self.dir, 'density.txt'))
-        self.vis.draw_velocity(v, self.num)
+        self.vis.draw_velocity(v, self.num, frame)

@@ -301,9 +301,9 @@ class Visualvehicle():
     def __init__ (self):
         pass
     
-    def draw_velocity(self, data: np.ndarray, num: int):
+    def draw_velocity(self, data: np.ndarray, num: int, frame: int):
         data = abs(np.transpose(data))
-        x = np.linspace(1, 2000, 2000)
+        x = np.linspace(1, frame, frame)
         for i in range(num):
             plt.plot(x, data[i], label='v{}'.format(i+1))
 
