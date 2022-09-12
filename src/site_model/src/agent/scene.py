@@ -84,8 +84,8 @@ class DynamicMap(SceneMap):
     def score_lanes(self, accessible_lanes: np.ndarray, num_lane: np.ndarray, num_area: np.ndarray) -> int:
         # TODO: improve coding
         def set_weight(orient, num_area):
-            nums_index = np.argsort(num_area) + 1
-            return (np.where(nums_index == orient)[0][0] + 1)
+            nums_index = np.argsort(num_area)
+            return (np.where(nums_index == orient)[0][0])
 
         # choose the accessible lanes
         num_lane = num_lane[accessible_lanes]

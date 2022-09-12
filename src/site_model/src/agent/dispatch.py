@@ -2,7 +2,6 @@
 
 import argparse
 from pathlib import Path
-from random import random
 from typing import List, Tuple
 import numpy as np
 import yaml
@@ -62,7 +61,7 @@ class Dispatch:
         num_lane, num_area = density(self.scene_map, poses)
         steers, throttles = [], []
         for p, v, pub in zip(poses, self.vehicles, self.pub_vehicles):
-            steer, throttle = v.navigate(p, num_lane, num_area, poses, random)
+            steer, throttle = v.navigate(p, num_lane, num_area, poses, self.random)
             print(v)
             pub.publish(throttle * THROTTLE, steer)
             steers.append(steer)

@@ -23,7 +23,7 @@ class Agent:
         self.TARGET_RANGE = 1.0                # if d(target, self) > TARGET_RANGE, switch to lost mode
         self.TARGET_THRES = 0.25               # if d(target, self) < TARGET_THRES, the vehicle has reached the target
         self.COLLIDE_THRES = 0.5               # if d(another_vehicle, self) < COLLIDE_THRES, the vehicle stops
-        self.SLOW_DOWN_THRES = 1.0             # if d(another_vehicle, self) < SLOW_DOWN_THRES, the vehicle slows down
+        self.SLOW_DOWN_THRES = 1.5             # if d(another_vehicle, self) < SLOW_DOWN_THRES, the vehicle slows down
         # add the length of the vehicle
         self.COLLIDE_THRES = self.COLLIDE_THRES + self.LENGTH / 2
         self.SLOW_DOWN_THRES = self.SLOW_DOWN_THRES + self.LENGTH / 2
