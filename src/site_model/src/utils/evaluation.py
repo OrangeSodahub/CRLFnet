@@ -220,7 +220,7 @@ class Evalagent():
         self.pose.append(frame_pose)
         self.velocity.append(np.array(throttles))
         self.density.append(np.array(density))
-        self.flow.append(np.array(flow))
+        self.flow = flow
         self.counter += 1
 
     def save(self):
@@ -230,7 +230,8 @@ class Evalagent():
         np.savetxt(os.path.join(self.dir, 'pose.txt'), self.pose)
         np.savetxt(os.path.join(self.dir, 'velocity.txt'), self.velocity)
         np.savetxt(os.path.join(self.dir, 'density.txt'), self.density)
-        np.savetxt(os.path.join(self.dir, 'flow.txt'), self.density)
+        for i, n in enumerate(self.flow):
+            np.savetxt(os.path.join(self.dir, 'flow_{}.txt'.format(i)), n)
         self.pose.clear()
         self.velocity.clear()
         self.density.clear()
@@ -241,4 +242,5 @@ class Evalagent():
         # visualization
         v = np.loadtxt(os.path.join(self.dir, 'velocity.txt'))
         d = np.loadtxt(os.path.join(self.dir, 'density.txt'))
-        self.vis.draw_velocity(v, self.num, frame)
+        # self.vis.draw_velocity(v, self.num, frame)
+        self.vis.draw_density(d, frame)

@@ -302,6 +302,10 @@ class Visualvehicle():
         pass
     
     def draw_velocity(self, data: np.ndarray, num: int, frame: int):
+        """
+            mat type: heatmap
+            data: shape(frame, num)
+        """
         data = abs(np.transpose(data))
         x = np.linspace(1, frame, frame)
         for i in range(num):
@@ -310,5 +314,21 @@ class Visualvehicle():
         plt.legend()
         plt.show()
 
-    def draw_density(self, data, num):
-        pass
+    def draw_density(self, data: np.ndarray, frame:int):
+        """
+            map type: stack plot
+            data: shape (frame, 4)
+        """
+        x = np.linspace(0, frame, num=frame, endpoint=False)
+        data = data.transpose()
+        labels = ["intersection", "ringroad", "overpass", "outerring"]
+        y1, y2, y3, y4 = data[0], data[1], data[2], data[3]
+
+        """
+            scatter map
+        """
+        for d in data:
+            plt.scatter(x, d)
+        plt.legend()
+        plt.grid(True)
+        plt.show()
