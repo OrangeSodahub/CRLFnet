@@ -199,7 +199,7 @@ def bbox_iou(boxes3d: np.array, boxes2d: np.array, critierion=-1):
 
 class Evalagent():
 
-    def __init__(self, num: int, save_dir: Path, vis: Visualvehicle=None):
+    def __init__(self, num: int = None, save_dir: Path = None, vis: Visualvehicle=None):
         self.num = num
         self.dir = str(save_dir)
         self.frame = 0
@@ -214,7 +214,7 @@ class Evalagent():
         """
         update records
         """
-        if self.counter == 5000:
+        if self.counter == 10000:
             self.save()
         frame_pose = np.array([[pose[0][0], pose[0][1]] for pose in poses]).reshape(1, -1)[0]
         self.pose.append(frame_pose)
@@ -242,5 +242,5 @@ class Evalagent():
         # visualization
         v = np.loadtxt(os.path.join(self.dir, 'velocity.txt'))
         d = np.loadtxt(os.path.join(self.dir, 'density.txt'))
-        # self.vis.draw_velocity(v, self.num, frame)
-        self.vis.draw_density(d, frame)
+        f = [np.loadtxt(os.path.join(self.dir, 'flow_{}.txt'.format(i))) for i in range(7)]
+        self.vis('d', d, self.num, frame)

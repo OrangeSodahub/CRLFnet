@@ -128,7 +128,7 @@ class Agent:
             self.tmp_node = node
             self.tmp_lane_point = 0
             self.tmp_target = self.scene_map.lanes[self.tmp_lane][0]
-            self.scene_map.reach_intersect(self, node, frame)
+            self.scene_map.reach_intersect(self, node, self.index,frame)
             self.mode = 'node'
 
     def node_nav(self) -> None:

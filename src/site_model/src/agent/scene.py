@@ -69,13 +69,15 @@ class DynamicMap(SceneMap):
         super().__init__(load_path)
         self.intersect_queues = [[] for _ in range(len(self.nodes))]
         self.flow = [[] for _ in range(len(self.nodes))]
+        self.v_tmp_index = -1
 
-    def reach_intersect(self, vehicle, node_index: int, frame = None) -> None:
+    def reach_intersect(self, vehicle, node_index: int, v_index: int, frame = None) -> None:
         q = self.intersect_queues[node_index]
         f = self.flow[node_index]
         q.append(vehicle)
-        if frame is not None:
-            f.append(frame)
+        if frame is not None and self.v_tmp_index != v_index:
+            f.append([frame, v_index])
+            self.v_tmp_index = v_index
         if len(q) > 1:
             vehicle.stop_flag = True
 
@@ -89,14 +91,14 @@ class DynamicMap(SceneMap):
         # TODO: improve coding
         def set_weight(orient, num_area):
             nums_index = np.argsort(num_area)
-            return (np.where(nums_index == orient)[0][0])
+            return np.where(nums_index == orient)[0][0]
 
         # choose the accessible lanes
         num_lane = num_lane[accessible_lanes]
 
         lane_orient = [self.lane_in_area[lane] for lane in accessible_lanes]
         lane_weight = [set_weight(orient, num_area) for orient in lane_orient]
-        lane_score = [a * b for a, b in zip(num_lane, lane_weight)]
+        lane_score = [(a+1) * (b+1) for a, b in zip(num_lane, lane_weight)]
         return accessible_lanes[np.where(lane_score == np.min(lane_score))[0][0]]
 
     def __repr__(self) -> str:

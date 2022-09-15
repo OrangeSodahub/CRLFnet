@@ -6,7 +6,7 @@ from pathlib import Path
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import List
+from typing import List, Union
 
 import rospy
 from sensor_msgs.msg import Image
@@ -300,6 +300,14 @@ def draw_pr_line(txt_dir: str):
 class Visualvehicle():
     def __init__ (self):
         pass
+
+    def __call__(self, type: str, data: Union[np.ndarray, List[np.ndarray]], num: int, frame: int):
+        if type == 'v':
+            self.draw_velocity(data, num, frame)
+        elif type == 'd':
+            self.draw_density(data, frame)
+        elif type == 'f':
+            self.draw_flow(data, frame)
     
     def draw_velocity(self, data: np.ndarray, num: int, frame: int):
         """
@@ -322,7 +330,8 @@ class Visualvehicle():
         x = np.linspace(0, frame, num=frame, endpoint=False)
         data = data.transpose()
         labels = ["intersection", "ringroad", "overpass", "outerring"]
-        y1, y2, y3, y4 = data[0], data[1], data[2], data[3]
+        plt.stackplot(x, data, labels=labels)
+        plt.show()
 
         """
             scatter map
@@ -331,4 +340,28 @@ class Visualvehicle():
             plt.scatter(x, d)
         plt.legend()
         plt.grid(True)
+        plt.show()
+
+        """
+            line map
+        """
+        y1, y2, y3, y4 = data[0], data[1], data[2], data[3]
+        for y in data:
+            plt.plot(x, y)
+        plt.show()
+
+
+    def draw_flow(self, data: List[np.ndarray], frame: int):
+        """
+            map type: 
+        """
+        maxl = 0
+        for i in range(len(data)):
+            l = data[i][:,0].size
+            y = [i+1 for i in range(l)]
+            maxl = l if l > maxl else maxl
+            plt.plot(data[i][:,0], y)
+
+        plt.xlim(0, frame)
+        plt.legend()
         plt.show()
