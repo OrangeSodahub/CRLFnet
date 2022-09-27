@@ -35,7 +35,7 @@
   "dependencies": {
     "@xmldom/xmldom": "^0.8.0",
     "cbor-js": "^0.1.0",
-    "eventemitter2": "^6.4.0",
+    "eventemitter2": "^6.4.8",
     "object-assign": "^4.0.0",
     "pngparse": "^2.0.0",
     "socket.io": "^4.0.0",
