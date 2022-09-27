@@ -1,7 +1,0 @@
-<!-- record for lid-cam fusion -->
-<launch>
-	<node pkg="rosbag" type="record" name="bag_record" args="/point_cloud_combined
-                                                            /camera_msgs_combined
-                                                            /deepracer1/base_pose_ground_truth
-                                                            -o /home/zonlin/CRLFnet/src/site_model/dataset/test_dataset/lidcamfusion.bag" />
-</launch>
