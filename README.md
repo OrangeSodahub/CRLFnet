@@ -16,7 +16,7 @@ The source code of the CRLFnet.
 
 - If using Google-colab, there is a recommanded environment: **CUDA10.2+PyTorch1.6**.
 - Refer to [INSTALL.md](https://github.com/open-mmlab/OpenPCDet/blob/master/docs/INSTALL.md) for the installation of `OpenPCDet`.
-- Install `ros_numpy` package mannually: [[Source code]](https://github.com/eric-wieser/ros_numpy),[[Install]](https://blog.csdn.net/mywxm/article/details/121945880).
+- Install `ros_numpy` package mannually: [[Source code]](https://github.com/eric-wieser/ros_numpy)[[Install]](https://blog.csdn.net/mywxm/article/details/121945880)
 
 Absolute paths may need your mind:
  | file path                        | Line(s)                               |
@@ -162,7 +162,5 @@ Some problems may occurred during debugging.
 - raise NotImplementedError, NaN or Inf found in input tensor when training: https://github.com/open-mmlab/OpenPCDet/issues/280
 - fix recall calculation bug for empty scene: https://github.com/open-mmlab/OpenPCDet/pull/908
 - installation Error " fatal error: THC/THC.h: No such file or directory #include <THC/THC.h> ": https://github.com/open-mmlab/OpenPCDet/issues/1014
-
-...
-
-Welcome to report more issues!
+- ...
+- Welcome to report more issues!
