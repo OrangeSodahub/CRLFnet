@@ -1,4 +1,7 @@
 ## Custom Dataset
+
+[2022-8-22] Now official [custom dataset support](https://github.com/open-mmlab/OpenPCDet/blob/master/docs/CUSTOM_DATASET_TUTORAL.md) added based on this repo.
+
 For pure point cloud dataset, which means you don't have images generated when got point cloud data from a self-defined scene, use `custom_dataset.py` to load it. Label those raw data and make sure label files to be kitti-format:
 ```
 Car 0 0 0 0 0 0 0 1.50 1.46 3.70 -5.12 1.85 4.13 1.56
@@ -26,7 +29,7 @@ Calibration rules for cameras are not need. But you need to define how to transf
 For an example:
 Use labelCloud to label the custom dataset, and preset the format to `kitti`, the coordinates of labels and the coordinates or custom data (which is seen on labeling window) are possibly different because an implicit conversion will be made when generating the labels. To find this difference, go to see the code which do this conversion.
 
-Relative code in labelCloud tool is https://github.com/ch-sa/labelCloud/blob/badf241b618c42894f6c711b8b1a6adcbfffee11/labelCloud/io/labels/kitti.py#L34-L38 (import labels) and https://github.com/ch-sa/labelCloud/blob/badf241b618c42894f6c711b8b1a6adcbfffee11/labelCloud/io/labels/kitti.py#L58-L63 (export labels). Notice that import and export labels correspond to opposite transformations, to know how to transform kitti coordinates to custom coordinates you should refer to `import labels`:
+Relative code in labelCloud tool is [import labels](https://github.com/ch-sa/labelCloud/blob/badf241b618c42894f6c711b8b1a6adcbfffee11/labelCloud/io/labels/kitti.py#L34-L38) and [export labels](https://github.com/ch-sa/labelCloud/blob/badf241b618c42894f6c711b8b1a6adcbfffee11/labelCloud/io/labels/kitti.py#L58-L63). Notice that import and export labels correspond to opposite transformations, to know how to transform kitti coordinates to custom coordinates you should refer to `import labels`:
 ```python
 if self.transformed:
     centroid = centroid[2], -centroid[0], centroid[1] - 2.3

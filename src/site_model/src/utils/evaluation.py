@@ -243,4 +243,13 @@ class Evalagent():
         v = np.loadtxt(os.path.join(self.dir, 'velocity.txt'))
         d = np.loadtxt(os.path.join(self.dir, 'density.txt'))
         f = [np.loadtxt(os.path.join(self.dir, 'flow_{}.txt'.format(i))) for i in range(7)]
+
+        # preprocess
+        # mask = np.random.randint(low=0, high=len(f[1]), size=20)
+        # f[1] = np.delete(f[1], mask, axis=0)
+
+        # calc overall flow
+        # sum_flow = np.array([len(f_) for f_ in f]).sum()
+        # print(sum_flow)
+        
         self.vis('d', d, self.num, frame)

@@ -348,6 +348,8 @@ class Visualvehicle():
         y1, y2, y3, y4 = data[0], data[1], data[2], data[3]
         for y in data:
             plt.plot(x, y)
+        labels = ["intersection", "circle", "overpass", "outerring"]
+        plt.legend(labels)
         plt.show()
 
 
@@ -362,6 +364,11 @@ class Visualvehicle():
             maxl = l if l > maxl else maxl
             plt.plot(data[i][:,0], y)
 
+        labels = [f"no.{i+1}" for i in range(7)]
+        plt.title("Randomly")
         plt.xlim(0, frame)
-        plt.legend()
+        plt.ylim(0, 150)
+        plt.legend(labels)
+        plt.xlabel("Frames")
+        plt.ylabel("Flow")
         plt.show()
