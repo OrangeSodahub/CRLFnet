@@ -1,7 +1,5 @@
 # CRLFnet
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
-<!--[![Test Coverage](https://api.codeclimate.com/v1/badges/0859d98473647f42d498/test_coverage)](https://codeclimate.com/github/OrangeSodahub/CRLFnet/test_coverage)-->
-<!--[![Maintainability](https://api.codeclimate.com/v1/badges/0859d98473647f42d498/maintainability)](https://codeclimate.com/github/OrangeSodahub/CRLFnet/maintainability)-->
 ![GitHub](https://img.shields.io/github/license/OrangeSodahub/CRLFnet)
 ![GitHub top language](https://img.shields.io/github/languages/top/OrangeSodahub/CRLFnet)
 ![GitHub last commit](https://img.shields.io/github/last-commit/OrangeSodahub/CRLFnet)
