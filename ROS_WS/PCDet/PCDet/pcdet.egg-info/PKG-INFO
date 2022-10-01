@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: pcdet
+Version: 0.5.2+9c8e583
+Summary: OpenPCDet is a general codebase for 3D object detection from point cloud
+Home-page: UNKNOWN
+Author: Shaoshuai Shi
+Author-email: shaoshuaics@gmail.com
+License: Apache License 2.0
+Description: UNKNOWN
+Platform: UNKNOWN

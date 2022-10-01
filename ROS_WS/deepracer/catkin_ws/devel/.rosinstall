@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/zonlin/ROS/deepracer/catkin_ws/devel/setup.sh

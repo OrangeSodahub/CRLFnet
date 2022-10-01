@@ -1,0 +1,2952 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  xmlns:xacro="http://www.ros.org/wiki/xacro" 
+  name="site">
+
+  <gazebo reference="lawn_Link">
+    <material>Gazebo/Green</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="green_lights_Link">
+    <material>Gazebo/LightOn</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="parking_Link">
+    <material>Gazebo/Red</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="red_lights_Link">
+    <material>Gazebo/LightOff</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="base_link">
+    <material>Gazebo/JointAnchor</material>
+  </gazebo>
+  <gazebo reference="overhead_Link">
+    <material>Gazebo/JointAnchor</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="building_Link">
+    <material>Gazebo/Blue</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="pole1_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="pole2_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="pole3_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="pole4_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="bar_Link">
+    <material>Gazebo/PioneerBody</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="pillar_Link">
+    <material>Gazebo/ZincYellow</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="camera11_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera12_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera13_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera14_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera2_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera3_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera41_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera42_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera43_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="camera44_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="CPU_1_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="CPU_2_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="CPU_3_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="CPU_4_Link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <!-- Base Link -->
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="1.56125112837913E-17 -0.999999999999998 -0.0249999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="12480" />
+      <inertia
+        ixx="29122.6"
+        ixy="-3.27915472553286E-12"
+        ixz="3.08097279027046E-13"
+        iyy="16642.6"
+        iyz="2.04193819513566E-12"
+        izz="45760" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="building_Link">
+    <inertial>
+      <origin
+        xyz="-0.473747770189478 0.283042790195534 0.101"
+        rpy="0 0 0" />
+      <mass
+        value="1661.4" />
+      <inertia
+        ixx="60.7995555555555"
+        ixy="-21.1083888888889"
+        ixz="3.43967112122077E-15"
+        iyy="68.6573333333333"
+        iyz="3.51993774370562E-15"
+        izz="118.380888888889" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/building_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/building_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="building"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="building_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lawn_Link">
+    <inertial>
+      <origin
+        xyz="-0.0384204887490791 0.220569526350704 0.000500000000001886"
+        rpy="0 0 0" />
+      <mass
+        value="87.5895422431805" />
+      <inertia
+        ixx="42.8153103888356"
+        ixy="-1.96630622226641"
+        ixz="1.02671686939444E-13"
+        iyy="15.6564332031183"
+        iyz="-9.99769555103605E-14"
+        izz="58.4717289936967" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/lawn_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/lawn_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lawn"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="lawn_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole1_Link">
+    <inertial>
+      <origin
+        xyz="0.00524490253336246 0.852741745560935 0.369451441039339"
+        rpy="0 0 0" />
+      <mass
+        value="7.39419519501673" />
+      <inertia
+        ixx="0.0813297779862586"
+        ixy="2.11325063006296E-18"
+        ixz="3.46097662248107E-18"
+        iyy="0.0691950917597022"
+        iyz="1.03699674893121E-17"
+        izz="0.0675209506018086" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole1_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!--<link
+    name="RS-LiDAR-16-1_Link">
+    <inertial>
+      <origin
+        xyz="-0.716154162323716 0.2472 0.716154162323723"
+        rpy="0 0 0" />
+      <mass
+        value="7393.55350963914" />
+      <inertia
+        ixx="1437.34231642691"
+        ixy="-2.07409247293512E-14"
+        ixz="-615.194768531792"
+        iyy="2396.20736896117"
+        iyz="9.61658423116496E-14"
+        izz="1437.34231642692" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/RS-LiDAR-16-1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/RS-LiDAR-16-1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RS-LiDAR-16-1"
+    type="continuous">
+    <origin
+      xyz="0.00504837374851497 0.852121866219549 0"
+      rpy="1.5707963267949 0 -0.000663101981024701" />
+    <parent
+      link="pole1_Link" />
+    <child
+      link="RS-LiDAR-16-1_Link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>-->
+
+  <!-- Lidar11 points1 -->
+  <joint name="velodyne11_base_mount_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="-0.367676330068534 1.21889954106114 0"/>
+    <!--<origin rpy="-0.261799 -0.261799 0" xyz="-0.367676330068534 1.21889954106114 0"/>-->
+    <parent link="pole1_Link"/>
+    <child link="velodyne11_base_link"/>
+  </joint>
+  <link name="velodyne11_base_link">
+    <inertial>
+      <mass value="0.83"/>
+      <origin xyz="-1.64972044824145 -1.1648101676817 0"/>
+      <inertia ixx="0.000908059425" ixy="0" ixz="0" iyy="0.000908059425" iyz="0" izz="0.0011049624"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_1_11.dae"/>
+      </geometry>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_2_11.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.03585"/>
+      <geometry>
+        <cylinder length="0.0717" radius="0.0516"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="velodyne11_base_scan_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="velodyne11_base_link"/>
+    <child link="velodyne11"/>
+  </joint>
+  <link name="velodyne11">
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_scan_11.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <gazebo reference="velodyne11">
+    <sensor name="velodyne11-VLP16" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>500</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.141592653589793</min_angle>
+            <max_angle>3.141592653589793</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>16</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.5352924815866609</min_angle>
+            <max_angle>0.5352924815866609</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>131.0</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.0</stddev>
+        </noise>
+      </ray>
+      <plugin filename="libgazebo_ros_velodyne_laser.so" name="gazebo_ros_laser_controller"> <!--插件位于包velodyne/devel/lib中,需编译后才能形成-->
+        <topicName>/velodyne1_points</topicName>
+        <frameName>velodyne11</frameName>
+        <organize_cloud>False</organize_cloud>
+        <min_range>0.9</min_range>
+        <max_range>130.0</max_range>
+        <gaussianNoise>0.008</gaussianNoise>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- Lidar12 points 2-->
+  <joint name="velodyne12_base_mount_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.5004837374851497 0.42121866219549 0"/>
+    <!--<origin rpy="0.261799 0.261799 0" xyz="0.5004837374851497 0.42121866219549 0"/>-->
+    <parent link="pole1_Link"/>
+    <child link="velodyne12_base_link"/>
+  </joint>
+  <link name="velodyne12_base_link">
+    <inertial>
+      <mass value="0.83"/>
+      <origin xyz="-0.716154162323716 0.2472 0"/>
+      <inertia ixx="0.000908059425" ixy="0" ixz="0" iyy="0.000908059425" iyz="0" izz="0.0011049624"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_1_12.dae"/>
+      </geometry>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_2_12.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.03585"/>
+      <geometry>
+        <cylinder length="0.0717" radius="0.0516"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="velodyne12_base_scan_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="velodyne12_base_link"/>
+    <child link="velodyne12"/>
+  </joint>
+  <link name="velodyne12">
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_scan_12.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <gazebo reference="velodyne12">
+    <sensor name="velodyne12-VLP16" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>500</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.141592653589793</min_angle>
+            <max_angle>3.141592653589793</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>16</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.5352924815866609</min_angle>
+            <max_angle>0.5352924815866609</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>131.0</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.0</stddev>
+        </noise>
+      </ray>
+      <plugin filename="libgazebo_ros_velodyne_laser.so" name="gazebo_ros_laser_controller">
+        <topicName>/velodyne2_points</topicName>
+        <frameName>velodyne12</frameName>
+        <organize_cloud>False</organize_cloud>
+        <min_range>0.9</min_range>
+        <max_range>130.0</max_range>
+        <gaussianNoise>0.008</gaussianNoise>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- camera11 -->
+  <link
+    name="camera11_Link">
+    <inertial>
+      <origin
+        xyz="9.38870134235548E-05 -0.00748683225188146 0.011160384617491"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683401" />
+      <inertia
+        ixx="0.000311480771844364"
+        ixy="-6.27451277672471E-08"
+        ixz="-8.81930983645903E-08"
+        iyy="0.000287273478591961"
+        iyz="2.45126654248803E-06"
+        izz="0.000386441122224446" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera11_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera11_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera11"
+    type="fixed">
+    <origin
+      xyz="0.133368198725666 1.0856705996286 0.400786782529668"
+      rpy="1.5707963267949 0 3.14159265358979" />
+    <parent
+      link="pole1_Link" />
+    <child
+      link="camera11_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera11_Link">
+    <sensor type="camera" name="camera11">
+      <pose>0 0 0 0 0 0</pose>
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera11</cameraName>
+        <imageTopicName>/image_raw_11</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+
+<!-- camera12 -->
+  <link
+    name="camera12_Link">
+    <inertial>
+      <origin
+        xyz="9.38870134239433E-05 -0.00748683225188157 0.0111603846174912"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683406" />
+      <inertia
+        ixx="0.000311480771844365"
+        ixy="-6.27451277671301E-08"
+        ixz="-8.81930983642742E-08"
+        iyy="0.000287273478591962"
+        iyz="2.45126654248784E-06"
+        izz="0.000386441122224447" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera12_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera12_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera12"
+    type="fixed">
+    <origin
+      xyz="0.235753651377794 0.73059534337703 0.407758198628931"
+      rpy="1.5707963267949 0 2.35619" />
+    <parent
+      link="pole1_Link" />
+    <child
+      link="camera12_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera12_Link">
+    <sensor type="camera" name="camera12">
+      <pose>1 2 3 4 5 3</pose>
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera12</cameraName>
+        <imageTopicName>/image_raw_12</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+
+  <!-- camera13 -->
+  <link
+    name="camera13_Link">
+    <inertial>
+      <origin
+        xyz="9.38870134235825E-05 -0.00748683225188163 0.011160384617491"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683401" />
+      <inertia
+        ixx="0.000311480771844364"
+        ixy="-6.27451277672487E-08"
+        ixz="-8.81930983645899E-08"
+        iyy="0.000287273478591961"
+        iyz="2.45126654248803E-06"
+        izz="0.000386441122224446" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera13_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera13_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera13"
+    type="fixed">
+    <origin
+      xyz="0.133368198725666 1.0856705996286 0.400786782529668"
+      rpy="1.5707963267949 0 3.92699" />
+    <parent
+      link="pole1_Link" />
+    <child
+      link="camera13_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera13_Link">
+    <sensor type="camera" name="camera13">
+      <pose>1 2 3 4 5 3</pose>
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera13</cameraName>
+        <imageTopicName>/image_raw_13</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+  
+  <!-- camera14 -->
+  <link
+    name="camera14_Link">
+    <inertial>
+      <origin
+        xyz="9.38870134235825E-05 -0.00748683225188146 0.0111603846174911"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683403" />
+      <inertia
+        ixx="0.000311480771844365"
+        ixy="-6.27451277672466E-08"
+        ixz="-8.81930983644949E-08"
+        iyy="0.000287273478591962"
+        iyz="2.4512665424879E-06"
+        izz="0.000386441122224447" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera14_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera14_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera14"
+    type="fixed">
+    <origin
+      xyz="-0.119721754372823 0.624671411483536 0.399378514419427"
+      rpy="1.5707963267949 0 1.5707963267949" />
+    <parent
+      link="pole1_Link" />
+    <child
+      link="camera14_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera14_Link">
+    <sensor type="camera" name="camera14">
+      <pose>1 2 3 4 5 3</pose>
+      <update_rate>30.0</update_rate>
+      <camera name="camera14">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera14</cameraName>
+        <imageTopicName>/image_raw_14</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+
+  <link
+    name="CPU_1_Link">
+    <inertial>
+      <origin
+        xyz="-1.73472347597681E-18 0.023 0"
+        rpy="0 0 0" />
+      <mass
+        value="6.05475000000001" />
+      <inertia
+        ixx="0.00895144331250001"
+        ixy="1.43263374006466E-36"
+        ixz="-7.54192281543497E-19"
+        iyy="0.017079440625"
+        iyz="-6.17990250986743E-20"
+        izz="0.0102633058125" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_1_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_1_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="CPU_1"
+    type="fixed">
+    <origin
+      xyz="0.0052464930768156 1.05996672932159 0.474696606002247"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="pole1_Link" />
+    <child
+      link="CPU_1_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole2_Link">
+    <inertial>
+      <origin
+        xyz="-1.65056071723983 -1.16485220275225 0.291658640472252"
+        rpy="0 0 0" />
+      <mass
+        value="2.89884662078385" />
+      <inertia
+        ixx="0.0220589453276697"
+        ixy="-2.53854946945034E-10"
+        ixz="2.15677912433961E-09"
+        iyy="0.0502481880303721"
+        iyz="1.26064168585644E-06"
+        izz="0.0318912700401255" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole2_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- camera2 -->
+  <link
+    name="camera2_Link">
+    <inertial>
+      <origin
+        xyz="9.38870134232772E-05 -0.00748683225188157 0.0261603846174914"
+        rpy="-1.50419751649876 -1.50419751649876 1.50419751649876" />
+      <mass
+        value="0.911654901683403" />
+      <inertia
+        ixx="0.000311480771844364"
+        ixy="-6.27451277670946E-08"
+        ixz="-8.81930983644301E-08"
+        iyy="0.000287273478591961"
+        iyz="2.45126654248796E-06"
+        izz="0.000386441122224446" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera2"
+    type="fixed">
+    <origin
+      xyz="-1.50419751649876 -1.20118229836556 0.419457359949273"
+      rpy="0 0 1.50419751649876" />
+    <parent
+      link="pole2_Link" />
+    <child
+      link="camera2_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera2_Link">
+    <sensor type="camera" name="camera2">
+      <pose>0 0 0 0 0 0</pose>
+      <update_rate>15.0</update_rate>
+      <camera name="camera2">
+        <horizontal_fov>1.13</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>60</updateRate>
+        <cameraName>camera2</cameraName>
+        <imageTopicName>/image_raw_2</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera2_Link</frameName>
+        <hackBaseline>0.0</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- Radar_2 in package 'radar_plugin' -->
+  <xacro:include filename="$(find radar_plugin)/urdf/ARS_408_21_2.urdf.xacro"/>
+    <xacro:ARS_408_21_2 parent="pole2_Link" name="ARS_408_21_2" radarTopic="/ARS_408_21_2_Topic" velTopic="/ARS_408_21_2_velTopic" occlusion="0.6" noiseDev="0.05" samplePoints="20">
+      <origin xyz="-1.48204368460924 -1.1757576992523 0.505765128564767" />
+  </xacro:ARS_408_21_2>
+
+  <!-- Lidar_2 points3 -->
+  <joint name="velodyne2_base_mount_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 -1 0.2046681097924481"/>
+    <parent link="pole4_Link"/>
+    <child link="velodyne2_base_link"/>
+  </joint>
+  <link name="velodyne2_base_link">
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0.07212"/>
+      <inertia ixx="0.002188947025" ixy="0" ixz="0" iyy="0.002188947025" iyz="0" izz="0.00091036445"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_1_2.dae"/>
+      </geometry>
+    </visual>
+    <visual>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_base_2_2.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.07212"/>
+      <geometry>
+        <cylinder length="0.14424" radius="0.04267"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="velodyne2_base_scan_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.09081"/>
+    <parent link="velodyne2_base_link"/>
+    <child link="velodyne2"/>
+  </joint>
+  <link name="velodyne2">
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-7" ixy="0" ixz="0" iyy="1e-7" iyz="0" izz="1e-7"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 -0.09081"/>
+      <geometry>
+        <mesh filename="package://site/meshes/VLP16_scan_2.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <gazebo reference="velodyne2">
+    <sensor name="velodyne2-VLP16" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>250</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.141592653589793</min_angle>
+            <max_angle>3.141592653589793</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>32</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.5352924815866609</min_angle>
+            <max_angle> 0.18622663118779495</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.3</min>
+          <max>131.0</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.0</stddev>
+        </noise>
+      </ray>
+      <plugin filename="libgazebo_ros_velodyne_laser.so" name="gazebo_ros_laser_controller">
+        <topicName>/velodyne3_points</topicName>
+        <frameName>velodyne2</frameName>
+        <organize_cloud>False</organize_cloud>
+        <min_range>0.9</min_range>
+        <max_range>130.0</max_range>
+        <gaussianNoise>0.008</gaussianNoise>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*******************************************************************************************-->
+
+  <link
+    name="CPU_2_Link">
+    <inertial>
+      <origin
+        xyz="0 0.023 0"
+        rpy="0 0 0" />
+      <mass
+        value="6.05474999999999" />
+      <inertia
+        ixx="0.00895144331249999"
+        ixy="3.30342849429178E-19"
+        ixz="3.63934576919076E-19"
+        iyy="0.0170794406249999"
+        iyz="-6.17990250986745E-20"
+        izz="0.0102633058125" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_2_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_2_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="CPU_2"
+    type="fixed">
+    <origin
+      xyz="-1.2534216846062 -1.16708729216942 0.012167278074569"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="pole2_Link" />
+    <child
+      link="CPU_2_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole3_Link">
+    <inertial>
+      <origin
+        xyz="1.01272653803107 -0.243014174930572 0.249878502460112"
+        rpy="0 0 0" />
+      <mass
+        value="2.36452854643365" />
+      <inertia
+        ixx="0.0220144460371057"
+        ixy="-3.87536046523951E-10"
+        ixz="-1.35563096517802E-09"
+        iyy="0.0218811011752868"
+        iyz="-1.25778940789738E-06"
+        izz="0.00352420685157413" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole3_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole3_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- camera3 -->
+  <link
+    name="camera3_Link">
+    <inertial>
+      <origin
+        xyz="9.38870134237213E-05 -0.00748683225188151 0.0111603846174912"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683404" />
+      <inertia
+        ixx="0.000311480771844364"
+        ixy="-6.2745127767106E-08"
+        ixz="-8.8193098364494E-08"
+        iyy="0.000287273478591961"
+        iyz="2.45126654248793E-06"
+        izz="0.000386441122224446" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera3_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera3"
+    type="fixed">
+    <origin
+      xyz="1.00371985693387 -0.234040557592747 0.41116470558808"
+      rpy="1.5707963267949 0 -0.785398" />
+    <parent
+      link="pole3_Link" />
+    <child
+      link="camera3_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera3_Link">
+    <sensor type="camera" name="camera3">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera3</cameraName>
+        <imageTopicName>/image_raw_3</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+
+  <!-- Radar_3 in package 'radar_plugin' -->
+  <xacro:include filename="$(find radar_plugin)/urdf/ARS_408_21_3.urdf.xacro"/>
+    <xacro:ARS_408_21_3 parent="pole3_Link" name="ARS_408_21_3" radarTopic="/ARS_408_21_3_Topic" velTopic="/ARS_408_21_3_velTopic" occlusion="0.6" noiseDev="0.05" samplePoints="20">
+      <origin xyz="1.00189979461188 -0.22928478435155 0.503482602285128" rpy="0 0 0" />
+  </xacro:ARS_408_21_3>
+
+  <link
+    name="CPU_3_Link">
+    <inertial>
+      <origin
+        xyz="-2.22044604925031E-16 0.023 0"
+        rpy="0 0 0" />
+      <mass
+        value="6.05474999999999" />
+      <inertia
+        ixx="0.00895144331249998"
+        ixy="3.30342849429178E-19"
+        ixz="1.53871056521315E-18"
+        iyy="0.0170794406249999"
+        iyz="5.71244006958292E-20"
+        izz="0.0102633058125" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_3_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_3_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="CPU_3"
+    type="fixed">
+    <origin
+      xyz="1.21054201286997 -0.238453398504354 0.0151409820672447"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="pole3_Link" />
+    <child
+      link="CPU_3_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole4_Link">
+    <inertial>
+      <origin
+        xyz="0.000973765603045291 -0.999292357763889 0.374839041538273"
+        rpy="0 0 0" />
+      <mass
+        value="16.9987163566676" />
+      <inertia
+        ixx="0.0770126451093729"
+        ixy="1.75584867568586E-08"
+        ixz="7.64118000611772E-08"
+        iyy="4.63079047987141"
+        iyz="6.56908733225988E-08"
+        izz="4.57009694729111" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole4_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pole4_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole4_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- camera41 -->
+  <link
+    name="camera41_Link">
+    <inertial>
+      <origin
+        xyz="0.0102232894385129 0.0645304612214411 -0.0627703192855593"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683404" />
+      <inertia
+        ixx="0.000311480771844365"
+        ixy="-6.27451277670048E-08"
+        ixz="-8.81930983709511E-08"
+        iyy="0.000287273478591961"
+        iyz="2.45126654248796E-06"
+        izz="0.000386441122224447" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera41_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera41_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera41"
+    type="continuous">
+    <origin
+      xyz="-0.01 -1 0.26323743064296"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="pole4_Link" />
+    <child
+      link="camera41_Link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera41_Link">
+    <sensor type="camera" name="camera41">
+      <pose>1 2 3 4 5 3</pose>
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera41</cameraName>
+        <imageTopicName>/image_raw_41</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+  
+  <!-- camera42 -->
+  <link
+    name="camera42_Link">
+    <inertial>
+      <origin
+        xyz="0.000223289438486929 0.0645304612214412 -0.0527703192855591"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683401" />
+      <inertia
+        ixx="0.000311480771844365"
+        ixy="-6.27451277724041E-08"
+        ixz="-8.81930985303779E-08"
+        iyy="0.000287273478591961"
+        iyz="2.45126654248799E-06"
+        izz="0.000386441122224446" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera42_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera42_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera42"
+    type="continuous">
+    <origin
+      xyz="-0.01 -1 0.26323743064296"
+      rpy="1.5707963267949 0 1.5707963267949" />
+    <parent
+      link="pole4_Link" />
+    <child
+      link="camera42_Link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+<!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera42_Link">
+    <sensor type="camera" name="camera42">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera42</cameraName>
+        <imageTopicName>/image_raw_42</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+  
+  <!-- camera43 -->
+  <link
+    name="camera43_Link">
+    <inertial>
+      <origin
+        xyz="-0.00977671056151555 0.0645304612214411 -0.0627703192855593"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683404" />
+      <inertia
+        ixx="0.000311480771844364"
+        ixy="-6.27451277727743E-08"
+        ixz="-8.81930985090575E-08"
+        iyy="0.000287273478591961"
+        iyz="2.4512665424878E-06"
+        izz="0.000386441122224447" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera43_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera43_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera43"
+    type="continuous">
+    <origin
+      xyz="-0.01 -1 0.26323743064296"
+      rpy="1.5707963267949 0 3.14159265358979" />
+    <parent
+      link="pole4_Link" />
+    <child
+      link="camera43_Link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera43_Link">
+    <sensor type="camera" name="camera43">
+      <pose>1 2 3 4 5 3</pose>
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera43</cameraName>
+        <imageTopicName>/image_raw_43</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+
+  <!-- camera44 -->
+  <link
+    name="camera44_Link">
+    <inertial>
+      <origin
+        xyz="0.00022328943848704 -0.0645304612214412 0.0727703192855595"
+        rpy="0 0 0" />
+      <mass
+        value="0.911654901683402" />
+      <inertia
+        ixx="0.000311480771844365"
+        ixy="6.27451277727037E-08"
+        ixz="8.81930985441731E-08"
+        iyy="0.000287273478591961"
+        iyz="2.45126654248793E-06"
+        izz="0.000386441122224446" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera44_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/camera44_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera44"
+    type="continuous">
+    <origin
+      xyz="-0.01 -1 0.26323743064296"
+      rpy="-1.5707963267949 0 -1.5707963267949" />
+    <parent
+      link="pole4_Link" />
+    <child
+      link="camera44_Link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <!--*********************************************************************-->
+  <!-- add camera simulation plugines -->
+  <gazebo reference="camera44_Link">
+    <sensor type="camera" name="camera44">
+      <pose>1 2 3 4 5 3</pose>
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>800</width>
+          <height>800</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>camera44</cameraName>
+        <imageTopicName>/image_raw_44</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>base_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <!--*********************************************************************-->
+
+  <link
+    name="CPU_4_Link">
+    <inertial>
+      <origin
+        xyz="-5.55111512312578E-17 0.023 0"
+        rpy="0 0 0" />
+      <mass
+        value="6.05475" />
+      <inertia
+        ixx="0.00895144331249999"
+        ixy="1.62805674780059E-33"
+        ixz="6.12845147893172E-18"
+        iyy="0.017079440625"
+        iyz="-6.17990250986738E-20"
+        izz="0.0102633058125" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_4_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/CPU_4_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="CPU_4"
+    type="fixed">
+    <origin
+      xyz="0.212583883794893 -0.990620397689533 0.00369002145397369"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="pole4_Link" />
+    <child
+      link="CPU_4_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pillar_Link">
+    <inertial>
+      <origin
+        xyz="0.00775673503764302 1.70795913509253 0.188421452183391"
+        rpy="0 0 0" />
+      <mass
+        value="640.460641155592" />
+      <inertia
+        ixx="8.47049489803464"
+        ixy="-7.45815238967656E-15"
+        ixz="1.66333725991718E-15"
+        iyy="35.6601185511319"
+        iyz="1.53518232839759E-15"
+        izz="30.5768288553375" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pillar_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/pillar_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pillar"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pillar_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="gaojia_Link">
+    <inertial>
+      <origin
+        xyz="-0.434458299133697 1.45286339292765 0.322807860147149"
+        rpy="0 0 0" />
+      <mass
+        value="635.067693626879" />
+      <inertia
+        ixx="810.84728424871"
+        ixy="-223.780967174228"
+        ixz="6.11397027938179"
+        iyy="740.765801766099"
+        iyz="-49.6134074750207"
+        izz="1538.10463751846" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/gaojia_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/gaojia_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="gaojia"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="gaojia_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="bar_Link">
+    <inertial>
+      <origin
+        xyz="-0.426616566503017 1.37270408838888 0.358987548531945"
+        rpy="0 0 0" />
+      <mass
+        value="66.3264544887281" />
+      <inertia
+        ixx="92.5143027110213"
+        ixy="-23.5948908858285"
+        ixz="0.771934827741342"
+        iyy="79.5120405259755"
+        iyz="-6.6768123317286"
+        izz="170.067426221949" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/bar_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/bar_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bar"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="bar_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="parking_Link">
+    <inertial>
+      <origin
+        xyz="-0.0149999999999998 -4 0.000500000000000245"
+        rpy="0 0 0" />
+      <mass
+        value="14.976" />
+      <inertia
+        ixx="0.312001247999999"
+        ixy="1.03053607314331E-17"
+        ixz="-1.12757025938493E-19"
+        iyy="0.287540447999999"
+        iyz="1.9145067209304E-17"
+        izz="0.599539199999999" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/parking_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.694117647058824 0.0980392156862745 0.0980392156862745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/parking_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="parking"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="parking_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="red_lights_Link">
+    <inertial>
+      <origin
+        xyz="0.0129948200760515 0.549569046124838 0.416358526964242"
+        rpy="0 0 0" />
+      <mass
+        value="1.48200706442281" />
+      <inertia
+        ixx="0.000327871572892924"
+        ixy="-5.45362632327028E-21"
+        ixz="-4.02015783883467E-23"
+        iyy="0.000266036342941379"
+        iyz="6.25965455083079E-21"
+        izz="0.000370719847120094" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/red_lights_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/red_lights_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="red_lights"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="red_lights_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="green_lights_Link">
+    <inertial>
+      <origin
+        xyz="-0.0793699773352983 0.333513997118549 0.38704336566844"
+        rpy="0 0 0" />
+      <mass
+        value="1.06410455566067" />
+      <inertia
+        ixx="0.000175911112143447"
+        ixy="-1.86485864433451E-20"
+        ixz="-3.31834723217723E-23"
+        iyy="0.000133062837916277"
+        iyz="5.28305601133791E-21"
+        izz="0.000218759386370617" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/green_lights_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/green_lights_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="green_lights"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="green_lights_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- deepracer -->
+<link name="chassis">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="5.0" />
+      <inertia
+        ixx="0.010609"
+        ixy="0"
+        ixz="0"
+        iyy="0.050409"
+        iyz="0"
+        izz="0.05865" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/chassis.STL" />
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 0.023249" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="chassis" />
+  </joint>
+  
+  <link
+    name="left_rear_wheel">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.34055" />
+      <inertia
+        ixx="0.00026046"
+        ixy="0"
+        ixz="0"
+        iyy="0.00041226"
+        iyz="0"
+        izz="0.00026046" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/left_rear_wheel.STL" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/left_rear_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint
+    name="left_rear_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="-0.081663 0.08105 0.01575"
+      rpy="0 0 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="left_rear_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="100" />
+  </joint>
+  
+  
+  <link
+    name="right_rear_wheel">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.34055" />
+      <inertia
+        ixx="0.00026046"
+        ixy="0"
+        ixz="0"
+        iyy="0.00041226"
+        iyz="0"
+        izz="0.00026046" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/right_rear_wheel.STL" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/right_rear_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+
+  <joint
+    name="right_rear_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="-0.081663 -0.08105 0.01575"
+      rpy="0 0 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="right_rear_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="100" />
+  </joint>
+  
+  
+  <link
+    name="left_steering_hinge">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="4E-06"
+        ixy="0"
+        ixz="0"
+        iyy="4E-06"
+        iyz="0"
+        izz="4E-06" />
+      </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/left_steering_hinge.STL" />
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint
+    name="left_steering_hinge_joint"
+    type="continuous">
+    <origin
+      xyz="0.082311 0.079601 0.011759"
+      rpy="0 0 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="left_steering_hinge" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1"
+      upper="1"
+      effort="10"
+      velocity="100" />
+  </joint>
+  
+  
+  <link
+    name="left_front_wheel">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.34055" />
+      <inertia
+        ixx="0.00026046"
+        ixy="0"
+        ixz="0"
+        iyy="0.00041226"
+        iyz="0"
+        izz="0.00026046" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/left_front_wheel.STL" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/left_front_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint
+    name="left_front_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="left_steering_hinge" />
+    <child
+      link="left_front_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="100" />
+  </joint>
+  
+  
+  <link
+    name="right_steering_hinge">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.1" />
+      <inertia
+        ixx="4E-06"
+        ixy="0"
+        ixz="0"
+        iyy="4E-06"
+        iyz="0"
+        izz="4E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/right_steering_hinge.STL" />
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint
+    name="right_steering_hinge_joint"
+    type="continuous">
+    <origin
+      xyz="0.082311 -0.079601 0.011759"
+      rpy="0 0 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="right_steering_hinge" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1"
+      upper="1"
+      effort="10"
+      velocity="100" />
+  </joint>
+  <link
+    name="right_front_wheel">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.34055" />
+      <inertia
+        ixx="0.00026046"
+        ixy="0"
+        ixz="0"
+        iyy="0.00041226"
+        iyz="0"
+        izz="0.00026046" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/right_front_wheel.STL" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/right_front_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint
+    name="right_front_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="right_steering_hinge" />
+    <child
+      link="right_front_wheel" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10"
+      velocity="100" />
+  </joint>
+  
+  <link
+    name="zed_camera_link_leftcam">
+    <inertial>
+      <origin
+        xyz="0.019881 6.2875E-05 0.034966"
+        rpy="0 0 0" />
+      <mass
+        value="1e-3" />
+      <inertia 
+        ixx="1e-6"
+        ixy="0"
+        ixz="0"
+        iyy="1e-6"
+        iyz="0"
+        izz="1e-6" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/zed_camera_link_leftcam.STL" />
+      </geometry>
+    </visual>
+  </link>
+  
+  <joint
+    name="zed_camera_joint_leftcam"
+    type="fixed">
+    <origin
+      xyz="0.091711 0.03 0.080023"
+      rpy="0 0.2618 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="zed_camera_link_leftcam" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_link_leftcam">
+    <inertial>
+      <origin
+        xyz="0.0005 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="1e-3" />
+      <inertia 
+        ixx="1e-6"
+        ixy="0"
+        ixz="0"
+        iyy="1e-6"
+        iyz="0"
+        izz="1e-6" />
+    </inertial>
+  <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/camera_link_leftcam.STL" />
+      </geometry>
+    </visual>
+  </link>
+  <joint
+    name="camera_joint_leftcam"
+    type="fixed">
+    <origin
+      xyz="0.044755 0 0.04"
+      rpy="0 0 0" />
+    <parent
+      link="zed_camera_link_leftcam" />
+    <child
+      link="camera_link_leftcam" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="zed_camera_link_rightcam">
+    <inertial>
+      <origin
+        xyz="0.019881 6.2895E-05 0.034966"
+        rpy="0 0 0" />
+      <mass
+        value="1e-3" />
+      <inertia 
+        ixx="1e-6"
+        ixy="0"
+        ixz="0"
+        iyy="1e-6"
+        iyz="0"
+        izz="1e-6" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/zed_camera_link_rightcam.STL" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint
+    name="zed_camera_joint_rightcam"
+    type="fixed">
+    <origin
+      xyz="0.091711 -0.03 0.080023"
+      rpy="0 0.2618 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="zed_camera_link_rightcam" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_link_rightcam">
+    <inertial>
+      <origin
+        xyz="0.0005 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="1e-3" />
+      <inertia 
+        ixx="1e-6"
+        ixy="0"
+        ixz="0"
+        iyy="1e-6"
+        iyz="0"
+        izz="1e-6" />
+    </inertial>
+  <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/camera_link_rightcam.STL" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint
+    name="camera_joint_rightcam"
+    type="fixed">
+    <origin
+      xyz="0.044755 0 0.04"
+      rpy="0 0 0" />
+    <parent
+      link="zed_camera_link_rightcam" />
+    <child
+      link="camera_link_rightcam" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="laser">
+    <inertial>
+      <origin
+        xyz="0.006099 0.00028423 -0.012654"
+        rpy="0 0 0" />
+      <mass
+        value="1E-5" />
+      <inertia
+        ixx="1e-6"
+        ixy="0"
+        ixz="0"
+        iyy="1e-6"
+        iyz="0"
+        izz="1e-6" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/laser.STL" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/laser.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="hokuyo_joint"
+    type="fixed">
+    <origin
+      xyz="0.02913 0 0.16145" 
+      rpy="0 0 3.1416" />
+    <parent
+      link="chassis" />
+    <child
+      link="laser" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="car_body_link_v3">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/car_body_link_lidar_v3.STL" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://site/meshes/deepracer/car_body_link_lidar_v3.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint
+    name="car_body_joint"
+    type="fixed">
+    <origin
+      xyz="-0.0762 0 2E-05"
+      rpy="0 0 0" />
+    <parent
+      link="chassis" />
+    <child
+      link="car_body_link_v3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  
+<!-- Gazebo Tags -->
+
+<!-- Vehicle body -->
+  <gazebo reference = "chassis">
+   <material>Gazebo/Grey</material>
+   <mu1 value="0.0"/>
+   <mu2 value="0.0"/>
+   <kp  value="1000000.0" />
+  </gazebo>
+  <gazebo reference = "left_rear_wheel">
+   <material>Gazebo/DarkGrey</material>
+   <mu1 value="0.5"/>
+   <mu2 value="0.5"/>
+   <kp  value="1000000.0" />
+   <kd  value="1.0" />
+   <fdir1 value="1 0 0"/>
+  </gazebo>
+  <gazebo reference = "left_front_wheel">
+   <material>Gazebo/DarkGrey</material>
+   <mu1 value="0.5"/>
+   <mu2 value="0.5"/>
+   <kp  value="1000000.0" />
+   <kd  value="1.0" />
+   <fdir1 value="1 0 0"/>
+  </gazebo>
+  <gazebo reference = "right_rear_wheel">
+   <material>Gazebo/DarkGrey</material>
+   <mu1 value="0.5"/>
+   <mu2 value="0.5"/>
+   <kp  value="1000000.0" />
+   <kd  value="1.0" />
+   <fdir1 value="1 0 0"/>
+  </gazebo>
+  <gazebo reference = "right_front_wheel">
+   <material>Gazebo/DarkGrey</material>
+   <mu1 value="0.5"/>
+   <mu2 value="0.5"/>
+   <kp  value="1000000.0" />
+   <kd  value="1.0" />
+   <fdir1 value="1 0 0"/>
+  </gazebo>
+  <gazebo reference = "left_steering_hinge">
+   <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <gazebo reference = "right_steering_hinge">
+   <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <gazebo reference = "zed_camera_link_leftcam">
+   <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <gazebo reference = "zed_camera_link_rightcam">
+   <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <gazebo reference = "laser">
+   <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <gazebo reference = "car_body_link_v3">
+   <material>Gazebo/Grey</material>
+  </gazebo>
+
+</robot>

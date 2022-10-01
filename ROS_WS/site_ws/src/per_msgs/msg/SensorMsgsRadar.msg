@@ -1,0 +1,17 @@
+Header header
+float32 range  # meters
+float32 total_front_esr_tracks
+float32 total_front_right_esr_tracks
+float32 total_front_left_esr_tracks
+float32 front_esr_tracker_counter
+float32 front_left_esr_tracker_counter
+float32 front_right_esr_tracker_counter
+float32 total_rear_sbmp_tracks
+float32 rear_sbmp_tracker_counter
+float32 total_fsm4_tracks
+float32 fsm4_tracker_counter
+GeometryMsgsRadarObject[] fsm4_tracklist
+GeometryMsgsRadarObject[] rear_sbmp_tracklist
+GeometryMsgsRadarObject[] front_esr_tracklist
+GeometryMsgsRadarObject[] front_right_esr_tracklist
+GeometryMsgsRadarObject[] front_left_esr_tracklist

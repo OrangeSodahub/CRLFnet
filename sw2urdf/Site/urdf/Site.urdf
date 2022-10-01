@@ -1,0 +1,1213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Site">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="1.0987E-17 -0.025 1"
+        rpy="0 0 0" />
+      <mass
+        value="12480" />
+      <inertia
+        ixx="29123"
+        ixy="3.081E-13"
+        ixz="3.2792E-12"
+        iyy="45760"
+        iyz="-2.5907E-13"
+        izz="16643" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="building_Link">
+    <inertial>
+      <origin
+        xyz="-0.47375 0.28304 0.101"
+        rpy="0 0 0" />
+      <mass
+        value="1661.4" />
+      <inertia
+        ixx="60.8"
+        ixy="-21.108"
+        ixz="4.3827E-14"
+        iyy="68.657"
+        iyz="1.5621E-14"
+        izz="118.38" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/building_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/building_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="building"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="building_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="lawn_Link">
+    <inertial>
+      <origin
+        xyz="-0.035001 -0.39569 0.0005"
+        rpy="0 0 0" />
+      <mass
+        value="102.57" />
+      <inertia
+        ixx="43.127"
+        ixy="-1.9663"
+        ixz="1.1408E-13"
+        iyy="15.944"
+        iyz="-1.0118E-13"
+        izz="59.071" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/lawn_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/lawn_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lawn"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="lawn_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole_Link1">
+    <inertial>
+      <origin
+        xyz="0.00504837374851534 0.85212186621955 0.360273727667057"
+        rpy="0 0 0" />
+      <mass
+        value="5.9640133711176" />
+      <inertia
+        ixx="0.0797140218809393"
+        ixy="1.79421820889015E-18"
+        ixz="-7.23243063744853E-18"
+        iyy="0.0675793356543829"
+        iyz="1.12397100962368E-17"
+        izz="0.0669612553965033" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole_Link1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_Link11">
+    <inertial>
+      <origin
+        xyz="0.0242975069439782 0.61112171978444 0.38112068651968"
+        rpy="0 0 0" />
+      <mass
+        value="2.96649116181871" />
+      <inertia
+        ixx="0.00227818595094953"
+        ixy="8.81930983647999E-08"
+        ixz="6.27451277665519E-08"
+        iyy="0.0026410510970109"
+        iyz="0.000107805199322781"
+        izz="0.00132731703677127" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link11.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link11.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera11"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link1" />
+    <child
+      link="camera_Link11" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_Link12">
+    <inertial>
+      <origin
+        xyz="-0.23527 0.83444 0.38086"
+        rpy="0 0 0" />
+      <mass
+        value="2.9665" />
+      <inertia
+        ixx="0.0026411"
+        ixy="-8.8193E-08"
+        ixz="0.00010781"
+        iyy="0.0022782"
+        iyz="-6.2745E-08"
+        izz="0.0013273" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link12.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link12.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera12"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link1" />
+    <child
+      link="camera_Link12" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_Link13">
+    <inertial>
+      <origin
+        xyz="0.254564607631063 0.860273378816475 0.37993006749904"
+        rpy="0 0 0" />
+      <mass
+        value="2.96649116181871" />
+      <inertia
+        ixx="0.0026410510970109"
+        ixy="-8.81930983649212E-08"
+        ixz="-0.000107805199322781"
+        iyy="0.00227818595094952"
+        iyz="6.27451277674168E-08"
+        izz="0.00132731703677127" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link13.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link13.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera13"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link1" />
+    <child
+      link="camera_Link13" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_Link14">
+    <inertial>
+      <origin
+        xyz="-0.0019348 1.0977 0.37971"
+        rpy="0 0 0" />
+      <mass
+        value="2.9665" />
+      <inertia
+        ixx="0.0022782"
+        ixy="8.8193E-08"
+        ixz="-6.2745E-08"
+        iyy="0.0026411"
+        iyz="-0.00010781"
+        izz="0.0013273" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link14.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link14.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera14"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link1" />
+    <child
+      link="camera_Link14" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="RS_Lidar_16_Link_1">
+    <inertial>
+      <origin
+        xyz="-0.711580514336151 0.136442744552784 0.2472"
+        rpy="0 0 0" />
+      <mass
+        value="7393.55350963914" />
+      <inertia
+        ixx="1438.15818992721"
+        ixy="615.194227524378"
+        ixz="6.72838228099047E-13"
+        iyy="1436.52644292663"
+        iyz="-5.39897738076063E-13"
+        izz="2396.20736896117" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/RS_Lidar_16_Link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/RS_Lidar_16_Link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RS_Lidar_16_1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link1" />
+    <child
+      link="RS_Lidar_16_Link_1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="CPU_Link1">
+    <inertial>
+      <origin
+        xyz="0.00524649307681596 1.05996672932159 0.497696606002247"
+        rpy="0 0 0" />
+      <mass
+        value="6.05475000000001" />
+      <inertia
+        ixx="0.00895144331250001"
+        ixy="7.54192281543497E-19"
+        ixz="5.87625890401656E-18"
+        iyy="0.0102633058125"
+        iyz="6.17990250986738E-20"
+        izz="0.017079440625" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/CPU_Link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/CPU_Link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="CPU1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link1" />
+    <child
+      link="CPU_Link1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole_Link2">
+    <inertial>
+      <origin
+        xyz="-1.66298552560336 -1.16558934125296 0.272855989302842"
+        rpy="0 0 0" />
+      <mass
+        value="2.54130116480907" />
+      <inertia
+        ixx="0.0216956936840439"
+        ixy="-1.30597302510636E-10"
+        ixz="1.44749479629731E-09"
+        iyy="0.0498035616213382"
+        iyz="1.58861263091639E-09"
+        izz="0.0317513462387992" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole_Link2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_Link2">
+    <inertial>
+      <origin
+        xyz="-1.5043 -1.175 0.41197"
+        rpy="0 0 0" />
+      <mass
+        value="0.91165" />
+      <inertia
+        ixx="0.00031148"
+        ixy="8.8193E-08"
+        ixz="6.2745E-08"
+        iyy="0.00038644"
+        iyz="2.4513E-06"
+        izz="0.00028727" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camerra2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link2" />
+    <child
+      link="camera_Link2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Radar_Link2">
+    <inertial>
+      <origin
+        xyz="-1.4836 -1.1912 0.50574"
+        rpy="0 0 0" />
+      <mass
+        value="3.0955" />
+      <inertia
+        ixx="0.0023398"
+        ixy="-3.6526E-05"
+        ixz="-5.7769E-06"
+        iyy="0.0072624"
+        iyz="1.0124E-06"
+        izz="0.0054186" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/Radar_Link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/Radar_Link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Radar2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link2" />
+    <child
+      link="Radar_Link2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole_Link3">
+    <inertial>
+      <origin
+        xyz="1.00398903567553 -0.239879473088964 0.220104212276089"
+        rpy="0 0 0" />
+      <mass
+        value="2.00698309045887" />
+      <inertia
+        ixx="0.0216511943934799"
+        ixy="-2.64278402115405E-10"
+        ixz="-6.46346644279585E-10"
+        iyy="0.0214364747662529"
+        iyz="1.26366532946229E-09"
+        izz="0.0033842830502478" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole_Link3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_Link3">
+    <inertial>
+      <origin
+        xyz="0.999696725402223 -0.250587757322949 0.390152115634034"
+        rpy="0 0 0" />
+      <mass
+        value="2.83520512559704" />
+      <inertia
+        ixx="0.0022626909191116"
+        ixy="8.81930983644589E-08"
+        ixz="-6.27451277673933E-08"
+        iyy="0.00261649976507747"
+        iyz="-0.000107874310248531"
+        izz="0.00131191144917134" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link3" />
+    <child
+      link="camera_Link3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Radar_Link3">
+    <inertial>
+      <origin
+        xyz="1.00358493786181 -0.213865595325845 0.503456445375522"
+        rpy="0 0 0" />
+      <mass
+        value="3.09545763589522" />
+      <inertia
+        ixx="0.00233952324153942"
+        ixy="6.43560712858864E-06"
+        ixz="5.76780928333135E-06"
+        iyy="0.00726270749670221"
+        iyz="-1.06274664763535E-06"
+        izz="0.00541858260532216" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/Radar_Link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/Radar_Link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Radar3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link3" />
+    <child
+      link="Radar_Link3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pole_Link4">
+    <inertial>
+      <origin
+        xyz="0.00422989196206984 -0.999401188590838 0.0350566037735849"
+        rpy="0 0 0" />
+      <mass
+        value="0.690723723880245" />
+      <inertia
+        ixx="0.00127388339482052"
+        ixy="-1.11016027905324E-19"
+        ixz="-1.49847001923188E-19"
+        iyy="0.000564478432796648"
+        iyz="2.76056552189904E-20"
+        izz="0.00106406170560551" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pole_Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pole4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pole_Link4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="RS_Lidar_16_Link_4">
+    <inertial>
+      <origin
+        xyz="-0.716154162323718 -1.71615416232372 0.242073684561546"
+        rpy="0 0 0" />
+      <mass
+        value="7393.55350963914" />
+      <inertia
+        ixx="1437.34231642692"
+        ixy="615.19476853179"
+        ixz="7.81108966496327E-13"
+        iyy="1437.34231642692"
+        iyz="-4.33838119226291E-13"
+        izz="2396.20736896117" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/RS_Lidar_16_Link_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/RS_Lidar_16_Link_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RS_Lidar_16_4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link4" />
+    <child
+      link="RS_Lidar_16_Link_4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="camera_Link4">
+    <inertial>
+      <origin
+        xyz="0.00422989196206995 -0.999401188590838 0.13436894027334"
+        rpy="0 0 0" />
+      <mass
+        value="3.64661960673362" />
+      <inertia
+        ixx="0.00139584378813762"
+        ixy="-8.13866313413374E-19"
+        ixz="-1.05880677633652E-19"
+        iyy="0.00139584378813762"
+        iyz="6.02227190608007E-19"
+        izz="0.00114909391436785" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/camera_Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link4" />
+    <child
+      link="camera_Link4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="CPU_Link4">
+    <inertial>
+      <origin
+        xyz="0.21258 -0.99062 0.02669"
+        rpy="0 0 0" />
+      <mass
+        value="6.0548" />
+      <inertia
+        ixx="0.0089514"
+        ixy="-6.1285E-18"
+        ixz="5.8763E-18"
+        iyy="0.010263"
+        iyz="6.1799E-20"
+        izz="0.017079" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/CPU_Link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52941 0.54902 0.54902 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/CPU_Link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="CPU4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pole_Link4" />
+    <child
+      link="CPU_Link4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="pillar_Link">
+    <inertial>
+      <origin
+        xyz="0.00775673503764316 1.70795913509253 0.188421452183391"
+        rpy="0 0 0" />
+      <mass
+        value="640.460641155592" />
+      <inertia
+        ixx="8.47049489803464"
+        ixy="-7.45815238967656E-15"
+        ixz="1.76436162601795E-14"
+        iyy="35.6601185511319"
+        iyz="1.84250835982244E-15"
+        izz="30.5768288553375" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pillar_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/pillar_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="pillar"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="pillar_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="overhead_Link">
+    <inertial>
+      <origin
+        xyz="-0.434458299133697 1.45286339292765 0.322807860147149"
+        rpy="0 0 0" />
+      <mass
+        value="635.067693626879" />
+      <inertia
+        ixx="810.84728424871"
+        ixy="-223.780967174228"
+        ixz="6.1139702793823"
+        iyy="740.765801766099"
+        iyz="-49.6134074750206"
+        izz="1538.10463751846" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/overhead_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/overhead_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="overhead"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="pillar_Link" />
+    <child
+      link="overhead_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="bar_Link">
+    <inertial>
+      <origin
+        xyz="-0.426616566503017 1.37270408838889 0.358987548531946"
+        rpy="0 0 0" />
+      <mass
+        value="66.3264544887281" />
+      <inertia
+        ixx="92.514302711021"
+        ixy="-23.5948908858284"
+        ixz="0.771934827741396"
+        iyy="79.5120405259754"
+        iyz="-6.6768123317286"
+        izz="170.067426221949" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/bar_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.529411764705882 0.549019607843137 0.549019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Site/meshes/bar_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bar"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="overhead_Link" />
+    <child
+      link="bar_Link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
