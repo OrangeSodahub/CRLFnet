@@ -1,1 +1,0 @@
-Place the point_cloud_dataset here "/point_cloud_data/pcd"
