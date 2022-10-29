@@ -161,3 +161,11 @@ Some problems may occurred during debugging.
 - installation Error " fatal error: THC/THC.h: No such file or directory #include <THC/THC.h> ": https://github.com/open-mmlab/OpenPCDet/issues/1014
 - ...
 - Welcome to report more issues!
+
+<details>
+<summary>Star History</summary>
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=OrangeSodahub/CRLFnet&type=Date)](https://star-history.com/#OrangeSodahub/CRLFnet&Date)
+
+</details>
