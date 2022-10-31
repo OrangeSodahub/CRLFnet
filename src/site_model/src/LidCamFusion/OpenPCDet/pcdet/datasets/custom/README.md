@@ -1,6 +1,6 @@
 ## Custom Dataset
 
-[2022-8-22] Now official [custom dataset support](https://github.com/open-mmlab/OpenPCDet/blob/master/docs/CUSTOM_DATASET_TUTORAL.md) added based on this repo.
+[2022-8-22] Now official [custom dataset support](https://github.com/open-mmlab/OpenPCDet/blob/master/docs/CUSTOM_DATASET_TUTORIAL.md) added based on this repo.
 
 For pure point cloud dataset, which means you don't have images generated when got point cloud data from a self-defined scene, use `custom_dataset.py` to load it. Label those raw data and make sure label files to be kitti-format:
 ```
