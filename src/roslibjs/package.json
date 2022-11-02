@@ -33,7 +33,7 @@
     "time-grunt": "^2.0.0"
   },
   "dependencies": {
-    "@xmldom/xmldom": "^0.8.0",
+    "@xmldom/xmldom": "^0.8.4",
     "cbor-js": "^0.1.0",
     "eventemitter2": "^6.4.0",
     "object-assign": "^4.0.0",
