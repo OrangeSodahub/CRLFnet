@@ -11,6 +11,7 @@
 *idea/
 .idea/
 __pycache__/
+*.pyc
 
 # Virtual Env
 crlfnet_env/

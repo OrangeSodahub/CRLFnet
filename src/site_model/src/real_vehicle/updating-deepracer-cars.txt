@@ -1,0 +1,68 @@
+
+ssh deepracer@192.168.0.119
+
+run commands from https://github.com/aws-deepracer/aws-deepracer-launcher/blob/main/getting-started.md
+
+## Building the core packages
+
+sudo su
+systemctl stop deepracer-core
+source /opt/ros/foxy/setup.bash 
+source /opt/intel/openvino_2021/bin/setupvars.sh
+mkdir -p ~/deepracer_ws
+cd ~/deepracer_ws
+git clone https://github.com/aws-deepracer/aws-deepracer-launcher.git
+cd ~/deepracer_ws/aws-deepracer-launcher
+./install_dependencies.sh
+rosws update
+sudo rosdep init
+rosdep update
+colcon build
+
+## Running the latest packages
+
+sudo su
+source /opt/ros/foxy/setup.bash 
+source /opt/intel/openvino_2021/bin/setupvars.sh
+source ~/deepracer_ws/aws-deepracer-launcher/install/setup.bash  
+ros2 launch deepracer_launcher deepracer_launcher.py
+
+
+## Edit deepracer_launcher.py to remove camera packages
+
+
+
+nano deepracer_launcher.py
+
+```
+   camera_node = Node(
+        package='camera_pkg',
+        namespace='camera_pkg',
+        executable='camera_node',
+        name='camera_node',
+        parameters=[
+            {'resize_images': True}
+        ]
+    )
+```
+
+
+
+
+
+
+
+##  Edit aws-deepracer-ctrl-pkg/blob/main/ctrl_pkg/src/ctrl_node.cpp
+
+cd aws-deepracer-ctrl-pkg/blob/main/ctrl_pkg/src/ctrl_node.cpp
+
+nano ctrl_node.cpp
+
+modify the void init() function
+
+
+
+
+
+
+

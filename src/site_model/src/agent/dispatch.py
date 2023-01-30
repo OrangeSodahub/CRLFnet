@@ -15,15 +15,21 @@ from msgs.msg._MsgRadCam import MsgRadCam      # radar camera fusion message typ
 from msgs.msg._MsgLidCam import MsgLidCam      # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 
+from ..real_vehicle.aws_deepracer_control_v3 import Client
+
 from .scene import SceneMap
 from .agent import DynamicMap, Agent
-from ..utils.evaluation import Evalagent
+# from ..utils.evaluation import Evalagent
 
 N = 10         # the number of vehicles
 THROTTLE = 20  # the base value of throttle
 
+# just for tests
+PASSWORD = "KUweQKRT"
+IP = "192.168.0.107"
 
-class VehiclePublisher:
+
+class VehicleController:
 
     def __init__(self, vehicle_name: str) -> None:
         # l: left, r: right, f: front, r: rear
@@ -35,8 +41,30 @@ class VehiclePublisher:
         self.l_steering_hinge = rospy.Publisher('/{}/left_steering_hinge_position_controller/command'.format(vehicle_name), Float64, queue_size=1)  # noqa: E501
         self.r_steering_hinge = rospy.Publisher('/{}/right_steering_hinge_position_controller/command'.format(vehicle_name), Float64, queue_size=1)  # noqa: E501
         # yapf: enable
+        self.is_real = False
+        self.client = None
+        self.max_speed = 1.0
+
+    def __del__(self):
+        if self.is_real:
+            self.client.stop_car()
+
+    def set_corresponding_vehicle(self, password: str, ip: str, max_speed: float = 0.15) -> None:
+        self.client = Client(password=password, ip=ip)
+        self.client.show_vehicle_info()
+        print("car battery level: {}".format(self.client.get_battery_level()))
+        self.client.set_manual_mode()
+        self.client.start_car()
+        print("Started the corresponding vehicle")
+        self.is_real = True
+        self.max_speed = max_speed
 
     def publish(self, throttle: float, steer: float) -> None:
+        self.ros_control(throttle * THROTTLE, steer)
+        if self.is_real:
+            self.real_control(throttle, steer)
+
+    def ros_control(self, throttle: float, steer: float) -> None:
         self.lr_wheel.publish(throttle)
         self.rr_wheel.publish(throttle)
         self.lf_wheel.publish(throttle)
@@ -44,27 +72,32 @@ class VehiclePublisher:
         self.l_steering_hinge.publish(steer)
         self.r_steering_hinge.publish(steer)
 
+    def real_control(self, drive: float, steer: float) -> None:
+        self.client.move(-steer, -drive, self.max_speed)
+
 
 class Dispatch:
 
-    def __init__(self, vehicle_num: int, scene_map: DynamicMap, evalagent: Evalagent = None, random: bool = False) -> None:
+    def __init__(self, vehicle_num: int, scene_map: DynamicMap, evalagent=None, random: bool = False) -> None:
         self.scene_map = scene_map
         self.vehicles = [Agent(self.scene_map, i) for i in range(1, vehicle_num + 1)]
-        self.pub_vehicles = [VehiclePublisher('deepracer{}'.format(i)) for i in range(1, N + 1)]
+        self.controllers = [VehicleController('deepracer{}'.format(i)) for i in range(1, N + 1)]
         self.pub_velocity = rospy.Publisher('/velocity', Float64MultiArray, queue_size=1)
         self.pub_num_area = rospy.Publisher('/nums', Float64MultiArray, queue_size=1)
         self.evalagent = evalagent
         self.random = random
 
     def flush(self, odoms: List[Odometry], evaluate: bool = False) -> None:
-        print(self.evalagent.counter)
+        if evaluate:
+            print(self.evalagent.counter)
         poses = list(map(odom2pose, odoms))
         num_lane, num_area = density(self.scene_map, poses)
         steers, throttles = [], []
-        for p, v, pub in zip(poses, self.vehicles, self.pub_vehicles):
-            steer, throttle = v.navigate(p, num_lane, num_area, poses, self.random, (evalagent.counter if evalagent is not None else None))
+        for p, v, c in zip(poses, self.vehicles, self.controllers):
+            steer, throttle = v.navigate(p, num_lane, num_area, poses, self.random,
+                                         (evalagent.counter if evalagent is not None else None))
             # print(v)
-            pub.publish(throttle * THROTTLE, steer)
+            c.publish(throttle, steer)
             steers.append(steer)
             throttles.append(throttle)
         # print(self.scene_map)
@@ -138,10 +171,14 @@ if __name__ == '__main__':
     # initialization
     scene_map = DynamicMap(MAP_DIR)
     if params.eval:
-        evalagent = Evalagent(N, SAVE_DIR)
+        # TODO: fix evalagent
+        # evalagent = Evalagent(N, SAVE_DIR)
+        pass
     else:
         evalagent = None
     dispatch_system = Dispatch(N, scene_map, evalagent, params.random)
+    # real vehicle test
+    dispatch_system.controllers[0].set_corresponding_vehicle(PASSWORD, IP, 0.5)
 
     # ROS messages
     rospy.init_node('servo_commands', anonymous=True)
