@@ -25,8 +25,8 @@ N = 10         # the number of vehicles
 THROTTLE = 20  # the base value of throttle
 
 # just for tests
-PASSWORD = "KUweQKRT"
-IP = "192.168.0.108"
+PASSWORD = "GYgtHGKq"
+IP = "192.168.0.115"
 
 
 class VehicleController:
