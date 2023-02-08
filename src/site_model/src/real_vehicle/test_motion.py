@@ -18,9 +18,31 @@ steer = 0
 drive = 0
 max_speed = 0.3
 
-
 PASSWORD = "alwUOgky"
-LOCAL_IP = "192.168.0.110"
+LOCAL_IP = "172.16.0.71"
+# LOCAL_IP = "192.168.0.110"
+
+# PASSWORD = "Ve9IJXXp"
+# LOCAL_IP = "172.16.0.18"
+
+# PASSWORD = "TgT7vMZq"
+# LOCAL_IP = "172.16.0.9"
+# LOCAL_IP = "192.168.0.113"
+
+# PASSWORD = "GYgtHGKq"
+# LOCAL_IP = "192.168.0.115"
+# LOCAL_IP = "172.16.0.91"
+
+# PASSWORD = "Geey5tLz"
+# LOCAL_IP = "192.168.0.101"
+# LOCAL_IP = "172.16.0.125"
+
+# PASSWORD = "KUweQKRT"
+# LOCAL_IP = "172.16.0.139"
+
+# PASSWORD = "ggQcwXwY"
+# LOCAL_IP = "172.16.0.84"
+# LOCAL_IP = "192.168.0.112"
 
 
 def main():
@@ -38,14 +60,21 @@ def main():
     global drive, steer, max_speed
 
     try:
+        client.move(0, -1, 1.0)
+        time.sleep(1.5)
+        client.move(0, 1, 1.0)
+        time.sleep(3)
+        client.stop_car()
+        """
         while True:
             logging.info("looping...")
             client.move(1, 1, max_speed)
             time.sleep(3)
             client.move(-1, -1, max_speed)
             time.sleep(2)
-            client.stop_car()
+            client.move(0, 0, max_speed)
             time.sleep(1)
+        """
     except KeyboardInterrupt:
         print("EXITING NOW")
         client.stop_car()

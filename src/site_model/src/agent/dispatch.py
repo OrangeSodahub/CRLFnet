@@ -15,7 +15,7 @@ from msgs.msg._MsgRadCam import MsgRadCam      # radar camera fusion message typ
 from msgs.msg._MsgLidCam import MsgLidCam      # lidar camera fusion message type
 from tf.transformations import euler_from_quaternion
 
-from ..real_vehicle.aws_deepracer_control_v3 import Client
+from ..real_vehicle.aws_deepracer_control_v3 import Client, DeepracerVehicleApiError
 
 from .scene import SceneMap
 from .agent import DynamicMap, Agent
@@ -25,8 +25,57 @@ N = 10         # the number of vehicles
 THROTTLE = 20  # the base value of throttle
 
 # just for tests
-PASSWORD = "GYgtHGKq"
-IP = "192.168.0.115"
+CLIENTS = [
+    {
+        "id": '0',
+        "ip": "192.168.0.115",
+        "new_ip": "172.16.0.91",
+        "password": "GYgtHGKq",
+        "use": True
+    },
+    {
+        "id": '1',
+        "ip": "192.168.0.110",
+        "new_ip": "172.16.0.71",
+        "password": "alwUOgky",
+        "use": False
+    },
+    {
+        "id": '2',
+        "ip": "",
+        "new_ip": "172.16.0.18",
+        "password": "Ve9IJXXp",
+        "use": False
+    },
+    {
+        "id": '3',
+        "ip": "",
+        "new_ip": "172.16.0.9",
+        "password": "TgT7vMZq",
+        "use": False
+    },
+    {
+        "id": '4',
+        "ip": "192.168.0.101",
+        "new_ip": "172.16.0.125",
+        "password": "Geey5tLz",
+        "use": False
+    },
+    {
+        "id": '5',
+        "ip": "",
+        "new_ip": "172.16.0.139",
+        "password": "KUweQKRT",
+        "use": False
+    },
+    {
+        "id": '6',
+        "ip": "192.168.0.112",
+        "new_ip": "172.16.0.84",
+        "password": "ggQcwXwY",
+        "use": False
+    }
+]
 
 
 class VehicleController:
@@ -161,14 +210,17 @@ if __name__ == '__main__':
     params = parser.parse_args()
 
     # load config file
+    print("Loading configure files...")
     ROOT_DIR = Path(__file__).resolve().parents[2]
     CONFIG_FILE = ROOT_DIR.joinpath('config/config.yaml')
     with open(CONFIG_FILE, 'r') as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
     MAP_DIR = ROOT_DIR.joinpath(config['dispatch']['scene_map'])
     SAVE_DIR = ROOT_DIR.joinpath("src/agent/eval")
+    print("success!")
 
     # initialization
+    print("Initializing...")
     scene_map = DynamicMap(MAP_DIR)
     if params.eval:
         # TODO: fix evalagent
@@ -178,7 +230,16 @@ if __name__ == '__main__':
         evalagent = None
     dispatch_system = Dispatch(N, scene_map, evalagent, params.random)
     # real vehicle test
-    dispatch_system.controllers[0].set_corresponding_vehicle(PASSWORD, IP, 0.5)
+    print("Connecting to the vehicles...")
+    for c in CLIENTS:
+        if c['use']:
+            password = c['password']
+            ip = c['ip']
+            try:
+                dispatch_system.controllers[0].set_corresponding_vehicle(password, ip, 0.5)
+            except DeepracerVehicleApiError:
+                print("Failed to connect to vehicle No.{}".format(c['id']))
+    print("success!")
 
     # ROS messages
     rospy.init_node('servo_commands', anonymous=True)
