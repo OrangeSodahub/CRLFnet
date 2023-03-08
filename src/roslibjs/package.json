@@ -41,7 +41,7 @@
     "socket.io": "^4.0.0",
     "webworkify": "^1.5.0",
     "webworkify-webpack": "^2.1.5",
-    "ws": "^8.0.0"
+    "ws": "^8.12.1"
   },
   "directories": {
     "example": "examples",
