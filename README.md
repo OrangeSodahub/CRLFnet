@@ -18,9 +18,9 @@ The source code of the CRLFnet.
 Absolute paths may need your mind:
  | file path                        | Line(s)                               |
  |----------------------------------|---------------------------------------|
- | src/camera_info/get_cam_info.cpp | 26,64,102,140,170,216,254,292,330,368,|
- | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pointrcnn.yaml|5     |
- | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml|5       |
+ | src/camera_info/get_cam_info.cpp | 26,64,102,140,178,216,254,292,330,368,|
+ | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pointrcnn.yaml|4,5   |
+ | src/LidCamFusion/OpenPCDet/tools/cfgs/custom_models/pv_rcnn.yaml|5,6     |
 
 ### Docker
 Build project from `Dockerfile`:
