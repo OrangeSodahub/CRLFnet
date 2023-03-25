@@ -51,7 +51,7 @@ This part integrates the Kalman-Filter to real-time radar data.
 
 - Set `use_cuda` to `True` in `src/site_model/config/config.yaml` to use GPU.
 
-- Download `yolo_weights.pth` from jbox, and move to `src/site_model/src/utils/yolo/model_data`.
+- Download `yolo_weights.pth` from [jbox](https://jbox.sjtu.edu.cn/l/G1YYHz), and move to `src/site_model/src/utils/yolo/model_data`.
 
 ### Run The Rad-Cam Fusion Model
 
