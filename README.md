@@ -51,7 +51,7 @@ This part integrates the Kalman-Filter to real-time radar data.
 
 - Set `use_cuda` to `True` in `src/site_model/config/config.yaml` to use GPU.
 
-- Download `yolo_weights.pth` from [jbox](https://jbox.sjtu.edu.cn/l/G1YYHz), and move to `src/site_model/src/utils/yolo/model_data`.
+- Download `yolo_weights.pth` from [jbox](https://jbox.sjtu.edu.cn/l/d1vV1d), and move to `src/site_model/src/utils/yolo/model_data`.
 
 ### Run The Rad-Cam Fusion Model
 
@@ -113,8 +113,8 @@ For example, if using `PV_RCNN` for training:
 Download pretrained model through these links:
 |model         |time cost       |URL                                                                               |
 |--------------|----------------|----------------------------------------------------------------------------------|
-|PointRCNN     |~3h             |[download](https://drive.google.com/file/d/11gTjqraBqWP3-ocsRMxfXu2R7HsM0-qm/view?usp=sharing)|
-|PV_RCNN       |~6h             |[download](https://drive.google.com/file/d/11gTjqraBqWP3-ocsRMxfXu2R7HsM0-qm/view?usp=sharing)|
+|PointRCNN     |~3h             |[Google drive](https://drive.google.com/file/d/11gTjqraBqWP3-ocsRMxfXu2R7HsM0-qm/view?usp=sharing) / [Jbox](https://jbox.sjtu.edu.cn/l/y14fwb)|
+|PV_RCNN       |~6h             |[Google drive](https://drive.google.com/file/d/11gTjqraBqWP3-ocsRMxfXu2R7HsM0-qm/view?usp=sharing) / [Jbox](https://jbox.sjtu.edu.cn/l/x1mhco)|
 
 ### Predict (Local)
 Prediction on local dataset help to check the result of trainin. Prepare the input properly.
