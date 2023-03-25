@@ -78,7 +78,7 @@ The calibration parameters are needed in related camera-data transformation. Onc
     rosrun site_model get_cam_info
 
     # generate calibration formula according to parameters of cameras
-    python src/site_model/src/tools/RadCamFusion/generate_calib.py
+    python src/site_model/src/utils/generate_calib.py
 ```
 
 ## Lid-Cam Fusion
