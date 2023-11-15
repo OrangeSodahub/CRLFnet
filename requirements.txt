@@ -27,5 +27,5 @@ SharedArray==3.0.0
 tensorboard==2.2.2
 tensorboardX==2.5
 tqdm==4.62.3
-vtk==9.1.0
+vtk==9.2.5
 zipp==3.8.0
