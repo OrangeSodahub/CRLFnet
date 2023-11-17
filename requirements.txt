@@ -10,22 +10,28 @@ llvmlite==0.38.0
 matplotlib==3.5.1
 ninja==1.10.2.3
 numba==0.55.1
-numpy==1.21.5
+numpy==1.22.2
 nvidia-ml-py3==7.352.0
 oauth2client==4.1.2
 oauthlib==3.1.0
 opencv-python==4.2.0.32
-opencv-python-headless==4.5.5.62
+opencv-python-headless==4.8.1.78
 pandas==1.4.1
-Pillow==9.0.1
-protobuf==3.20.0
+Pillow==10.0.1
+protobuf==3.20.2
 pybind11==2.9.1
 PyOpenGL==3.1.6
 pyOpenSSL==19.0.0
-scipy==1.4.1
+scipy==1.10.0rc1
 SharedArray==3.0.0
 tensorboard==2.2.2
 tensorboardX==2.5
 tqdm==4.62.3
-vtk==9.1.0
+vtk==9.2.5
 zipp==3.8.0
+ipython>=8.10.0 # not directly required, pinned by Snyk to avoid a vulnerability
+jupyter-server>=2.7.2 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
+tornado>=6.3.3 # not directly required, pinned by Snyk to avoid a vulnerability
+werkzeug>=2.3.8 # not directly required, pinned by Snyk to avoid a vulnerability
+wheel>=0.38.0 # not directly required, pinned by Snyk to avoid a vulnerability
